@@ -1,12 +1,12 @@
-;; ========================================================================================
-;; The AudioEngine Library is Copyright (c) Grame, Computer Music Research Laboratory 03-04
+;; ============================================================================================
+;; The LibAudioStream Library is Copyright (c) Grame, Computer Music Research Laboratory 03-05
 ;;
 ;; Grame : Computer Music Research Laboratory
 ;; Web : http://www.grame.fr/Research
-;; ========================================================================================
+;; ============================================================================================
 
-;; This file contains definitions for entry points of the AudioEngine library
-;; It must be used with the AudioEngine.Framework located in /System/Library/Frameworks
+;; This file contains definitions for entry points of the LibAudioStream library
+;; It must be used with the LibAudioStream.Framework located in /System/Library/Frameworks
 
 ;; Utilities
 ;;===========
