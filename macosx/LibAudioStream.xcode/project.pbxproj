@@ -294,6 +294,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-framework LibAudioStream";
 				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = testPlayer;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
