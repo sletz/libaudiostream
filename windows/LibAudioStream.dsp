@@ -92,10 +92,6 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\src\AudioPlayer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Envelope.cpp
 # End Source File
 # Begin Source File
@@ -105,6 +101,10 @@ SOURCE=..\src\atomic\lffifo.c
 # Begin Source File
 
 SOURCE=..\src\atomic\lflifo.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\LibAudioStream.cpp
 # End Source File
 # Begin Source File
 

@@ -386,14 +386,32 @@
 			settings = {
 			};
 		};
-		4B6B230B071FBF97005E6873 = {
-			fileRef = F5C1D5B70330CC4101053105;
+		4B83CA1907FBE5AE00256489 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = LibAudioStream.cpp;
+			path = ../src/LibAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B83CA1A07FBE5AE00256489 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = LibAudioStream.h;
+			path = ../src/LibAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B83CA1B07FBE5AE00256489 = {
+			fileRef = 4B83CA1907FBE5AE00256489;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-		4B6B230C071FBF97005E6873 = {
-			fileRef = F5C1D5B80330CC4101053105;
+		4B83CA1C07FBE5AE00256489 = {
+			fileRef = 4B83CA1A07FBE5AE00256489;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -565,7 +583,6 @@
 				4B0391E20585040A006C929E,
 				4B0391E40585040A006C929E,
 				4B0392030585043C006C929E,
-				4B6B230C071FBF97005E6873,
 				4B0757B707F070FA006B4B5F,
 				4B51474B07F18D980059C4C8,
 				4B51474E07F18D9F0059C4C8,
@@ -573,6 +590,7 @@
 				4BC6136A07F499E200ACC53C,
 				4BC6136B07F49ABB00ACC53C,
 				4BC6136C07F49ABF00ACC53C,
+				4B83CA1C07FBE5AE00256489,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,10 +628,10 @@
 				4B0392020585043C006C929E,
 				4B6B22F7071FB980005E6873,
 				4B6B22FE071FB9D1005E6873,
-				4B6B230B071FBF97005E6873,
 				4B45BD8207F1C177000405C4,
 				4BC6136307F4990300ACC53C,
 				4BC6136507F4990B00ACC53C,
+				4B83CA1B07FBE5AE00256489,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1050,24 +1068,6 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
-		F5C1D5B70330CC4101053105 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = AudioPlayer.cpp;
-			path = ../src/AudioPlayer.cpp;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		F5C1D5B80330CC4101053105 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = AudioPlayer.h;
-			path = ../src/AudioPlayer.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
 		F5C1D5BD0330CC5A01053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1303,8 +1303,8 @@
 		};
 		F5C1FF5D0328B7A301053105 = {
 			children = (
-				F5C1D5B70330CC4101053105,
-				F5C1D5B80330CC4101053105,
+				4B83CA1907FBE5AE00256489,
+				4B83CA1A07FBE5AE00256489,
 			);
 			isa = PBXGroup;
 			name = Interface;
