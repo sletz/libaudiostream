@@ -27,6 +27,10 @@
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
 
+#define IN_CHANNELS 0 // stereo player
+#define OUT_CHANNELS 2 // stereo player
+#define CHANNELS 8 
+
 AudioStreamPtr test0()
 {
 	printf("-------------- \n");
@@ -83,17 +87,17 @@ AudioStreamPtr test4()
 
 AudioStreamPtr test5()
 {
-	printf("-----------------------------------\n");
-    printf("Build a input/ouput through stream \n");
-    printf("-----------------------------------\n\n");
+	printf("------------------------------------\n");
+    printf("Build a input/output through stream \n");
+    printf("------------------------------------\n\n");
     return MakeInputSound();
 }
 
 AudioStreamPtr test6()
 {
-	printf("--------------------------------------------------------\n");
-    printf("Build a input/ouput through and record the ouput stream\n");
-    printf("--------------------------------------------------------\n\n");
+	printf("---------------------------------------------------------\n");
+    printf("Build a input/output through and record the ouput stream\n");
+    printf("---------------------------------------------------------\n\n");
     return  MakeWriteSound("input.aif", MakeInputSound(), SF_FORMAT_AIFF|SF_FORMAT_PCM_16);
 }
 
@@ -121,6 +125,21 @@ AudioStreamPtr test8()
         mix = MakeMixSound(sound, mix);
     }
     return MakeWriteSound("output.aif", MakeCutSound(mix, 100000, 200000), SF_FORMAT_AIFF|SF_FORMAT_PCM_16);
+}
+
+AudioStreamPtr test9()
+{
+	printf("-----------------------------------------------------------\n");
+    printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
+    printf("-----------------------------------------------------------\n\n");
+	AudioStreamPtr sound = MakeRendererSound(MakeRegionSound(FILENAME2, 400000, 500000));
+	float buffer[512 * OUT_CHANNELS];
+	long res;
+	do {
+		res = ReadSound(sound, buffer, 512, OUT_CHANNELS);
+		printf("Simulate non real-time rendering : use buffer here %ld\n",res);
+	} while (res == 512);
+	printf("Simulate non real-time rendering : use last buffer here %ld\n", res);
 }
 
 void TestPlay(AudioPlayerPtr player)
@@ -171,7 +190,8 @@ void TestPlay(AudioPlayerPtr player)
 void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
 {
 	int res = LoadChannel(player, sound, 1, 120, 64);
-	if (res == NO_ERR) TestPlay(player);
+	if (res == NO_ERR) 
+		TestPlay(player);
 	StopSound(player, 1);
 	DeleteSound(sound);
 }
@@ -182,8 +202,8 @@ int main(int argc, char * argv[])
     printf("LibAudioStream based Player \n");
     printf("--------------------------- \n\n");
 
-    //AudioPlayerPtr player = OpenAudioPlayer(0, 2, 8, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
-	AudioPlayerPtr player = OpenAudioPlayer(0, 2, 8, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer);
+    //AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
+	AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer);
 	StartAudioPlayer(player);
 
 	printf("Type 'b' to start playing from the begining\n");
@@ -204,6 +224,7 @@ int main(int argc, char * argv[])
 	ExecTest(player, test6());
 	ExecTest(player, test7());
 	ExecTest(player, test8());
+	test9();
 	
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
