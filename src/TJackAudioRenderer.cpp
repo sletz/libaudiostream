@@ -106,7 +106,7 @@ long TJackAudioRenderer::Close()
 
 long TJackAudioRenderer::Start()
 {
-    const char **ports;
+    const char** ports;
 
     if (jack_activate(fClient)) {
         printf("cannot activate client");
@@ -153,20 +153,19 @@ error:
 
 long TJackAudioRenderer::Stop()
 {
-    if (jack_deactivate (fClient)) {
+    if (jack_deactivate(fClient)) {
         printf("cannot deactivate client");
         return OPEN_ERR;
     }
     return NO_ERR;
 }
 
-// to be completed
 void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
 {
     info->fInput = fInput;
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    //info->fCurFrame = long(Pa_StreamTime(fStream));
-    //info->fCurMs = ConvertSample2Ms(info->fCurFrame);
+    info->fCurFrame = jack_frame_time(fClient);
+    info->fCurMs = ConvertSample2Ms(info->fCurFrame);
 }

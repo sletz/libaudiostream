@@ -204,6 +204,8 @@ int main(int argc, char * argv[])
 
     //AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
 	AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer);
+    if (!player)
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
 	StartAudioPlayer(player);
 
 	printf("Type 'b' to start playing from the begining\n");

@@ -28,13 +28,13 @@
 #include <stdio.h>
 #include <string.h>
 
-// Callback called by disk thread
+// Callback called by command manager
 void TFileAudioStream::ReadBufferAux(TFileAudioStreamPtr obj, TAudioBuffer<short>* buffer, long framesNum, long framePos)
 {
     obj->TBufferedAudioStream::ReadBuffer(buffer, framesNum, framePos);
 }
 
-// Calls the disk read function in a low-priority thread
+// Handle the disk read function with the command manager: either direct or low-priority thread based
 void TFileAudioStream::ReadBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos)
 {
     fReady = false;
@@ -44,13 +44,13 @@ void TFileAudioStream::ReadBuffer(TAudioBuffer<short>* buffer, long framesNum, l
     fManager->ExecCmd((CmdPtr)ReadBufferAux, (long)this, (long)buffer, framesNum, framePos, 0);
 }
 
-// Callback called by disk thread
+// Callback called by command manager
 void TFileAudioStream::WriteBufferAux(TFileAudioStreamPtr obj, TAudioBuffer<short>* buffer, long framesNum, long framePos)
 {
     obj->TBufferedAudioStream::WriteBuffer(buffer, framesNum, framePos);
 }
 
-// Calls the disk write function in a low-priority thread
+// Handle the disk write function with the command manager: either direct or low-priority thread based
 void TFileAudioStream::WriteBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos)
 {
     fReady = false;

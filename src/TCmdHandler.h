@@ -113,11 +113,8 @@ class TCmdHandlerList : public list<TCmdHandlerPtr>
         }
         virtual ~TCmdHandlerList()
         {}
-
-}
-;
+};
 
 typedef TCmdHandlerList* TCmdHandlerListPtr;
-
 
 #endif
