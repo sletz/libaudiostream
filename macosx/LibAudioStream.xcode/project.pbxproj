@@ -538,7 +538,6 @@
 				4BD0E9930446D70000053105,
 				4BD0E9940446D70400053105,
 				4BD0E9950446D70500053105,
-				4BD0E9960446D70500053105,
 				4BD0E9990446D70900053105,
 				4BD0E9A00446D71400053105,
 				4BD0E9A80446D71A00053105,
@@ -748,12 +747,6 @@
 		};
 		4BD0E9950446D70500053105 = {
 			fileRef = F5C1D5A00330CB2F01053105;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4BD0E9960446D70500053105 = {
-			fileRef = F5C1D5A10330CB2F01053105;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1047,15 +1040,6 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = TThreadCmdManager.h;
 			path = ../src/TThreadCmdManager.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		F5C1D5A10330CB2F01053105 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = TThreadRunner.h;
-			path = ../src/TThreadRunner.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -1353,7 +1337,6 @@
 				F5C1D59C0330CB1E01053105,
 				F5C1D59F0330CB2F01053105,
 				F5C1D5A00330CB2F01053105,
-				F5C1D5A10330CB2F01053105,
 			);
 			isa = PBXGroup;
 			name = Thread;
