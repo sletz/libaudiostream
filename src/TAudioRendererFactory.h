@@ -26,6 +26,10 @@ grame@rd.grame.fr
 #include "AudioExports.h"
 #include "TAudioRenderer.h"
 
+/*!
+\brief A Factory for audio renderers.
+*/
+
 class AUDIO_EXPORTS TAudioRendererFactory
 {
 

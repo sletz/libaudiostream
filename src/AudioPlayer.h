@@ -70,6 +70,7 @@ extern "C"
     AudioStreamPtr MakeReadSound(char* name);
     /*!
     \brief Creates a file region reader stream.
+	\param name The sound file pathname.
     \param beginFrame The start frame of the region.
     \param endFrame The end frame of the region.
     \return A pointer to new stream object.
@@ -77,6 +78,7 @@ extern "C"
     AudioStreamPtr MakeRegionSound(char* name, long beginFrame, long endFrame);
     /*!
     \brief Creates a fade on a stream.
+	\param sound The stream to be "faded".
     \param fadeIn The fadein length in frames.
     \param fadeOut The fadeout length in frames.
     \return A pointer to new stream object.
@@ -91,7 +93,8 @@ extern "C"
     AudioStreamPtr MakeLoopSound(AudioStreamPtr sound, long num);
     /*!
     \brief Cut in a stream : the portion between 0 and beginFrame will be removed, the portion between endFrame and the stream end will be removed.
-    \param beginFrame The start frame number of the stream part to remove.
+	\param sound The stream to be cutted.
+	\param beginFrame The start frame number of the stream part to remove.
     \param endFrame The end frame number of the stream part to remove
     \return A pointer to new stream object.
     */
@@ -113,21 +116,21 @@ extern "C"
     AudioStreamPtr MakeMixSound(AudioStreamPtr s1, AudioStreamPtr s2);
     /*!
     \brief Apply an effect on a stream.
-    	\param s1 The stream to be transformed.
+	\param sound The stream to be transformed.
     \param effect The effect to be used.
     \param fadeIn A fadein section frames before the effect is fully applied.
     \param fadeOut A fadeout section frames before the effect is fully removed.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeTransformSound(AudioStreamPtr s1, AudioEffectPtr effect, long fadeIn, long fadeOut);
+    AudioStreamPtr MakeTransformSound(AudioStreamPtr sound, AudioEffectPtr effect, long fadeIn, long fadeOut);
     /*!
     \brief Create a stream writer.
-    	\param name The spund file pathname.
-    \param effect The stream to be written.
+	\param name The sound file pathname.
+	\param sound The stream to be saved.
     \param format A libsndfile format.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeWriteSound(char* name, AudioStreamPtr s, long format);
+    AudioStreamPtr MakeWriteSound(char* name, AudioStreamPtr sound, long format);
     /*!
     \brief Create an inputstream.
     \return A pointer to new stream object.
@@ -155,7 +158,7 @@ extern "C"
     \param sound The stream.
     \param buffer A buffer to be filled with frames.
     \param buffer_size The buffer length.
-    \param buffer_size The number of channels in the buffer.
+    \param channels The number of channels in the buffer.
     \return The number of read frames.
     */
     long ReadSound(AudioStreamPtr sound, float* buffer, long buffer_size, long channels);
@@ -246,14 +249,14 @@ extern "C"
     \brief Set the channel volume [0...127]
     \param player The audio player.
     \param chan The audio channel number to be used.
-    \param chan The new volume value.
+    \param vol The new volume value.
     */
     void SetVolSound(AudioPlayerPtr player, long chan, long vol);
     /*!
     \brief Set the channel panning [0...127]
     \param player The audio player.
     \param chan The audio channel number to be used.
-    \param chan The new panning value.
+    \param pan The new panning value.
     */
     void SetPanSound(AudioPlayerPtr player, long chan, long pan);
 
@@ -261,13 +264,13 @@ extern "C"
     /*!
     \brief Set the audio player volume [0...127]
     \param player The audio player.
-    \param chan The new volume value.
+    \param vol The new volume value.
     */
     void SetVolAudioPlayer(AudioPlayerPtr player, long vol);
     /*!
     \brief Set the audio player panning [0...127]
     \param player The audio player.
-    \param chan The new panning value.
+    \param pan The new panning value.
     */
     void SetPanAudioPlayer(AudioPlayerPtr player, long pan);
 
