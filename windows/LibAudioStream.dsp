@@ -78,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /entry:"" /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /nodefaultlib
 
 !ENDIF 
@@ -92,107 +92,107 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\src\AudioPlayer.cpp
+SOURCE=..\src\AudioPlayer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\Envelope.cpp
+SOURCE=..\src\Envelope.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\atomic\lffifo.c
+SOURCE=..\src\atomic\lffifo.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\atomic\lflifo.c
+SOURCE=..\src\atomic\lflifo.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\Object.cpp
+SOURCE=..\src\Object.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioChannel.cpp
+SOURCE=..\src\TAudioChannel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioEffect.cpp
+SOURCE=..\src\TAudioEffect.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioEngine.cpp
+SOURCE=..\src\TAudioEngine.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioGlobals.cpp
+SOURCE=..\src\TAudioGlobals.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioMixer.cpp
+SOURCE=..\src\TAudioMixer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioRenderer.cpp
+SOURCE=..\src\TAudioRenderer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioRendererFactory.cpp
+SOURCE=..\src\TAudioRendererFactory.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TAudioStreamFactory.cpp
+SOURCE=..\src\TAudioStreamFactory.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TBufferedAudioStream.cpp
+SOURCE=..\src\TBufferedAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TCutEndAudioStream.cpp
+SOURCE=..\src\TCutEndAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TFadeAudioStream.cpp
+SOURCE=..\src\TFadeAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TFileAudioStream.cpp
+SOURCE=..\src\TFileAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TLoopAudioStream.cpp
+SOURCE=..\src\TLoopAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TMixAudioStream.cpp
+SOURCE=..\src\TMixAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TPortAudioRenderer.cpp
+SOURCE=..\src\TPortAudioRenderer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TReadFileAudioStream.cpp
+SOURCE=..\src\TReadFileAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TRendererAudioStream.cpp
+SOURCE=..\src\TRendererAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TSeqAudioStream.cpp
+SOURCE=..\src\TSeqAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TThreadCmdManager.cpp
+SOURCE=..\src\TThreadCmdManager.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TTransformAudioStream.cpp
+SOURCE=..\src\TTransformAudioStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\TWriteFileAudioStream.cpp
+SOURCE=..\src\TWriteFileAudioStream.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
