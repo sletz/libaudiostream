@@ -127,7 +127,19 @@ AudioStreamPtr test8()
     return MakeWriteSound("output.aif", MakeCutSound(mix, 100000, 200000), SF_FORMAT_AIFF|SF_FORMAT_PCM_16);
 }
 
-void test9()
+AudioStreamPtr test9()
+{
+	printf("--------------------------------------------------------------\n");
+    printf("Sequence of a region with a transformed region (volume effect)\n");
+    printf("--------------------------------------------------------------\n\n");
+	AudioStreamPtr sound1 = MakeRegionSound(FILENAME1, 400000, 600000);
+	AudioStreamPtr sound2 = MakeRegionSound(FILENAME1, 400000, 600000);
+	AudioEffectListPtr list_effect = MakeAudioEffectList();
+	list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.25));
+	return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
+}
+
+void test10()
 {
 	printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
@@ -226,7 +238,8 @@ int main(int argc, char * argv[])
 	ExecTest(player, test6());
 	ExecTest(player, test7());
 	ExecTest(player, test8());
-	test9();
+	ExecTest(player, test9());
+	test10();
 	
     StopAudioPlayer(player);
     CloseAudioPlayer(player);

@@ -28,6 +28,8 @@
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 
+#include "TVolAudioEffect.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -51,7 +53,8 @@ extern "C"
     // Opaque pointers
     typedef AudioPlayer* AudioPlayerPtr;
     typedef void* AudioStreamPtr;
-    typedef void* AudioEffectPtr;
+    typedef void* AudioEffectListPtr;
+	typedef void* AudioEffectPtr;
 
     // Build sound
     AudioStreamPtr AUDIOAPI MakeNullSound(long lengthFrame);
@@ -62,7 +65,7 @@ extern "C"
     AudioStreamPtr AUDIOAPI MakeCutSound(AudioStreamPtr sound, long beginFrame, long endFrame);
     AudioStreamPtr AUDIOAPI MakeSeqSound(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade);
     AudioStreamPtr AUDIOAPI MakeMixSound(AudioStreamPtr s1, AudioStreamPtr s2);
-    AudioStreamPtr AUDIOAPI MakeTransformSound(AudioStreamPtr s1, AudioEffectPtr effect, long fadeIn, long fadeOut);
+    AudioStreamPtr AUDIOAPI MakeTransformSound(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
     AudioStreamPtr AUDIOAPI MakeWriteSound(char* name, AudioStreamPtr s, long format);
     AudioStreamPtr AUDIOAPI MakeInputSound();
     AudioStreamPtr AUDIOAPI MakeRendererSound(AudioStreamPtr s);
@@ -72,6 +75,13 @@ extern "C"
     long AUDIOAPI ReadSound(AudioStreamPtr stream, float* buffer, long buffer_size, long channels);
 
     void AUDIOAPI DeleteSound(AudioStreamPtr sound);
+	
+	// Effect management
+	AudioEffectListPtr AUDIOAPI MakeAudioEffectList();
+	AudioEffectListPtr AUDIOAPI AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+	AudioEffectListPtr AUDIOAPI RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+	
+	AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
 
     // Open/Close
     AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
@@ -156,9 +166,9 @@ AudioStreamPtr AUDIOAPI MakeInputSound()
     return TAudioStreamFactory::MakeInputSound();
 }
 
-AudioStreamPtr AUDIOAPI MakeTransformSound(AudioStreamPtr s1, AudioEffectPtr effect, long fadeIn, long fadeOut)
+AudioStreamPtr AUDIOAPI MakeTransformSound(AudioStreamPtr s1, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
 {
-    return TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)s1, (TAudioEffectPtr)effect, fadeIn, fadeOut);
+    return TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)s1, (TAudioEffectPtr)list_effect, fadeIn, fadeOut);
 }
 
 AudioStreamPtr AUDIOAPI MakeWriteSound(char* name, AudioStreamPtr s, long format)
@@ -190,6 +200,29 @@ long AUDIOAPI ReadSound(AudioStreamPtr s, float* buffer, long buffer_size, long 
 void AUDIOAPI DeleteSound(AudioStreamPtr s)
 {
     delete(TAudioStreamPtr)s;
+}
+
+// Effect management
+AudioEffectListPtr MakeAudioEffectList()
+{
+	return new TAudioEffect();
+}
+
+AudioEffectPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
+{
+	TAudioEffectPtr(list_effect)->push_back(TAudioEffectInterfacePtr(effect));
+	return list_effect;
+}
+
+AudioEffectPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
+{
+	TAudioEffectPtr(list_effect)->remove(TAudioEffectInterfacePtr(effect));
+	return list_effect;
+}
+
+AudioEffectPtr MakeVolAudioEffect(float gain)
+{
+	return new TVolAudioEffect(gain);
 }
 
 // Open/Close

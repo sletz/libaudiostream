@@ -55,6 +55,7 @@ extern "C"
     typedef void* AudioPlayerPtr;
     typedef void* AudioStreamPtr;
     typedef void* AudioEffectPtr;
+	typedef void* AudioEffectListPtr;
 
     /*!
     \brief Create a stream that will produce "silence".
@@ -117,12 +118,12 @@ extern "C"
     /*!
     \brief Apply an effect on a stream.
 	\param sound The stream to be transformed.
-    \param effect The effect to be used.
+    \param effect_list The effect list to be used.
     \param fadeIn A fadein section frames before the effect is fully applied.
     \param fadeOut A fadeout section frames before the effect is fully removed.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeTransformSound(AudioStreamPtr sound, AudioEffectPtr effect, long fadeIn, long fadeOut);
+    AudioStreamPtr MakeTransformSound(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
     /*!
     \brief Create a stream writer.
 	\param name The sound file pathname.
@@ -167,6 +168,37 @@ extern "C"
     \param sound The stream to be deleted.
     */
     void DeleteSound(AudioStreamPtr sound);
+
+	/* Effect management */
+	
+	/*!
+    \brief Create an effect list.
+ 	\return A pointer to new effect list.
+    */
+	AudioEffectListPtr MakeAudioEffectList();
+	
+	/*!
+    \brief Add an effect in an effect list.
+	\param list The effect list where the effect is added.
+	\param effect The effect to be added.
+ 	\return A pointer to the modified effect list.
+    */
+	AudioEffectListPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+	
+	/*!
+    \brief Remove an effect from an effect list.
+	\param list The effect list where the effect is removed.
+	\param effect The effect to be removed.
+ 	\return A pointer to the modified effect list.
+    */
+	AudioEffectListPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+	
+	/*!
+    \brief Create a volume effect.
+    \param gain The gain between 0 and 1.
+	\return A pointer to new effect object.
+    */
+	AudioEffectPtr MakeVolAudioEffect(float gain);
 
     // Open/Close
     /*!
