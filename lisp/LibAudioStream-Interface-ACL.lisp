@@ -49,7 +49,7 @@
 ;;---------------------------------------------------------------------------------
 
 (defparameter kPortAudioRenderer 0)
-(defparameter kJackAudioRenderer 1)
+(defparameter kJackRenderer 1)
 
 (defparameter no_err 0)
 (defparameter open_err -1)
