@@ -205,7 +205,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer
 
     TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size);
 
-    AudioPlayerPtr player = (AudioPlayerPtr)malloc(sizeof(AudioPlayer));
+    AudioPlayerPtr player = (AudioPlayerPtr)calloc(1, sizeof(AudioPlayer));
     if (!player)
 		goto error;
 	
