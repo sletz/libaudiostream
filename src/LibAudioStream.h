@@ -57,19 +57,19 @@ extern "C"
     typedef void* AudioEffectPtr;
 
     /*!
-    \brief Creates a stream that will produce "silence".
+    \brief Create a stream that will produce "silence".
     \param lengthFrame The number of null frame to be produced.
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeNullSound(long lengthFrame);
     /*!
-    \brief Creates a file reader stream.
+    \brief Create a file reader stream.
     \param name The sound file pathname.
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeReadSound(char* name);
     /*!
-    \brief Creates a file region reader stream.
+    \brief Create a file region reader stream.
 	\param name The sound file pathname.
     \param beginFrame The start frame of the region.
     \param endFrame The end frame of the region.
@@ -77,7 +77,7 @@ extern "C"
     */
     AudioStreamPtr MakeRegionSound(char* name, long beginFrame, long endFrame);
     /*!
-    \brief Creates a fade on a stream.
+    \brief Create a fade on a stream.
 	\param sound The stream to be "faded".
     \param fadeIn The fadein length in frames.
     \param fadeOut The fadeout length in frames.
@@ -85,7 +85,7 @@ extern "C"
     */
     AudioStreamPtr MakeFadeSound(AudioStreamPtr sound, long fadeIn, long fadeOut);
     /*!
-    \brief Loops a stream.
+    \brief Loop a stream.
     \param sound The stream to be looped.
     \param num The number of loops.
     \return A pointer to new stream object.
@@ -164,7 +164,7 @@ extern "C"
     long ReadSound(AudioStreamPtr sound, float* buffer, long buffer_size, long channels);
     /*!
     \brief Delete a stream.
-    \param sound The stream.
+    \param sound The stream to be deleted.
     */
     void DeleteSound(AudioStreamPtr sound);
 
@@ -179,7 +179,7 @@ extern "C"
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
     \param rtstream_buffer_size The input stream buffer size.
 	\param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
-    \return The new audio player.
+    \return A pointer to new audio player object.
     */
     AudioPlayerPtr OpenAudioPlayer(long inChan,
                                    long outChan,
@@ -191,7 +191,7 @@ extern "C"
 								   long renderer);
     /*!
     \brief Close the audio player.
-    \param player The audio player.
+    \param player The audio player to be closed.
     */
     void CloseAudioPlayer(AudioPlayerPtr player);
 
