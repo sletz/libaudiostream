@@ -21,7 +21,7 @@
 */
 
 
-#include "AudioPlayer.h"
+#include "LibAudioStream.h"
 #include <sndfile.h>
 
 #define FILENAME1 "/Users/letz/levot.wav"
