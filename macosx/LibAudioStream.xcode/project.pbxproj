@@ -1,0 +1,1588 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		014CEA460018CE2711CA2923 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		014CEA470018CE2711CA2923 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//010
+//011
+//012
+//013
+//014
+//020
+//021
+//022
+//023
+//024
+		0249A662FF388D9811CA2CEA = {
+			children = (
+				0249A663FF388D9811CA2CEA,
+				F666DED703EC03FB01D11C03,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		0249A663FF388D9811CA2CEA = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = "libstdc++.a";
+			path = "/usr/lib/libstdc++.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+//020
+//021
+//022
+//023
+//024
+//080
+//081
+//082
+//083
+//084
+		08FB7793FE84155DC02AAC07 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				014CEA460018CE2711CA2923,
+				014CEA470018CE2711CA2923,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 08FB7794FE84155DC02AAC07;
+			projectDirPath = "";
+			targets = (
+				4BD0E98A0446D6E400053105,
+				4B5146EB07F186810059C4C8,
+			);
+		};
+		08FB7794FE84155DC02AAC07 = {
+			children = (
+				F5C1FF600328B7FA01053105,
+				F5EDBD21032F870801053105,
+				4BA6AC5A044AF64500053105,
+				F5D82C3D032DEAA101053105,
+				F5EDBD20032F86EF01053105,
+				F5C1FF5F0328B7D201053105,
+				F5C1FF5D0328B7A301053105,
+				F5C1FF5C0328B78201053105,
+				F5C1FF5B0328B76601053105,
+				F5C1FF5A0328B73A01053105,
+				F5F4A84E032657D901053105,
+				F5F4A853032657D901053105,
+				08FB7795FE84155DC02AAC07,
+				0249A662FF388D9811CA2CEA,
+				1AB674ADFE9D54B511CA2CBB,
+			);
+			isa = PBXGroup;
+			name = AudioEngine.prprj;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 = {
+			children = (
+			);
+			isa = PBXGroup;
+			name = Source;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//080
+//081
+//082
+//083
+//084
+//1A0
+//1A1
+//1A2
+//1A3
+//1A4
+		1AB674ADFE9D54B511CA2CBB = {
+			children = (
+				4BD0E98B0446D6E400053105,
+				4B5146EC07F186810059C4C8,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//1A0
+//1A1
+//1A2
+//1A3
+//1A4
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4B0391DF0585040A006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioRenderer.h;
+			path = ../src/TAudioRenderer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0391E00585040A006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioRendererFactory.cpp;
+			path = ../src/TAudioRendererFactory.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0391E10585040A006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioRendererFactory.h;
+			path = ../src/TAudioRendererFactory.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0391E20585040A006C929E = {
+			fileRef = 4B0391DF0585040A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B0391E30585040A006C929E = {
+			fileRef = 4B0391E00585040A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B0391E40585040A006C929E = {
+			fileRef = 4B0391E10585040A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B0391F20585042A006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TJackAudioRenderer.cpp;
+			path = ../src/TJackAudioRenderer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0391F30585042A006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TJackAudioRenderer.h;
+			path = ../src/TJackAudioRenderer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0392000585043C006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TPortAudioRenderer.cpp;
+			path = ../src/TPortAudioRenderer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0392010585043C006C929E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TPortAudioRenderer.h;
+			path = ../src/TPortAudioRenderer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B0392020585043C006C929E = {
+			fileRef = 4B0392000585043C006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B0392030585043C006C929E = {
+			fileRef = 4B0392010585043C006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B0757B707F070FA006B4B5F = {
+			fileRef = F5C1D5E80330CCD601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B45BD7E07F1C107000405C4 = {
+			fileRef = 4B0391F30585042A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B45BD8207F1C177000405C4 = {
+			fileRef = 4B0391F20585042A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B5146E707F186810059C4C8 = {
+			buildActionMask = 2147483647;
+			files = (
+				4B45BD7E07F1C107000405C4,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B5146E807F186810059C4C8 = {
+			buildActionMask = 2147483647;
+			files = (
+				4B5146EF07F1868F0059C4C8,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B5146E907F186810059C4C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B5146EA07F186810059C4C8 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B5146EB07F186810059C4C8 = {
+			buildPhases = (
+				4B5146E707F186810059C4C8,
+				4B5146E807F186810059C4C8,
+				4B5146E907F186810059C4C8,
+				4B5146EA07F186810059C4C8,
+			);
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-framework LibAudioStream";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = testPlayer;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXToolTarget;
+			name = testPlayer;
+			productInstallPath = /usr/local/bin;
+			productName = testLibrary;
+			productReference = 4B5146EC07F186810059C4C8;
+		};
+		4B5146EC07F186810059C4C8 = {
+			explicitFileType = "compiled.mach-o.executable";
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = testPlayer;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4B5146EF07F1868F0059C4C8 = {
+			fileRef = F5F4A84E032657D901053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B51474207F18D680059C4C8 = {
+			children = (
+				4B51474407F18D890059C4C8,
+				4B51474707F18D910059C4C8,
+				4BCC1A8007F1AA7E003E6784,
+				4B51474A07F18D980059C4C8,
+				4B51474D07F18D9F0059C4C8,
+				4B51475007F18DA60059C4C8,
+			);
+			isa = PBXGroup;
+			name = Atomic;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B51474407F18D890059C4C8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = lflifoppc.c;
+			path = ../src/atomic/lflifoppc.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B51474507F18D890059C4C8 = {
+			fileRef = 4B51474407F18D890059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B51474707F18D910059C4C8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = lffifoppc.c;
+			path = ../src/atomic/lffifoppc.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B51474807F18D910059C4C8 = {
+			fileRef = 4B51474707F18D910059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B51474A07F18D980059C4C8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = lffifo.h;
+			path = ../src/atomic/lffifo.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B51474B07F18D980059C4C8 = {
+			fileRef = 4B51474A07F18D980059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B51474D07F18D9F0059C4C8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = msAtomic.h;
+			path = ../src/atomic/msAtomic.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B51474E07F18D9F0059C4C8 = {
+			fileRef = 4B51474D07F18D9F0059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B51475007F18DA60059C4C8 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = msAtomicPPC.h;
+			path = ../src/atomic/msAtomicPPC.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B51475107F18DA60059C4C8 = {
+			fileRef = 4B51475007F18DA60059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B6B22F6071FB980005E6873 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TRendererAudioStream.cpp;
+			path = ../src/TRendererAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B6B22F7071FB980005E6873 = {
+			fileRef = 4B6B22F6071FB980005E6873;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B6B22FD071FB9D1005E6873 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioEngine.cpp;
+			path = ../src/TAudioEngine.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B6B22FE071FB9D1005E6873 = {
+			fileRef = 4B6B22FD071FB9D1005E6873;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B6B230B071FBF97005E6873 = {
+			fileRef = F5C1D5B70330CC4101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B6B230C071FBF97005E6873 = {
+			fileRef = F5C1D5B80330CC4101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BA3E1780459506A00053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TRendererAudioStream.h;
+			path = ../src/TRendererAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BA3E17C0459506A00053105 = {
+			fileRef = 4BA3E1780459506A00053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BA6AC5A044AF64500053105 = {
+			children = (
+				4B0391DF0585040A006C929E,
+				4BB27531056B7DF100053105,
+				4BB2752F056B798A00053105,
+				4B0392000585043C006C929E,
+				4B0392010585043C006C929E,
+				4B0391E00585040A006C929E,
+				4B0391E10585040A006C929E,
+				4B0391F20585042A006C929E,
+				4B0391F30585042A006C929E,
+			);
+			isa = PBXGroup;
+			name = Renderer;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4BB2752F056B798A00053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioClient.h;
+			path = ../src/TAudioClient.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BB27530056B798A00053105 = {
+			fileRef = 4BB2752F056B798A00053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BB27531056B7DF100053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioRenderer.cpp;
+			path = ../src/TAudioRenderer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BB27532056B7DF100053105 = {
+			fileRef = 4BB27531056B7DF100053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BCC1A8007F1AA7E003E6784 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = lflifo.h;
+			path = ../src/atomic/lflifo.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BCC1A8107F1AA7E003E6784 = {
+			fileRef = 4BCC1A8007F1AA7E003E6784;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9850446D6E400053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BD0E98D0446D6F900053105,
+				4BD0E98E0446D6FA00053105,
+				4BD0E98F0446D6FB00053105,
+				4BD0E9930446D70000053105,
+				4BD0E9940446D70400053105,
+				4BD0E9950446D70500053105,
+				4BD0E9960446D70500053105,
+				4BD0E9990446D70900053105,
+				4BD0E9A00446D71400053105,
+				4BD0E9A80446D71A00053105,
+				4BD0E9AA0446D71B00053105,
+				4BD0E9AC0446D71C00053105,
+				4BD0E9B40446D72700053105,
+				4BD0E9B50446D72800053105,
+				4BD0E9B60446D73000053105,
+				4BD0E9B80446D73100053105,
+				4BD0E9BB0446D73300053105,
+				4BD0E9BE0446D73500053105,
+				4BD0E9C00446D73600053105,
+				4BD0E9C20446D73700053105,
+				4BD0E9C40446D73800053105,
+				4BD0E9C50446D73900053105,
+				4BD0E9C70446D73A00053105,
+				4BD0E9C90446D73B00053105,
+				4BD0E9CB0446D73E00053105,
+				4BD0E9CD0446D73F00053105,
+				4BD0E9CE0446D73F00053105,
+				4BA3E17C0459506A00053105,
+				4BB27530056B798A00053105,
+				4B0391E20585040A006C929E,
+				4B0391E40585040A006C929E,
+				4B0392030585043C006C929E,
+				4B6B230C071FBF97005E6873,
+				4B0757B707F070FA006B4B5F,
+				4B51474B07F18D980059C4C8,
+				4B51474E07F18D9F0059C4C8,
+				4B51475107F18DA60059C4C8,
+				4BCC1A8107F1AA7E003E6784,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BD0E9860446D6E400053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BD0E9870446D6E400053105 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BD0E98C0446D6F600053105,
+				4BD0E9900446D6FC00053105,
+				4BD0E9920446D70000053105,
+				4BD0E9970446D70600053105,
+				4BD0E9980446D70800053105,
+				4BD0E9A70446D71900053105,
+				4BD0E9AB0446D71C00053105,
+				4BD0E9B30446D72600053105,
+				4BD0E9BA0446D73300053105,
+				4BD0E9BC0446D73400053105,
+				4BD0E9BD0446D73400053105,
+				4BD0E9BF0446D73600053105,
+				4BD0E9C10446D73600053105,
+				4BD0E9C30446D73800053105,
+				4BD0E9C60446D73900053105,
+				4BD0E9C80446D73B00053105,
+				4BD0E9CA0446D73B00053105,
+				4BD0E9CC0446D73E00053105,
+				4BB27532056B7DF100053105,
+				4B0391E30585040A006C929E,
+				4B0392020585043C006C929E,
+				4B6B22F7071FB980005E6873,
+				4B6B22FE071FB9D1005E6873,
+				4B6B230B071FBF97005E6873,
+				4B51474507F18D890059C4C8,
+				4B51474807F18D910059C4C8,
+				4B45BD8207F1C177000405C4,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BD0E9880446D6E400053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BD0E9890446D6E400053105 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BD0E98A0446D6E400053105 = {
+			buildPhases = (
+				4BD0E9850446D6E400053105,
+				4BD0E9860446D6E400053105,
+				4BD0E9870446D6E400053105,
+				4BD0E9880446D6E400053105,
+				4BD0E9890446D6E400053105,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__ ";
+				OTHER_LDFLAGS = "-flat_namespace /usr/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox -framework  Jack";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = LibAudioStream;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = LibAudioStream;
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = AudioEngineFramework;
+			productReference = 4BD0E98B0446D6E400053105;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>LibAudioStream</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+</dict>
+</plist>
+";
+		};
+		4BD0E98B0446D6E400053105 = {
+			explicitFileType = wrapper.framework;
+			isa = PBXFileReference;
+			path = LibAudioStream.framework;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4BD0E98C0446D6F600053105 = {
+			fileRef = F5C1D58D0330C7F001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E98D0446D6F900053105 = {
+			fileRef = F5C1D58E0330C7F001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E98E0446D6FA00053105 = {
+			fileRef = F5C1D5930330CAEF01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E98F0446D6FB00053105 = {
+			fileRef = F5D82C3E032DEAB501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9900446D6FC00053105 = {
+			fileRef = F5D82C47032DF3CC01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9920446D70000053105 = {
+			fileRef = F5C1D5960330CB0801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9930446D70000053105 = {
+			fileRef = F5C1D5970330CB0801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9940446D70400053105 = {
+			fileRef = F5C1D59C0330CB1E01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9950446D70500053105 = {
+			fileRef = F5C1D5A00330CB2F01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9960446D70500053105 = {
+			fileRef = F5C1D5A10330CB2F01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9970446D70600053105 = {
+			fileRef = F5C1D59F0330CB2F01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9980446D70800053105 = {
+			fileRef = F5C1D5A80330CB4101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9990446D70900053105 = {
+			fileRef = F5C1D5A90330CB4101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9A00446D71400053105 = {
+			fileRef = F5E2072A032E1EA501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9A70446D71900053105 = {
+			fileRef = F5C1D5D50330CC8501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9A80446D71A00053105 = {
+			fileRef = F5C1D5D60330CC8501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9AA0446D71B00053105 = {
+			fileRef = F5C1D5BD0330CC5A01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9AB0446D71C00053105 = {
+			fileRef = F6FC02B9033249ED010531C2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9AC0446D71C00053105 = {
+			fileRef = F68E6D0D0334858B01DE1461;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9B30446D72600053105 = {
+			fileRef = F5C1D5E90330CCD601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9B40446D72700053105 = {
+			fileRef = F5C1D5EA0330CCD601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9B50446D72800053105 = {
+			fileRef = F5C1D5F90330CCFF01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9B60446D73000053105 = {
+			fileRef = F5C1D5FC0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9B80446D73100053105 = {
+			fileRef = F5C1FF850328C9C301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9BA0446D73300053105 = {
+			fileRef = F5C1FF840328C9C301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9BB0446D73300053105 = {
+			fileRef = F5D82C41032DEB9D01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9BC0446D73400053105 = {
+			fileRef = F5D82C44032DF22401053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9BD0446D73400053105 = {
+			fileRef = F5C1D5FD0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9BE0446D73500053105 = {
+			fileRef = F5C1D5FE0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9BF0446D73600053105 = {
+			fileRef = F5C1D5FF0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C00446D73600053105 = {
+			fileRef = F5C1D6000330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C10446D73600053105 = {
+			fileRef = F5C1D6100330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C20446D73700053105 = {
+			fileRef = F5C1D6110330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C30446D73800053105 = {
+			fileRef = F5C1D6120330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C40446D73800053105 = {
+			fileRef = F5C1D6130330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C50446D73900053105 = {
+			fileRef = F5C1D61E0330CD7501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C60446D73900053105 = {
+			fileRef = F5C1D6210330CD8701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C70446D73A00053105 = {
+			fileRef = F5C1D6220330CD8701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C80446D73B00053105 = {
+			fileRef = F5C5B1FE033220AA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9C90446D73B00053105 = {
+			fileRef = F5C5B1FF033220AA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9CA0446D73B00053105 = {
+			fileRef = F5C5B204033220C001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9CB0446D73E00053105 = {
+			fileRef = F5C5B205033220C001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9CC0446D73E00053105 = {
+			fileRef = F5C5B21203322F5801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9CD0446D73F00053105 = {
+			fileRef = F5C5B21303322F5801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BD0E9CE0446D73F00053105 = {
+			fileRef = F665FF400332A4BE01913B4D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5C1D58D0330C7F001053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioChannel.cpp;
+			path = ../src/TAudioChannel.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D58E0330C7F001053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioChannel.h;
+			path = ../src/TAudioChannel.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5930330CAEF01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TPanTable.h;
+			path = ../src/TPanTable.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5960330CB0801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioMixer.cpp;
+			path = ../src/TAudioMixer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5970330CB0801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioMixer.h;
+			path = ../src/TAudioMixer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D59C0330CB1E01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TCmdManager.h;
+			path = ../src/TCmdManager.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D59F0330CB2F01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TThreadCmdManager.cpp;
+			path = ../src/TThreadCmdManager.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5A00330CB2F01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TThreadCmdManager.h;
+			path = ../src/TThreadCmdManager.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5A10330CB2F01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TThreadRunner.h;
+			path = ../src/TThreadRunner.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5A80330CB4101053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioStreamFactory.cpp;
+			path = ../src/TAudioStreamFactory.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5A90330CB4101053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioStreamFactory.h;
+			path = /Volumes/Document1/Developpement/ProjectsCVS/AudioPlayerCVS/AudioPlayer/src/TAudioStreamFactory.h;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F5C1D5B70330CC4101053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioPlayer.cpp;
+			path = ../src/AudioPlayer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5B80330CC4101053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioPlayer.h;
+			path = ../src/AudioPlayer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5BD0330CC5A01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Envelope.h;
+			path = ../src/Envelope.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5D50330CC8501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = Object.cpp;
+			path = ../src/Object.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5D60330CC8501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Object.h;
+			path = ../src/Object.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5E80330CCD601053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioEngine.h;
+			path = ../src/TAudioEngine.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5E90330CCD601053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioGlobals.cpp;
+			path = ../src/TAudioGlobals.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5EA0330CCD601053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioGlobals.h;
+			path = ../src/TAudioGlobals.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5F90330CCFF01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TSharedBuffers.h;
+			path = ../src/TSharedBuffers.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5FC0330CD3801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioStream.h;
+			path = ../src/TAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5FD0330CD3801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TCutEndAudioStream.cpp;
+			path = ../src/TCutEndAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5FE0330CD3801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TCutEndAudioStream.h;
+			path = ../src/TCutEndAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D5FF0330CD3801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TFadeAudioStream.cpp;
+			path = ../src/TFadeAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6000330CD3801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TFadeAudioStream.h;
+			path = ../src/TFadeAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6100330CD5501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TLoopAudioStream.cpp;
+			path = ../src/TLoopAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6110330CD5501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TLoopAudioStream.h;
+			path = ../src/TLoopAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6120330CD5501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TMixAudioStream.cpp;
+			path = ../src/TMixAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6130330CD5501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TMixAudioStream.h;
+			path = ../src/TMixAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D61E0330CD7501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TNullAudioStream.h;
+			path = ../src/TNullAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6210330CD8701053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TSeqAudioStream.cpp;
+			path = ../src/TSeqAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1D6220330CD8701053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TSeqAudioStream.h;
+			path = ../src/TSeqAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1FF5A0328B73A01053105 = {
+			children = (
+				F5C1D5FC0330CD3801053105,
+				4BA3E1780459506A00053105,
+				4B6B22F6071FB980005E6873,
+				F5C1FF850328C9C301053105,
+				F5C1FF840328C9C301053105,
+				F5D82C41032DEB9D01053105,
+				F5D82C44032DF22401053105,
+				F5C1D5FD0330CD3801053105,
+				F5C1D5FE0330CD3801053105,
+				F5C1D5FF0330CD3801053105,
+				F5C1D6000330CD3801053105,
+				F5C1D6100330CD5501053105,
+				F5C1D6110330CD5501053105,
+				F5C1D6120330CD5501053105,
+				F5C1D6130330CD5501053105,
+				F5C1D61E0330CD7501053105,
+				F5C1D6210330CD8701053105,
+				F5C1D6220330CD8701053105,
+				F5C5B1FE033220AA01053105,
+				F5C5B1FF033220AA01053105,
+				F5C5B204033220C001053105,
+				F5C5B205033220C001053105,
+				F5C5B21203322F5801053105,
+				F5C5B21303322F5801053105,
+				F665FF400332A4BE01913B4D,
+			);
+			isa = PBXGroup;
+			name = Stream;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1FF5B0328B76601053105 = {
+			children = (
+				4B6B22FD071FB9D1005E6873,
+				F5C1D5E80330CCD601053105,
+				F5C1D5E90330CCD601053105,
+				F5C1D5EA0330CCD601053105,
+				F5C1D5F90330CCFF01053105,
+			);
+			isa = PBXGroup;
+			name = Player;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1FF5C0328B78201053105 = {
+			children = (
+				4B51474207F18D680059C4C8,
+				F5E2072A032E1EA501053105,
+				F5C1D5D50330CC8501053105,
+				F5C1D5D60330CC8501053105,
+				F5C1D5BD0330CC5A01053105,
+				F6FC02B9033249ED010531C2,
+				F68E6D0D0334858B01DE1461,
+				F68E6D0F0334858B01DE1461,
+			);
+			isa = PBXGroup;
+			name = Tools;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1FF5D0328B7A301053105 = {
+			children = (
+				F5C1D5B70330CC4101053105,
+				F5C1D5B80330CC4101053105,
+			);
+			isa = PBXGroup;
+			name = Interface;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1FF5F0328B7D201053105 = {
+			children = (
+				F5C1D5A90330CB4101053105,
+				F5C1D5A80330CB4101053105,
+			);
+			isa = PBXGroup;
+			name = Factory;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1FF600328B7FA01053105 = {
+			children = (
+				F5C1D59C0330CB1E01053105,
+				F5C1D59F0330CB2F01053105,
+				F5C1D5A00330CB2F01053105,
+				F5C1D5A10330CB2F01053105,
+			);
+			isa = PBXGroup;
+			name = Thread;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1FF840328C9C301053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TBufferedAudioStream.cpp;
+			path = ../src/TBufferedAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C1FF850328C9C301053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TBufferedAudioStream.h;
+			path = ../src/TBufferedAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C5B1FE033220AA01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TFileAudioStream.cpp;
+			path = ../src/TFileAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C5B1FF033220AA01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TFileAudioStream.h;
+			path = ../src/TFileAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C5B204033220C001053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TReadFileAudioStream.cpp;
+			path = ../src/TReadFileAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C5B205033220C001053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TReadFileAudioStream.h;
+			path = ../src/TReadFileAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C5B21203322F5801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TWriteFileAudioStream.cpp;
+			path = ../src/TWriteFileAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5C5B21303322F5801053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TWriteFileAudioStream.h;
+			path = ../src/TWriteFileAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5D82C3D032DEAA101053105 = {
+			children = (
+				F5D82C3E032DEAB501053105,
+				F5D82C47032DF3CC01053105,
+			);
+			isa = PBXGroup;
+			name = Effect;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5D82C3E032DEAB501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioEffect.h;
+			path = ../src/TAudioEffect.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5D82C41032DEB9D01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TTransformAudioStream.h;
+			path = ../src/TTransformAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5D82C44032DF22401053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TTransformAudioStream.cpp;
+			path = ../src/TTransformAudioStream.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5D82C47032DF3CC01053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = TAudioEffect.cpp;
+			path = ../src/TAudioEffect.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5E2072A032E1EA501053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioBuffer.h;
+			path = ../src/TAudioBuffer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5EDBD20032F86EF01053105 = {
+			children = (
+				F5C1D5960330CB0801053105,
+				F5C1D5970330CB0801053105,
+			);
+			isa = PBXGroup;
+			name = Mixer;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5EDBD21032F870801053105 = {
+			children = (
+				F5C1D58D0330C7F001053105,
+				F5C1D58E0330C7F001053105,
+				F5C1D5930330CAEF01053105,
+			);
+			isa = PBXGroup;
+			name = Channel;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5F4A84E032657D901053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = main.cpp;
+			path = ../src/main.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F5F4A853032657D901053105 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioConstants.h;
+			path = ../src/TAudioConstants.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//F60
+//F61
+//F62
+//F63
+//F64
+		F665FF400332A4BE01913B4D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TInputAudioStream.h;
+			path = ../src/TInputAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F666DED703EC03FB01D11C03 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = JavaVM.framework;
+			path = /System/Library/Frameworks/JavaVM.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		F68E6D0D0334858B01DE1461 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = UAudioTools.h;
+			path = ../src/UAudioTools.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F68E6D0F0334858B01DE1461 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = UTools.h;
+			path = ../src/UTools.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		F6FC02B9033249ED010531C2 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = Envelope.cpp;
+			path = ../src/Envelope.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+	};
+	rootObject = 08FB7793FE84155DC02AAC07;
+}
