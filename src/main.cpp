@@ -127,7 +127,7 @@ AudioStreamPtr test8()
     return MakeWriteSound("output.aif", MakeCutSound(mix, 100000, 200000), SF_FORMAT_AIFF|SF_FORMAT_PCM_16);
 }
 
-AudioStreamPtr test9()
+void test9()
 {
 	printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
