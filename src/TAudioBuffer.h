@@ -48,17 +48,8 @@ class TAudioBuffer
 
         TAudioBuffer(): fBuffer(NULL), fFrames(0), fChannels(0), fPos(0)
         {}
-        TAudioBuffer(long frames, long channels)
-        {
-            fBuffer = new T[frames * channels];
-            fFrames = frames;
-            fChannels = channels;
-            fPos = 0;
-        }
-        virtual ~TAudioBuffer()
-        {
-            delete []fBuffer;
-        }
+		virtual ~TAudioBuffer()
+		{}
 
         long GetSize()
         {
@@ -90,6 +81,33 @@ class TAudioBuffer
         }
 };
 
+/*!
+\brief Template based class for local buffers.
+*/
+
+template <class T>
+class TLocalAudioBuffer : public TAudioBuffer<T>
+{
+
+    public:
+
+        TLocalAudioBuffer(long frames, long channels)
+        {
+            fBuffer = new T[frames * channels];
+            fFrames = frames;
+            fChannels = channels;
+            fPos = 0;
+        }
+        virtual ~TLocalAudioBuffer()
+        {
+			delete []fBuffer;
+		}
+};
+
+/*!
+\brief Template based class for shared buffers.
+*/
+
 template <class T>
 class TSharedAudioBuffer : public TAudioBuffer<T>
 {
@@ -105,7 +123,8 @@ class TSharedAudioBuffer : public TAudioBuffer<T>
         }
         virtual ~TSharedAudioBuffer()
         {}
-}
-;
+};
+
+
 
 #endif

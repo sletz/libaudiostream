@@ -71,7 +71,7 @@ void TAudioGlobals::Destroy()
 TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                              long buffer_size, long stream_buffer_size, long rtstream_buffer_size)
 {
-    fInBuffer = new TAudioBuffer<short>(rtstream_buffer_size, inChan);
+ 	fInBuffer = new TLocalAudioBuffer<short>(rtstream_buffer_size, inChan);
     assert(fInBuffer);
     fInput = inChan;
     fOutput = outChan;

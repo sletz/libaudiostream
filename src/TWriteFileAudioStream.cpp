@@ -58,7 +58,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream
     SF_INFO info;
 
     fChannels = stream->Channels();
-    fBuffer = new TAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
+ 	fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
     fStream = stream;
     fFormat = format;
 

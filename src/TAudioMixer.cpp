@@ -35,7 +35,7 @@ TAudioMixer::TAudioMixer ()
     fVol = DEFAULT_VOL;
     fPan = DEFAULT_PAN;
 
-    fMixBuffer = new TAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+	fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
     fSoundChannelTable = new TAudioChannelPtr[TAudioGlobals::fChannels];
 
     for (int j = 0; j < TAudioGlobals::fChannels; j++) {

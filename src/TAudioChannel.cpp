@@ -39,7 +39,7 @@ TAudioChannel::TAudioChannel()
     fLeftOut = 0;
     fRightOut = 1;
 
-    fMixBuffer = new TAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+	fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
 }
 
 TAudioChannel::~TAudioChannel()
