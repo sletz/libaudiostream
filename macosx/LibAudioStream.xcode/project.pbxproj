@@ -648,7 +648,6 @@
 				OTHER_LDFLAGS = "-flat_namespace /usr/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox -framework  Jack";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
 				SECTORDER_FLAGS = "";
