@@ -27,7 +27,7 @@
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
 
-#define IN_CHANNELS 0 // stereo player
+#define IN_CHANNELS 2 // stereo player
 #define OUT_CHANNELS 2 // stereo player
 #define CHANNELS 8 
 
@@ -214,8 +214,9 @@ int main(int argc, char * argv[])
     printf("LibAudioStream based Player \n");
     printf("--------------------------- \n\n");
 
-    //AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
-	AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer);
+	// Try to open Jack version
+ 	AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer);
+	// Is failure opens PortAudio version
     if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
 	StartAudioPlayer(player);
