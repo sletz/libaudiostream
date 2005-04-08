@@ -57,7 +57,6 @@ class TCmdHandler
 
 typedef TCmdHandler * TCmdHandlerPtr;
 
-
 //-----------------------
 // Class TCmdHandlerList
 //-----------------------

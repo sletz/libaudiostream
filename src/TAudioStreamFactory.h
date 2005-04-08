@@ -64,7 +64,7 @@ class AUDIO_EXPORTS TAudioStreamFactory
         {}
         virtual ~TAudioStreamFactory()
         {}
-      
+
         static TAudioStreamPtr MakeInputSound(void);
         static TAudioStreamPtr MakeNullSound(long lengthFrame);
         static TAudioStreamPtr MakeReadSound(string name);
@@ -79,7 +79,7 @@ class AUDIO_EXPORTS TAudioStreamFactory
         static TAudioStreamPtr MakeRTRenderer(TAudioStreamPtr s);
         static TAudioStreamPtr MakeDTRenderer(TAudioStreamPtr s);
         //static TAudioStreamPtr MakeConvertSound(TAudioStreamPtr s, long converter, double ratio);
-		//static TAudioStreamPtr MakeGCSound(TAudioStreamPtr sound);
+        //static TAudioStreamPtr MakeGCSound(TAudioStreamPtr sound);
 };
 
 typedef TAudioStreamFactory * TAudioStreamFactoryPtr;

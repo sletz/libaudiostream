@@ -52,7 +52,7 @@ class AUDIO_EXPORTS TAudioGlobals
         static long fRTStream_Buffer_Size;      // Real-Time Stream Buffer size
         static long fDiskError;                 // Counter of disk streaming errors
 
-		TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
+        TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
         virtual ~TAudioGlobals();
 

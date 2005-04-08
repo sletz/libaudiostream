@@ -48,8 +48,8 @@ class TAudioBuffer
 
         TAudioBuffer(): fBuffer(NULL), fFrames(0), fChannels(0), fPos(0)
         {}
-		virtual ~TAudioBuffer()
-		{}
+        virtual ~TAudioBuffer()
+        {}
 
         long GetSize()
         {
@@ -100,8 +100,8 @@ class TLocalAudioBuffer : public TAudioBuffer<T>
         }
         virtual ~TLocalAudioBuffer()
         {
-			delete []fBuffer;
-		}
+            delete []fBuffer;
+        }
 };
 
 /*!
@@ -123,7 +123,8 @@ class TSharedAudioBuffer : public TAudioBuffer<T>
         }
         virtual ~TSharedAudioBuffer()
         {}
-};
+}
+;
 
 
 

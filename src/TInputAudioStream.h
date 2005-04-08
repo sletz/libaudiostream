@@ -44,7 +44,7 @@ class TInputAudioStream : public TAudioStream
 
         long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
         {
-			assert(TSharedBuffers::GetInBuffer()); 
+            assert(TSharedBuffers::GetInBuffer());
             UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
                                              framesNum,

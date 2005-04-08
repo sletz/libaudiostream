@@ -35,7 +35,7 @@ extern "C"
 #define FILE_NOT_FOUND_ERR -4
 
     enum {kPlayingChannel = 0, kIdleChannel};
-	enum {kPortAudioRenderer = 0, kJackRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer};
 
     /*!
     \brief Sound channel info
@@ -55,7 +55,7 @@ extern "C"
     typedef void* AudioPlayerPtr;
     typedef void* AudioStreamPtr;
     typedef void* AudioEffectPtr;
-	typedef void* AudioEffectListPtr;
+    typedef void* AudioEffectListPtr;
 
     /*!
     \brief Create a stream that will produce "silence".
@@ -71,7 +71,7 @@ extern "C"
     AudioStreamPtr MakeReadSound(char* name);
     /*!
     \brief Create a file region reader stream.
-	\param name The sound file pathname.
+    \param name The sound file pathname.
     \param beginFrame The start frame of the region.
     \param endFrame The end frame of the region.
     \return A pointer to new stream object.
@@ -79,7 +79,7 @@ extern "C"
     AudioStreamPtr MakeRegionSound(char* name, long beginFrame, long endFrame);
     /*!
     \brief Create a fade on a stream.
-	\param sound The stream to be "faded".
+    \param sound The stream to be "faded".
     \param fadeIn The fadein length in frames.
     \param fadeOut The fadeout length in frames.
     \return A pointer to new stream object.
@@ -94,8 +94,8 @@ extern "C"
     AudioStreamPtr MakeLoopSound(AudioStreamPtr sound, long num);
     /*!
     \brief Cut in a stream : the portion between 0 and beginFrame will be removed, the portion between endFrame and the stream end will be removed.
-	\param sound The stream to be cutted.
-	\param beginFrame The start frame number of the stream part to remove.
+    \param sound The stream to be cutted.
+    \param beginFrame The start frame number of the stream part to remove.
     \param endFrame The end frame number of the stream part to remove
     \return A pointer to new stream object.
     */
@@ -117,7 +117,7 @@ extern "C"
     AudioStreamPtr MakeMixSound(AudioStreamPtr s1, AudioStreamPtr s2);
     /*!
     \brief Apply an effect on a stream.
-	\param sound The stream to be transformed.
+    \param sound The stream to be transformed.
     \param effect_list The effect list to be used.
     \param fadeIn A fadein section frames before the effect is fully applied.
     \param fadeOut A fadeout section frames before the effect is fully removed.
@@ -126,8 +126,8 @@ extern "C"
     AudioStreamPtr MakeTransformSound(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
     /*!
     \brief Create a stream writer.
-	\param name The sound file pathname.
-	\param sound The stream to be saved.
+    \param name The sound file pathname.
+    \param sound The stream to be saved.
     \param format A libsndfile format.
     \return A pointer to new stream object.
     */
@@ -169,36 +169,36 @@ extern "C"
     */
     void DeleteSound(AudioStreamPtr sound);
 
-	/* Effect management */
-	
-	/*!
-    \brief Create an effect list.
- 	\return A pointer to new effect list.
-    */
-	AudioEffectListPtr MakeAudioEffectList();
-	
-	/*!
-    \brief Add an effect in an effect list.
-	\param list The effect list where the effect is added.
-	\param effect The effect to be added.
- 	\return A pointer to the modified effect list.
-    */
-	AudioEffectListPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-	
-	/*!
-    \brief Remove an effect from an effect list.
-	\param list The effect list where the effect is removed.
-	\param effect The effect to be removed.
- 	\return A pointer to the modified effect list.
-    */
-	AudioEffectListPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-	
-	/*!
-    \brief Create a volume effect.
-    \param gain The gain between 0 and 1.
-	\return A pointer to new effect object.
-    */
-	AudioEffectPtr MakeVolAudioEffect(float gain);
+    /* Effect management */
+
+    /*!
+	\brief Create an effect list.
+	\return A pointer to new effect list.
+	*/
+    AudioEffectListPtr MakeAudioEffectList();
+
+    /*!
+	\brief Add an effect in an effect list.
+    \param list The effect list where the effect is added.
+    \param effect The effect to be added.
+	\return A pointer to the modified effect list.
+	*/
+    AudioEffectListPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+
+    /*!
+	\brief Remove an effect from an effect list.
+    \param list The effect list where the effect is removed.
+    \param effect The effect to be removed.
+	\return A pointer to the modified effect list.
+	*/
+    AudioEffectListPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+
+    /*!
+	\brief Create a volume effect.
+	\param gain The gain between 0 and 1.
+    \return A pointer to new effect object.
+	*/
+    AudioEffectPtr MakeVolAudioEffect(float gain);
 
     // Open/Close
     /*!
@@ -210,7 +210,7 @@ extern "C"
     \param buffer_size The audio playerr internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
     \param rtstream_buffer_size The input stream buffer size.
-	\param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+    \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
     \return A pointer to new audio player object.
     */
     AudioPlayerPtr OpenAudioPlayer(long inChan,
@@ -220,7 +220,7 @@ extern "C"
                                    long buffer_size,
                                    long stream_buffer_size,
                                    long rtstream_buffer_size,
-								   long renderer);
+                                   long renderer);
     /*!
     \brief Close the audio player.
     \param player The audio player to be closed.

@@ -59,14 +59,7 @@ class TCmdManager
             fInstance = 0;
             //delete fInstance;
         }
-        /*
-        static void ExecCmd (CmdPtr fun, long a1,long a2,long a3,long a4,long a5) 
-        {
-             printf("ExecCmd  %ld\n", fInstance);
-             if (fInstance) fInstance->ExecCmdAux(fun,a1,a2,a3,a4,a5);
-        }
-        */
-
+    
         void ExecCmd(CmdPtr fun, long a1, long a2, long a3, long a4, long a5)
         {
             ExecCmdAux(fun, a1, a2, a3, a4, a5);
@@ -120,7 +113,6 @@ class TDirectCmdManager : public TCmdManager
             fun(a1, a2, a3, a4, a5);
         }
 };
-
 
 typedef TDirectCmdManager * TDirectCmdManagerPtr;
 

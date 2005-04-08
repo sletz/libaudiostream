@@ -1,21 +1,21 @@
 /*
- Copyright © Grame 2002
+Copyright © Grame 2002
 
- This library is free software; you can redistribute it and modify it under
- the terms of the GNU Library General Public License as published by the
- Free Software Foundation version 2 of the License, or any later version.
+This library is free software; you can redistribute it and modify it under
+the terms of the GNU Library General Public License as published by the
+Free Software Foundation version 2 of the License, or any later version.
 
- This library is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
- for more details.
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
+for more details.
 
- You should have received a copy of the GNU Library General Public License
- along with this library; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
- grame@rd.grame.fr
+Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+grame@rd.grame.fr
 
 */
 
@@ -43,12 +43,13 @@ void* TThreadCmdManager::CmdHandler(void* arg)
         pthread_cond_wait(&manager->fCond, &manager->fLock);
         pthread_mutex_unlock(&manager->fLock);
 #else
-        manager->RunAux();
+		manager->RunAux();
         pthread_mutex_lock(&manager->fLock);
         while (fifosize(&manager->fRunningCmd) == 0)
             pthread_cond_wait(&manager->fCond, &manager->fLock);
         pthread_mutex_unlock(&manager->fLock);
 #endif
+
     }
 
     pthread_exit(0);
@@ -69,11 +70,11 @@ TThreadCmdManager::TThreadCmdManager()
 {
     struct sched_param param;
     int err;
-	TCmd* cmd;
+    TCmd* cmd;
 
     // Init variables
     lfinit(&fFreeCmd);
-  
+
     pthread_mutex_init(&fLock, NULL);
     pthread_cond_init(&fCond, NULL);
 
@@ -83,8 +84,8 @@ TThreadCmdManager::TThreadCmdManager()
         if (cmd)
             lfpush(&fFreeCmd, (lifocell*)cmd);
     }
-	cmd = (TCmd*)malloc(sizeof(TCmd));
-	fifoinit(&fRunningCmd, (fifocell*)cmd);
+    cmd = (TCmd*)malloc(sizeof(TCmd));
+    fifoinit(&fRunningCmd, (fifocell*)cmd);
 
     param.sched_priority = 99;
     err = pthread_create(&fThread, NULL, CmdHandler, (void*)this);
@@ -93,7 +94,7 @@ TThreadCmdManager::TThreadCmdManager()
 TThreadCmdManager::~TThreadCmdManager()
 {
     TCmd* cmd;
-	TCmd* next;
+    TCmd* next;
 
     // Wait for thread exit
 #ifdef WIN32
@@ -105,14 +106,15 @@ TThreadCmdManager::~TThreadCmdManager()
     pthread_cond_destroy(&fCond);
 
     // Free structures
-    while ((cmd = (TCmd*)lfpop(&fFreeCmd)))
+    while ((cmd = (TCmd*)lfpop(&fFreeCmd))) {
         free(cmd);
-	cmd = (TCmd*)fifoclear(&fRunningCmd);
-	while (cmd) {
-		next = cmd->link;
-		free(cmd);
-		cmd = next;
 	}
+    cmd = (TCmd*)fifoclear(&fRunningCmd);
+    while (cmd) {
+        next = cmd->link;
+        free(cmd);
+        cmd = next;
+    }
 }
 
 void TThreadCmdManager::FlushCmds()
@@ -137,7 +139,7 @@ void TThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long arg3, 
         cmd->arg3 = arg3;
         cmd->arg4 = arg4;
         cmd->arg5 = arg5;
-		// Signal the condition to wake the thread
+        // Signal the condition to wake the thread
         pthread_mutex_lock(&fLock);
         fifoput(&fRunningCmd, (fifocell*)cmd);
         pthread_mutex_unlock(&fLock);

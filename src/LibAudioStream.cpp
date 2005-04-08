@@ -1,21 +1,21 @@
 /*
- Copyright © Grame 2002
+Copyright © Grame 2002
 
- This library is free software; you can redistribute it and modify it under
- the terms of the GNU Library General Public License as published by the
- Free Software Foundation version 2 of the License, or any later version.
+This library is free software; you can redistribute it and modify it under
+the terms of the GNU Library General Public License as published by the
+Free Software Foundation version 2 of the License, or any later version.
 
- This library is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
- for more details.
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
+for more details.
 
- You should have received a copy of the GNU Library General Public License
- along with this library; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU Library General Public License
+along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
- grame@rd.grame.fr
+Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+grame@rd.grame.fr
 
 */
 
@@ -43,7 +43,7 @@ extern "C"
 	#define	AUDIOAPI
 #endif
 
-	enum {kPortAudioRenderer = 0, kJackRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer};
 
     struct AudioPlayer {
         TAudioRendererPtr	fRenderer;
@@ -54,7 +54,7 @@ extern "C"
     typedef AudioPlayer* AudioPlayerPtr;
     typedef void* AudioStreamPtr;
     typedef void* AudioEffectListPtr;
-	typedef void* AudioEffectPtr;
+    typedef void* AudioEffectPtr;
 
     // Build sound
     AudioStreamPtr AUDIOAPI MakeNullSound(long lengthFrame);
@@ -75,13 +75,13 @@ extern "C"
     long AUDIOAPI ReadSound(AudioStreamPtr stream, float* buffer, long buffer_size, long channels);
 
     void AUDIOAPI DeleteSound(AudioStreamPtr sound);
-	
-	// Effect management
-	AudioEffectListPtr AUDIOAPI MakeAudioEffectList();
-	AudioEffectListPtr AUDIOAPI AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-	AudioEffectListPtr AUDIOAPI RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-	
-	AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
+
+    // Effect management
+    AudioEffectListPtr AUDIOAPI MakeAudioEffectList();
+    AudioEffectListPtr AUDIOAPI AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+    AudioEffectListPtr AUDIOAPI RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+
+    AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
 
     // Open/Close
     AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
@@ -91,7 +91,7 @@ extern "C"
                                             long buffer_size,
                                             long stream_buffer_size,
                                             long rtstream_buffer_size,
-											long renderer);
+                                            long renderer);
     void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player);
 
 
@@ -183,18 +183,22 @@ AudioStreamPtr AUDIOAPI MakeRendererSound(AudioStreamPtr s)
 
 long AUDIOAPI GetLengthSound(AudioStreamPtr s)
 {
-    return ((TAudioStreamPtr)s)->Length();
+    return (s) ? ((TAudioStreamPtr)s)->Length() : 0;
 }
 
 long AUDIOAPI GetChannelsSound(AudioStreamPtr s)
 {
-    return ((TAudioStreamPtr)s)->Channels();
+    return (s) ? ((TAudioStreamPtr)s)->Channels() : 0;
 }
 
 long AUDIOAPI ReadSound(AudioStreamPtr s, float* buffer, long buffer_size, long channels)
 {
-    TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
-    return ((TAudioStreamPtr)s)->Read(&process, buffer_size, 0, channels);
+    if (s && buffer) {
+        TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
+        return ((TAudioStreamPtr)s)->Read(&process, buffer_size, 0, channels);
+    } else {
+        return 0;
+    }
 }
 
 void AUDIOAPI DeleteSound(AudioStreamPtr s)
@@ -205,24 +209,27 @@ void AUDIOAPI DeleteSound(AudioStreamPtr s)
 // Effect management
 AudioEffectListPtr MakeAudioEffectList()
 {
-	return new TAudioEffect();
+    return new TAudioEffect();
 }
 
 AudioEffectPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
-	TAudioEffectPtr(list_effect)->push_back(TAudioEffectInterfacePtr(effect));
-	return list_effect;
+    if (list_effect && effect)
+        TAudioEffectPtr(list_effect)->push_back(TAudioEffectInterfacePtr(effect));
+    return list_effect;
 }
 
 AudioEffectPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
-	TAudioEffectPtr(list_effect)->remove(TAudioEffectInterfacePtr(effect));
-	return list_effect;
+    if (list_effect && effect)
+        TAudioEffectPtr(list_effect)->remove
+        (TAudioEffectInterfacePtr(effect));
+    return list_effect;
 }
 
 AudioEffectPtr MakeVolAudioEffect(float gain)
 {
-	return new TVolAudioEffect(gain);
+    return new TVolAudioEffect(gain);
 }
 
 // Open/Close
@@ -234,47 +241,47 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer
     long tmpOutChan = outChan;
     long tmpBufferSize = buffer_size;
     long tmpSampleRate = sample_rate;
-	int res;
+    int res;
 
     TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size);
 
     AudioPlayerPtr player = (AudioPlayerPtr)calloc(1, sizeof(AudioPlayer));
     if (!player)
-		goto error;
-	
-	switch (renderer) {
-	
-		case kPortAudioRenderer:
-			player->fRenderer = TAudioRendererFactory::MakePortAudioRenderer();
-			break;
-			
-		case kJackRenderer:
-			player->fRenderer = TAudioRendererFactory::MakeJackAudioRenderer();
-			break;
-	}
-	
-	if (!player->fRenderer)
-		goto error;
+        goto error;
+
+    switch (renderer) {
+
+        case kPortAudioRenderer:
+            player->fRenderer = TAudioRendererFactory::MakePortAudioRenderer();
+            break;
+
+        case kJackRenderer:
+            player->fRenderer = TAudioRendererFactory::MakeJackAudioRenderer();
+            break;
+    }
+
+    if (!player->fRenderer)
+        goto error;
 
     player->fEngine = new TAudioEngine(player->fRenderer);
- 	if (!player->fEngine)
-		goto error;
+    if (!player->fEngine)
+        goto error;
 
     res = player->fEngine->Open(&tmpInChan, &tmpOutChan, &tmpBufferSize, &tmpSampleRate);
 
-    if (res == NO_ERR) 
+    if (res == NO_ERR)
         return player;
-	
+
 error:
-	CloseAudioPlayer(player);
-	return 0;
+    CloseAudioPlayer(player);
+    return 0;
 }
 
 void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 {
-	if (!player)
-		return;
-		
+    if (!player)
+        return ;
+
     if (player->fEngine) {
         player->fEngine->Close();
         delete player->fEngine;
@@ -291,7 +298,7 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 // SoundFile management
 long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan)
 {
-    if (player->fEngine) {
+    if (player && player->fEngine && sound) {
         return player->fEngine->LoadChannel((TAudioStreamPtr)sound, chan, vol, pan);
     } else
         return LOAD_ERR;
@@ -299,7 +306,7 @@ long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStreamPtr sound, long chan
 
 void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info)
 {
-    if (player->fEngine) {
+    if (player && player->fEngine && info) {
         player->fEngine->GetInfoChannel(chan, info);
     }
 }
@@ -307,57 +314,57 @@ void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info
 // Transport
 void AUDIOAPI StartSound(AudioPlayerPtr player, long chan)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->StartSound(chan);
 }
 
 void AUDIOAPI ContSound(AudioPlayerPtr player, long chan)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->PlaySound(chan);
 }
 
 void AUDIOAPI StopSound(AudioPlayerPtr player, long chan)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->StopSound(chan);
 }
 
 void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->Start();
 }
 
 void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->Stop();
 }
 
 // Params
 void AUDIOAPI SetVolSound(AudioPlayerPtr player, long chan, long vol)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->SetVolSound(chan, vol);
 }
 
 void AUDIOAPI SetPanSound(AudioPlayerPtr player, long chan, long pan)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->SetPanSound(chan, pan);
 }
 
 // Master
 void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, long vol)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->SetMasterVol(vol);
 }
 
 void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, long pan)
 {
-    if (player->fEngine)
+    if (player && player->fEngine)
         player->fEngine->SetMasterPan(pan);
 }
 

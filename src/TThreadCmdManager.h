@@ -35,7 +35,7 @@ grame@rd.grame.fr
 
 /*
 Warning : the fifocell data structure size (see lffifo.h) MUST match the TCmd data structure size 
-*/
+*/ 
 /*!
 \brief A command structure
 */
@@ -168,7 +168,7 @@ class TThreadCmdManager : public TCmdManager
 {
 
     private:
-	    lifo fFreeCmd;				// Commands free list
+        lifo fFreeCmd;				// Commands free list
         fifo fRunningCmd;			// Running commands
         pthread_t	fThread;		// Execution thread
         pthread_mutex_t fLock;		// Mutex

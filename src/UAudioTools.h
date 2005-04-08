@@ -45,7 +45,7 @@ class UAudioTools
 
     private:
 
-        static const float fGain ;
+        static const float fGain;
 
     public:
 
@@ -120,7 +120,7 @@ class UAudioTools
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
                     int index1 = i * channels + j;
                     int index2 = index1 + 1;
-					dst[index1] += (src[index1] * leftamp);
+                    dst[index1] += (src[index1] * leftamp);
                     dst[index2] += (src[index2] * rightamp);
                 }
             }
@@ -170,17 +170,17 @@ class UAudioTools
 
         static inline void ZeroStereoBlk(short* dst, long nbsamples)
         {
-			memset(dst, 0, sizeof(short)*nbsamples);
+            memset(dst, 0, sizeof(short)*nbsamples);
         }
 
         static inline void ZeroStereoBlk(MY_FLOAT* dst, long nbsamples)
         {
-			memset(dst, 0, sizeof(MY_FLOAT)*nbsamples);
+            memset(dst, 0, sizeof(MY_FLOAT)*nbsamples);
         }
 
         static inline void ZeroFloatBlk(MY_FLOAT* dst, long framesNum, long channels)
         {
-			memset(dst, 0, sizeof(MY_FLOAT)*framesNum*channels);
+            memset(dst, 0, sizeof(MY_FLOAT)*framesNum*channels);
         }
 
         static inline void ZeroShortBlk(short* dst, long framesNum, long channels)
@@ -195,7 +195,7 @@ class UAudioTools
             }
         }
 
-		static inline void Float2LongMulti(MY_FLOAT* in, long * out, long framesNum, long nbchan, long chan1, long chan2)
+        static inline void Float2LongMulti(MY_FLOAT* in, long * out, long framesNum, long nbchan, long chan1, long chan2)
         {
             for (long i = 0;i < framesNum; i++) {
                 out[(i*nbchan) + chan1]
@@ -308,7 +308,7 @@ class UAudioTools
                     }
                 }
             } else {
-				for (long i = 0; i < framesNum * channelsOut; i += 4) {
+                for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += (short)(ClipFloat(in[i]) * fGain);
                     out[i + 1] += (short)(ClipFloat(in[i + 1]) * fGain);
                     out[i + 2] += (short)(ClipFloat(in[i + 2]) * fGain);
@@ -326,7 +326,7 @@ class UAudioTools
                     }
                 }
             } else {
-				for (long i = 0; i < framesNum * channelsOut; i += 4) {
+                for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] = (short)(ClipFloat(in[i]) * fGain);
                     out[i + 1] = (short)(ClipFloat(in[i + 1]) * fGain);
                     out[i + 2] = (short)(ClipFloat(in[i + 2]) * fGain);
