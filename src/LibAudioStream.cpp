@@ -207,19 +207,19 @@ void AUDIOAPI DeleteSound(AudioStreamPtr s)
 }
 
 // Effect management
-AudioEffectListPtr MakeAudioEffectList()
+AudioEffectListPtr AUDIOAPI MakeAudioEffectList()
 {
     return new TAudioEffect();
 }
 
-AudioEffectPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
+AudioEffectPtr AUDIOAPI AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
     if (list_effect && effect)
         TAudioEffectPtr(list_effect)->push_back(TAudioEffectInterfacePtr(effect));
     return list_effect;
 }
 
-AudioEffectPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
+AudioEffectPtr AUDIOAPI RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
     if (list_effect && effect)
         TAudioEffectPtr(list_effect)->remove
@@ -227,7 +227,7 @@ AudioEffectPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr 
     return list_effect;
 }
 
-AudioEffectPtr MakeVolAudioEffect(float gain)
+AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain)
 {
     return new TVolAudioEffect(gain);
 }

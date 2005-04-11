@@ -84,9 +84,9 @@ class TBufferedAudioStream : public TAudioStream
         long fCurFrame;		// Position inside a buffer
         long fFramesNum;	// Total file frames number
         long fTotalFrames;	// Total frames already handled
-        long fBeginFrame;	// Frames begin
+        //long fBeginFrame;	// Frames begin
 
-        bool fReady;		// For disk access error dectection
+        bool fReady;		// For disk access error detection
 
         virtual long Write(TAudioBuffer<short>* buffer, long framesNum, long framePos)
         {
@@ -101,13 +101,11 @@ class TBufferedAudioStream : public TAudioStream
         virtual void WriteBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos);
 
         long HandleBuffer(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels, bool read_or_write);
-        void Init(TAudioBuffer<short>* buffer, long beginFrame);
+        void Init(TAudioBuffer<short>* buffer);
 
     public:
 
         TBufferedAudioStream();
-        TBufferedAudioStream(long beginFrame);
-        TBufferedAudioStream(TAudioBuffer<short>* buffer, long beginFrame);
         virtual ~TBufferedAudioStream()
         {}
 
@@ -132,7 +130,7 @@ class TBufferedAudioStream : public TAudioStream
         }
         virtual TAudioStreamPtr Copy()
         {
-            return new TBufferedAudioStream(fBeginFrame);
+            return new TBufferedAudioStream();
         } // Le buffer interne est partagé??
 };
 

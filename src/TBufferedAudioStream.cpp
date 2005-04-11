@@ -28,24 +28,13 @@ grame@rd.grame.fr
 
 TBufferedAudioStream::TBufferedAudioStream(): TAudioStream()
 {
-    Init(0, 0);
+    Init(0);
 }
 
-TBufferedAudioStream::TBufferedAudioStream(long beginFrame): TAudioStream()
-{
-    Init(0, beginFrame);
-}
-
-TBufferedAudioStream::TBufferedAudioStream(TAudioBuffer<short>* buffer, long beginFrame): TAudioStream()
-{
-    Init(fBuffer, beginFrame);
-}
-
-void TBufferedAudioStream::Init(TAudioBuffer<short>* buffer, long beginFrame)
+void TBufferedAudioStream::Init(TAudioBuffer<short>* buffer)
 {
     fBuffer = buffer;
     fFramesNum = fCurFrame = fChannels = fTotalFrames = 0;
-    fBeginFrame = beginFrame;
     fReady = false;
 }
 

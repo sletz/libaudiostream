@@ -28,7 +28,7 @@ grame@rd.grame.fr
 #include "UTools.h"
 #include <stdio.h>
 
-TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name, beginFrame)
+TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
     SF_INFO info;
 
@@ -45,6 +45,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 
     fFramesNum = long(info.frames);
     fChannels = long(info.channels);
+    fBeginFrame = beginFrame;
 
     if (info.samplerate != TAudioGlobals::fSample_Rate)
         printf("Warning : file sample rate different from engine sample rate! %i\n", info.samplerate);

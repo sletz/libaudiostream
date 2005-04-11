@@ -53,8 +53,8 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         void WriteBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos);
 
     public:
-
-        TFileAudioStream(string name, long beginFrame): TBufferedAudioStream(beginFrame), fName(name)
+     
+        TFileAudioStream(string name): TBufferedAudioStream(), fName(name)
         {}
         virtual ~TFileAudioStream()
         {}
@@ -78,8 +78,4 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
 typedef TFileAudioStream * TFileAudioStreamPtr;
 
 #endif
-
-
-
-
 

@@ -29,7 +29,7 @@ grame@rd.grame.fr
 #include <string.h>
 
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioBuffer<short>* buffer, TAudioStreamPtr stream, long format)
-        : TFileAudioStream(name, 0)
+        : TFileAudioStream(name)
 {
     SF_INFO info;
 
@@ -53,7 +53,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioBuffer<short>* b
 }
 
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format)
-        : TFileAudioStream(name, 0)
+        : TFileAudioStream(name)
 {
     SF_INFO info;
 
