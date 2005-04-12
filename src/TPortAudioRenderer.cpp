@@ -229,10 +229,12 @@ void TPortAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fBufferSize = fBufferSize;
     info->fCurFrame = long(Pa_StreamTime(fStream));
     info->fCurMs = ConvertSample2Ms(info->fCurFrame);
-#ifdef WIN32
-
-    info->fOutputLatencyFrame = Pa_GetOutputLatency (fStream);
-    info->fOutputLatencyMs = ConvertSample2Ms (info->fOutputLatencyFrame);
+#if defined(WIN32) && defined(IMUTUS)
+    info->fOutputLatencyFrame = Pa_GetOutputLatency(fStream);
+    info->fOutputLatencyMs = ConvertSample2Ms(info->fOutputLatencyFrame);
+#else
+	info->fOutputLatencyFrame = 0;
+    info->fOutputLatencyMs = 0;
 #endif
 }
 
