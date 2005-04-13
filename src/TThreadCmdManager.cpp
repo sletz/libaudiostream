@@ -101,8 +101,6 @@ TThreadCmdManager::~TThreadCmdManager()
     TCmd* cmd;
     TCmd* next;
     
-    printf("fThreadList.size() %ld\n", fThreadList.size());
-
     // Wait for thread exit
     for (unsigned int i = 0; i < fThreadList.size(); i++) {
     #ifdef __APPLE__
