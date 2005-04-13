@@ -122,7 +122,7 @@ class TRTRendererAudioStream : public TRendererAudioStream
         virtual ~TRTRendererAudioStream()
         {}
 
-        static void Init();
+        static void Init(long thread_num);
         static void Destroy();
         static void Flush();
 };

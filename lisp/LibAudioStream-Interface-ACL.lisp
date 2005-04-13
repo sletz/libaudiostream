@@ -209,7 +209,8 @@
   	(bs :long)
   	(sbs :long)
   	(rtbs :long)
-	(renderer :long))
+	(renderer :long)
+	(thread_num :long))
   :returning :long)
 
 ;;................................................................................: CloseAudioPlayer

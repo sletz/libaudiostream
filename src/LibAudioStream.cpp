@@ -84,14 +84,15 @@ extern "C"
     AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
 
     // Open/Close
-    AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
-                                            long outChan,
-                                            long channels,
-                                            long sample_rate,
-                                            long buffer_size,
-                                            long stream_buffer_size,
-                                            long rtstream_buffer_size,
-                                            long renderer);
+    AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 
+                                            long outChan, 
+                                            long channels, 
+                                            long sample_rate, 
+                                            long buffer_size, 
+                                            long stream_buffer_size, 
+                                            long rtstream_buffer_size, 
+                                            long renderer,
+                                            long thread_num);
     void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player);
 
 
@@ -233,9 +234,15 @@ AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain)
 }
 
 // Open/Close
-
-AUDIOAPI AudioPlayerPtr OpenAudioPlayer
-(long inChan, long outChan, long channels, long sample_rate, long buffer_size, long stream_buffer_size, long rtstream_buffer_size, long renderer)
+AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 
+                                        long outChan, 
+                                        long channels, 
+                                        long sample_rate, 
+                                        long buffer_size, 
+                                        long stream_buffer_size, 
+                                        long rtstream_buffer_size, 
+                                        long renderer,
+                                        long thread_num)
 {
     long tmpInChan = inChan;
     long tmpOutChan = outChan;
@@ -243,7 +250,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer
     long tmpSampleRate = sample_rate;
     int res;
 
-    TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size);
+    TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);
 
     AudioPlayerPtr player = (AudioPlayerPtr)calloc(1, sizeof(AudioPlayer));
     if (!player)
@@ -279,6 +286,8 @@ error:
 
 void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 {
+   TAudioGlobals::Destroy();
+ 
     if (!player)
         return ;
 
@@ -291,7 +300,6 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
         delete player->fRenderer;
     }
 
-    TAudioGlobals::Destroy();
     free(player);
 }
 

@@ -266,7 +266,7 @@
                      :void))
 
 ;................................................................................: OpenAudioPlayer
-(defmacro OpenAudioPlayer (inchan outchan channels sr bs sbs rtbs renderer)
+(defmacro OpenAudioPlayer (inchan outchan channels sr bs sbs rtbs renderer thread_num)
   "Opens a new AUdioEngine"
   `(ccl::ppc-ff-call (get-fun-addr "OpenAudioPlayer" *libaudiostream*) 
                      :signed-fullword, inchan
@@ -277,6 +277,7 @@
                      :signed-fullword, sbs
                      :signed-fullword, rtbs
                      :signed-fullword, renderer
+                     :signed-fullword, thread_num
                      :address))
 
 ;;................................................................................: CloseAudioPlayer

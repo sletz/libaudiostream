@@ -106,9 +106,9 @@ AudioStreamPtr test7()
     printf("-------------------------\n");
     printf("Build a echo on a region \n");
     printf("-------------------------\n\n");
-    AudioStreamPtr sound, mix = MakeRegionSound(FILENAME2, 400000, 500000);
-    for (int i = 0; i < 8 ; i++) {
-        sound = MakeSeqSound(MakeNullSound(i * 44000), MakeRegionSound(FILENAME2, 400000, 500000), 0);
+    AudioStreamPtr sound, mix = MakeRegionSound(FILENAME2, 400000, 1000000);
+    for (int i = 0; i < 32 ; i++) {
+        sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 400000, 1000000 ), 0);
         mix = MakeMixSound(sound, mix);
     }
     return mix;
@@ -211,17 +211,17 @@ void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
     DeleteSound(sound);
 }
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
     printf("----------------------------\n");
     printf("LibAudioStream based Player \n");
     printf("--------------------------- \n\n");
 
     // Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer);
+    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
     // Is failure opens PortAudio version
     if (!player)
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
 
     printf("Type 'b' to start playing from the begining\n");

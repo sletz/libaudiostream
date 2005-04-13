@@ -66,15 +66,15 @@ extern "C"
     /*!
     \brief Create a file reader stream.
     \param name The sound file pathname.
-    \return A pointer to new stream object.
+    \return A pointer to new stream object or NULL if the file cannot be opened.
     */
     AudioStreamPtr MakeReadSound(char* name);
     /*!
-    \brief Create a file region reader stream.
+    \brief Create a file region reader stream. 
     \param name The sound file pathname.
     \param beginFrame The start frame of the region.
     \param endFrame The end frame of the region.
-    \return A pointer to new stream object.
+    \return A pointer to new stream object or NULL if the wanted region is not part of the file.
     */
     AudioStreamPtr MakeRegionSound(char* name, long beginFrame, long endFrame);
     /*!
@@ -129,7 +129,7 @@ extern "C"
     \param name The sound file pathname.
     \param sound The stream to be saved.
     \param format A libsndfile format.
-    \return A pointer to new stream object.
+    \return A pointer to new stream object or NULL if the file cannot be opened.
     */
     AudioStreamPtr MakeWriteSound(char* name, AudioStreamPtr sound, long format);
     /*!
@@ -138,7 +138,7 @@ extern "C"
     */
     AudioStreamPtr MakeInputSound();
     /*!
-    \brief Create an renderer "wrapper" on a stream, to be used for direct acces to the stream content.
+    \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeRendererSound(AudioStreamPtr s);
@@ -207,10 +207,11 @@ extern "C"
     \param outChan The number of output channels.
     \param channels The number of stream channels.
     \param sample_rate The sampling rate.
-    \param buffer_size The audio playerr internal buffer size.
+    \param buffer_size The audio player internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
     \param rtstream_buffer_size The input stream buffer size.
     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+    \param thread_num The number of additionnal low-priority threads used to precompute data
     \return A pointer to new audio player object.
     */
     AudioPlayerPtr OpenAudioPlayer(long inChan,
@@ -220,7 +221,8 @@ extern "C"
                                    long buffer_size,
                                    long stream_buffer_size,
                                    long rtstream_buffer_size,
-                                   long renderer);
+                                   long renderer,
+                                   long thread_num);
     /*!
     \brief Close the audio player.
     \param player The audio player to be closed.

@@ -36,11 +36,6 @@ using namespace std;
 \brief  Effect list management for subclasses of TAudioEffectInterface
 */
 
-/*
-Effect list management for subclasses of TAudioEffectInterface : a TAudioEffectInterface* object will be casted 
-to a TAudioEffect* object to use ProcessList, CopyList, ResetList and DeleteList methods : is this always safe?
-*/
-
 class TAudioEffect : public list<TAudioEffectInterfacePtr>
 {
 

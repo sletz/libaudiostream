@@ -29,6 +29,8 @@ grame@rd.grame.fr
 #include "lffifo.h"
 #include "lflifo.h"
 
+#include <vector>
+
 //-------------
 // Struct TCmd
 //-------------
@@ -51,8 +53,6 @@ typedef struct TCmd
     long arg5;
 }
 TCmd;
-
-
 
 #define MAXCOMMAND 256
 
@@ -168,17 +168,17 @@ class TThreadCmdManager : public TCmdManager
 {
 
     private:
-        lifo fFreeCmd;				// Commands free list
-        fifo fRunningCmd;			// Running commands
-        pthread_t	fThread;		// Execution thread
-        pthread_mutex_t fLock;		// Mutex
-        pthread_cond_t fCond;		// Condition variable
+	    lifo fFreeCmd;      // Commands free list
+        fifo fRunningCmd;   // Running commands
+        std::vector<pthread_t> fThreadList; // Execution thread
+        pthread_mutex_t fLock;  // Mutex
+        pthread_cond_t fCond;   // Condition variable
 
         static void* CmdHandler(void* arg);
 
     public:
 
-        TThreadCmdManager();
+        TThreadCmdManager(long thread);
         ~TThreadCmdManager();
 
         void ExecCmdAux (CmdPtr fun, long a1, long a2, long a3, long a4, long a5);

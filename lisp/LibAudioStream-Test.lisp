@@ -22,13 +22,14 @@
 ;; Buffer size
 ;; Disk buffer size
 ;; Disk buffer size for real-time stream
+;; Number of additional low priority streams used for disk access or advance stream computation
 
-;;(setq player (OpenAudioPlayer 0 2 32 44100 1024 65536 65536 kPortAudioRenderer))
+;;(setq player (OpenAudioPlayer 0 2 32 44100 1024 65536 65536 kPortAudioRenderer 1))
 
 
 ;; WARNING !! when using Jack, the Sample rate and Buffer size values much match the values currently used with Jack server
  
-(setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kJackRenderer))
+(setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kJackRenderer 1))
 
 
 ;; Start Audio engine execution

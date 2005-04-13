@@ -57,7 +57,8 @@ class AUDIO_EXPORTS TAudioGlobals
         virtual ~TAudioGlobals();
 
         static void Init(long inChan, long outChan, long channels,
-                         long sample_rate, long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
+                         long sample_rate, long buffer_size, long stream_buffer_size, 
+                         long rtstream_buffer_size, long thread_num);
 
         static void LogError();
         static void Destroy();

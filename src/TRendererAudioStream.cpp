@@ -51,9 +51,9 @@ void TDTRendererAudioStream::Flush()
     fManager->FlushCmds();
 }
 
-void TRTRendererAudioStream::Init()
+void TRTRendererAudioStream::Init(long thread_num)
 {
-    fManager = new TThreadCmdManager();
+    fManager = new TThreadCmdManager(thread_num);
 }
 void TRTRendererAudioStream::Destroy()
 {

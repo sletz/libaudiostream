@@ -66,10 +66,9 @@ void TThreadCmdManager::RunAux()
     }
 }
 
-TThreadCmdManager::TThreadCmdManager()
+TThreadCmdManager::TThreadCmdManager(long thread_num)
 {
     struct sched_param param;
-    int err;
     TCmd* cmd;
 
     // Init variables
@@ -88,20 +87,33 @@ TThreadCmdManager::TThreadCmdManager()
     fifoinit(&fRunningCmd, (fifocell*)cmd);
 
     param.sched_priority = 99;
-    err = pthread_create(&fThread, NULL, CmdHandler, (void*)this);
+    for (int i = 0; i < thread_num; i++) {
+        pthread_t thread;
+        pthread_create(&thread, NULL, CmdHandler, (void*)this);
+        fThreadList.push_back(thread);
+    }
+    
+    //err = pthread_create(&fThread, NULL, CmdHandler, (void*)this);
 }
 
 TThreadCmdManager::~TThreadCmdManager()
 {
     TCmd* cmd;
     TCmd* next;
+    
+    printf("fThreadList.size() %ld\n", fThreadList.size());
 
     // Wait for thread exit
-#ifdef WIN32
-    pthread_cancel(fThread);
-    pthread_join(fThread, NULL); // A REVOIR : ne marche pas sur MacOSX
-#endif
-
+    for (unsigned int i = 0; i < fThreadList.size(); i++) {
+    #ifdef __APPLE__
+        mach_port_t machThread = pthread_mach_thread_np(fThreadList[i]);
+        thread_terminate(machThread); 
+    #else 
+        pthread_cancel(fThreadList[i]);
+        pthread_join(fThreadList[i], NULL); 
+    #endif
+    }
+ 
     pthread_mutex_destroy(&fLock);
     pthread_cond_destroy(&fCond);
 
