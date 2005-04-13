@@ -70,6 +70,7 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
 {
     struct sched_param param;
     TCmd* cmd;
+	int i;
 
     // Init variables
     lfinit(&fFreeCmd);
@@ -78,7 +79,7 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
     pthread_cond_init(&fCond, NULL);
 
     // Preallocate commands
-    for (int i = 0; i < MAXCOMMAND; i++) {
+    for (i = 0; i < MAXCOMMAND; i++) {
         cmd = (TCmd*)malloc(sizeof(TCmd));
         if (cmd)
             lfpush(&fFreeCmd, (lifocell*)cmd);
@@ -87,13 +88,11 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
     fifoinit(&fRunningCmd, (fifocell*)cmd);
 
     param.sched_priority = 99;
-    for (int i = 0; i < thread_num; i++) {
+    for (i = 0; i < thread_num; i++) {
         pthread_t thread;
-        pthread_create(&thread, NULL, CmdHandler, (void*)this);
+        pthread_create(&thread, NULL, CmdHandler, (void*)this); // assume it works..
         fThreadList.push_back(thread);
     }
-    
-    //err = pthread_create(&fThread, NULL, CmdHandler, (void*)this);
 }
 
 TThreadCmdManager::~TThreadCmdManager()
