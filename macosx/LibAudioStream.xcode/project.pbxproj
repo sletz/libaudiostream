@@ -77,6 +77,7 @@
 			mainGroup = 08FB7794FE84155DC02AAC07;
 			projectDirPath = "";
 			targets = (
+				4BC07786080FA1F700F44F75,
 				4BD0E98A0446D6E400053105,
 				4B5146EB07F186810059C4C8,
 			);
@@ -117,6 +118,7 @@
 			children = (
 				4BD0E98B0446D6E400053105,
 				4B5146EC07F186810059C4C8,
+				4BC077CD080FA1F700F44F75,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -481,6 +483,556 @@
 			settings = {
 			};
 		};
+		4BC07786080FA1F700F44F75 = {
+			buildPhases = (
+				4BC07787080FA1F700F44F75,
+				4BC077AE080FA1F700F44F75,
+				4BC077AF080FA1F700F44F75,
+				4BC077CB080FA1F700F44F75,
+				4BC077CC080FA1F700F44F75,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__ ";
+				OTHER_LDFLAGS = "-flat_namespace /usr/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = LibAudioStream;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = LibAudioStreamPA;
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = AudioEngineFramework;
+			productReference = 4BC077CD080FA1F700F44F75;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>LibAudioStream</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+</dict>
+</plist>
+";
+		};
+		4BC07787080FA1F700F44F75 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BC07788080FA1F700F44F75,
+				4BC07789080FA1F700F44F75,
+				4BC0778A080FA1F700F44F75,
+				4BC0778B080FA1F700F44F75,
+				4BC0778C080FA1F700F44F75,
+				4BC0778D080FA1F700F44F75,
+				4BC0778E080FA1F700F44F75,
+				4BC0778F080FA1F700F44F75,
+				4BC07790080FA1F700F44F75,
+				4BC07791080FA1F700F44F75,
+				4BC07792080FA1F700F44F75,
+				4BC07793080FA1F700F44F75,
+				4BC07794080FA1F700F44F75,
+				4BC07795080FA1F700F44F75,
+				4BC07796080FA1F700F44F75,
+				4BC07797080FA1F700F44F75,
+				4BC07798080FA1F700F44F75,
+				4BC07799080FA1F700F44F75,
+				4BC0779A080FA1F700F44F75,
+				4BC0779B080FA1F700F44F75,
+				4BC0779C080FA1F700F44F75,
+				4BC0779D080FA1F700F44F75,
+				4BC0779E080FA1F700F44F75,
+				4BC0779F080FA1F700F44F75,
+				4BC077A0080FA1F700F44F75,
+				4BC077A1080FA1F700F44F75,
+				4BC077A2080FA1F700F44F75,
+				4BC077A3080FA1F700F44F75,
+				4BC077A4080FA1F700F44F75,
+				4BC077A5080FA1F700F44F75,
+				4BC077A6080FA1F700F44F75,
+				4BC077A7080FA1F700F44F75,
+				4BC077A8080FA1F700F44F75,
+				4BC077A9080FA1F700F44F75,
+				4BC077AA080FA1F700F44F75,
+				4BC077AC080FA1F700F44F75,
+				4BC077AD080FA1F700F44F75,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BC07788080FA1F700F44F75 = {
+			fileRef = F5C1D58E0330C7F001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07789080FA1F700F44F75 = {
+			fileRef = F5C1D5930330CAEF01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0778A080FA1F700F44F75 = {
+			fileRef = F5D82C3E032DEAB501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0778B080FA1F700F44F75 = {
+			fileRef = F5C1D5970330CB0801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0778C080FA1F700F44F75 = {
+			fileRef = F5C1D59C0330CB1E01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0778D080FA1F700F44F75 = {
+			fileRef = F5C1D5A00330CB2F01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0778E080FA1F700F44F75 = {
+			fileRef = F5E2072A032E1EA501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0778F080FA1F700F44F75 = {
+			fileRef = F5C1D5D60330CC8501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07790080FA1F700F44F75 = {
+			fileRef = F5C1D5BD0330CC5A01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07791080FA1F700F44F75 = {
+			fileRef = F68E6D0D0334858B01DE1461;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07792080FA1F700F44F75 = {
+			fileRef = F5C1D5EA0330CCD601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07793080FA1F700F44F75 = {
+			fileRef = F5C1D5F90330CCFF01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07794080FA1F700F44F75 = {
+			fileRef = F5C1D5FC0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07795080FA1F700F44F75 = {
+			fileRef = F5C1FF850328C9C301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07796080FA1F700F44F75 = {
+			fileRef = F5D82C41032DEB9D01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07797080FA1F700F44F75 = {
+			fileRef = F5C1D5FE0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07798080FA1F700F44F75 = {
+			fileRef = F5C1D6000330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC07799080FA1F700F44F75 = {
+			fileRef = F5C1D6110330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0779A080FA1F700F44F75 = {
+			fileRef = F5C1D6130330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0779B080FA1F700F44F75 = {
+			fileRef = F5C1D61E0330CD7501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0779C080FA1F700F44F75 = {
+			fileRef = F5C1D6220330CD8701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0779D080FA1F700F44F75 = {
+			fileRef = F5C5B1FF033220AA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0779E080FA1F700F44F75 = {
+			fileRef = F5C5B205033220C001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC0779F080FA1F700F44F75 = {
+			fileRef = F5C5B21303322F5801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A0080FA1F700F44F75 = {
+			fileRef = F665FF400332A4BE01913B4D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A1080FA1F700F44F75 = {
+			fileRef = 4BA3E1780459506A00053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A2080FA1F700F44F75 = {
+			fileRef = 4BB2752F056B798A00053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A3080FA1F700F44F75 = {
+			fileRef = 4B0391DF0585040A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A4080FA1F700F44F75 = {
+			fileRef = 4B0391E10585040A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A5080FA1F700F44F75 = {
+			fileRef = 4B0392010585043C006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A6080FA1F700F44F75 = {
+			fileRef = F5C1D5E80330CCD601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A7080FA1F700F44F75 = {
+			fileRef = 4B51474A07F18D980059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A8080FA1F700F44F75 = {
+			fileRef = 4B51474D07F18D9F0059C4C8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077A9080FA1F700F44F75 = {
+			fileRef = 4BCC1A8007F1AA7E003E6784;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077AA080FA1F700F44F75 = {
+			fileRef = 4BC6136907F499E200ACC53C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077AC080FA1F700F44F75 = {
+			fileRef = F68E6D0F0334858B01DE1461;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077AD080FA1F700F44F75 = {
+			fileRef = 4B83CA1A07FBE5AE00256489;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		4BC077AE080FA1F700F44F75 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BC077AF080FA1F700F44F75 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BC077B0080FA1F700F44F75,
+				4BC077B1080FA1F700F44F75,
+				4BC077B2080FA1F700F44F75,
+				4BC077B3080FA1F700F44F75,
+				4BC077B4080FA1F700F44F75,
+				4BC077B5080FA1F700F44F75,
+				4BC077B6080FA1F700F44F75,
+				4BC077B7080FA1F700F44F75,
+				4BC077B8080FA1F700F44F75,
+				4BC077B9080FA1F700F44F75,
+				4BC077BA080FA1F700F44F75,
+				4BC077BB080FA1F700F44F75,
+				4BC077BC080FA1F700F44F75,
+				4BC077BD080FA1F700F44F75,
+				4BC077BE080FA1F700F44F75,
+				4BC077BF080FA1F700F44F75,
+				4BC077C0080FA1F700F44F75,
+				4BC077C1080FA1F700F44F75,
+				4BC077C2080FA1F700F44F75,
+				4BC077C3080FA1F700F44F75,
+				4BC077C4080FA1F700F44F75,
+				4BC077C5080FA1F700F44F75,
+				4BC077C6080FA1F700F44F75,
+				4BC077C8080FA1F700F44F75,
+				4BC077C9080FA1F700F44F75,
+				4BC077CA080FA1F700F44F75,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BC077B0080FA1F700F44F75 = {
+			fileRef = F5C1D58D0330C7F001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B1080FA1F700F44F75 = {
+			fileRef = F5D82C47032DF3CC01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B2080FA1F700F44F75 = {
+			fileRef = F5C1D5960330CB0801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B3080FA1F700F44F75 = {
+			fileRef = F5C1D59F0330CB2F01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B4080FA1F700F44F75 = {
+			fileRef = F5C1D5A80330CB4101053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B5080FA1F700F44F75 = {
+			fileRef = F5C1D5D50330CC8501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B6080FA1F700F44F75 = {
+			fileRef = F6FC02B9033249ED010531C2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B7080FA1F700F44F75 = {
+			fileRef = F5C1D5E90330CCD601053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B8080FA1F700F44F75 = {
+			fileRef = F5C1FF840328C9C301053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077B9080FA1F700F44F75 = {
+			fileRef = F5D82C44032DF22401053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077BA080FA1F700F44F75 = {
+			fileRef = F5C1D5FD0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077BB080FA1F700F44F75 = {
+			fileRef = F5C1D5FF0330CD3801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077BC080FA1F700F44F75 = {
+			fileRef = F5C1D6100330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077BD080FA1F700F44F75 = {
+			fileRef = F5C1D6120330CD5501053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077BE080FA1F700F44F75 = {
+			fileRef = F5C1D6210330CD8701053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077BF080FA1F700F44F75 = {
+			fileRef = F5C5B1FE033220AA01053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C0080FA1F700F44F75 = {
+			fileRef = F5C5B204033220C001053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C1080FA1F700F44F75 = {
+			fileRef = F5C5B21203322F5801053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C2080FA1F700F44F75 = {
+			fileRef = 4BB27531056B7DF100053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C3080FA1F700F44F75 = {
+			fileRef = 4B0391E00585040A006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C4080FA1F700F44F75 = {
+			fileRef = 4B0392000585043C006C929E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C5080FA1F700F44F75 = {
+			fileRef = 4B6B22F6071FB980005E6873;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C6080FA1F700F44F75 = {
+			fileRef = 4B6B22FD071FB9D1005E6873;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C8080FA1F700F44F75 = {
+			fileRef = 4BC6136207F4990300ACC53C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077C9080FA1F700F44F75 = {
+			fileRef = 4BC6136407F4990B00ACC53C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077CA080FA1F700F44F75 = {
+			fileRef = 4B83CA1907FBE5AE00256489;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BC077CB080FA1F700F44F75 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BC077CC080FA1F700F44F75 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BC077CD080FA1F700F44F75 = {
+			explicitFileType = wrapper.framework;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = LibAudioStream.framework;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4BC6136207F4990300ACC53C = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -668,7 +1220,7 @@
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__ ";
+				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__  -D__JACK__";
 				OTHER_LDFLAGS = "-flat_namespace /usr/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox -lJack";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -682,7 +1234,7 @@
 			dependencies = (
 			);
 			isa = PBXFrameworkTarget;
-			name = LibAudioStream;
+			name = "LibAudioStreamPA+Jack";
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = AudioEngineFramework;
 			productReference = 4BD0E98B0446D6E400053105;
