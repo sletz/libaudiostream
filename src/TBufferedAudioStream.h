@@ -45,26 +45,27 @@ will have a ReadBuffer method that calls the real disk read function inside a lo
  
   
                                         //----------------------------//
-                                        //			      //  
+                                        //							  //  
                                         //     TBufferedAudioStream   // 
-                                        //			      //
+                                        //							  //
                                         //----------------------------//
                                                         !
                                                         !     						
                                                         !							
                                         //------------------------------// 		    
-                                        //			        //		   
+                                        //								//		   
                                         //      TFileAudioStream      	//		      
-                                        //			        //		    
+                                        //								//		    
                                         //------------------------------//
                                                         !
                                                         !
                                                         !     						
                                 --------------------------------------------------                          
                                 !                        			 !
-                                !                        			 !							//------------------------------//	  	//------------------------------// 					//				//		//   				//
+				//------------------------------//	  	//------------------------------// 					
+				//								//		//								//
                 //    TReadFileAudioStream      //		//    TWriteFileAudioStream     //      
-                //			        //		//			        //    
+                //			        			//		//								//
                 //------------------------------//		//------------------------------//   
  
 */
@@ -84,8 +85,7 @@ class TBufferedAudioStream : public TAudioStream
         long fCurFrame;		// Position inside a buffer
         long fFramesNum;	// Total file frames number
         long fTotalFrames;	// Total frames already handled
-        //long fBeginFrame;	// Frames begin
-
+     
         bool fReady;		// For disk access error detection
 
         virtual long Write(TAudioBuffer<short>* buffer, long framesNum, long framePos)

@@ -22,7 +22,7 @@ grame@rd.grame.fr
 
 #include "TPortAudioRenderer.h"
 #include "TAudioRendererFactory.h"
-#ifdef __APPLE__
+#ifdef __JACK__
 #include "TJackAudioRenderer.h"
 #endif
 
@@ -33,10 +33,9 @@ TAudioRendererPtr TAudioRendererFactory::MakePortAudioRenderer()
 
 TAudioRendererPtr TAudioRendererFactory::MakeJackAudioRenderer()
 {
-#ifdef __APPLE__
+#ifdef __JACK__
     return new TJackAudioRenderer();
 #else
-
     return NULL;
 #endif
 }
