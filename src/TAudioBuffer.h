@@ -93,14 +93,14 @@ class TLocalAudioBuffer : public TAudioBuffer<T>
 
         TLocalAudioBuffer(long frames, long channels)
         {
-            fBuffer = new T[frames * channels];
-            fFrames = frames;
-            fChannels = channels;
-            fPos = 0;
+            this->fBuffer = new T[frames * channels];
+            this->fFrames = frames;
+            this->fChannels = channels;
+            this->fPos = 0;
         }
         virtual ~TLocalAudioBuffer()
         {
-            delete []fBuffer;
+            delete []this->fBuffer;
         }
 };
 
@@ -116,10 +116,10 @@ class TSharedAudioBuffer : public TAudioBuffer<T>
 
         TSharedAudioBuffer(T* buffer, long frames, long channels)
         {
-            fBuffer = buffer;
-            fFrames = frames;
-            fChannels = channels;
-            fPos = 0;
+            this->fBuffer = buffer;
+            this->fFrames = frames;
+            this->fChannels = channels;
+            this->fPos = 0;
         }
         virtual ~TSharedAudioBuffer()
         {}
