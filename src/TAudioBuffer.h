@@ -44,7 +44,7 @@ class TAudioBuffer
 
     public:
 
-        TAudioBuffer(): fBuffer(NULL), fFrames(0), fChannels(0), fPos(0)
+        TAudioBuffer(): fBuffer(0), fFrames(0), fChannels(0), fPos(0)
         {}
         virtual ~TAudioBuffer()
         {}
