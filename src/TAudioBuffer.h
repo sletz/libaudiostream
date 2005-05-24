@@ -22,9 +22,7 @@ grame@rd.grame.fr
 #ifndef __TAudioBuffer__
 #define __TAudioBuffer__
 
-#include <stdio.h>
 #include <assert.h>
-#include <string.h>
 
 //--------------------
 // Class TAudioBuffer
@@ -123,9 +121,6 @@ class TSharedAudioBuffer : public TAudioBuffer<T>
         }
         virtual ~TSharedAudioBuffer()
         {}
-}
-;
-
-
+};
 
 #endif

@@ -23,6 +23,7 @@ grame@rd.grame.fr
 
 #include "LibAudioStream.h"
 #include <sndfile.h>
+#include <stdio.h>
 
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
@@ -108,7 +109,7 @@ AudioStreamPtr test7()
     printf("-------------------------\n\n");
     AudioStreamPtr sound, mix = MakeRegionSound(FILENAME2, 400000, 1000000);
     for (int i = 0; i < 32 ; i++) {
-        sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 400000, 1000000 ), 0);
+        sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 400000, 1000000), 0);
         mix = MakeMixSound(sound, mix);
     }
     return mix;

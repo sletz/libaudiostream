@@ -49,7 +49,6 @@ void* TThreadCmdManager::CmdHandler(void* arg)
             pthread_cond_wait(&manager->fCond, &manager->fLock);
         pthread_mutex_unlock(&manager->fLock);
 #endif
-
     }
 
     pthread_exit(0);
@@ -84,8 +83,7 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
         if (cmd)
             lfpush(&fFreeCmd, (lifocell*)cmd);
     }
-    cmd = (TCmd*)malloc(sizeof(TCmd));
-    fifoinit(&fRunningCmd, (fifocell*)cmd);
+	fifoinit(&fRunningCmd);
 
     param.sched_priority = 99;
     for (i = 0; i < thread_num; i++) {
@@ -118,7 +116,7 @@ TThreadCmdManager::~TThreadCmdManager()
     while ((cmd = (TCmd*)lfpop(&fFreeCmd))) {
         free(cmd);
 	}
-    cmd = (TCmd*)fifoclear(&fRunningCmd);
+	cmd = (TCmd*)fifoflush(&fRunningCmd);
     while (cmd) {
         next = cmd->link;
         free(cmd);

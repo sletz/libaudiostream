@@ -21,20 +21,15 @@
 */
 
 #include "lffifo.h"
-#include <string.h>
 
 #define fifo_end(ff)	(fifocell *)ff
 
 //----------------------------------------------------------------
-void fifoinit (fifo* ff, fifocell *dummy)
+void fifoinit (fifo* ff)
 {
 	ff->count.value = 0;
-	/*
-		raw initialization may be used to control a fifo state 
-		when no dummy cell is available
-	*/
-	if (dummy) dummy->link = fifo_end(ff);
-	ff->head = ff->tail = dummy;
+	ff->dummy.link = fifo_end(ff);
+	ff->head = ff->tail = &ff->dummy;
 }
 
 //----------------------------------------------------------------
@@ -68,8 +63,7 @@ void fifoput (fifo * ff, fifocell * cl)
 fifocell * fifoget (fifo * ff) 
 {
 	fifocell * volatile head;
-	fifocell * next; 
-	char val[sizeof(fifocell) - sizeof(fifocell*)];
+	fifocell * next;
 	short done = 0;
 	
 	do {
@@ -87,25 +81,24 @@ fifocell * fifoget (fifo * ff)
 			CASLNE (&ff->tail, (void *)head, fifo_end(ff));
 		}
 		else if (next != fifo_end(ff)) { /* if we are not competing on the dummy cell */
-			/* we read the next cell value */
-			memcpy(&val[0], &next->value[0], sizeof(fifocell) - sizeof(fifocell*));
 			/* and we try to set head to the next cell */
 			done = STWCX (&ff->head, (void *)head, next);
 		}
 	} while (!done);
 	msAtomicDec (&ff->count);
-	/* and finally copy the value to the deqeued cell */
-	memcpy(&head->value[0], &val[0], sizeof(fifocell) - sizeof(fifocell*));
+	if (head == &ff->dummy) {
+		fifoput(ff,head);
+		head = fifoget(ff);
+	}
 	return (fifocell *)head;
 }
 
 //----------------------------------------------------------------
 /*	fifoavail returns a pointer to the "first" cell in the fifo
 	if it is not empty. This is meaningful if there is only one
-	reader for the fifo. The pointer returned is actually the 
-	second cell of the fifo because it contains the right content.
-	This means that : fifoavail(ff) != fifoget(ff) but we have
-	content(fifoavail(ff)) == content(fifoget(ff))
+	reader for the fifo. The pointer returned may actually be the 
+	second cell of the fifo to skip the dummy cell.
+	It ensures that : fifoavail(ff) == fifoget(ff)
 */
 fifocell* fifoavail (fifo* ff) 
 {
@@ -119,7 +112,7 @@ fifocell* fifoavail (fifo* ff)
 		if (STWCX (&ff->head, (void *)hd, hd)) {
 			/*	no cells were removed during reading, therefore
 				we have coherent (but maybe outdated) data*/
-			return (hd==tail) ? 0 : n;
+			return (hd==tail) ? 0 : (hd==&ff->dummy) ? n : hd;
 		}
 	}
 	return 0;	/* never used !*/
@@ -141,14 +134,4 @@ fifocell* fifoflush (fifo* ff)
 	}
 	cur->link = 0;
 	return first;
-}
-
-//----------------------------------------------------------------
-fifocell* fifoclear (fifo* ff) 
-{
-	fifocell* head = ff->head;
-	fifocell* tail = ff->tail;
-	fifoinit(ff, 0);
-	if (tail) tail->link = 0;	
-	return head;
 }

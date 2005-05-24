@@ -89,7 +89,6 @@ class UAudioTools
             }
         }
 
-
         static inline void MixStereoToStereoBlk(long* dst, short* src, long nbsamples, short leftamp, short rightamp)
         {
             long x, y ;
@@ -138,7 +137,6 @@ class UAudioTools
             }
         }
 
-
         static inline void ReplaceFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels, MY_FLOAT leftamp, MY_FLOAT rightamp)
         {
             for (int i = 0 ; i < framesNum; i++) {
@@ -165,27 +163,27 @@ class UAudioTools
 
         static inline void ZeroStereoBlk(long* dst, long nbsamples)
         {
-            memset(dst, 0, sizeof(long)*nbsamples);
+            memset(dst, 0, sizeof(long) * nbsamples);
         }
 
         static inline void ZeroStereoBlk(short* dst, long nbsamples)
         {
-            memset(dst, 0, sizeof(short)*nbsamples);
+            memset(dst, 0, sizeof(short) * nbsamples);
         }
 
         static inline void ZeroStereoBlk(MY_FLOAT* dst, long nbsamples)
         {
-            memset(dst, 0, sizeof(MY_FLOAT)*nbsamples);
+            memset(dst, 0, sizeof(MY_FLOAT) * nbsamples);
         }
 
         static inline void ZeroFloatBlk(MY_FLOAT* dst, long framesNum, long channels)
         {
-            memset(dst, 0, sizeof(MY_FLOAT)*framesNum*channels);
+            memset(dst, 0, sizeof(MY_FLOAT) * framesNum * channels);
         }
 
         static inline void ZeroShortBlk(short* dst, long framesNum, long channels)
         {
-            memset(dst, 0, sizeof(short)*framesNum*channels);
+            memset(dst, 0, sizeof(short) * framesNum * channels);
         }
 
         static inline void Float2ShortStereo(MY_FLOAT* in, short* out, long nbsamples)
@@ -389,11 +387,4 @@ class UAudioTools
 };
 
 #endif
-
-
-
-
-
-
-
 
