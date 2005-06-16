@@ -24,7 +24,8 @@ TAudioBuffer<float>*
 
 #include "TAudioBuffer.h"
 #include "TAudioEffectInterface.h"
-
+#include "TAudioGlobals.h"
+#include "TAudioConstants.h"
 #include <list>
 
 using namespace std;
@@ -39,10 +40,22 @@ using namespace std;
 class TAudioEffect : public list<TAudioEffectInterfacePtr>
 {
 
+	private:
+	
+		float* fTemp1[MAX_PLUG_CHANNELS];
+		float* fTemp2[MAX_PLUG_CHANNELS];
+		
     public:
 
         TAudioEffect()
-        {}
+        {
+			for (int i = 0; i < MAX_PLUG_CHANNELS; i++) {
+				fTemp1[i] = (float*)calloc(TAudioGlobals::fBuffer_Size, sizeof(float));
+			}
+			for (int i = 0; i < MAX_PLUG_CHANNELS; i++) {
+				fTemp2[i] = (float*)calloc(TAudioGlobals::fBuffer_Size, sizeof(float));
+			}
+		}
         virtual ~TAudioEffect();
 
         void Process(float* buffer, long framesNum, long channels);

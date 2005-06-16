@@ -29,6 +29,8 @@ grame@rd.grame.fr
 #include "UAudioTools.h"
 
 #include "TVolAudioEffect.h"
+#include "TFaustAudioEffect.h"
+
 
 #ifdef __cplusplus
 extern "C"
@@ -82,6 +84,7 @@ extern "C"
     AudioEffectListPtr AUDIOAPI RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
 
     AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
+	AudioEffectPtr AUDIOAPI MakeFaustAudioEffect(const char* name);
 
     // Open/Close
     AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 
@@ -232,6 +235,17 @@ AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain)
 {
     return new TVolAudioEffect(gain);
 }
+
+AudioEffectPtr AUDIOAPI MakeFaustAudioEffect(const char* name)
+{
+	try {
+		return new TFaustAudioEffect(name);
+	} catch (int n) {
+		printf("MakeFaustAudioEffect exception %d \n", n);
+		return 0;
+	}
+}
+
 
 // Open/Close
 AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 

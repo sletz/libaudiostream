@@ -374,3 +374,31 @@
                      :signed-fullword, pan
                      :void))
 
+;;;========================== EFFECTS 
+
+(defmacro MakeAudioEffectList ()
+  `(ccl::ppc-ff-call (get-fun-addr "MakeAudioEffectList" *libaudiostream*) 
+                     :address))
+
+(defmacro AddAudioEffect (effect-list effect)
+  `(ccl::ppc-ff-call (get-fun-addr "AddAudioEffect" *libaudiostream*)
+                     :address ,effect-list
+                     :address ,effect
+                     :address))
+
+(defmacro RemoveAudioEffect (effect-list effect)
+  `(ccl::ppc-ff-call (get-fun-addr "RemoveAudioEffect" *libaudiostream*)
+                     :address ,effect-list
+                     :address ,effect
+                     :address))
+
+(defmacro MakeVolAudioEffect (gain)
+  `(ccl::ppc-ff-call (get-fun-addr "MakeVolAudioEffect" *libaudiostream*) 
+                     :double-float ,gain
+                     :address))
+
+(defmacro MakeFaustAudioEffect (name)
+  `(with-cstrs ((s ,name))
+      (ccl::ppc-ff-call (get-fun-addr "MakeFaustAudioEffect" *libaudiostream*) 
+                        :address s
+                        :address)))

@@ -63,7 +63,7 @@ class TAudioChannel
 
         TChannelFadeAudioStream fFadeStream; 		// Fade stream
         TRTRendererAudioStream	fRendererStream;	// Renderer stream (set a real-time command manager for file stream)
-        TAudioStreamPtr	fStream;			// Audio stream
+        TAudioStreamPtr			fStream;			// Audio stream
         TAudioBuffer<float>*	fMixBuffer; 		// Used for mixing
 
         long fVol;	// Master vol

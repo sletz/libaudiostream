@@ -45,11 +45,11 @@ class TVolAudioEffect : public TAudioEffectInterface
         virtual ~TVolAudioEffect()
         {}
 
-        void Process(float* buffer, long framesNum, long channels)
+        void Process(float** input, float** output, long framesNum, long channels)
         {
             for (int i = 0; i < framesNum; i++) {
                 for (int j = 0; j < channels; j++) {
-                    buffer[i*channels + j] = (buffer[i * channels + j] * fGain);
+                    output[j][i] = input[j][i] * fGain;
                 }
             }
         }

@@ -22,7 +22,7 @@ grame@rd.grame.fr
 
 
 #include "LibAudioStream.h"
-#include <sndfile.h>
+#include </opt/local/include/sndfile.h>
 #include <stdio.h>
 
 #define FILENAME1 "/Users/letz/levot.wav"
@@ -140,7 +140,29 @@ AudioStreamPtr test9()
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
 }
 
-void test10()
+AudioStreamPtr test10()
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("Sequence of a region with a Faust freeverb region                  \n");
+    printf("-------------------------------------------------------------------\n\n");
+    AudioStreamPtr sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
+    AudioStreamPtr sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
+    AudioEffectListPtr list_effect = MakeAudioEffectList();
+    list_effect = AddAudioEffect(list_effect, MakeFaustAudioEffect("freeverb.so"));
+    return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
+}
+
+AudioStreamPtr test11()
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("Input stream + Faust freeverb effect                               \n");
+    printf("-------------------------------------------------------------------\n\n");
+    AudioEffectListPtr list_effect = MakeAudioEffectList();
+    list_effect = AddAudioEffect(list_effect, MakeFaustAudioEffect("freeverb.so"));
+    return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+}
+
+void test12()
 {
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
@@ -216,7 +238,7 @@ int main(int argc, char* argv[])
 {
     printf("----------------------------\n");
     printf("LibAudioStream based Player \n");
-    printf("--------------------------- \n\n");
+    printf("----------------------------\n\n");
 
     // Try to open Jack version
     AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
@@ -244,7 +266,9 @@ int main(int argc, char* argv[])
     ExecTest(player, test7());
     ExecTest(player, test8());
     ExecTest(player, test9());
-    test10();
+	ExecTest(player, test10());
+	ExecTest(player, test11());
+    test12();
 
     StopAudioPlayer(player);
     CloseAudioPlayer(player);

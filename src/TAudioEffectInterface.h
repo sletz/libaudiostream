@@ -54,14 +54,14 @@ class TAudioEffectInterface
             return fState;
         }
 
-        void ProcessAux(float* buffer, long framesNum, long channels)
+        void ProcessAux(float** input, float** output, long framesNum, long channels)
         {
             if (fState)
-                Process(buffer, framesNum, channels);
+                Process(input, output, framesNum, channels);
         }
 
         // Pure virtual : to be implemented by sub-classes
-        virtual void Process(float* buffer, long framesNum, long channels) = 0;
+        virtual void Process(float** input, float** output, long framesNum, long channels) = 0;
         virtual TAudioEffectInterface* Copy() = 0;
         virtual void Reset() = 0;
         virtual long Channels() = 0;

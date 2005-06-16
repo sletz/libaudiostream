@@ -35,6 +35,9 @@ typedef unsigned char Boolean;
 #define kBufferNum  	10
 #define MAX_CHANNELS  	64 //
 
+
+#define MAX_PLUG_CHANNELS 4
+
 // For MidiDiMan Delta 1010
 #define DELTA_OUTVOICES 	8
 #define DELTA_INVOICES 		8

@@ -199,6 +199,14 @@ extern "C"
     \return A pointer to new effect object.
 	*/
     AudioEffectPtr MakeVolAudioEffect(float gain);
+	
+	/*!
+	\brief Create an effect decribed in the Faust DSP language.
+	\param name The name of the Faust effect shared library.
+    \return A pointer to new effect object or NULL if the effect cannot be located or created.
+	*/
+
+	AudioEffectPtr MakeFaustAudioEffect(const char* name);
 
     // Open/Close
     /*!
