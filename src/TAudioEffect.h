@@ -49,10 +49,11 @@ class TAudioEffect : public list<TAudioEffectInterfacePtr>
 
         TAudioEffect()
         {
-			for (int i = 0; i < MAX_PLUG_CHANNELS; i++) {
+			int i;
+			for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
 				fTemp1[i] = (float*)calloc(TAudioGlobals::fBuffer_Size, sizeof(float));
 			}
-			for (int i = 0; i < MAX_PLUG_CHANNELS; i++) {
+			for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
 				fTemp2[i] = (float*)calloc(TAudioGlobals::fBuffer_Size, sizeof(float));
 			}
 		}

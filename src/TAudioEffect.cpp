@@ -28,10 +28,11 @@ void TAudioEffect::Process(float* buffer, long framesNum, long channels)
 {
 	float** input = fTemp1;
 	float** tmp_output = fTemp2;
-	float** output = output;
+	float** output = fTemp2;
+	int i,j;
 	
-	for (int i = 0; i < framesNum; i++) {
-		for (int j = 0; j < channels; j++) {
+	for (i = 0; i < framesNum; i++) {
+		for (j = 0; j < channels; j++) {
 			input[j][i] = buffer[i * channels + j];
 		}
 	}
@@ -43,8 +44,8 @@ void TAudioEffect::Process(float* buffer, long framesNum, long channels)
 		SwapBuffers(input, tmp_output);
     }
 	
-	for (int i = 0; i < framesNum; i++) {
-		for (int j = 0; j < channels; j++) {
+	for (i = 0; i < framesNum; i++) {
+		for (j = 0; j < channels; j++) {
 			buffer[i * channels + j] = output[j][i];
 		}
 	}
@@ -60,15 +61,16 @@ void TAudioEffect::Reset()
 
 TAudioEffect::~TAudioEffect()
 {
+	int i;
     for (list<TAudioEffectInterfacePtr>::iterator iter = begin(); iter != end(); iter++) {
         TAudioEffectInterfacePtr process = *iter;
         delete process;
     }
 	
-	for (int i = 0; i < MAX_PLUG_CHANNELS; i++) {
+	for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
 		free(fTemp1[i]);
 	}
-	for (int i = 0; i < MAX_PLUG_CHANNELS; i++) {
+	for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
 		free(fTemp2[i]);
 	}
 }

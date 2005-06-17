@@ -24,6 +24,7 @@ grame@rd.grame.fr
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
+
 #include <dlfcn.h>
 
 //-------------------------
