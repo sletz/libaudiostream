@@ -65,6 +65,11 @@ class TAudioEffectInterface
         virtual TAudioEffectInterface* Copy() = 0;
         virtual void Reset() = 0;
         virtual long Channels() = 0;
+		
+		virtual long GetControlCount() = 0;
+		virtual void GetControlParam(long param, char* label, float* min, float* max, float* init) = 0;
+		virtual void SetControlValue(long param, float f) = 0; 
+		virtual float GetControlValue(long param) = 0;
 };
 
 typedef TAudioEffectInterface * TAudioEffectInterfacePtr;

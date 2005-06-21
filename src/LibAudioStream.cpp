@@ -85,6 +85,10 @@ extern "C"
 
     AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffect(const char* name);
+	long AUDIOAPI GetControlCount(AudioEffectPtr effect);
+	void AUDIOAPI GetControlParams(AudioEffectPtr effect, int param, char* label, float* min, float* max, float* init);
+	void AUDIOAPI SetControlValue(AudioEffectPtr effect, int param, float f);
+	float AUDIOAPI GetControlValue(AudioEffectPtr effect, int param);
 
     // Open/Close
     AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 
@@ -199,6 +203,7 @@ long AUDIOAPI ReadSound(AudioStreamPtr s, float* buffer, long buffer_size, long 
 {
     if (s && buffer) {
         TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
+		 UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
         return ((TAudioStreamPtr)s)->Read(&process, buffer_size, 0, channels);
     } else {
         return 0;
@@ -207,7 +212,8 @@ long AUDIOAPI ReadSound(AudioStreamPtr s, float* buffer, long buffer_size, long 
 
 void AUDIOAPI DeleteSound(AudioStreamPtr s)
 {
-    delete(TAudioStreamPtr)s;
+	((TAudioStreamPtr)s)->Stop(); 
+    delete (TAudioStreamPtr)s;
 }
 
 // Effect management
@@ -246,6 +252,25 @@ AudioEffectPtr AUDIOAPI MakeFaustAudioEffect(const char* name)
 	}
 }
 
+long AUDIOAPI GetControlCount(AudioEffectPtr effect) 
+{
+	return ((TAudioEffectInterfacePtr)effect)->GetControlCount();
+}
+
+void AUDIOAPI GetControlParam(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init)
+{
+	((TAudioEffectInterfacePtr)effect)->GetControlParam(control, label, min, max, init);
+}
+
+void AUDIOAPI SetControlValue(AudioEffectPtr effect, long control, float f)
+{
+	((TAudioEffectInterfacePtr)effect)->SetControlValue(control, f);
+}
+
+float AUDIOAPI GetControlValue(AudioEffectPtr effect, long control)
+{
+	return ((TAudioEffectInterfacePtr)effect)->GetControlValue(control);
+}
 
 // Open/Close
 AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 

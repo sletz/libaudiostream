@@ -207,6 +207,12 @@ extern "C"
 	*/
 
 	AudioEffectPtr MakeFaustAudioEffect(const char* name);
+	
+	long GetControlCount(AudioEffectPtr effect);
+	void GetControlParam(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
+	void SetControlValue(AudioEffectPtr effect, long control, float f);
+	float GetControlValue(AudioEffectPtr effect, long control);
+
 
     // Open/Close
     /*!

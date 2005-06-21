@@ -68,7 +68,7 @@ TJackAudioRenderer::~TJackAudioRenderer()
 long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
     if ((fClient = jack_client_new("AudioPlayer")) == 0) {
-        printf("jack server not running?\n");
+        printf("Jack server not running?\n");
         goto error;
     }
 
@@ -98,7 +98,7 @@ error:
 long TJackAudioRenderer::Close()
 {
     if (fClient && jack_client_close(fClient)) {
-        printf ("cannot close client");
+        printf ("Cannot close client");
         return CLOSE_ERR;
     }
     return NO_ERR;
@@ -109,7 +109,7 @@ long TJackAudioRenderer::Start()
     const char** ports;
 
     if (jack_activate(fClient)) {
-        printf("cannot activate client");
+        printf("Cannot activate client");
         goto error;
     }
 
@@ -118,11 +118,11 @@ long TJackAudioRenderer::Start()
     } else {
 
         if (jack_connect(fClient, ports[0], jack_port_name(fInput_port1))) {
-            printf("cannot connect input ports\n");
+            printf("Cannot connect input ports\n");
         }
 
         if (jack_connect(fClient, ports[1], jack_port_name(fInput_port2))) {
-            printf("cannot connect input ports\n");
+            printf("Cannot connect input ports\n");
         }
 
         free (ports);
@@ -133,11 +133,11 @@ long TJackAudioRenderer::Start()
     } else {
 
         if (jack_connect(fClient, jack_port_name(fOutput_port1), ports[0])) {
-            printf("cannot connect output ports\n");
+            printf("Cannot connect output ports\n");
         }
 
         if (jack_connect(fClient, jack_port_name(fOutput_port2), ports[1])) {
-            printf("cannot connect output ports\n");
+            printf("Cannot connect output ports\n");
         }
 
         free (ports);
@@ -154,7 +154,7 @@ error:
 long TJackAudioRenderer::Stop()
 {
     if (jack_deactivate(fClient)) {
-        printf("cannot deactivate client");
+        printf("Cannot deactivate client");
         return OPEN_ERR;
     }
     return NO_ERR;

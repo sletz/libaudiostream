@@ -27,10 +27,13 @@ grame@rd.grame.fr
 
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
+#define FILENAME3 "/Users/letz/son1.wav"
 
 #define IN_CHANNELS 2 // stereo player
 #define OUT_CHANNELS 2 // stereo player
 #define CHANNELS 8
+
+AudioEffectPtr faust_effect = 0;
 
 AudioStreamPtr test0()
 {
@@ -147,8 +150,18 @@ AudioStreamPtr test10()
     printf("-------------------------------------------------------------------\n\n");
     AudioStreamPtr sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioStreamPtr sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
-    AudioEffectListPtr list_effect = MakeAudioEffectList();
-    list_effect = AddAudioEffect(list_effect, MakeFaustAudioEffect("freeverb.so"));
+	AudioEffectListPtr list_effect = MakeAudioEffectList();
+    faust_effect = MakeFaustAudioEffect("freeverb.so");
+    
+	printf("Faust effect: param num %ld\n", GetControlCount(faust_effect));
+	for (int i = 0; i < GetControlCount(faust_effect); i++) {
+		float min, max, init;
+		char label[32];
+		GetControlParams(faust_effect, i, label, &min, &max, &init); 
+		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
+	}
+	
+	list_effect = AddAudioEffect(list_effect, faust_effect);
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
 }
 
@@ -158,11 +171,21 @@ AudioStreamPtr test11()
     printf("Input stream + Faust freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectListPtr list_effect = MakeAudioEffectList();
-    list_effect = AddAudioEffect(list_effect, MakeFaustAudioEffect("freeverb.so"));
+	faust_effect = MakeFaustAudioEffect("freeverb.so");
+	
+    printf("Faust effect: param num %ld\n", GetControlCount(faust_effect));
+	for (int i = 0; i < GetControlCount(faust_effect); i++) {
+		float min, max, init;
+		char label[32];
+		GetControlParams(faust_effect, i, label, &min, &max, &init); 
+		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
+	}
+	
+	list_effect = AddAudioEffect(list_effect, faust_effect);
     return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
 }
 
-void test12()
+void test20()
 {
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
@@ -175,6 +198,23 @@ void test12()
         printf("Simulate non real-time rendering : use buffer here %ld\n", res);
     } while (res == 512);
     printf("Simulate non real-time rendering : use last buffer here %ld\n", res);
+	DeleteSound(sound);
+}
+
+void test21()
+{
+    printf("-----------------------------------------------------------\n");
+    printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
+    printf("-----------------------------------------------------------\n\n");
+    AudioStreamPtr sound = MakeRendererSound(MakeWriteSound("output.aif", MakeReadSound(FILENAME3),SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+    float buffer[512 * OUT_CHANNELS];
+    long res;
+	do {
+        res = ReadSound(sound, buffer, 512, OUT_CHANNELS);
+        printf("Simulate non real-time rendering : use buffer here %ld\n", res);
+    } while (res == 512);
+    printf("Simulate non real-time rendering : use last buffer here %ld\n", res);
+	DeleteSound(sound);
 }
 
 void TestPlay(AudioPlayerPtr player)
@@ -182,14 +222,14 @@ void TestPlay(AudioPlayerPtr player)
     int vol = 127;
     int pan = 64;
     char c;
-
+	
     while ((c = getchar()) && (c != 'n')) {
 
         switch (c) {
 
             case 'b':
                 StartSound(player, 1);
-                break;
+				break;
 
             case 'p':
                 ContSound(player, 1);
@@ -218,6 +258,11 @@ void TestPlay(AudioPlayerPtr player)
                 pan -= 5;
                 SetPanAudioPlayer(player, pan);
                 break;
+				
+			 case 'c': // To be used only when faust effects are running....
+				SetControlValue(faust_effect, 1, 0.95);
+				SetControlValue(faust_effect, 2, 0.9);
+	            break;
         }
     }
 }
@@ -228,7 +273,7 @@ void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
     if (res == NO_ERR) {
         TestPlay(player);
     } else {
-        printf("LoadChannel error %ld \n", res);
+        printf("LoadChannel error %d \n", res);
     }
     StopSound(player, 1);
     DeleteSound(sound);
@@ -255,7 +300,7 @@ int main(int argc, char* argv[])
     printf("Type '1' to pan left\n");
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
-
+	
     ExecTest(player, test0());
     ExecTest(player, test1());
     ExecTest(player, test2());
@@ -268,7 +313,8 @@ int main(int argc, char* argv[])
     ExecTest(player, test9());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
-    test12();
+ 	test20();
+	test21();
 
     StopAudioPlayer(player);
     CloseAudioPlayer(player);

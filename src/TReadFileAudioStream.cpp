@@ -31,9 +31,9 @@ grame@rd.grame.fr
 TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
     SF_INFO info;
-
-    fFile = sf_open(fName.c_str(), SFM_READ, &info) ;
-
+	memset(&info, 0, sizeof(info));
+    fFile = sf_open(fName.c_str(), SFM_READ, &info);
+	
     // Check file
     if (!fFile)
         throw - 1;

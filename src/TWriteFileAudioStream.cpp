@@ -67,7 +67,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream
     info.samplerate = TAudioGlobals::fSample_Rate;
     info.channels = fChannels;
     info.format = fFormat;
-
+	
     fFile = sf_open(fName.c_str(), SFM_WRITE, &info);
 
     // Check file
@@ -79,7 +79,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream
 TWriteFileAudioStream::~TWriteFileAudioStream()
 {
     if (fFile) {
-        sf_close(fFile);
+		sf_close(fFile);
         fFile = 0;
     }
 
@@ -112,11 +112,11 @@ long TWriteFileAudioStream::Write(TAudioBuffer<short>* buffer, long framesNum, l
 
 void TWriteFileAudioStream::Stop()
 {
-    // Flush the current buffer
+    // Flush the current buffer using "direct" write
     if (fCurFrame < fBuffer->GetSize() / 2) {
-        WriteBuffer(fBuffer, fCurFrame, 0);
+		TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame, 0);
     } else {
-        WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);
+		TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);
     }
 
     // Start a new buffer

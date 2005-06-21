@@ -32,7 +32,119 @@ grame@rd.grame.fr
 //-------------------------
 
 class dsp;
-class UI;
+
+typedef void (*uiCallback)(float val, void* data);
+
+class UI
+{
+		
+	public:
+			
+		UI() {}
+		virtual ~UI() {}
+		
+		// -- active widgets
+		
+		virtual void addButton(char* label, float* zone) = 0;
+		virtual void addToggleButton(char* label, float* zone) = 0;
+		virtual void addCheckButton(char* label, float* zone) = 0;
+		virtual void addVerticalSlider(char* label, float* zone, float init, float min, float max, float step) = 0;
+		virtual void addHorizontalSlider(char* label, float* zone, float init, float min, float max, float step) = 0;
+		virtual void addNumEntry(char* label, float* zone, float init, float min, float max, float step) = 0;
+		
+		// -- passive widgets
+		
+		virtual void addNumDisplay(char* label, float* zone, int precision) = 0;
+		virtual void addTextDisplay(char* label, float* zone, char* names[], float min, float max) = 0;
+		virtual void addHorizontalBargraph(char* label, float* zone, float min, float max) = 0;
+		virtual void addVerticalBargraph(char* label, float* zone, float min, float max) = 0;
+		void addCallback(float* zone, uiCallback foo, void* data);
+
+		// -- widget's layouts
+	
+		virtual void openFrameBox(char* label) = 0;
+		virtual void openTabBox(char* label) = 0;
+		virtual void openHorizontalBox(char* label) = 0;
+		virtual void openVerticalBox(char* label) = 0;
+		virtual void closeBox() = 0;
+		
+};
+
+class UIObject {
+
+	protected:
+		
+		string fLabel;
+		float* fZone;
+		
+		float range(float min, float max, float val) {return (val < min) ? min : (val > max) ? max : val;}
+	
+	public:
+			
+		UIObject(char* label, float* zone):fLabel(label),fZone(zone) {}
+		virtual ~UIObject() {}
+		
+		virtual void SetControlValue(float f) {*fZone = range(0.0f, 1.0f, f);}
+		virtual float GetControlValue() {return *fZone;}
+		virtual void GetControlParam(char* label, float* min, float* max, float* init)
+		{
+			strcpy(label, fLabel.c_str());
+			*min = 0;
+			*max = 0;
+			*init = 0;
+		}
+};
+
+class ToggleButton : public UIObject {
+	
+	public:	
+	
+		ToggleButton(char* label, float* zone):UIObject(label,zone) {}
+		virtual ~ToggleButton() {}
+};
+
+class CheckButton : public UIObject {
+	
+	public:
+	
+		CheckButton(char* label, float* zone):UIObject(label,zone) {}	
+		virtual ~CheckButton() {}
+};
+
+class Button : public UIObject {
+	
+	public:
+	
+		Button(char* label, float* zone):UIObject(label,zone) {}
+		virtual ~Button() {}		
+};
+
+class Slider : public UIObject {
+
+	private:
+	
+		float fInit;
+		float fMin;
+		float fMax;
+		float fStep;
+	
+	public:	
+	
+		Slider(char* label, float* zone, float init, float min, float max, float step)
+			:UIObject(label,zone),fInit(init),fMin(min),fMax(max),fStep(step) {}
+		virtual ~Slider() {}	
+		
+		void SetControlValue(float f) {*fZone = range(fMin, fMax, f);}
+		
+		virtual void GetControlParam(char* label, float* min, float* max, float* init)
+		{
+			UIObject::GetControlParam(label, min, max, init);
+			*min = fMin;
+			*max = fMax;
+			*init = fInit;
+		}
+};
+
 
 typedef dsp* (* newDsp) ();
 typedef void (* deleteDsp) (dsp* self); 						
@@ -47,7 +159,7 @@ typedef void (* conclude) (dsp* self);
 \brief Faust effect.
 */
 
-class TFaustAudioEffect : public TAudioEffectInterface
+class TFaustAudioEffect : public TAudioEffectInterface, public UI
 {
 
     private:
@@ -63,6 +175,7 @@ class TFaustAudioEffect : public TAudioEffectInterface
 		init fInit;
 		compute fCompute;
 		conclude fConclude;
+		vector<UIObject*> fUITable;
 		
     public:
 
@@ -82,11 +195,13 @@ class TFaustAudioEffect : public TAudioEffectInterface
 			fConclude = (conclude)dlsym(fHandle, "conclude");
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSample_Rate);
-			
-			//fBuildUserInterface(fDsp);
+			fBuildUserInterface(fDsp, this);
 		}
         virtual ~TFaustAudioEffect()
         {
+			for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) 
+				delete *iter;
+				
 			if (fHandle) {
 				fDelete(fDsp);
 				dlclose(fHandle);
@@ -107,12 +222,68 @@ class TFaustAudioEffect : public TAudioEffectInterface
 			fDelete(fDsp);
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSample_Rate);
-			//fBuildUserInterface(fDsp);
+			fBuildUserInterface(fDsp, this);
 		}
         long Channels()
         {
             return fGetNumInputs(fDsp);
         }
+		
+		void addButton(char* label, float* zone) {fUITable.push_back(new Button(label, zone));}
+		
+		void addToggleButton(char* label, float* zone) {fUITable.push_back(new ToggleButton(label, zone));}
+		
+		void addCheckButton(char* label, float* zone) {fUITable.push_back(new CheckButton(label, zone));}
+		
+		void addVerticalSlider(char* label, float* zone, float init, float min, float max, float step) 
+		{ 	
+			fUITable.push_back(new Slider(label, zone, init, min, max, step));
+		}
+		
+		void addHorizontalSlider(char* label, float* zone, float init, float min, float max, float step) 
+		{
+			fUITable.push_back(new Slider(label, zone, init, min, max, step));
+		}
+		
+		void addNumEntry(char* label, float* zone, float init, float min, float max, float step)
+		{
+			fUITable.push_back(new Slider(label, zone, init, min, max, step));
+		}
+		
+		virtual void addNumDisplay(char* label, float* zone, int precision) {}
+		virtual void addTextDisplay(char* label, float* zone, char* names[], float min, float max) {}
+		virtual void addHorizontalBargraph(char* label, float* zone, float min, float max) {}
+		virtual void addVerticalBargraph(char* label, float* zone, float min, float max) {}
+		void addCallback(float* zone, uiCallback foo, void* data);
+		
+		void openFrameBox(char* label) {}
+		void openTabBox(char* label) {}
+		void openHorizontalBox(char* label) {}
+		void openVerticalBox(char* label) {}
+		void closeBox() {}
+		
+		long GetControlCount()
+		{
+			return fUITable.size(); 
+		}
+				
+		void GetControlParam(long param, char* label, float* min, float* max, float* init)
+		{
+			assert(param < fUITable.size()); 
+			fUITable[param]->GetControlParam(label, min, max, init);
+		}
+		
+		void SetControlValue(long param, float f) 
+		{
+			assert(param < fUITable.size()); 
+			fUITable[param]->SetControlValue(f);
+		}
+		
+		float GetControlValue(long param) 
+		{
+			assert(param < fUITable.size()); 
+			fUITable[param]->GetControlValue();
+		}
 };
 
 typedef TFaustAudioEffect * TFaustAudioEffectPtr;

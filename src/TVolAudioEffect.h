@@ -64,6 +64,28 @@ class TVolAudioEffect : public TAudioEffectInterface
         {
             return 2;
         }
+		
+		long GetControlCount()
+		{
+			return 1;
+		}
+		
+		void GetControlParam(long param, char* label, float* min, float* max, float* init)
+		{
+			strcpy(label, "Volume");
+			*min = 0.0f;
+			*max = 1.0f;
+			*init = 0.8f;
+		}
+		
+		void SetControlValue(long param, float f)
+		{
+			fGain = f;
+		}
+		float GetControlValue(long param)
+		{
+			return fGain;
+		}
 };
 
 typedef TVolAudioEffect * TVolAudioEffectPtr;

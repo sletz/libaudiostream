@@ -36,17 +36,17 @@ void TAudioEffect::Process(float* buffer, long framesNum, long channels)
 			input[j][i] = buffer[i * channels + j];
 		}
 	}
-
+	
 	for (list<TAudioEffectInterfacePtr>::iterator iter = begin(); iter != end(); iter++) {
 	    TAudioEffectInterfacePtr process = *iter;
-        process->ProcessAux(input, tmp_output, framesNum, channels);
+		process->ProcessAux(input, tmp_output, framesNum, channels);
 		output = tmp_output;
 		SwapBuffers(input, tmp_output);
     }
 	
 	for (i = 0; i < framesNum; i++) {
 		for (j = 0; j < channels; j++) {
-			buffer[i * channels + j] = output[j][i];
+			buffer[i * channels + j] = output[j][i]; 
 		}
 	}
 }
