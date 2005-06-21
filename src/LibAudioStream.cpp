@@ -86,9 +86,9 @@ extern "C"
     AudioEffectPtr AUDIOAPI MakeVolAudioEffect(float gain);
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffect(const char* name);
 	long AUDIOAPI GetControlCount(AudioEffectPtr effect);
-	void AUDIOAPI GetControlParams(AudioEffectPtr effect, int param, char* label, float* min, float* max, float* init);
-	void AUDIOAPI SetControlValue(AudioEffectPtr effect, int param, float f);
-	float AUDIOAPI GetControlValue(AudioEffectPtr effect, int param);
+	void AUDIOAPI GetControlParam(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
+	void AUDIOAPI SetControlValue(AudioEffectPtr effect, long param, float f);
+	float AUDIOAPI GetControlValue(AudioEffectPtr effect, long param);
 
     // Open/Close
     AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 

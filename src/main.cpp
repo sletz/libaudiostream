@@ -157,7 +157,7 @@ AudioStreamPtr test10()
 	for (int i = 0; i < GetControlCount(faust_effect); i++) {
 		float min, max, init;
 		char label[32];
-		GetControlParams(faust_effect, i, label, &min, &max, &init); 
+		GetControlParam(faust_effect, i, label, &min, &max, &init); 
 		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
 	}
 	
@@ -177,7 +177,7 @@ AudioStreamPtr test11()
 	for (int i = 0; i < GetControlCount(faust_effect); i++) {
 		float min, max, init;
 		char label[32];
-		GetControlParams(faust_effect, i, label, &min, &max, &init); 
+		GetControlParam(faust_effect, i, label, &min, &max, &init); 
 		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
 	}
 	
