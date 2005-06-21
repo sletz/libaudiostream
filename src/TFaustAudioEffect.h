@@ -25,7 +25,9 @@ grame@rd.grame.fr
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
 
+#ifdef __Macintosh__
 #include <dlfcn.h>
+#endif
 
 //-------------------------
 // Class TFaustAudioEffect
@@ -179,6 +181,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 		
     public:
 
+#ifdef __Macintosh__
         TFaustAudioEffect(const char* name): TAudioEffectInterface()
         {
 			strcpy(fName, name);
@@ -207,6 +210,12 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 				dlclose(fHandle);
 			}
 		}
+#else
+		TFaustAudioEffect(const char* name): TAudioEffectInterface()
+		{}
+		virtual ~TFaustAudioEffect()
+		{}
+#endif		
 
         void Process(float** input, float** output, long framesNum, long channels)
         {
