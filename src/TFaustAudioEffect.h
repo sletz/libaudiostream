@@ -291,7 +291,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 		float GetControlValue(long param) 
 		{
 			assert(param < fUITable.size()); 
-			fUITable[param]->GetControlValue();
+			return fUITable[param]->GetControlValue();
 		}
 };
 
