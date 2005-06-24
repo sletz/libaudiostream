@@ -46,7 +46,7 @@ TAudioMixer::TAudioMixer ()
 
 TAudioMixer::~TAudioMixer()
 {
-    for (int j = 0; j < TAudioGlobals::fChannels ; j++)
+    for (int j = 0; j < TAudioGlobals::fChannels; j++)
         delete fSoundChannelTable[j];
     delete[] fSoundChannelTable;
     delete fMixBuffer;
@@ -56,16 +56,19 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 {
     // Init buffer
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
-
+	
     // Mix all SoundChannels
-    for (list<TAudioChannelPtr>::iterator iter = fSoundChannelSeq.begin(); iter != fSoundChannelSeq.end(); iter++) {
-        TAudioChannelPtr channel = *iter;
-        if (!channel->Mix(fMixBuffer, TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput)) { // End of channel
+	list<TAudioChannelPtr>::iterator iter = fSoundChannelSeq.begin();
+	while (iter != fSoundChannelSeq.end()) {
+		TAudioChannelPtr channel = *iter;
+		if (!channel->Mix(fMixBuffer, TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput)) { // End of channel
             channel->SetState(false); // Important : used to mark the insertion state
             iter = fSoundChannelSeq.erase(iter);
-        }
-    }
-
+		} else {
+			iter++;
+		}
+	}
+	
     // Master Pan and Vol
     MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
     MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
