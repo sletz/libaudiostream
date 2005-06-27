@@ -118,11 +118,11 @@ class TAudioChannel
             fRightOut = right;
         }
 
-        int GetVol()
+        long GetVol()
         {
             return fVol;
         }
-        int GetPan()
+        long GetPan()
         {
             return fPan;
         }
