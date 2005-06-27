@@ -81,17 +81,50 @@
 ;;===============================================================================================
 
 
-(setq s10 (MakeRendererSound (MakeReadSound soundfile1)))
-(GetLengthSound s10)
-(GetChannelsSound s10)
+(setq s7 (MakeRendererSound (MakeReadSound soundfile1)))
+(GetLengthSound s7)
+(GetChannelsSound s7)
 
 (defparameter buffer_size 512)
-(defvar buffer (ccl::newptrclear (* 4  buffer_size (GetChannelsSound s10))))
+(defvar buffer (ccl::newptrclear (* 4  buffer_size (GetChannelsSound s7))))
 
-(ReadSound s10 buffer buffer_size (GetChannelsSound s10))
+(ReadSound s7 buffer buffer_size (GetChannelsSound s7))
 
 (ccl::%get-long  buffer 0)
 (ccl::%get-long  buffer 1)
+
+
+;; Use of a Faust effect (http://faudiostream.sf.net)
+;;====================================================
+
+(setq freeverb (MakeFaustAudioEffect "/Volumes/MacOSX\ Panther/Applications/MCL\ 5.0/MCL\ 5.0/freeverb.so"))
+
+;; Print effect parameters
+
+(GetControlParam freeverb 0)
+(GetControlParam freeverb 1)
+(GetControlParam freeverb 2)
+
+(defun print-params (effect)
+  (dotimes (i (GetControlCount effect))
+    (multiple-value-bind (name min max init) (GetControlParam effect i)
+      (print (list name min max init)))))
+
+(print-params freeverb)
+
+(setq effect_list (MakeAudioEffectList))
+(setq effect_list (AddAudioEffect effect_list freeverb))
+
+(setq s8 (MakeTransformSound (MakeReadSound soundfile1) effect_list 100 100))
+
+;; Change effect parameters : parameters are reseted to their default value each time the "transform" stream is reseted, 
+;; typically when the stream is re-started: changing parameters value can be done "on the fly" when the stream is playing  
+
+(SetControlValue freeverb 1 0.9)
+(SetControlValue freeverb 2 0.9)
+
+:: Note: the effect list will be destroyed when the "transform" stream using them is deleted (using the DeleteSound function)
+;; thus one cannot use the effect pointer anymore after the stream deletion without crash consequences....
 
 
 ;; Load audio player channels
@@ -106,6 +139,9 @@
 (LoadChannel player s5 5 120 64)
 (LoadChannel player s6 6 120 64)
 
+(LoadChannel player s7 7 120 64)
+(LoadChannel player s8 8 120 64)
+
 
 ;; Channels can be started/stopped/continued individually 
 ;;========================================================
@@ -119,6 +155,8 @@
 (StartSound player 4)
 (StartSound player 5)
 (StartSound player 6)
+(StartSound player 7)
+(StartSound player 8)
 
 ;; Stop channels
 ;;================
@@ -129,6 +167,9 @@
 (StopSound player 4)
 (StopSound player 5)
 (StopSound player 6)
+(StopSound player 7)
+(StopSound player 8)
+
 
 ;; Continue channels
 ;;====================
@@ -139,7 +180,8 @@
 (ContSound player 4)
 (ContSound player 5)
 (ContSound player 6)
-
+(ContSound player 7)
+(ContSound player 8)
 
 ;;==================================================================================
 ;; NOTE : To start all channels simultanously in a perfectly synchronous manner, 

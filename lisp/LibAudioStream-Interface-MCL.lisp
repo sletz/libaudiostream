@@ -402,3 +402,33 @@
       (ccl::ppc-ff-call (get-fun-addr "MakeFaustAudioEffect" *libaudiostream*) 
                         :address s
                         :address)))
+
+(defmacro GetControlCount (effect)
+ `(ccl::ppc-ff-call  (get-fun-addr "GetControlCount" *libaudiostream*) 
+                        :address ,effect
+                        :signed-fullword))
+
+(defmacro GetControlParam (effect control)
+  `(%stack-block ((name 64) (min 4) (max 4) (init 4))
+     (ccl::ppc-ff-call  (get-fun-addr "GetControlParam" *libaudiostream*) 
+                        :address ,effect
+                        :signed-fullword ,control
+                        :address name
+                        :address min
+                        :address max
+                        :address init
+                        :void)
+     (values (%get-cstring name) (%get-single-float min) (%get-single-float max) (%get-single-float init))))
+
+(defmacro SetControlValue (effect control value)
+ `(ccl::ppc-ff-call  (get-fun-addr "SetControlValue" *libaudiostream*) 
+                        :address ,effect
+                        :signed-fullword ,control
+                        :double-float ,value
+                        :void))
+
+(defmacro GetControlValue (effect control)
+ `(ccl::ppc-ff-call  (get-fun-addr "GetControlValue" *libaudiostream*) 
+                        :address ,effect
+                        :signed-fullword ,control
+                        ::double-float))
