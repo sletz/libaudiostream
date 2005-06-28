@@ -104,11 +104,7 @@ class TDirectCmdManager : public TCmdManager
         virtual ~TDirectCmdManager()
         {}
 
-        void ExecCmd(CmdPtr fun, long a1, long a2, long a3, long a4, long a5)
-        {
-            ExecCmdAux(fun, a1, a2, a3, a4, a5);
-        }
-        void ExecCmdAux(CmdPtr fun, long a1, long a2, long a3, long a4, long a5)
+		void ExecCmdAux(CmdPtr fun, long a1, long a2, long a3, long a4, long a5)
         {
             fun(a1, a2, a3, a4, a5);
         }
