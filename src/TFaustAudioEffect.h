@@ -152,7 +152,7 @@ typedef dsp* (* newDsp) ();
 typedef void (* deleteDsp) (dsp* self); 						
 typedef int (* getNumInputs) (dsp* self);
 typedef int (* getNumOutputs) (dsp* self);
-typedef void (* buildUserInterface) (dsp* self,UI* interface);
+typedef void (* buildUserInterface) (dsp* self,UI* ui);
 typedef void (* init) (dsp* self, int freq);
 typedef void (* compute) (dsp* self, int len, float** inputs, float** outputs); 						
 typedef void (* conclude) (dsp* self);
