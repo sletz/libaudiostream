@@ -112,16 +112,17 @@ long TWriteFileAudioStream::Write(TAudioBuffer<short>* buffer, long framesNum, l
 
 void TWriteFileAudioStream::Stop()
 {
-    // Flush the current buffer using "direct" write
+    // Flush the current buffer
     if (fCurFrame < fBuffer->GetSize() / 2) {
-		TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame, 0);
+		WriteBuffer(fBuffer, fCurFrame, 0);
     } else {
-		TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);
+		WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);
     }
 
     // Start a new buffer
     fCurFrame = 0;
 }
+
 
 
 
