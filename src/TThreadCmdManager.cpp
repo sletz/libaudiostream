@@ -26,34 +26,39 @@ grame@rd.grame.fr
 #include <stdlib.h>
 #include <errno.h>
 
+#ifdef __APPLE__ 
+
 void* TThreadCmdManager::CmdHandler(void* arg)
 {
     TThreadCmdManager* manager = (TThreadCmdManager*) arg;
 
-#ifdef WIN32
-    // FAIT PLANTER SUR MacOSX
-    // pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
-    // sur WIN32 : pthread_cancel ne marche pas si PTHREAD_CANCEL_ASYNCHRONOUS
-#endif
-
     while (true) {
-#ifdef WIN32	// using the "while line" make the application not quit properly (hanging thread)
-        manager->RunAux();
-        pthread_mutex_lock(&manager->fLock);
-        pthread_cond_wait(&manager->fCond, &manager->fLock);
-        pthread_mutex_unlock(&manager->fLock);
-#else
 		manager->RunAux();
         pthread_mutex_lock(&manager->fLock);
         while (fifosize(&manager->fRunningCmd) == 0)
             pthread_cond_wait(&manager->fCond, &manager->fLock);
         pthread_mutex_unlock(&manager->fLock);
-#endif
     }
 
     pthread_exit(0);
     return 0;
 }
+
+#elif WIN32
+
+DWORD WINAPI TThreadCmdManager::CmdHandler(void* arg)
+{
+    TThreadCmdManager* manager = (TThreadCmdManager*) arg;
+
+    while (true) {
+        manager->RunAux();
+		WaitForSingleObject(manager->fCond, INFINITE);
+    }
+
+    return 0;
+}
+
+#endif
 
 void TThreadCmdManager::RunAux()
 {
@@ -66,16 +71,19 @@ void TThreadCmdManager::RunAux()
 }
 
 TThreadCmdManager::TThreadCmdManager(long thread_num)
-{
-    struct sched_param param;
+{   
     TCmd* cmd;
 	int i;
 
     // Init variables
     lfinit(&fFreeCmd);
 
-    pthread_mutex_init(&fLock, NULL);
+#ifdef __APPLE__    
+	pthread_mutex_init(&fLock, NULL);
     pthread_cond_init(&fCond, NULL);
+#elif WIN32
+	fCond = CreateEvent(NULL, FALSE, FALSE, NULL);
+#endif
 
     // Preallocate commands
     for (i = 0; i < MAXCOMMAND; i++) {
@@ -85,12 +93,21 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
     }
 	fifoinit(&fRunningCmd);
 
+#ifdef __APPLE__
+	struct sched_param param;
     param.sched_priority = 99;
     for (i = 0; i < thread_num; i++) {
         pthread_t thread;
         pthread_create(&thread, NULL, CmdHandler, (void*)this); // assume it works..
         fThreadList.push_back(thread);
     }
+#elif WIN32
+	for (i = 0; i < thread_num; i++) {
+		DWORD id;
+		HANDLE thread = CreateThread(NULL, 0, CmdHandler, (void*)this, 0, &id);
+        fThreadList.push_back(thread);
+    }
+#endif
 }
 
 TThreadCmdManager::~TThreadCmdManager()
@@ -103,14 +120,21 @@ TThreadCmdManager::~TThreadCmdManager()
     #ifdef __APPLE__
         mach_port_t machThread = pthread_mach_thread_np(fThreadList[i]);
         thread_terminate(machThread); 
-    #else 
-        pthread_cancel(fThreadList[i]);
+    #elif WIN32
+		TerminateThread(fThreadList[i],0);
+		//WaitForSingleObject(fThreadList[i], INFINITE);
+	#else
+		pthread_cancel(fThreadList[i]);
         pthread_join(fThreadList[i], NULL); 
     #endif
-    }
- 
-    pthread_mutex_destroy(&fLock);
-    pthread_cond_destroy(&fCond);
+    }  
+
+	#ifdef __APPLE__
+		pthread_mutex_destroy(&fLock);
+		pthread_cond_destroy(&fCond);
+	#elif WIN32
+		CloseHandle(fCond);
+	#endif
 
     // Free structures
     while ((cmd = (TCmd*)lfpop(&fFreeCmd))) {
@@ -146,11 +170,16 @@ void TThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long arg3, 
         cmd->arg3 = arg3;
         cmd->arg4 = arg4;
         cmd->arg5 = arg5;
-        // Signal the condition to wake the thread
+	// Signal the condition to wake the thread
+	#ifdef __APPLE__       
         pthread_mutex_lock(&fLock);
         fifoput(&fRunningCmd, (fifocell*)cmd);
         pthread_mutex_unlock(&fLock);
         pthread_cond_signal(&fCond);
+	#elif WIN32
+		fifoput(&fRunningCmd, (fifocell*)cmd);
+		SetEvent(fCond);
+	#endif
     } else {
         printf("Error : empty cmd lifo\n");
     }

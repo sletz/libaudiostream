@@ -23,12 +23,15 @@ grame@rd.grame.fr
 #ifndef __TThreadCmdManager__
 #define __TThreadCmdManager__
 
+#ifdef __APPLE__
 #include <pthread.h>
-#include "TCmdManager.h"
+#elif WIN32
+#include <windows.h>
+#endif
 
+#include "TCmdManager.h"
 #include "lffifo.h"
 #include "lflifo.h"
-
 #include <vector>
 
 //-------------
@@ -168,14 +171,21 @@ class TThreadCmdManager : public TCmdManager
 {
 
     private:
+
 	    lifo fFreeCmd;      // Commands free list
         fifo fRunningCmd;   // Running commands
-        std::vector<pthread_t> fThreadList; // Execution thread
-        pthread_mutex_t fLock;  // Mutex
+
+	#ifdef __APPLE__
+		std::vector<pthread_t> fThreadList; // Execution thread
+		pthread_mutex_t fLock;  // Mutex
         pthread_cond_t fCond;   // Condition variable
-
-        static void* CmdHandler(void* arg);
-
+		static void* CmdHandler(void* arg);
+	#elif WIN32
+		std::vector<HANDLE> fThreadList; // Execution thread
+        HANDLE fCond;   // Condition variable
+		static DWORD WINAPI CmdHandler(void* arg);
+	#endif
+       
     public:
 
         TThreadCmdManager(long thread);
