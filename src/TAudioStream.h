@@ -25,6 +25,7 @@ grame@rd.grame.fr
 #include "TAudioConstants.h"
 #include "UAudioTools.h"
 #include "TAudioBuffer.h"
+#include "smartpointer.h"
 
 #include <stdio.h>
 
@@ -43,7 +44,11 @@ Be carefull : Closing may be done by another thread and no synchronization is do
 and the possible other thread.
 */
 
-class TAudioStream
+class TAudioStream;
+
+typedef SMARTP<TAudioStream>  TAudioStreamPtr;
+
+class TAudioStream : public smartable
 {
 
     public:
@@ -71,7 +76,7 @@ class TAudioStream
         {}
 
         // Cut the beginning of the stream
-        virtual TAudioStream* CutBegin(long frames)
+        virtual TAudioStreamPtr CutBegin(long frames)
         {
             return 0;
         }
@@ -89,13 +94,13 @@ class TAudioStream
         }
 
         // Copy the structure
-        virtual TAudioStream* Copy()
+        virtual TAudioStreamPtr Copy()
         {
             return 0;
         }
 };
 
-typedef TAudioStream * TAudioStreamPtr;
+//  typedef TAudioStream * TAudioStreamPtr;
 
 //-------------------------
 // Class TUnaryAudioStream
@@ -112,8 +117,11 @@ class TUnaryAudioStream
         TAudioStreamPtr fStream; // Decorated stream
 
     public:
-
-        TAudioStreamPtr getBranch1()
+	
+		virtual ~TUnaryAudioStream()
+        {}
+	
+        TAudioStreamPtr GetBranch1()
         {
             return fStream;
         }
@@ -143,12 +151,7 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             fStream = stream;
         }
 
-        virtual ~TDecoratedAudioStream()
-        {
-            delete fStream;
-        }
-
-        virtual long Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+		virtual long Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
         {
             assert(fStream);
             return fStream->Write(buffer, framesNum, framePos, channels);

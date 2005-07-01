@@ -25,6 +25,10 @@ grame@rd.grame.fr
 #include </opt/local/include/sndfile.h>
 #include <stdio.h>
 
+// steph 
+#include "TAudioStreamFactory.h"
+
+
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
@@ -41,7 +45,7 @@ AudioStreamPtr test0()
     printf("Build a region \n");
     printf("-------------- \n\n");
     AudioStreamPtr s1;
-    s1 = MakeRegionSound(FILENAME1, 200000, 500000);
+	s1 = MakeRegionSoundPtr(FILENAME1, 200000, 500000);
     return s1;
 }
 
@@ -51,8 +55,8 @@ AudioStreamPtr test1()
     printf("Build a region with a fade \n");
     printf("--------------------------- \n\n");
     AudioStreamPtr s1;
-    s1 = MakeRegionSound(FILENAME1, 200000, 500000);
-    return MakeFadeSound(s1, 44100, 44100);
+    s1 = MakeRegionSoundPtr(FILENAME1, 200000, 500000);
+    return MakeFadeSoundPtr(s1, 44100, 44100);
 }
 
 AudioStreamPtr test2()
@@ -61,9 +65,9 @@ AudioStreamPtr test2()
     printf("Build a mix of 2 regions with a fade \n");
     printf("------------------------------------- \n\n");
     AudioStreamPtr s1, s2;
-    s1 = MakeRegionSound(FILENAME1, 400000, 1700000);
-    s2 = MakeRegionSound(FILENAME2, 400000, 1800000);
-    return MakeFadeSound(MakeMixSound(s2, s1), 44100, 44100);
+    s1 = MakeRegionSoundPtr(FILENAME1, 400000, 1700000);
+    s2 = MakeRegionSoundPtr(FILENAME2, 400000, 1800000);
+    return MakeFadeSoundPtr(MakeMixSoundPtr(s2, s1), 44100, 44100);
 }
 
 AudioStreamPtr test3()
@@ -72,9 +76,9 @@ AudioStreamPtr test3()
     printf("Build a sequence of 2 regions with a crossfade \n");
     printf("-----------------------------------------------\n\n");
     AudioStreamPtr s1, s2;
-    s1 = MakeRegionSound(FILENAME1, 200000, 500000);
-    s2 = MakeRegionSound(FILENAME2, 200000, 700000);
-    return MakeSeqSound(s1, s2, 88200);
+    s1 = MakeRegionSoundPtr(FILENAME1, 200000, 500000);
+    s2 = MakeRegionSoundPtr(FILENAME2, 200000, 700000);
+    return MakeSeqSoundPtr(s1, s2, 88200);
 }
 
 AudioStreamPtr test4()
@@ -83,9 +87,9 @@ AudioStreamPtr test4()
     printf("Build a looped region \n");
     printf("----------------------\n\n");
     AudioStreamPtr s1;
-    s1 = MakeRegionSound(FILENAME1, 200000, 400000);
-    s1 = MakeFadeSound(s1, 500, 500);
-    s1 = MakeLoopSound(s1, 5);
+    s1 = MakeRegionSoundPtr(FILENAME1, 200000, 400000);
+    s1 = MakeFadeSoundPtr(s1, 500, 500);
+    s1 = MakeLoopSoundPtr(s1, 5);
     return s1;
 }
 
@@ -94,7 +98,7 @@ AudioStreamPtr test5()
     printf("------------------------------------\n");
     printf("Build a input/output through stream \n");
     printf("------------------------------------\n\n");
-    return MakeInputSound();
+    return MakeInputSoundPtr();
 }
 
 AudioStreamPtr test6()
@@ -102,7 +106,7 @@ AudioStreamPtr test6()
     printf("---------------------------------------------------------\n");
     printf("Build a input/output through and record the ouput stream\n");
     printf("---------------------------------------------------------\n\n");
-    return MakeWriteSound("input.aif", MakeInputSound(), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
+    return MakeWriteSoundPtr("input.aif", MakeInputSoundPtr(), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
 }
 
 AudioStreamPtr test7()
@@ -110,10 +114,10 @@ AudioStreamPtr test7()
     printf("-------------------------\n");
     printf("Build a echo on a region \n");
     printf("-------------------------\n\n");
-    AudioStreamPtr sound, mix = MakeRegionSound(FILENAME2, 400000, 1000000);
+    AudioStreamPtr sound, mix = MakeRegionSoundPtr(FILENAME2, 400000, 1000000);
     for (int i = 0; i < 32 ; i++) {
-        sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 400000, 1000000), 0);
-        mix = MakeMixSound(sound, mix);
+        sound = MakeSeqSoundPtr(MakeNullSoundPtr(i * 4410), MakeRegionSoundPtr(FILENAME2, 400000, 1000000), 0);
+        mix = MakeMixSoundPtr(sound, mix);
     }
     return mix;
 }
@@ -123,12 +127,12 @@ AudioStreamPtr test8()
     printf("------------------------------------------------------------------\n");
     printf("Cut a region into a complex stream and write the result to a file\n");
     printf("------------------------------------------------------------------\n\n");
-    AudioStreamPtr sound, mix = MakeRegionSound(FILENAME2, 400000, 500000);
+    AudioStreamPtr sound, mix = MakeRegionSoundPtr(FILENAME2, 400000, 500000);
     for (int i = 0; i < 8 ; i++) {
-        sound = MakeSeqSound(MakeNullSound(i * 44000), MakeRegionSound(FILENAME2, 400000, 500000), 0);
-        mix = MakeMixSound(sound, mix);
+        sound = MakeSeqSoundPtr(MakeNullSoundPtr(i * 44000), MakeRegionSoundPtr(FILENAME2, 400000, 500000), 0);
+        mix = MakeMixSoundPtr(sound, mix);
     }
-    return MakeWriteSound("output.aif", MakeCutSound(mix, 100000, 200000), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
+    return MakeWriteSoundPtr("output.aif", MakeCutSoundPtr(mix, 100000, 200000), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
 }
 
 AudioStreamPtr test9()
@@ -136,11 +140,11 @@ AudioStreamPtr test9()
     printf("--------------------------------------------------------------\n");
     printf("Sequence of a region with a transformed region (volume effect)\n");
     printf("--------------------------------------------------------------\n\n");
-    AudioStreamPtr sound1 = MakeRegionSound(FILENAME1, 400000, 600000);
-    AudioStreamPtr sound2 = MakeRegionSound(FILENAME1, 400000, 600000);
-    AudioEffectListPtr list_effect = MakeAudioEffectList();
-    list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.25));
-    return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
+    AudioStreamPtr sound1 = MakeRegionSoundPtr(FILENAME1, 400000, 600000);
+    AudioStreamPtr sound2 = MakeRegionSoundPtr(FILENAME1, 400000, 600000);
+    AudioEffectListPtr list_effect = MakeAudioEffectListPtr();
+    list_effect = AddAudioEffectPtr(list_effect, MakeVolAudioEffectPtr(0.25));
+    return MakeSeqSoundPtr(sound1, MakeTransformSoundPtr(sound2, list_effect, 100, 100), 44100);
 }
 
 AudioStreamPtr test10()
@@ -148,21 +152,21 @@ AudioStreamPtr test10()
     printf("-------------------------------------------------------------------\n");
     printf("Sequence of a region with a Faust freeverb region                  \n");
     printf("-------------------------------------------------------------------\n\n");
-    AudioStreamPtr sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
-    AudioStreamPtr sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
-	AudioEffectListPtr list_effect = MakeAudioEffectList();
-    faust_effect = MakeFaustAudioEffect("freeverb.so");
+    AudioStreamPtr sound1 = MakeRegionSoundPtr(FILENAME1, 400000, 1000000);
+    AudioStreamPtr sound2 = MakeRegionSoundPtr(FILENAME1, 400000, 1000000);
+	AudioEffectListPtr list_effect = MakeAudioEffectListPtr();
+    faust_effect = MakeFaustAudioEffectPtr("freeverb.so");
     
-	printf("Faust effect: param num %ld\n", GetControlCount(faust_effect));
-	for (int i = 0; i < GetControlCount(faust_effect); i++) {
+	printf("Faust effect: param num %ld\n", GetControlCountPtr(faust_effect));
+	for (int i = 0; i < GetControlCountPtr(faust_effect); i++) {
 		float min, max, init;
 		char label[32];
-		GetControlParam(faust_effect, i, label, &min, &max, &init); 
+		GetControlParamPtr(faust_effect, i, label, &min, &max, &init); 
 		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
 	}
 	
-	list_effect = AddAudioEffect(list_effect, faust_effect);
-    return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
+	list_effect = AddAudioEffectPtr(list_effect, faust_effect);
+    return MakeSeqSoundPtr(sound1, MakeTransformSoundPtr(sound2, list_effect, 100, 100), 44100);
 }
 
 AudioStreamPtr test11()
@@ -170,19 +174,19 @@ AudioStreamPtr test11()
     printf("-------------------------------------------------------------------\n");
     printf("Input stream + Faust freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
-    AudioEffectListPtr list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect("freeverb.so");
+    AudioEffectListPtr list_effect = MakeAudioEffectListPtr();
+	faust_effect = MakeFaustAudioEffectPtr("freeverb.so");
 	
-    printf("Faust effect: param num %ld\n", GetControlCount(faust_effect));
-	for (int i = 0; i < GetControlCount(faust_effect); i++) {
+    printf("Faust effect: param num %ld\n", GetControlCountPtr(faust_effect));
+	for (int i = 0; i < GetControlCountPtr(faust_effect); i++) {
 		float min, max, init;
 		char label[32];
-		GetControlParam(faust_effect, i, label, &min, &max, &init); 
+		GetControlParamPtr(faust_effect, i, label, &min, &max, &init); 
 		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
 	}
 	
-	list_effect = AddAudioEffect(list_effect, faust_effect);
-    return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+	list_effect = AddAudioEffectPtr(list_effect, faust_effect);
+    return MakeTransformSoundPtr(MakeInputSoundPtr(), list_effect, 100, 100);
 }
 
 void test20()
@@ -190,15 +194,15 @@ void test20()
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
     printf("-----------------------------------------------------------\n\n");
-    AudioStreamPtr sound = MakeRendererSound(MakeRegionSound(FILENAME2, 400000, 500000));
+    AudioStreamPtr sound = MakeRendererSoundPtr(MakeRegionSoundPtr(FILENAME2, 400000, 500000));
     float buffer[512 * OUT_CHANNELS];
     long res;
     do {
-        res = ReadSound(sound, buffer, 512, OUT_CHANNELS);
+        res = ReadSoundPtr(sound, buffer, 512, OUT_CHANNELS);
         printf("Simulate non real-time rendering : use buffer here %ld\n", res);
     } while (res == 512);
     printf("Simulate non real-time rendering : use last buffer here %ld\n", res);
-	DeleteSound(sound);
+	DeleteSoundPtr(sound);
 }
 
 void test21()
@@ -206,15 +210,15 @@ void test21()
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
     printf("-----------------------------------------------------------\n\n");
-    AudioStreamPtr sound = MakeRendererSound(MakeWriteSound("output.aif", MakeReadSound(FILENAME3),SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+    AudioStreamPtr sound = MakeRendererSoundPtr(MakeWriteSoundPtr("output.aif", MakeReadSoundPtr(FILENAME3),SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
     float buffer[512 * OUT_CHANNELS];
     long res;
 	do {
-        res = ReadSound(sound, buffer, 512, OUT_CHANNELS);
+        res = ReadSoundPtr(sound, buffer, 512, OUT_CHANNELS);
         printf("Simulate non real-time rendering : use buffer here %ld\n", res);
     } while (res == 512);
     printf("Simulate non real-time rendering : use last buffer here %ld\n", res);
-	DeleteSound(sound);
+	DeleteSoundPtr(sound);
 }
 
 void TestPlay(AudioPlayerPtr player)
@@ -260,8 +264,8 @@ void TestPlay(AudioPlayerPtr player)
                 break;
 				
 			 case 'c': // To be used only when faust effects are running....
-				SetControlValue(faust_effect, 1, 0.95);
-				SetControlValue(faust_effect, 2, 0.9);
+				SetControlValuePtr(faust_effect, 1, 0.95);
+				SetControlValuePtr(faust_effect, 2, 0.9);
 	            break;
         }
     }
@@ -269,14 +273,14 @@ void TestPlay(AudioPlayerPtr player)
 
 void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
 {
-    int res = LoadChannel(player, sound, 1, 120, 64);
+    int res = LoadChannelPtr(player, sound, 1, 120, 64);
     if (res == NO_ERR) {
         TestPlay(player);
     } else {
         printf("LoadChannel error %d \n", res);
     }
     StopSound(player, 1);
-    DeleteSound(sound);
+    DeleteSoundPtr(sound);
 }
 
 int main(int argc, char* argv[])
@@ -284,14 +288,14 @@ int main(int argc, char* argv[])
     printf("----------------------------\n");
     printf("LibAudioStream based Player \n");
     printf("----------------------------\n\n");
-
-    // Try to open Jack version
+	
+	// Try to open Jack version
     AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
     // Is failure opens PortAudio version
     if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
-
+	
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");
     printf("Type 'p' to play from the current position\n");
@@ -312,8 +316,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test8());
     ExecTest(player, test9());
 	ExecTest(player, test10());
-	ExecTest(player, test11());
- 	test20();
+	test20();
 	test21();
 
     StopAudioPlayer(player);

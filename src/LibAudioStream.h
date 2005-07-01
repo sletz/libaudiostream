@@ -53,7 +53,8 @@ extern "C"
 
     // Opaque pointers
     typedef void* AudioPlayerPtr;
-    typedef void* AudioStreamPtr;
+ 	typedef void* AudioStreamPtr;
+	
     typedef void* AudioEffectPtr;
     typedef void* AudioEffectListPtr;
 
@@ -62,13 +63,13 @@ extern "C"
     \param lengthFrame The number of null frame to be produced.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeNullSound(long lengthFrame);
+    AudioStreamPtr MakeNullSoundPtr(long lengthFrame);
     /*!
     \brief Create a file reader stream.
     \param name The sound file pathname.
     \return A pointer to new stream object or NULL if the file cannot be opened.
     */
-    AudioStreamPtr MakeReadSound(char* name);
+    AudioStreamPtr MakeReadSoundPtr(char* name);
     /*!
     \brief Create a file region reader stream. 
     \param name The sound file pathname.
@@ -76,7 +77,7 @@ extern "C"
     \param endFrame The end frame of the region.
     \return A pointer to new stream object or NULL if the wanted region is not part of the file.
     */
-    AudioStreamPtr MakeRegionSound(char* name, long beginFrame, long endFrame);
+    AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
     /*!
     \brief Create a fade on a stream.
     \param sound The stream to be "faded".
@@ -84,14 +85,14 @@ extern "C"
     \param fadeOut The fadeout length in frames.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeFadeSound(AudioStreamPtr sound, long fadeIn, long fadeOut);
+    AudioStreamPtr MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut);
     /*!
     \brief Loop a stream.
     \param sound The stream to be looped.
     \param num The number of loops.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeLoopSound(AudioStreamPtr sound, long num);
+    AudioStreamPtr MakeLoopSoundPtr(AudioStreamPtr sound, long num);
     /*!
     \brief Cut in a stream : the portion between 0 and beginFrame will be removed, the portion between endFrame and the stream end will be removed.
     \param sound The stream to be cutted.
@@ -99,7 +100,7 @@ extern "C"
     \param endFrame The end frame number of the stream part to remove
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeCutSound(AudioStreamPtr sound, long beginFrame, long endFrame);
+    AudioStreamPtr MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, long endFrame);
     /*!
     \brief Put two streams in sequence.
     \param s1 The first stream in the sequence.
@@ -107,14 +108,14 @@ extern "C"
     \param crossFade A crossface section expressed in frames.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeSeqSound(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade);
+    AudioStreamPtr MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade);
     /*!
     \brief Mix two streams.
     \param s1 The first stream in the mix.
     \param s2 The second stream in the mix.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeMixSound(AudioStreamPtr s1, AudioStreamPtr s2);
+    AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     /*!
     \brief Apply an effect on a stream.
     \param sound The stream to be transformed.
@@ -123,7 +124,7 @@ extern "C"
     \param fadeOut A fadeout section frames before the effect is fully removed.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeTransformSound(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+    AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
     /*!
     \brief Create a stream writer.
     \param name The sound file pathname.
@@ -131,29 +132,29 @@ extern "C"
     \param format A libsndfile format.
     \return A pointer to new stream object or NULL if the file cannot be opened.
     */
-    AudioStreamPtr MakeWriteSound(char* name, AudioStreamPtr sound, long format);
+    AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr sound, long format);
     /*!
     \brief Create an inputstream.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeInputSound();
+    AudioStreamPtr MakeInputSoundPtr();
     /*!
     \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeRendererSound(AudioStreamPtr s);
+    AudioStreamPtr MakeRendererSoundPtr(AudioStreamPtr s);
     /*!
     \brief Get the stream length in frames.
     \param sound The stream.
     \return The stream length in frames.
     */
-    long GetLengthSound(AudioStreamPtr sound);
+    long GetLengthSoundPtr(AudioStreamPtr sound);
     /*!
     \brief Get the stream number of channels.
     \param sound The stream.
     \return The number of channels.
     */
-    long GetChannelsSound(AudioStreamPtr sound);
+    long GetChannelsSoundPtr(AudioStreamPtr sound);
     /*!
     \brief Read a buffer of the stream.
     \param sound The stream.
@@ -162,12 +163,12 @@ extern "C"
     \param channels The number of channels in the buffer.
     \return The number of read frames.
     */
-    long ReadSound(AudioStreamPtr sound, float* buffer, long buffer_size, long channels);
+    long ReadSoundPtr(AudioStreamPtr sound, float* buffer, long buffer_size, long channels);
     /*!
     \brief Delete a stream.
     \param sound The stream to be deleted.
     */
-    void DeleteSound(AudioStreamPtr sound);
+    void DeleteSoundPtr(AudioStreamPtr sound);
 
     /* Effect management */
 
@@ -175,7 +176,7 @@ extern "C"
 	\brief Create an effect list.
 	\return A pointer to new effect list.
 	*/
-    AudioEffectListPtr MakeAudioEffectList();
+    AudioEffectListPtr MakeAudioEffectListPtr();
 
     /*!
 	\brief Add an effect in an effect list.
@@ -183,7 +184,7 @@ extern "C"
     \param effect The effect to be added.
 	\return A pointer to the modified effect list.
 	*/
-    AudioEffectListPtr AddAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+    AudioEffectListPtr AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
 
     /*!
 	\brief Remove an effect from an effect list.
@@ -191,14 +192,14 @@ extern "C"
     \param effect The effect to be removed.
 	\return A pointer to the modified effect list.
 	*/
-    AudioEffectListPtr RemoveAudioEffect(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+    AudioEffectListPtr RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
 
     /*!
 	\brief Create a volume effect.
 	\param gain The gain between 0 and 1.
     \return A pointer to new effect object.
 	*/
-    AudioEffectPtr MakeVolAudioEffect(float gain);
+    AudioEffectPtr MakeVolAudioEffectPtr(float gain);
 	
 	/*!
 	\brief Create an effect decribed in the Faust DSP language.
@@ -206,12 +207,12 @@ extern "C"
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
 
-	AudioEffectPtr MakeFaustAudioEffect(const char* name);
+	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
 	
-	long GetControlCount(AudioEffectPtr effect);
-	void GetControlParam(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
-	void SetControlValue(AudioEffectPtr effect, long control, float f);
-	float GetControlValue(AudioEffectPtr effect, long control);
+	long GetControlCountPtr(AudioEffectPtr effect);
+	void GetControlParamPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
+	void SetControlValuePtr(AudioEffectPtr effect, long control, float f);
+	float GetControlValuePtr(AudioEffectPtr effect, long control);
 
 
     // Open/Close
@@ -252,7 +253,7 @@ extern "C"
     \param pan The panning between 0 and 127.
     \return An error code.
     */
-    long LoadChannel(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan);
+    long LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan);
     /*!
     \brief Retrieve information about a sound channel.
     \param player The audio player.

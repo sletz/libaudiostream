@@ -100,11 +100,11 @@ class TAudioChannel
         void SetStream(TAudioStreamPtr stream);
         TAudioStreamPtr GetStream();
 
-        int GetLeft()
+        long GetLeft()
         {
             return fLeftOut;
         }
-        int GetRight()
+        long GetRight()
         {
             return fRightOut;
         }

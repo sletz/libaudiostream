@@ -22,6 +22,8 @@ TAudioBuffer<float>*
 #ifndef __TAudioEffectInterface__
 #define __TAudioEffectInterface__
 
+#include "smartpointer.h"
+
 //-----------------------------
 // Class TAudioEffectInterface
 //-----------------------------
@@ -29,7 +31,11 @@ TAudioBuffer<float>*
 \brief The base class for audio effects.
 */
 
-class TAudioEffectInterface
+class TAudioEffectInterface;
+
+typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
+
+class TAudioEffectInterface : public smartable
 {
 
     private:
@@ -72,6 +78,6 @@ class TAudioEffectInterface
 		virtual float GetControlValue(long param) = 0;
 };
 
-typedef TAudioEffectInterface * TAudioEffectInterfacePtr;
+//typedef TAudioEffectInterface * TAudioEffectInterfacePtr;
 
 #endif

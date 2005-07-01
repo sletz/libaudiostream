@@ -25,7 +25,8 @@ grame@rd.grame.fr
 
 TTransformAudioStream::TTransformAudioStream(TAudioStreamPtr stream, TAudioEffectPtr effectList, long fadeIn, long fadeOut)
 {
-    fEffectList = effectList;
+    fCurEffectList = effectList;
+	fNextEffectList = 0;
     // Add rest
     fStream = new TFadeAudioStream(new TSeqAudioStream(stream, new TNullAudioStream(fadeOut), fadeIn), fadeIn, fadeOut);
     fFadeIn = fadeIn;
@@ -36,14 +37,22 @@ TTransformAudioStream::TTransformAudioStream(TAudioStreamPtr stream, TAudioEffec
 TAudioStreamPtr TTransformAudioStream::CutBegin(long frames)
 {
     // A REVOIR
-    return new TTransformAudioStream(fStream->CutBegin(frames), fEffectList->Copy(), fFadeIn, fFadeOut);
+    return new TTransformAudioStream(fStream->CutBegin(frames), fCurEffectList->Copy(), fFadeIn, fFadeOut);
 }
 
 long TTransformAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
 {
 	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+	// Possibly switch to a new effect list
+	/*
+	if (fNextEffectList) {
+		delete fCurEffectList; //???
+		fCurEffectList = fNextEffectList;
+		fNextEffectList = 0;
+	}
+	*/
     int res = fStream->Read(fBuffer, framesNum, framePos, channels);
-    fEffectList->Process(fBuffer->GetFrame(framePos), framesNum, channels);
+    fCurEffectList->Process(fBuffer->GetFrame(framePos), framesNum, channels);
 	UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos), fBuffer->GetFrame(framePos), framesNum, channels);
     return res;
 }
@@ -51,12 +60,12 @@ long TTransformAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, lo
 void TTransformAudioStream::Reset()
 {
     fStream->Reset();
-    fEffectList->Reset();
+    fCurEffectList->Reset();
 }
 
 TAudioStreamPtr TTransformAudioStream::Copy()
 {
-    return new TTransformAudioStream(fStream->Copy(), fEffectList->Copy(), fFadeIn, fFadeOut);
+    return new TTransformAudioStream(fStream->Copy(), fCurEffectList->Copy(), fFadeIn, fFadeOut);
 }
 
 

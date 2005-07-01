@@ -70,6 +70,8 @@ TReadFileAudioStream::~TReadFileAudioStream()
 
     delete fBuffer;
     delete fCopyBuffer;
+	
+	//printf("~TReadFileAudioStream %x\n",this); 
 }
 
 TAudioStreamPtr TReadFileAudioStream::CutBegin(long frames)

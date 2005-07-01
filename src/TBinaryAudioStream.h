@@ -43,14 +43,9 @@ class TBinaryAudioStream : public TDecoratedAudioStream
         TBinaryAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, TAudioStreamPtr init)
                 : TDecoratedAudioStream(init), fStream1(s1), fStream2(s2)
         {}
-        // To avoid desallocation but the base TDecoratedAudioStream class
         virtual ~TBinaryAudioStream()
-        {
-            fStream = NULL;
-            delete fStream1;
-            delete fStream2;
-        }
-
+        {}
+	
         virtual long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels) = 0;
 
         virtual void Reset()
@@ -69,11 +64,11 @@ class TBinaryAudioStream : public TDecoratedAudioStream
         virtual long Channels() = 0;
         virtual TAudioStreamPtr Copy() = 0;
 
-        TAudioStreamPtr getBranch1()
+        TAudioStreamPtr GetBranch1()
         {
             return fStream1;
         }
-        TAudioStreamPtr getBranch2()
+        TAudioStreamPtr GetBranch2()
         {
             return fStream2;
         }

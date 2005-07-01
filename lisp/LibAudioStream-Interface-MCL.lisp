@@ -151,108 +151,132 @@
 
 ;................................................................................: MakeNullSound
 (defmacro MakeNullSound (length)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeNullSound" *libaudiostream*) 
-                     :signed-fullword, length
-                     :address))
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeNullSoundPtr" *libaudiostream*) 
+                                  :signed-fullword, length
+                                  :address)))
+     (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+     sound))
 
 ;................................................................................: MakeReadSound
 (defmacro MakeReadSound (name)
   `(with-cstrs ((s ,name))
-      (ccl::ppc-ff-call (get-fun-addr "MakeReadSound" *libaudiostream*) 
-                        :address s
-                        :address)))
+     (let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeReadSoundPtr" *libaudiostream*) 
+                                    :address s
+                                    :address)))
+       (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound)))
 
 ;................................................................................: MakeRegionSound
 (defmacro MakeRegionSound (name begin end)
   `(with-cstrs ((s ,name))
-      (ccl::ppc-ff-call (get-fun-addr "MakeRegionSound" *libaudiostream*) 
-                        :address s
-                        :signed-fullword, begin
-                        :signed-fullword, end
-                        :address)))
+     (let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeRegionSoundPtr" *libaudiostream*) 
+                                    :address s
+                                    :signed-fullword, begin
+                                    :signed-fullword, end
+                                    :address)))
+       (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound)))
 
 ;................................................................................: MakeFadeSound
 (defmacro MakeFadeSound (sound fadein fadeout)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeFadeSound" *libaudiostream*) 
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeFadeSoundPtr" *libaudiostream*) 
                      :address ,sound 
                      :signed-fullword, fadein
                      :signed-fullword, fadeout
-                     :address))
+                     :address)))
+      (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound))
 
 ;................................................................................: MakeLoopSound
 (defmacro MakeLoopSound (sound len)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeLoopSound" *libaudiostream*) 
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeLoopSoundPtr" *libaudiostream*) 
                      :address ,sound 
                      :signed-fullword, len
-                     :address))
+                     :address)))
+      (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound))
 
 ;................................................................................: MakeCutSound
 (defmacro MakeCutSound (sound begin end)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeCutSound" *libaudiostream*) 
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeCutSoundPtr" *libaudiostream*) 
                         :address ,sound
                         :signed-fullword, begin
                         :signed-fullword, end
-                        :address))
+                        :address)))
+      (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound))
 
 ;................................................................................: MakeSeqSound
 (defmacro MakeSeqSound (s1 s2 crossfade)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeSeqSound" *libaudiostream*) 
-                        :address ,s1
-                        :address ,s2
-                        :signed-fullword ,crossfade
-                        :address))
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeSeqSoundPtr" *libaudiostream*) 
+                                  :address ,s1
+                                  :address ,s2
+                                  :signed-fullword ,crossfade
+                                  :address)))
+     (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+     sound))
 
 ;................................................................................: MakeMixSound
 (defmacro MakeMixSound (s1 s2)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeMixSound" *libaudiostream*) 
-                        :address ,s1
-                        :address ,s2
-                        :address))
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeMixSoundPtr" *libaudiostream*) 
+                                  :address ,s1
+                                  :address ,s2
+                                  :address)))
+     (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+     sound))
 
 ;................................................................................: MakeTransformSound
 (defmacro MakeTransformSound (sound effect fadein fadeout)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeTransformSound" *libaudiostream*) 
-                        :address ,sound
-                        :address ,effect
-                        :signed-fullword, fadein
-                        :signed-fullword, fadeout
-                        :address))
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeTransformSoundPtr" *libaudiostream*) 
+                                  :address ,sound
+                                  :address ,effect
+                                  :signed-fullword, fadein
+                                  :signed-fullword, fadeout
+                                  :address)))
+     (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+     sound))
 
 ;................................................................................: MakeRegionSound
 (defmacro MakeWriteSound (name sound format)
   `(with-cstrs ((s ,name))
-     (ccl::ppc-ff-call (get-fun-addr "MakeWriteSound" *libaudiostream*) 
-                       :address s
-                       :address ,sound
-                       :signed-fullword, format
-                       :address)))
+     (let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeWriteSoundPtr" *libaudiostream*) 
+                                    :address s
+                                    :address ,sound
+                                    :signed-fullword, format
+                                    :address)))
+       (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound)))
 
 ;................................................................................: MakeInputSound
 (defmacro MakeInputSound ()
-  `(ccl::ppc-ff-call (get-fun-addr "MakeInputSound" *libaudiostream*) 
-                     :address))
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeInputSoundPtr" *libaudiostream*) 
+                     :address)))
+      (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound))
 
 ;................................................................................: MakeRendererSound
 (defmacro MakeRendererSound (sound)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeRendererSound" *libaudiostream*) 
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeRendererSoundPtr" *libaudiostream*) 
                      :address ,sound
-                     :address))
+                     :address)))
+      (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound))
 
 ;................................................................................: GetLengthSound
 (defmacro GetLengthSound (sound)
-  `(ccl::ppc-ff-call (get-fun-addr "GetLengthSound" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "GetLengthSoundPtr" *libaudiostream*) 
                      :address ,sound
                      :signed-fullword))
 
 ;................................................................................: GetChannelsSound
 (defmacro GetChannelsSound (sound)
-  `(ccl::ppc-ff-call (get-fun-addr "GetChannelsSound" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "GetChannelsSoundPtr" *libaudiostream*) 
                      :address ,sound
                      :signed-fullword))
 
 ;................................................................................: ReadSound
 (defmacro ReadSound (sound buffer buffer_size channels)
-  `(ccl::ppc-ff-call (get-fun-addr "ReadSound" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "ReadSoundPtr" *libaudiostream*) 
                      :address ,sound
                      :address ,buffer
                      :signed-fullword, buffer_size
@@ -261,7 +285,7 @@
 
 ;................................................................................: DeleteSound
 (defmacro DeleteSound (sound)
-  `(ccl::ppc-ff-call (get-fun-addr "DeleteSound" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "DeleteSoundPtr" *libaudiostream*) 
                      :address ,sound
                      :void))
 
@@ -290,7 +314,7 @@
 ;; Channels
 ;................................................................................: LoadChannel
 (defmacro LoadChannel (player sound chan vol pan)
-  `(ccl::ppc-ff-call (get-fun-addr "LoadChannel" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "LoadChannelPtr" *libaudiostream*) 
                      :address ,player
                      :address ,sound
                      :signed-fullword, chan
@@ -376,41 +400,57 @@
 
 ;;;========================== EFFECTS 
 
-(defmacro MakeAudioEffectList ()
-  `(ccl::ppc-ff-call (get-fun-addr "MakeAudioEffectList" *libaudiostream*) 
-                     :address))
+(defmacro DeleteEffectList (effect_list)
+  `(ccl::ppc-ff-call (get-fun-addr "DeleteEffectListPtr" *libaudiostream*) 
+                     :address ,effect_list
+                     :void))
 
+(defmacro DeleteEffect (effect)
+  `(ccl::ppc-ff-call (get-fun-addr "DeleteEffectPtr" *libaudiostream*) 
+                     :address ,effect
+                     :void))
+
+(defmacro MakeAudioEffectList ()
+  `(let ((effect_list (ccl::ppc-ff-call (get-fun-addr "MakeAudioEffectListPtr" *libaudiostream*) 
+                                        :address)))
+     (terminate-when-unreachable effect_list #'(lambda(effect_list) (print effect_list) (DeleteEffectList effect_list)))
+     effect_list))
+     
 (defmacro AddAudioEffect (effect-list effect)
-  `(ccl::ppc-ff-call (get-fun-addr "AddAudioEffect" *libaudiostream*)
+  `(ccl::ppc-ff-call (get-fun-addr "AddAudioEffectPtr" *libaudiostream*)
                      :address ,effect-list
                      :address ,effect
                      :address))
 
 (defmacro RemoveAudioEffect (effect-list effect)
-  `(ccl::ppc-ff-call (get-fun-addr "RemoveAudioEffect" *libaudiostream*)
+  `(ccl::ppc-ff-call (get-fun-addr "RemoveAudioEffectPtr" *libaudiostream*)
                      :address ,effect-list
                      :address ,effect
                      :address))
 
 (defmacro MakeVolAudioEffect (gain)
-  `(ccl::ppc-ff-call (get-fun-addr "MakeVolAudioEffect" *libaudiostream*) 
-                     :double-float ,gain
-                     :address))
+  `(let ((effect (ccl::ppc-ff-call (get-fun-addr "MakeVolAudioEffectPtr" *libaudiostream*) 
+                                   :double-float ,gain
+                                   :address)))
+     (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
+     effect))
 
 (defmacro MakeFaustAudioEffect (name)
   `(with-cstrs ((s ,name))
-      (ccl::ppc-ff-call (get-fun-addr "MakeFaustAudioEffect" *libaudiostream*) 
-                        :address s
-                        :address)))
+     (let ((effect (ccl::ppc-ff-call (get-fun-addr "MakeFaustAudioEffectPtr" *libaudiostream*) 
+                                     :address s
+                                     :address)))
+       (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
+       effect)))
 
 (defmacro GetControlCount (effect)
- `(ccl::ppc-ff-call  (get-fun-addr "GetControlCount" *libaudiostream*) 
+ `(ccl::ppc-ff-call (get-fun-addr "GetControlCountPtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword))
 
 (defmacro GetControlParam (effect control)
   `(%stack-block ((name 64) (min 4) (max 4) (init 4))
-     (ccl::ppc-ff-call  (get-fun-addr "GetControlParam" *libaudiostream*) 
+     (ccl::ppc-ff-call (get-fun-addr "GetControlParamPtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword ,control
                         :address name
@@ -421,14 +461,14 @@
      (values (%get-cstring name) (%get-single-float min) (%get-single-float max) (%get-single-float init))))
 
 (defmacro SetControlValue (effect control value)
- `(ccl::ppc-ff-call  (get-fun-addr "SetControlValue" *libaudiostream*) 
+ `(ccl::ppc-ff-call (get-fun-addr "SetControlValuePtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword ,control
                         :double-float ,value
                         :void))
 
 (defmacro GetControlValue (effect control)
- `(ccl::ppc-ff-call  (get-fun-addr "GetControlValue" *libaudiostream*) 
+ `(ccl::ppc-ff-call (get-fun-addr "GetControlValuePtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword ,control
                         ::double-float))

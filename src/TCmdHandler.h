@@ -75,11 +75,11 @@ class TCmdHandlerList : public list<TCmdHandlerPtr>
         {
         	// Goes inside the unary stream
         	if (TUnaryAudioStreamPtr  unary = dynamic_cast<TUnaryAudioStreamPtr>(stream)) { 
-        		MakeList(unary->getBranch1()); 
+        		MakeList(unary->GetBranch1()); 
         	// Goes inside the two branches
         	}else if (TBinaryAudioStreamPtr binary = dynamic_cast<TBinaryAudioStreamPtr>(stream)){
-        		MakeList(binary->getBranch1());
-        		MakeList(binary->getBranch2()); 
+        		MakeList(binary->GetBranch1());
+        		MakeList(binary->GetBranch2()); 
         	}
         	
         	if (TCmdHandlerPtr handler = dynamic_cast<TCmdHandlerPtr>(stream)) {
@@ -89,20 +89,21 @@ class TCmdHandlerList : public list<TCmdHandlerPtr>
         */
 
         // Build a list of TCmdHandler leaves
+		
         void MakeList(TAudioStreamPtr stream)
         {
             // Goes inside the two branches
-            if (TBinaryAudioStreamPtr binary = dynamic_cast<TBinaryAudioStreamPtr>(stream)) {
-                MakeList(binary->getBranch1());
-                MakeList(binary->getBranch2());
+	       if (TBinaryAudioStreamPtr binary = dynamic_cast<TBinaryAudioStreamPtr>((TAudioStream*)stream)) {
+                MakeList(binary->GetBranch1());
+                MakeList(binary->GetBranch2());
                 // Goes inside the unary stream
-            } else if (TUnaryAudioStreamPtr unary = dynamic_cast<TUnaryAudioStreamPtr>(stream)) {
-                MakeList(unary->getBranch1());
+            } else if (TUnaryAudioStreamPtr unary = dynamic_cast<TUnaryAudioStreamPtr>((TAudioStream*)stream)) {
+                MakeList(unary->GetBranch1());
             }
-
-            if (TCmdHandlerPtr handler = dynamic_cast<TCmdHandlerPtr>(stream))
+	
+            if (TCmdHandlerPtr handler = dynamic_cast<TCmdHandlerPtr>((TAudioStream*)stream))
                 push_front(handler);
-        }
+	    }
 
     public:
 

@@ -37,7 +37,11 @@ using namespace std;
 \brief  Effect list management for subclasses of TAudioEffectInterface
 */
 
-class TAudioEffect : public list<TAudioEffectInterfacePtr>
+class TAudioEffect;
+
+typedef SMARTP<TAudioEffect> TAudioEffectPtr;
+
+class TAudioEffect : public list<TAudioEffectInterfacePtr>,  public smartable
 {
 
 	private:
@@ -60,10 +64,10 @@ class TAudioEffect : public list<TAudioEffectInterfacePtr>
         virtual ~TAudioEffect();
 
         void Process(float* buffer, long framesNum, long channels);
-        TAudioEffect* Copy();
+        TAudioEffectPtr Copy();
         void Reset();
 };
 
-typedef TAudioEffect * TAudioEffectPtr;
+//typedef TAudioEffect * TAudioEffectPtr;
 
 #endif

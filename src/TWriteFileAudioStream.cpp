@@ -83,7 +83,6 @@ TWriteFileAudioStream::~TWriteFileAudioStream()
         fFile = 0;
     }
 
-    delete fStream;
     delete fBuffer;  // faux a revoir (si buffer partagé)
 }
 

@@ -56,7 +56,7 @@ class TInputAudioStream : public TAudioStream
         {}
 
         // Cut the beginning of the stream
-        virtual TAudioStream* CutBegin(long frames)
+        virtual TAudioStreamPtr CutBegin(long frames)
         {
             printf("TInputAudioStream::CutBegin Error\n");
             return new TInputAudioStream();
@@ -71,7 +71,7 @@ class TInputAudioStream : public TAudioStream
         {
             return 2;
         } 		// A REVOIR
-        virtual TAudioStream* Copy()
+        virtual TAudioStreamPtr Copy()
         {
             printf("TInputAudioStream::Copy Error\n");
             return new TInputAudioStream();
