@@ -254,7 +254,6 @@ AudioStreamPtr AUDIOAPI MakeSoundPtr(AudioStream sound)
 
 void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound) 
 {
-	//printf("DeleteSoundPtr\n");
 	delete sound;
 }
 
@@ -398,13 +397,11 @@ float AUDIOAPI GetControlValue(AudioEffect effect, long control)
 
 void AUDIOAPI DeleteEffectListPtr(AudioEffectListPtr list_effect) 
 {
-	//printf("DeleteEffectListPtr\n");
 	delete list_effect;
 }
 
 void AUDIOAPI DeleteEffectPtr(AudioEffectPtr effect) 
 {
-	//printf("DeleteEffectPtr\n");
 	delete effect;
 }
 
