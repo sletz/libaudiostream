@@ -388,6 +388,69 @@
 			settings = {
 			};
 		};
+		4B7AFA7E085CB187002CD798 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TAudioEffectInterface.h;
+			path = ../src/TAudioEffectInterface.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B7AFA7F085CB188002CD798 = {
+			fileRef = 4B7AFA7E085CB187002CD798;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B7AFA80085CB188002CD798 = {
+			fileRef = 4B7AFA7E085CB187002CD798;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B7AFA81085CB19E002CD798 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TVolAudioEffect.h;
+			path = ../src/TVolAudioEffect.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B7AFA82085CB19E002CD798 = {
+			fileRef = 4B7AFA81085CB19E002CD798;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B7AFA83085CB19E002CD798 = {
+			fileRef = 4B7AFA81085CB19E002CD798;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B7AFA84085CB1AD002CD798 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TFaustAudioEffect.h;
+			path = ../src/TFaustAudioEffect.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B7AFA85085CB1AD002CD798 = {
+			fileRef = 4B7AFA84085CB1AD002CD798;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B7AFA86085CB1AD002CD798 = {
+			fileRef = 4B7AFA84085CB1AD002CD798;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4B83CA1907FBE5AE00256489 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -495,11 +558,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
+				GCC_VERSION = 4.0;
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__ ";
-				OTHER_LDFLAGS = "-flat_namespace /usr/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox";
+				OTHER_LDFLAGS = "-flat_namespace /opt/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -586,6 +650,13 @@
 				4BC077AA080FA1F700F44F75,
 				4BC077AC080FA1F700F44F75,
 				4BC077AD080FA1F700F44F75,
+				4B7AFA80085CB188002CD798,
+				4B7AFA83085CB19E002CD798,
+				4B7AFA86085CB1AD002CD798,
+				4BFC6E5E08727E9A0012D079,
+				4BFC6E8008729C6F0012D079,
+				4BFC6E8308729C830012D079,
+				4BFC6E8608729C970012D079,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -851,6 +922,7 @@
 				4BC077C8080FA1F700F44F75,
 				4BC077C9080FA1F700F44F75,
 				4BC077CA080FA1F700F44F75,
+				4BFCA3C608718BFB00EC8A46,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1146,6 +1218,13 @@
 				4BC6136B07F49ABB00ACC53C,
 				4BC6136C07F49ABF00ACC53C,
 				4B83CA1C07FBE5AE00256489,
+				4B7AFA7F085CB188002CD798,
+				4B7AFA82085CB19E002CD798,
+				4B7AFA85085CB1AD002CD798,
+				4BFC6E5D08727E9A0012D079,
+				4BFC6E7F08729C6F0012D079,
+				4BFC6E8208729C830012D079,
+				4BFC6E8508729C970012D079,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1187,6 +1266,7 @@
 				4BC6136307F4990300ACC53C,
 				4BC6136507F4990B00ACC53C,
 				4B83CA1B07FBE5AE00256489,
+				4BFCA3C508718BFB00EC8A46,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1219,9 +1299,9 @@
 				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				OPTIMIZATION_CFLAGS = "-O3";
+				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__  -D__JACK__";
-				OTHER_LDFLAGS = "-flat_namespace /usr/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox -lJack";
+				OTHER_LDFLAGS = "-flat_namespace  /opt/local/lib/libsndfile.a  PortAudioLib -framework AudioToolbox -lJack";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -1533,6 +1613,111 @@
 			settings = {
 			};
 		};
+		4BFC6E5C08727E9A0012D079 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = smartpointer.h;
+			path = ../src/smartpointer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BFC6E5D08727E9A0012D079 = {
+			fileRef = 4BFC6E5C08727E9A0012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E5E08727E9A0012D079 = {
+			fileRef = 4BFC6E5C08727E9A0012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E7E08729C6F0012D079 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TThreadUtils.h;
+			path = ../src/TThreadUtils.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BFC6E7F08729C6F0012D079 = {
+			fileRef = 4BFC6E7E08729C6F0012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E8008729C6F0012D079 = {
+			fileRef = 4BFC6E7E08729C6F0012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E8108729C830012D079 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TBinaryAudioStream.h;
+			path = ../src/TBinaryAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BFC6E8208729C830012D079 = {
+			fileRef = 4BFC6E8108729C830012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E8308729C830012D079 = {
+			fileRef = 4BFC6E8108729C830012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E8408729C970012D079 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TCmdHandler.h;
+			path = ../src/TCmdHandler.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BFC6E8508729C970012D079 = {
+			fileRef = 4BFC6E8408729C970012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFC6E8608729C970012D079 = {
+			fileRef = 4BFC6E8408729C970012D079;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFCA3C408718BFB00EC8A46 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = smartpointer.cpp;
+			path = ../src/smartpointer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BFCA3C508718BFB00EC8A46 = {
+			fileRef = 4BFCA3C408718BFB00EC8A46;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BFCA3C608718BFB00EC8A46 = {
+			fileRef = 4BFCA3C408718BFB00EC8A46;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //4B0
 //4B1
 //4B2
@@ -1797,7 +1982,12 @@
 		};
 		F5C1FF5A0328B73A01053105 = {
 			children = (
+				4BFC6E5C08727E9A0012D079,
+				4BFCA3C408718BFB00EC8A46,
+				4BFC6E8408729C970012D079,
+				4BFC6E7E08729C6F0012D079,
 				F5C1D5FC0330CD3801053105,
+				4BFC6E8108729C830012D079,
 				4BA3E1780459506A00053105,
 				4B6B22F6071FB980005E6873,
 				F5C1FF850328C9C301053105,
@@ -1963,6 +2153,9 @@
 		};
 		F5D82C3D032DEAA101053105 = {
 			children = (
+				4B7AFA84085CB1AD002CD798,
+				4B7AFA81085CB19E002CD798,
+				4B7AFA7E085CB187002CD798,
 				F5D82C3E032DEAB501053105,
 				F5D82C47032DF3CC01053105,
 			);
