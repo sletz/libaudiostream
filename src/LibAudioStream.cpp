@@ -74,7 +74,7 @@ extern "C"
     AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
     AudioStream AUDIOAPI MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
     AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2);
-    AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+    AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
     AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format);
     AudioStream AUDIOAPI MakeInputSound();
     AudioStream AUDIOAPI MakeRendererSound(AudioStream s);
@@ -212,9 +212,10 @@ AudioStream AUDIOAPI MakeInputSound()
     return TAudioStreamFactory::MakeInputSound();
 }
 
-AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
+AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
 {
- }
+	return TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)s1, (TAudioEffectPtr)list_effect, fadeIn, fadeOut);
+}
 
 AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format)
 {
