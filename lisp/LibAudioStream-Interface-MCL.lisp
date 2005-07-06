@@ -274,6 +274,12 @@
                      :address ,sound
                      :signed-fullword))
 
+;................................................................................: ResetSound
+(defmacro ResetSound (sound)
+  `(ccl::ppc-ff-call (get-fun-addr "ResetSoundPtr" *libaudiostream*) 
+                     :address ,sound
+                     :void))
+
 ;................................................................................: ReadSound
 (defmacro ReadSound (sound buffer buffer_size channels)
   `(ccl::ppc-ff-call (get-fun-addr "ReadSoundPtr" *libaudiostream*) 
