@@ -48,8 +48,7 @@ class TTransformAudioStream : public TDecoratedAudioStream
         TTransformAudioStream(TAudioStreamPtr stream, TAudioEffectPtr effect, long fadeIn, long fadeOut);
         virtual ~TTransformAudioStream()
         {
-            delete fCurEffectList;
-			delete fBuffer;
+    		delete fBuffer;
         }
 
         virtual long Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
