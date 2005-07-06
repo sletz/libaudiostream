@@ -72,7 +72,7 @@ long TFadeAudioStream::ReadAux(TAudioBuffer<float>* buffer, long framesNum, long
     fCurFrame += res;
 
     if (res < framesNum) { // should never happens
-        fStream->Stop(); // Stops the stream (possibly force flush)
+        //fStream->Stop(); // Stops the stream (possibly force flush)
         fStatus = kIdle;
     } else if (fCurFrame >= fFramesNum) {
         fStatus = kFadeOut;
@@ -97,7 +97,7 @@ long TFadeAudioStream::FadeIn(TAudioBuffer<float>* buffer, long framesNum, long 
                                     framesNum, channels, 1.0, 1.0);
 
     if (res < framesNum) {
-        fStream->Stop(); // Stops the stream (possibly force flush)
+        //fStream->Stop(); // Stops the stream (possibly force flush)
         fStatus = kIdle;
     } else if (fFadeIn.lastOut() >= 1.0) {
         fStatus = kPlaying;
@@ -121,7 +121,7 @@ long TFadeAudioStream::FadeOut(TAudioBuffer<float>* buffer, long framesNum, long
                                     framesNum, channels, 1.0, 1.0);
 
     if ((res < framesNum) || (fFadeOut.lastOut() <= 0.0)) {
-        fStream->Stop(); // Stops the stream (possibly force flush)
+        //fStream->Stop(); // Stops the stream (possibly force flush)
         fStatus = kIdle;
     }
 

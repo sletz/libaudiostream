@@ -69,7 +69,7 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         }
 
         virtual void Reset() = 0;
-        virtual void Stop() = 0;
+        //virtual void Stop() = 0;
         virtual TAudioStreamPtr CutBegin(long frames) = 0;
         virtual long Length() = 0;
         virtual TAudioStreamPtr Copy() = 0;

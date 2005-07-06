@@ -113,9 +113,13 @@ class TBufferedAudioStream : public TAudioStream
         virtual long Read( TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
 
         virtual void Reset();
+		
+		/*
         // Stop the stream
         virtual void Stop()
         {}
+		*/
+		
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             return 0;

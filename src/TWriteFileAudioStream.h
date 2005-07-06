@@ -41,6 +41,12 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
     private:
 
         long fFormat;
+		void Open();
+		void Close();
+		void CloseCmd();
+		void Flush();
+		
+		static void CloseAux(TWriteFileAudioStream* obj, long u1, long u2, long u3);
 
     protected:
 
@@ -55,7 +61,7 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
         long TWriteFileAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
 
         void Reset();
-        void Stop();
+       
         TAudioStreamPtr CutBegin(long frames)
         {
             return new TWriteFileAudioStream(fName, fStream->CutBegin(frames), fFormat);

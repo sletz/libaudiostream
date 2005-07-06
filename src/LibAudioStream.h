@@ -169,6 +169,7 @@ extern "C"
     \param sound The stream to be deleted.
     */
     void DeleteSoundPtr(AudioStreamPtr sound);
+	void ResetSoundPtr(AudioStreamPtr sound);
 
     /* Effect management */
 

@@ -72,8 +72,8 @@ class TAudioStream : public smartable
         {}
 
         // Stop the stream
-        virtual void Stop()
-        {}
+        //virtual void Stop()
+        //{}
 
         // Cut the beginning of the stream
         virtual TAudioStreamPtr CutBegin(long frames)
@@ -169,11 +169,13 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             fStream->Reset();
         }
 
+		/*
         virtual void Stop()
         {
             assert(fStream);
             fStream->Stop();
         }
+		*/
 
         virtual TAudioStreamPtr CutBegin(long frames)
         {

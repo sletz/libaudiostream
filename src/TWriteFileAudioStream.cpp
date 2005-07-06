@@ -31,72 +31,73 @@ grame@rd.grame.fr
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioBuffer<short>* buffer, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
-    SF_INFO info;
-
     fChannels = stream->Channels();
     fBuffer = buffer;
     fStream = stream;
     fFormat = format;
-
-    fFramesNum = fStream->Length();
-
-    info.samplerate = TAudioGlobals::fSample_Rate;
-    info.channels = fChannels;
-    info.format = fFormat;
-
-    fFile = sf_open(fName.c_str(), SFM_WRITE, &info);
-
-    // Check file
-    if (!fFile)
-        throw - 1;
-    fReady = true;
+	fFramesNum = fStream->Length();
+	fFile = 0;
+    Open();
 }
 
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
-    SF_INFO info;
-
     fChannels = stream->Channels();
     fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
     fStream = stream;
     fFormat = format;
-
     fFramesNum = fStream->Length();
-
-    info.samplerate = TAudioGlobals::fSample_Rate;
-    info.channels = fChannels;
-    info.format = fFormat;
-	
-    fFile = sf_open(fName.c_str(), SFM_WRITE, &info);
-
-    // Check file
-    if (!fFile)
-        throw - 1;
-    fReady = true;
+	fFile = 0;
+    Open();
 }
 
 TWriteFileAudioStream::~TWriteFileAudioStream()
 {
-    if (fFile) {
+	Flush();
+    Close();	
+    delete fBuffer;  // faux a revoir (si buffer partagé)
+}
+
+void TWriteFileAudioStream::Open()
+{
+	if (fFile == 0) {
+		SF_INFO info;
+		info.samplerate = TAudioGlobals::fSample_Rate;
+		info.channels = fChannels;
+		info.format = fFormat;
+		fFile = sf_open(fName.c_str(), SFM_WRITE, &info);
+
+		// Check file
+		if (!fFile)
+			throw - 1;
+			
+		sf_seek(fFile, 0, SEEK_SET);
+		fReady = true;
+	}
+}
+
+void TWriteFileAudioStream::Close()
+{
+	if (fFile) {
 		sf_close(fFile);
         fFile = 0;
     }
-
-    delete fBuffer;  // faux a revoir (si buffer partagé)
 }
 
 long TWriteFileAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
 {
     long res = fStream->Read(buffer, framesNum, framePos, channels);
     TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
+	if (res < framesNum) 
+		CloseCmd();
     return res;
 }
 
 void TWriteFileAudioStream::Reset()
 {
     // A AMELIORER (réutiliser les fichiers disque??)
-    sf_seek (fFile, 0, SEEK_SET);
+	Open();
     fStream->Reset();
     TBufferedAudioStream::Reset();
 }
@@ -109,19 +110,34 @@ long TWriteFileAudioStream::Write(TAudioBuffer<short>* buffer, long framesNum, l
     return long(sf_writef_short(fFile, buffer->GetFrame(framePos), framesNum));  // In frames
 }
 
-void TWriteFileAudioStream::Stop()
+void TWriteFileAudioStream::Flush()
 {
-    // Flush the current buffer
-    if (fCurFrame < fBuffer->GetSize() / 2) {
-		WriteBuffer(fBuffer, fCurFrame, 0);
-    } else {
-		WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);
-    }
+	if (fFile) {
+		// Flush the current buffer
+		if (fCurFrame < fBuffer->GetSize() / 2) {
+			TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame, 0);  // direct write 
+		} else {
+			TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);  // direct write 
+		}
 
-    // Start a new buffer
-    fCurFrame = 0;
+		// Start a new buffer
+		fCurFrame = 0;
+	}
 }
 
+// Handle the disk read function with the command manager: either direct or low-priority thread based
+void TWriteFileAudioStream::CloseCmd()
+{
+    if (fManager == 0)
+        printf("Error : stream rendered without command manager\n");
+    assert(fManager);
+    fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
+}
 
-
+// Callback called by command manager
+void TWriteFileAudioStream::CloseAux(TWriteFileAudioStreamPtr obj, long u1, long u2, long u3)
+{
+    obj->Flush();
+	obj->Close();
+}
 

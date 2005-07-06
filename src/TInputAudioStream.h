@@ -70,7 +70,7 @@ class TInputAudioStream : public TAudioStream
         virtual long Channels()
         {
             return 2;
-        } 		// A REVOIR
+        } 	// A REVOIR
         virtual TAudioStreamPtr Copy()
         {
             printf("TInputAudioStream::Copy Error\n");
