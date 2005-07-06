@@ -89,8 +89,12 @@ long TWriteFileAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, lo
 {
     long res = fStream->Read(buffer, framesNum, framePos, channels);
     TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
-	if (res < framesNum) 
-		CloseCmd();
+	if (res < framesNum) {
+		 if (fManager == 0)
+			printf("Error : stream rendered without command manager\n");
+		assert(fManager);
+		fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
+	}
     return res;
 }
 
@@ -123,15 +127,6 @@ void TWriteFileAudioStream::Flush()
 		// Start a new buffer
 		fCurFrame = 0;
 	}
-}
-
-// Handle the disk read function with the command manager: either direct or low-priority thread based
-void TWriteFileAudioStream::CloseCmd()
-{
-    if (fManager == 0)
-        printf("Error : stream rendered without command manager\n");
-    assert(fManager);
-    fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
 }
 
 // Callback called by command manager

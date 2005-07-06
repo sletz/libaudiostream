@@ -43,7 +43,6 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
         long fFormat;
 		void Open();
 		void Close();
-		void CloseCmd();
 		void Flush();
 		
 		static void CloseAux(TWriteFileAudioStream* obj, long u1, long u2, long u3);
