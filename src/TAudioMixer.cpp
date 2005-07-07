@@ -136,18 +136,31 @@ void TAudioMixer::Stop(long chan)
         channel->SoundOff();
 }
 
-void TAudioMixer::SetVol(long chan, long vol )
+void TAudioMixer::SetVol(long chan, long vol)
 {
     TAudioChannelPtr channel;
     if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
         channel->SetVol(vol);
 }
 
-void TAudioMixer::SetPan(long chan, long pan )
+void TAudioMixer::SetPan(long chan, long pan)
 {
     TAudioChannelPtr channel;
     if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
         channel->SetPan(pan);
+}
+
+void TAudioMixer::SetStopCallback(long chan, StopCallback callback, void* context)
+{
+	TAudioChannelPtr channel;
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+        channel->SetStopCallback(callback, context);
+}
+
+StopCallback TAudioMixer::GetStopCallback(long chan)
+{
+	TAudioChannelPtr channel;
+    return (IsValid(chan) && (channel = fSoundChannelTable[chan])) ? channel->GetStopCallback() : 0;
 }
 
 void TAudioMixer::GetInfo(long chan, ChannelInfo* info)

@@ -28,17 +28,16 @@ grame@rd.grame.fr
 
 #include "UAudioTools.h"
 #include "TPanTable.h"
+#include "TNullAudioStream.h"
 
 TAudioChannel::TAudioChannel()
 {
-    fStream = 0;
+	SetStream(new TNullAudioStream(0x7FFF));
     fInserted = false;
     fPan = DEFAULT_PAN;
     fVol = DEFAULT_VOL;
-
-    fLeftOut = 0;
+	fLeftOut = 0;
     fRightOut = 1;
-
     fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
 }
 
@@ -69,30 +68,32 @@ TAudioStreamPtr TAudioChannel::GetStream()
 
 void TAudioChannel::SoundOn()
 {
-    if (fStream && (fFadeStream.IsIdle()))
-        fFadeStream.FadeIn();
+	if (fFadeStream.IsIdle()) 
+		fFadeStream.FadeIn();
+	fStopCallback.Activate();
 }
 
 // Synchonous stop : wait for the FadeOut to finish
 
 void TAudioChannel::SoundOff()
 {
-    if (fStream && (!fFadeStream.IsIdle())) {
+	if (!fFadeStream.IsIdle()) {
         fFadeStream.FadeOut();
-        ChannelInfo info;
+		ChannelInfo info;
 
         // Wait until Fade Out ends
         do {
             GetInfo(&info);
             AudioSleep(50);
         } while (info.fStatus != TFadeAudioStream::kIdle);
+		
+		fStopCallback.Desactivate();
     }
 }
 
 void TAudioChannel::Reset()
 {
-    if (fStream)
-        fFadeStream.Reset();
+	fFadeStream.Reset();
 }
 
 void TAudioChannel::GetInfo(ChannelInfo* info)
@@ -113,14 +114,16 @@ bool TAudioChannel::Mix(TAudioBuffer<float>* dst, long framesNum, long channels)
 {
     // Init buffer
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
-
-    long res = fFadeStream.Read(fMixBuffer, framesNum, 0, channels);
+	long res = fFadeStream.Read(fMixBuffer, framesNum, 0, channels);
 
     MY_FLOAT leftvol = TPanTable::GetVolLeft(short(fVol), short(fPan));
     MY_FLOAT rightvol = TPanTable::GetVolRight(short(fVol), short(fPan));
 
     UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, leftvol, rightvol);
-
+	
+	if (res < framesNum) 	
+		fStopCallback.Execute();
+	
     // Stops when the stream is empty
     return (res == framesNum);
 }

@@ -39,6 +39,11 @@ grame@rd.grame.fr
 
 AudioEffectPtr faust_effect = 0;
 
+static void TestCallback(void* context)
+{
+	printf("Channel stopped\n");
+}
+
 AudioStreamPtr test0()
 {
     printf("-------------- \n");
@@ -274,6 +279,7 @@ void TestPlay(AudioPlayerPtr player)
 void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
 {
     int res = LoadChannelPtr(player, sound, 1, 120, 64);
+	SetStopCallbackChannel(player, 1, TestCallback, NULL);
     if (res == NO_ERR) {
         TestPlay(player);
     } else {

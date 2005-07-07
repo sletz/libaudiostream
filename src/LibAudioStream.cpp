@@ -64,6 +64,8 @@ extern "C"
     typedef TAudioEffectInterfacePtr AudioEffect;	
 	typedef AudioEffectList* AudioEffectListPtr;
     typedef AudioEffect* AudioEffectPtr;	
+	
+	typedef void (*StopCallback)(void* context);
 
     // Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
@@ -149,6 +151,9 @@ extern "C"
     long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, long vol, long pan);
 	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan);
     void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+	
+	void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
+	StopCallback AUDIOAPI GetStopCallbackChannel(AudioPlayerPtr player, long chan);
 
     // Transport
     void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -566,6 +571,18 @@ void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info
         player->fEngine->GetInfoChannel(chan, info);
     }
 }
+
+void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player,long chan, StopCallback callback, void* context)
+{
+    if (player && player->fEngine ) {
+        player->fEngine->SetStopCallback(chan, callback, context);
+    }
+}
+StopCallback AUDIOAPI GetStopCallbackChannel(AudioPlayerPtr player, long chan)
+{
+    return (player && player->fEngine) ? player->fEngine->GetStopCallback(chan): 0;
+}
+
 
 // Transport
 void AUDIOAPI StartSound(AudioPlayerPtr player, long chan)

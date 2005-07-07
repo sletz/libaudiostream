@@ -57,6 +57,8 @@ extern "C"
 	
     typedef void* AudioEffectPtr;
     typedef void* AudioEffectListPtr;
+	
+	typedef void (*StopCallback)(void* context);
 
     /*!
     \brief Create a stream that will produce "silence".
@@ -262,6 +264,10 @@ extern "C"
     \param info The channel info structure to be filled.
     */
     void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+	
+	void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
+	StopCallback GetStopCallbackChannel(AudioPlayerPtr player, long chan);
+
 
     // Transport
     /*!

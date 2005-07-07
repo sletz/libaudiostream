@@ -81,7 +81,10 @@ class TAudioMixer : public TAudioClient
         {
             fPan = pan;
         }
-};
+		
+		void SetStopCallback(long chan, StopCallback callback, void* context);
+		StopCallback GetStopCallback(long chan);
+ };
 
 typedef TAudioMixer * TAudioMixerPtr;
 

@@ -48,6 +48,73 @@ typedef struct ChannelInfo
 }
 ChannelInfo;
 
+typedef void (*StopCallback)(void* context);
+
+/*!
+\brief A generic callback.
+*/
+
+class TCallback
+{
+
+    protected:
+
+        void* fContext;
+        bool fStatus;
+
+    public:
+
+        TCallback(): fContext(0), fStatus(false)
+        {}
+        virtual ~TCallback()
+        {}
+
+        void Activate()
+        {
+			fStatus = true;
+        }
+        void Desactivate()
+        {
+			fStatus = false;
+        }
+};
+
+/*!
+\brief A callback to be called when the stream stops.
+*/
+class TStopCallback : public TCallback
+{
+
+    private:
+
+        StopCallback fCallback;
+
+    public:
+
+        TStopCallback(): TCallback(), fCallback(0)
+        {}
+        virtual ~TStopCallback()
+        {}
+
+        void Execute()
+        {
+			if (fStatus && fCallback) {
+                fStatus = false;
+                fCallback(fContext);
+			}
+		}
+
+        void SetCallback(StopCallback fun, void* context)
+        {
+            fCallback = fun;
+            fContext = context;
+        }
+        StopCallback GetCallback()
+        {
+            return fCallback;
+        }
+};
+
 //---------------------
 // Class TAudioChannel
 //---------------------
@@ -65,6 +132,7 @@ class TAudioChannel
         TRTRendererAudioStream	fRendererStream;	// Renderer stream (set a real-time command manager for file stream)
         TAudioStreamPtr			fStream;			// Audio stream
         TAudioBuffer<float>*	fMixBuffer; 		// Used for mixing
+		TStopCallback			fStopCallback;
 
         long fVol;	// Master vol
         long fPan;	// Master pan
@@ -134,6 +202,16 @@ class TAudioChannel
         void SetPan(long pan)
         {
             fPan = pan;
+        }
+		
+		void SetStopCallback(StopCallback callback, void* context)
+        {
+            fStopCallback.SetCallback(callback, context);
+        }
+
+        StopCallback GetStopCallback()
+        {
+            return fStopCallback.GetCallback();
         }
 };
 

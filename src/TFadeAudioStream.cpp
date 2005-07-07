@@ -153,7 +153,7 @@ void TFadeAudioStream::Reset()
 {
     fStream->Reset();
     fStatus = kFadeIn; // Starting state for the stream with a fade
-    fCurFrame = 0;
+	fCurFrame = 0;
     Init(0.0f, float(fFadeInFrames), 1.0f, float(fFadeOutFrames));
 }
 

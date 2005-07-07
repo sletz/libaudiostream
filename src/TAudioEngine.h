@@ -106,6 +106,16 @@ class TAudioEngine
         {
             fMixer->SetMasterPan(pan);
         }
+		
+		void SetStopCallback(long chan, StopCallback callback, void* context)
+		{
+            fMixer->SetStopCallback(chan, callback, context);
+        }
+		StopCallback GetStopCallback(long chan)
+		{
+			return fMixer->GetStopCallback(chan);
+		}
+
 };
 
 typedef TAudioEngine * TAudioEnginePtr;
