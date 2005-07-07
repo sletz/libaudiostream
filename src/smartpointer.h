@@ -26,8 +26,6 @@
 #include <cassert>
 #include <stdio.h>
 
-#include "exports.h"
-
 /*!
 \brief the base class for smart pointers implementation
 
@@ -35,7 +33,7 @@
 	inherit from the smartable class which provides reference counting
 	and automatic delete when the reference count drops to zero.
 */
-class EXP smartable {
+class smartable {
 	private:
 		unsigned long refCount;		
 	public:
@@ -64,7 +62,7 @@ class EXP smartable {
 	objects that implements the \e addReference and \e removeReference
 	methods in a consistent way).
 */
-template<class T> class EXP SMARTP {
+template<class T> class SMARTP {
 	private:
 		//! the actual pointer to the class
 		T* fSmartPtr;
