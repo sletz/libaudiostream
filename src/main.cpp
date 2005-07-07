@@ -269,8 +269,8 @@ void TestPlay(AudioPlayerPtr player)
                 break;
 				
 			 case 'c': // To be used only when faust effects are running....
-				SetControlValuePtr(faust_effect, 1, 0.95);
-				SetControlValuePtr(faust_effect, 2, 0.9);
+				SetControlValuePtr(faust_effect, 1, 0.95f);
+				SetControlValuePtr(faust_effect, 2, 0.9f);
 	            break;
         }
     }
