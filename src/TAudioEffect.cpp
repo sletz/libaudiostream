@@ -62,10 +62,6 @@ void TAudioEffect::Reset()
 TAudioEffect::~TAudioEffect()
 {
 	int i;
-    for (list<TAudioEffectInterfacePtr>::iterator iter = begin(); iter != end(); iter++) {
-        TAudioEffectInterfacePtr process = *iter;
-        delete process;
-    }
 	
 	for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
 		free(fTemp1[i]);
