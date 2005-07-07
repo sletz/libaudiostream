@@ -37,9 +37,8 @@ class TTransformAudioStream : public TDecoratedAudioStream
 
     private:
 
-        TAudioEffectPtr fCurEffectList;  	// Effect list
-		TAudioEffectPtr fNextEffectList;  	// Effect list
-        long fFadeIn;	// FadeIn time
+        TAudioEffectPtr fEffectList;  	// Effect list
+		long fFadeIn;	// FadeIn time
         long fFadeOut;	// FadeOut time
 		TAudioBuffer<float>* fBuffer;
 
@@ -60,15 +59,6 @@ class TTransformAudioStream : public TDecoratedAudioStream
         void Reset();
         TAudioStreamPtr CutBegin(long frames);    // Length in frames
         TAudioStreamPtr Copy();
-		
-		void SetEffectList(TAudioEffectPtr effectList) 
-		{
-			fNextEffectList = effectList;
-		}
-		TAudioEffectPtr GetEffectList() 
-		{
-			return fCurEffectList;
-		}
 };
 
 typedef TTransformAudioStream * TTransformAudioStreamPtr;
