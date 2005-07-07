@@ -557,6 +557,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
 				FRAMEWORK_VERSION = A;
 				GCC_VERSION = 4.0;
 				HEADER_SEARCH_PATHS = /opt/local/include;
@@ -1296,6 +1297,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
 				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = /opt/local/include;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
