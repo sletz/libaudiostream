@@ -216,7 +216,9 @@ extern "C"
 	void GetControlParamPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
 	void SetControlValuePtr(AudioEffectPtr effect, long control, float f);
 	float GetControlValuePtr(AudioEffectPtr effect, long control);
-
+	
+	void DeleteEffectListPtr(AudioEffectListPtr list_effect);
+	void DeleteEffectPtr(AudioEffectPtr effect);
 
     // Open/Close
     /*!

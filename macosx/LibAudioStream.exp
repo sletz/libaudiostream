@@ -28,6 +28,9 @@ _GetControlParamPtr
 _SetControlValuePtr
 _GetControlValuePtr
 
+_DeleteEffectListPtr
+_DeleteEffectPtr
+
 _OpenAudioPlayer
 _CloseAudioPlayer
 _LoadChannelPtr
@@ -37,10 +40,10 @@ _GetStopCallbackChannel
 
 _StartAudioPlayer
 _StopAudioPlayer
-_StartSound
-_ContSound
-_StopSound
-_SetVolSound
-_SetPanSound
+_StartChannel
+_ContChannel
+_StopChannel
+_SetVolChannel
+_SetPanChannel
 _SetVolAudioPlayer
 _SetPanAudioPlayer
