@@ -150,13 +150,13 @@ extern "C"
     void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
     void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
 
-    void AUDIOAPI StartSound(AudioPlayerPtr player, long chan); // Start a sound region from the beginning
-    void AUDIOAPI ContSound(AudioPlayerPtr player, long chan);	// Play a sound region from the current location
-    void AUDIOAPI StopSound(AudioPlayerPtr player, long chan);	// Stop playing
+    void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan); // Start a sound region from the beginning
+    void AUDIOAPI ContChannel(AudioPlayerPtr player, long chan);	// Play a sound region from the current location
+    void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan);	// Stop playing
 
     // Params
-    void AUDIOAPI SetVolSound(AudioPlayerPtr player, long chan, long vol);
-    void AUDIOAPI SetPanSound(AudioPlayerPtr player, long chan, long pan);
+    void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, long vol);
+    void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, long pan);
 
     // Master
     void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, long pan);
@@ -576,22 +576,22 @@ StopCallback AUDIOAPI GetStopCallbackChannel(AudioPlayerPtr player, long chan)
 
 
 // Transport
-void AUDIOAPI StartSound(AudioPlayerPtr player, long chan)
+void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan)
 {
     if (player && player->fEngine)
-        player->fEngine->StartSound(chan);
+        player->fEngine->StartChannel(chan);
 }
 
-void AUDIOAPI ContSound(AudioPlayerPtr player, long chan)
+void AUDIOAPI ContChannel(AudioPlayerPtr player, long chan)
 {
     if (player && player->fEngine)
-        player->fEngine->PlaySound(chan);
+        player->fEngine->PlayChannel(chan);
 }
 
-void AUDIOAPI StopSound(AudioPlayerPtr player, long chan)
+void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan)
 {
     if (player && player->fEngine)
-        player->fEngine->StopSound(chan);
+        player->fEngine->StopChannel(chan);
 }
 
 void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player)
@@ -607,16 +607,16 @@ void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player)
 }
 
 // Params
-void AUDIOAPI SetVolSound(AudioPlayerPtr player, long chan, long vol)
+void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, long vol)
 {
     if (player && player->fEngine)
-        player->fEngine->SetVolSound(chan, vol);
+        player->fEngine->SetVolChannel(chan, vol);
 }
 
-void AUDIOAPI SetPanSound(AudioPlayerPtr player, long chan, long pan)
+void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, long pan)
 {
     if (player && player->fEngine)
-        player->fEngine->SetPanSound(chan, pan);
+        player->fEngine->SetPanChannel(chan, pan);
 }
 
 // Master

@@ -350,22 +350,22 @@
                      :void))
 
 ;................................................................................: StartSound
-(defmacro StartSound (player chan)
-  `(ccl::ppc-ff-call (get-fun-addr "StartSound" *libaudiostream*) 
+(defmacro StartChannel (player chan)
+  `(ccl::ppc-ff-call (get-fun-addr "StartChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :void))
 
 ;................................................................................: ContSound
-(defmacro ContSound (player chan)
-  `(ccl::ppc-ff-call (get-fun-addr "ContSound" *libaudiostream*) 
+(defmacro ContChannel (player chan)
+  `(ccl::ppc-ff-call (get-fun-addr "ContChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :void))
 
 ;................................................................................: StopSound
-(defmacro StopSound (player chan)
-  `(ccl::ppc-ff-call (get-fun-addr "StopSound" *libaudiostream*) 
+(defmacro StopChannel (player chan)
+  `(ccl::ppc-ff-call (get-fun-addr "StopChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :void))
@@ -373,16 +373,16 @@
 ;; Params
 
 ;................................................................................: SetVolSound
-(defmacro SetVolSound (player chan vol)
-  `(ccl::ppc-ff-call (get-fun-addr "SetVolSound" *libaudiostream*) 
+(defmacro SetVolChannel (player chan vol)
+  `(ccl::ppc-ff-call (get-fun-addr "SetVolChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :signed-fullword, vol
                      :void))
 
 ;................................................................................: SetPanSound
-(defmacro SetPanSound (player chan pan)
-  `(ccl::ppc-ff-call (get-fun-addr "SetPanSound" *libaudiostream*) 
+(defmacro SetPanChannel (player chan pan)
+  `(ccl::ppc-ff-call (get-fun-addr "SetPanChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :signed-fullword, pan

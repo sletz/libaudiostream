@@ -237,15 +237,15 @@ void TestPlay(AudioPlayerPtr player)
         switch (c) {
 
             case 'b':
-                StartSound(player, 1);
+                StartChannel(player, 1);
 				break;
 
             case 'p':
-                ContSound(player, 1);
+                ContChannel(player, 1);
                 break;
 
             case 's':
-                StopSound(player, 1);
+                StopChannel(player, 1);
                 break;
 
             case '+':
@@ -285,7 +285,7 @@ void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
     } else {
         printf("LoadChannel error %d \n", res);
     }
-    StopSound(player, 1);
+    StopChannel(player, 1);
     DeleteSoundPtr(sound);
 }
 

@@ -76,24 +76,24 @@ class TAudioEngine
             fMixer->GetInfo(chan, info);
         }
 
-        void StartSound(long chan)
+        void StartChannel(long chan)
         {
             fMixer->Start(chan);
         }
-        void PlaySound(long chan)
+        void PlayChannel(long chan)
         {
             fMixer->Play(chan);
         }
-        void StopSound(long chan)
+        void StopChannel(long chan)
         {
             fMixer->Stop(chan);
         }
 
-        void SetVolSound(long chan, long vol)
+        void SetVolChannel(long chan, long vol)
         {
             fMixer->SetVol(chan, vol);
         }
-        void SetPanSound(long chan, long pan)
+        void SetPanChannel(long chan, long pan)
         {
             fMixer->SetPan(chan, pan);
         }

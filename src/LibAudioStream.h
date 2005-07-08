@@ -286,19 +286,19 @@ extern "C"
     \param player The audio player.
     \param chan The audio channel number to be used.
     */
-    void StartSound(AudioPlayerPtr player, long chan);
+    void StartChannel(AudioPlayerPtr player, long chan);
     /*!
     \brief Play a sound region from the current location.
     \param player The audio player.
     \param chan The audio channel number to be used.
     */
-    void ContSound(AudioPlayerPtr player, long chan);
+    void ContChannel(AudioPlayerPtr player, long chan);
     /*!
     \brief Stop playing a channel.
     \param player The audio player.
     \param chan The audio channel number to be used.
     */
-    void StopSound(AudioPlayerPtr player, long chan);
+    void StopChannel(AudioPlayerPtr player, long chan);
 
     // Params
     /*!
@@ -307,14 +307,14 @@ extern "C"
     \param chan The audio channel number to be used.
     \param vol The new volume value.
     */
-    void SetVolSound(AudioPlayerPtr player, long chan, long vol);
+    void SetVolChannel(AudioPlayerPtr player, long chan, long vol);
     /*!
     \brief Set the channel panning [0...127]
     \param player The audio player.
     \param chan The audio channel number to be used.
     \param pan The new panning value.
     */
-    void SetPanSound(AudioPlayerPtr player, long chan, long pan);
+    void SetPanChannel(AudioPlayerPtr player, long chan, long pan);
 
     // Master
     /*!

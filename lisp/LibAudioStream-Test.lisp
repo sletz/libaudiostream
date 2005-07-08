@@ -149,39 +149,39 @@
 ;; Start channels
 ;;================
 
-(StartSound player 1)
-(StartSound player 2)
-(StartSound player 3)
-(StartSound player 4)
-(StartSound player 5)
-(StartSound player 6)
-(StartSound player 7)
-(StartSound player 8)
+(StartChannel player 1)
+(StartChannel player 2)
+(StartChannel player 3)
+(StartChannel player 4)
+(StartChannel player 5)
+(StartChannel player 6)
+(StartChannel player 7)
+(StartChannel player 8)
 
 ;; Stop channels
 ;;================
 
-(StopSound player 1)
-(StopSound player 2)
-(StopSound player 3)
-(StopSound player 4)
-(StopSound player 5)
-(StopSound player 6)
-(StopSound player 7)
-(StopSound player 8)
+(StopChannel player 1)
+(StopChannel player 2)
+(StopChannel player 3)
+(StopChannel player 4)
+(StopChannel player 5)
+(StopChannel player 6)
+(StopChannel player 7)
+(StopChannel player 8)
 
 
 ;; Continue channels
 ;;====================
 
-(ContSound player 1)
-(ContSound player 2)
-(ContSound player 3)
-(ContSound player 4)
-(ContSound player 5)
-(ContSound player 6)
-(ContSound player 7)
-(ContSound player 8)
+(ContChannel player 1)
+(ContChannel player 2)
+(ContChannel player 3)
+(ContChannel player 4)
+(ContChannel player 5)
+(ContChannel player 6)
+(ContChannel player 7)
+(ContChannel player 8)
 
 ;;==================================================================================
 ;; NOTE : To start all channels simultanously in a perfectly synchronous manner, 
@@ -196,13 +196,13 @@
 ;; Set channel volume (0 127)
 ;;============================
 
-(SetVolSound player 1 80)
-(SetVolSound player 1 50)
+(SetVolChannel player 1 80)
+(SetVolChannel player 1 50)
 
 ;; Set channel pan (0 127)
 ;;============================
 
-(SetPanSound player 1 80)
+(SetPanChannel player 1 80)
 
 ;; Set audio player volume (0 127)
 ;;================================
