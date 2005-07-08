@@ -50,6 +50,10 @@ ChannelInfo;
 
 typedef void (*StopCallback)(void* context);
 
+//-----------------
+// Class TCallback
+//-----------------
+
 /*!
 \brief A generic callback.
 */
@@ -79,9 +83,14 @@ class TCallback
         }
 };
 
+//---------------------
+// Class TStopCallback
+//---------------------
+
 /*!
 \brief A callback to be called when the stream stops.
 */
+
 class TStopCallback : public TCallback
 {
 
@@ -132,7 +141,7 @@ class TAudioChannel
         TRTRendererAudioStream	fRendererStream;	// Renderer stream (set a real-time command manager for file stream)
         TAudioStreamPtr			fStream;			// Audio stream
         TAudioBuffer<float>*	fMixBuffer; 		// Used for mixing
-		TStopCallback			fStopCallback;
+		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
 
         long fVol;	// Master vol
         long fPan;	// Master pan
@@ -152,40 +161,46 @@ class TAudioChannel
 
         // Mixing
         bool Mix(TAudioBuffer<float>* out, long framesNum, long channels);
-
-        // Status
-        int GetState()
-        {
-            return fInserted;
-        } 	// To know if the channel is inserted in the active channel list
+		
+		// To know if the channel is inserted in the active channel list
         void SetState(bool state)
         {
             fInserted = state;
         }
+        // Status
+        int GetState()
+        {
+            return fInserted;
+        } 	
+		
         void GetInfo(ChannelInfoPtr info);
 
         // Warning : SetStream replaces the internal stream with a new one, desallocation has to be done externally
         void SetStream(TAudioStreamPtr stream);
         TAudioStreamPtr GetStream();
 
+		void SetLeft(long left)
+        {
+            fLeftOut = left;
+        }
         long GetLeft()
         {
             return fLeftOut;
         }
-        long GetRight()
-        {
-            return fRightOut;
-        }
-
-        void SetLeft(long left)
-        {
-            fLeftOut = left;
-        }
+		
         void SetRight(long right)
         {
             fRightOut = right;
         }
+		long GetRight()
+        {
+            return fRightOut;
+        }
 
+		void SetVol(long vol)
+        {
+            fVol = vol;
+        }
         long GetVol()
         {
             return fVol;
@@ -194,12 +209,7 @@ class TAudioChannel
         {
             return fPan;
         }
-
-        void SetVol(long vol)
-        {
-            fVol = vol;
-        }
-        void SetPan(long pan)
+		void SetPan(long pan)
         {
             fPan = pan;
         }

@@ -29,6 +29,8 @@ grame@rd.grame.fr
 #include <dlfcn.h>
 #endif
 
+#include <vector>
+
 //-------------------------
 // Class TFaustAudioEffect
 //-------------------------
@@ -69,7 +71,6 @@ class UI
 		virtual void openHorizontalBox(char* label) = 0;
 		virtual void openVerticalBox(char* label) = 0;
 		virtual void closeBox() = 0;
-		
 };
 
 class UIObject {
@@ -146,7 +147,6 @@ class Slider : public UIObject {
 			*init = fInit;
 		}
 };
-
 
 typedef dsp* (* newDsp) ();
 typedef void (* deleteDsp) (dsp* self); 						

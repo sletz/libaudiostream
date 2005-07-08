@@ -21,19 +21,10 @@ grame@rd.grame.fr
 
 #include "TAudioEngine.h"
 #include "TAudioRendererFactory.h"
-
 #include "TAudioStreamFactory.h"
-#include "TThreadCmdManager.h"
-
-#include "TAudioGlobals.h"
-#include "UAudioTools.h"
 
 #include "TVolAudioEffect.h"
 #include "TFaustAudioEffect.h"
-
-#include "TAudioStream.h"
-
-#include <map>
 
 #ifdef __cplusplus
 extern "C"
