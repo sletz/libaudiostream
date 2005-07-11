@@ -527,8 +527,6 @@ error:
 
 void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 {
-   TAudioGlobals::Destroy();
- 
     if (!player)
         return ;
 
@@ -542,6 +540,7 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
     }
 
     free(player);
+	TAudioGlobals::Destroy();
 }
 
 // SoundFile management
