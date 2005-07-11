@@ -274,12 +274,14 @@ AudioStreamPtr AUDIOAPI MakeNullSoundPtr(long lengthFrame)
 
 AudioStreamPtr AUDIOAPI MakeReadSoundPtr(char* name)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeReadSound(name));
+	AudioStream sound = TAudioStreamFactory::MakeReadSound(name);
+	return (sound) ? MakeSoundPtr(sound) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeRegionSoundPtr(char* name, long beginFrame, long endFrame)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame));
+	AudioStream sound = TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
+	return (sound) ? MakeSoundPtr(sound) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut)
