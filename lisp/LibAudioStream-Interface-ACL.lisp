@@ -11,11 +11,11 @@
 ;; Utilities
 ;;===========
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "LibAudioStream.dll"))
+(in-package :cl-user)
+
+;(load "LibAudioStream.dll")
 
 (use-package 'ff)
-
 
 ;; libsndfile types
 
@@ -94,111 +94,188 @@
 
 ;;; Build sound
 
+(defun delete-sound (stream)
+  (print stream)
+  (DeleteSound stream))
+    
 ;................................................................................: MakeNullSound
 (def-foreign-call 
-	(MakeNullSound "MakeNullSound")
+	(MakeNullSoundPtr "MakeNullSoundPtr")
   	((length :long))
  :returning :long)
 
+(defun MakeNullSound (length)
+  (let ((sound (MakeNullSoundPtr length)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
 ;................................................................................: MakeReadSound
 (def-foreign-call 
-	(MakeReadSound "MakeReadSound")
+	(MakeReadSoundPtr "MakeReadSoundPtr")
   	((name SoundName))
  :returning :long)
 
+(defun MakeReadSound (name)
+  (let ((sound (MakeReadSoundPtr name)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
 ;................................................................................: MakeRegionSound
 (def-foreign-call 
-	(MakeRegionSound "MakeRegionSound")
+	(MakeRegionSoundPtr "MakeRegionSoundPtr")
   	((name SoundName)
   	 (begin :long)
   	 (end :long))
- :returning :long)
+  :returning :long)
+
+(defun MakeRegionSound (name begin end)
+  (let ((sound (MakeRegionSoundPtr name begin end)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
 
 ;................................................................................: MakeFadeSound
 (def-foreign-call 
-	(MakeFadeSound "MakeFadeSound")
+	(MakeFadeSoundPtr "MakeFadeSoundPtr")
   	((sound :long)
   	 (fadein :long)
   	 (fadeout :long))
   :returning :long)
-  	 
+
+(defun MakeFadeSound (sound fadein fadeout)
+  (let ((sound (MakeFadeSoundPtr sound fadein fadeout)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
 ;................................................................................: MakeLoopSound
 (def-foreign-call 
-	(MakeLoopSound "MakeLoopSound")
+	(MakeLoopSoundPtr "MakeLoopSoundPtr")
   	((sound :long)
   	 (len :long))
   :returning :long)
 
+(defun MakeLoopSound (sound len)
+  (let ((sound (MakeLoopSoundPtr sound len)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
 ;................................................................................: MakeCutSound
 (def-foreign-call 
-	(MakeCutSound "MakeCutSound")
+	(MakeCutSoundPtr "MakeCutSoundPtr")
   	((sound :long)
   	 (begin :long)
   	 (end :long))
   :returning :long)
 
+(defun MakeCutSound (sound begin end)
+  (let ((sound (MakeCutSoundPtr sound begin end)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
 ;................................................................................: MakeSeqSound
 (def-foreign-call 
-	(MakeSeqSound "MakeSeqSound")
+	(MakeSeqSoundPtr "MakeSeqSoundPtr")
   	((sound1 :long)
   	 (sound2 :long)
 	 (crossfade :long))
   :returning :long)
 
+(defun MakeSeqSound (sound1 sound2 crossfade)
+  (let ((sound (MakeSeqSoundPtr sound1 sound2 crossfade)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
 ;................................................................................: MakeMixSound
 (def-foreign-call 
-	(MakeMixSound "MakeMixSound")
+	(MakeMixSoundPtr "MakeMixSoundPtr")
   	((sound1 :long)
   	 (sound2 :long))
   :returning :long)
 
+(defun MakeMixSound (sound1 sound2)
+  (let ((sound (MakeMixSoundPtr sound1 sound2)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
 ;................................................................................: MakeTransformSound
 (def-foreign-call 
-	(MakeTransformSound "MakeTransformSound")
+	(MakeTransformSoundPtr "MakeTransformSoundPtr")
   	((sound :long)
   	 (effect :long)
   	 (fadein :long)
   	 (fadeout :long))
   :returning :long)
 
-;................................................................................: MakeRegionSound
+(defun MakeTransformSound (sound effect fadein fadeout)
+  (let ((sound (MakeTransformSoundPtr sound effect fadein fadeout)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
+;................................................................................: MakeWriteSound
 (def-foreign-call 
-	(MakeWriteSound "MakeWriteSound")
+	(MakeWriteSoundPtr "MakeWriteSoundPtr")
   	((name SoundName)
   	 (sound :long)
   	 (format :long))
   :returning :long)
 
+(defun MakeWriteSound (name sound format)
+  (let ((sound (MakeWriteSoundPtr name sound format)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
 ;................................................................................: MakeInputSound
 (def-foreign-call 
-	(MakeInputSound "MakeInputSound")
+	(MakeInputSoundPtr "MakeInputSoundPtr")
   	(:void)
   :returning :long)
+
+(defun MakeInputSound ()
+  (let ((sound (MakeInputSoundPtr)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
   
 ;................................................................................: MakeRendererSound
 (def-foreign-call 
-	(MakeRendererSound "MakeRendererSound")
+	(MakeRendererSoundPtr "MakeRendererSoundPtr")
   	((sound :long))
   :returning :long)
 
+(defun MakeRendererSound (sound)
+  (let ((sound (MakeRendererSoundPtr sound)))
+    (excl::schedule-finalization sound 'delete-sound)
+    sound))
+
 ;................................................................................: GetLengthSound
 (def-foreign-call 
-	(GetLengthSound "GetLengthSound")
+	(GetLengthSound "GetLengthSoundPtr")
   	((sound :long))
   :returning :long)
 
 ;................................................................................: GetChannelsSound
 (def-foreign-call 
-	(GetChannelsSound "GetChannelsSound")
+	(GetChannelsSound "GetChannelsSoundPtr")
   	((sound :long))
   :returning :long)
 
+
 ;................................................................................: DeleteSound
 (def-foreign-call 
-	(DeleteSound "DeleteSound")
+	(DeleteSound "DeleteSoundPtr")
   	((sound :long))
   :returning :void)
-  
+
+;................................................................................: ResetSound
+(def-foreign-call 
+	(ResetSound "ResetSoundPtr")
+  	((sound :long))
+  :returning :void)
+
+;................................................................................: ReadSound
+(def-foreign-call 
+    (ReadSound "ReadSoundPtr")
+    ((sound :long)
+     (buffer :foreign-address)
+     (buffer_size :long)
+     (channels :long))
+  :returning :long)
+
 ;................................................................................: OpenAudioPlayer
 (def-foreign-call 
 	(OpenAudioPlayer "OpenAudioPlayer")
@@ -222,7 +299,7 @@
 ;; Channels
 ;................................................................................: LoadChannel
 (def-foreign-call 
-	(LoadChannel "LoadChannel")
+	(LoadChannel "LoadChannelPtr")
   	((player :long)
   	(sound :long)
   	(channels :long)
@@ -253,21 +330,21 @@
 
 ;................................................................................: StartSound
 (def-foreign-call 
-	(StartSound "StartSound")
+	(StartChannel "StartChannel")
   	((player :long)
   	 (chan :long))
   :returning :void)
 
 ;................................................................................: ContSound
 (def-foreign-call 
-	(ContSound "ContSound")
+	(ContChannel "ContChannel")
   	((player :long)
   	 (chan :long))
   :returning :void)
 
 ;................................................................................: StopSound
 (def-foreign-call 
-	(StopSound "StopSound")
+	(StopChannel "StopChannel")
   	((player :long)
   	 (chan :long))
   :returning :void)
@@ -276,7 +353,7 @@
 
 ;................................................................................: SetVolSound
 (def-foreign-call 
-	(SetVolSound "SetVolSound")
+	(SetVolChannel "SetVolChannel")
   	((player :long)
   	 (chan :long)
   	 (vol :long))
@@ -284,7 +361,7 @@
  
 ;................................................................................: SetPanSound
 (def-foreign-call 
-	(SetPanSound "SetPanSound")
+	(SetPanChannel "SetPanChannel")
   	((player :long)
   	 (chan :long)
   	 (vol :long))
@@ -307,5 +384,109 @@
   :returning :void)
 
 
+;;;============================ EFFECTS =================================    
+
+;---------------------------------------------------------------------------: MakeAudioEffectList
+(def-foreign-call 
+    (MakeAudioEffectListPtr "MakeAudioEffectListPtr")
+    ()
+  :returning :foreign-address)
+
+(defun MakeAudioEffectList ()
+  (let ((effectlist (MakeAudioEffectListPtr)))
+    (excl::schedule-finalization effectlist #'(lambda (effectlist) (DeleteEffectList effectlist)))
+    effectlist))
+
+;---------------------------------------------------------------------------: DeleteEffectList
+(def-foreign-call 
+    (DeleteEffectList "DeleteEffectListPtr")
+    ((effect-list :foreign-address))
+  :returning :void)
 
 
+;---------------------------------------------------------------------------: DeleteEffect
+(def-foreign-call 
+    (DeleteEffect "DeleteEffectPtr")
+    ((effect :foreign-address))
+  :returning :void)
+
+;---------------------------------------------------------------------------: MakeVolAudioEffect
+(def-foreign-call 
+    (MakeVolAudioEffectPtr "MakeVolAudioEffectPtr")
+    ((gain :float))
+  :returning :foreign-address)
+
+(defun MakeVolAudioEffect (gain)
+  (let ((effect (MakeVolAudioEffectPtr gain)))
+    (excl::schedule-finalization effect #'(lambda (effect) (DeleteEffect effect)))
+    effect))
+
+;---------------------------------------------------------------------------: AddAudioEffect
+(def-foreign-call 
+    (AddAudioEffect "AddAudioEffectPtr")
+    ((effect-list :foreign-address) 
+     (effect :foreign-address))
+  :returning :foreign-address)
+
+;---------------------------------------------------------------------------: RemoveAudioEffect
+(def-foreign-call 
+    (RemoveAudioEffect "RemoveAudioEffectPtr")
+    ((effect-list :foreign-address) 
+     (effect :foreign-address))
+  :returning :foreign-address)
+
+;---------------------------------------------------------------------------: MakeFaustAudioEffect
+(def-foreign-call 
+    (MakeFaustAudioEffectPtr "MakeFaustAudioEffectPtr")
+    ((gain (* :char )))
+  :returning :foreign-address)
+
+(defun MakeFaustAudioEffect (s)
+  (let ((effect (MakeFaustAudioEffectPtr s)))
+    (excl::schedule-finalization effect #'(lambda (effect) (DeleteEffect effect)))
+    effect))
+
+;---------------------------------------------------------------------------: GetControlCount
+(def-foreign-call 
+    (GetControlCount "GetControlCountPtr")
+    ((effect :foreign-address))
+  :returning :long)
+
+;---------------------------------------------------------------------------: GetControlParam
+;;; a tester...
+(def-foreign-call 
+    (GetControlParamPtr "GetControlParamPtr")
+    ((effect :foreign-address)
+     (control :long)
+     (name :foreign-address)
+     (min :foreign-address)
+     (max :foreign-address)
+     (init :foreign-address))
+  :returning :void)
+
+(defun GetControlParam (effect control)
+  (let ((name (ff::make-foreign-pointer :size 64))
+        (min (ff::make-foreign-pointer :size 4))
+        (max (ff::make-foreign-pointer :size 4))
+        (init (ff::make-foreign-pointer :size 4)))
+    (GetControlParamPtr effect control name min max init)
+    (values (excl::native-to-string (ff::foreign-pointer-address name))
+            (sys::memref-int  (ff::foreign-pointer-address min) 0 0 :single-float)
+            (sys::memref-int  (ff::foreign-pointer-address max) 0 0 :single-float)
+            (sys::memref-int  (ff::foreign-pointer-address init) 0 0 :single-float))
+    ))
+
+;---------------------------------------------------------------------------: SetControlValue
+(def-foreign-call 
+    (SetControlValue "SetControlValuePtr")
+    ((effect :foreign-address)
+     (control :long)
+     (value :float))
+  :returning :void)
+
+;---------------------------------------------------------------------------: GetControlValue
+(def-foreign-call 
+    (GetControlValue "GetControlValuePtr")
+    ((effect :foreign-address)
+     (control :long))
+  :returning :float)
