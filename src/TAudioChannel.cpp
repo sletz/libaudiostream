@@ -82,10 +82,11 @@ void TAudioChannel::SoundOff()
 		ChannelInfo info;
 
         // Wait until Fade Out ends
+		int count = 0;
         do {
             GetInfo(&info);
             AudioSleep(50);
-        } while (info.fStatus != TFadeAudioStream::kIdle);
+        } while (info.fStatus != TFadeAudioStream::kIdle && count++ < 10);
 		
 		fStopCallback.Desactivate();
     }
@@ -116,9 +117,12 @@ bool TAudioChannel::Mix(TAudioBuffer<float>* dst, long framesNum, long channels)
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
 	long res = fFadeStream.Read(fMixBuffer, framesNum, 0, channels);
 
-    MY_FLOAT leftvol = TPanTable::GetVolLeft(short(fVol), short(fPan));
+	// Effects
+	fEffectList.Process(fMixBuffer->GetFrame(0), framesNum, channels);
+	
+	// Vol and Pan 
+	MY_FLOAT leftvol = TPanTable::GetVolLeft(short(fVol), short(fPan));
     MY_FLOAT rightvol = TPanTable::GetVolRight(short(fVol), short(fPan));
-
     UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, leftvol, rightvol);
 	
 	if (res < framesNum) 	

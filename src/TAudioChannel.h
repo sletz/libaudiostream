@@ -24,6 +24,7 @@ grame@rd.grame.fr
 
 #include "TFadeAudioStream.h"
 #include "TRendererAudioStream.h"
+#include "TAudioEffect.h"
 
 #ifdef WIN32
 	#if defined(_AFXDLL) || defined(_WINDLL)	// using mfc
@@ -142,6 +143,7 @@ class TAudioChannel
         TAudioStreamPtr			fStream;			// Audio stream
         TAudioBuffer<float>*	fMixBuffer; 		// Used for mixing
 		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
+		TAudioEffectListManager	fEffectList;
 
         long fVol;	// Master vol
         long fPan;	// Master pan
@@ -175,7 +177,6 @@ class TAudioChannel
 		
         void GetInfo(ChannelInfoPtr info);
 
-        // Warning : SetStream replaces the internal stream with a new one, desallocation has to be done externally
         void SetStream(TAudioStreamPtr stream);
         TAudioStreamPtr GetStream();
 
@@ -222,6 +223,16 @@ class TAudioChannel
         StopCallback GetStopCallback()
         {
             return fStopCallback.GetCallback();
+        }
+		
+		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+        {
+			fEffectList.SetEffectList(effect_list, fadeIn ,fadeOut);
+        }
+
+        TAudioEffectListPtr GetEffectList()
+        {
+            return  fEffectList.GetEffectList();
         }
 };
 

@@ -9,6 +9,7 @@
 
 ;(defparameter soundfile1 "Users/letz/levot.wav")
 ;(defparameter soundfile2 "Users/letz/tango.wav")
+;(defparameter effect1 "Users/letz/freeverb.so")
 
 
 ;;;=======================
@@ -90,41 +91,68 @@
 
 (ReadSound s7 buffer buffer_size (GetChannelsSound s7))
 
-(ccl::%get-long  buffer 0)
-(ccl::%get-long  buffer 1)
+(ccl::%get-single-float  buffer 0)
+(ccl::%get-single-float  buffer 1)
 
 
 ;; Use of a Faust effect (http://faudiostream.sf.net)
 ;;====================================================
 
-(setq freeverb (MakeFaustAudioEffect "/Volumes/MacOSX\ Panther/Applications/MCL\ 5.0/MCL\ 5.0/freeverb.so"))
+(defvar freeverb1 (MakeFaustAudioEffect effect1))
+(defvar freeverb2 (MakeFaustAudioEffect effect1))
+(defvar freeverb3 (MakeFaustAudioEffect effect1))
+(defvar freeverb4 (MakeFaustAudioEffect effect1))
 
 ;; Print effect parameters
 
-(GetControlParam freeverb 0)
-(GetControlParam freeverb 1)
-(GetControlParam freeverb 2)
+(GetControlParam freeverb1 0)
+(GetControlParam freeverb1 1)
+(GetControlParam freeverb1 2)
 
 (defun print-params (effect)
   (dotimes (i (GetControlCount effect))
     (multiple-value-bind (name min max init) (GetControlParam effect i)
       (print (list name min max init)))))
 
-(print-params freeverb)
+(print-params freeverb1)
 
-(setq effect_list (MakeAudioEffectList))
-(setq effect_list (AddAudioEffect effect_list freeverb))
+(defvar effect_list1 (MakeAudioEffectList))
+(setq effect_list1 (AddAudioEffect effect_list1 freeverb1))
+
+(defvar effect_list2 (MakeAudioEffectList))
+(setq effect_list2 (AddAudioEffect effect_list2 freeverb2))
+
+(defvar effect_list3 (MakeAudioEffectList))
+(setq effect_list3 (AddAudioEffect effect_list3 freeverb3))
+
+(defvar effect_list4 (MakeAudioEffectList))
+(setq effect_list4 (AddAudioEffect effect_list4 freeverb4))
+
 
 (setq s8 (MakeTransformSound (MakeReadSound soundfile1) effect_list 100 100))
 
 ;; Change effect parameters : parameters are reseted to their default value each time the "transform" stream is reseted, 
 ;; typically when the stream is re-started: changing parameters value can be done "on the fly" when the stream is playing  
 
-(SetControlValue freeverb 1 0.9)
-(SetControlValue freeverb 2 0.9)
+(SetControlValue freeverb1 1 0.9)
+(SetControlValue freeverb1 2 0.6)
 
-:: Note: the effect list will be destroyed when the "transform" stream using them is deleted (using the DeleteSound function)
-;; thus one cannot use the effect pointer anymore after the stream deletion without crash consequences....
+(SetControlValue freeverb2 1 0.1)
+(SetControlValue freeverb2 2 0.1)
+
+(SetControlValue freeverb3 1 0.9)
+(SetControlValue freeverb3 2 0.6)
+
+(SetControlValue freeverb4 1 0.1)
+(SetControlValue freeverb4 2 0.1)
+
+
+(SetEffectListAudioPlayer player effect_list1 88100 88100)
+(SetEffectListAudioPlayer player effect_list2 44100 44100)
+
+
+(SetEffectListChannel player 1 effect_list3  44100 44100)
+(SetEffectListChannel player 1 effect_list4  44100 44100)
 
 
 ;; Load audio player channels

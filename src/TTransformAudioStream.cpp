@@ -23,7 +23,7 @@ grame@rd.grame.fr
 #include "TNullAudioStream.h"
 #include "TSeqAudioStream.h"
 
-TTransformAudioStream::TTransformAudioStream(TAudioStreamPtr stream, TAudioEffectPtr effectList, long fadeIn, long fadeOut)
+TTransformAudioStream::TTransformAudioStream(TAudioStreamPtr stream, TAudioEffectListPtr effectList, long fadeIn, long fadeOut)
 {
     fEffectList = effectList;
     // Add rest

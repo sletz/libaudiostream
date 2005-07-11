@@ -340,7 +340,7 @@ class UAudioTools
                 frame[i] *= val;
             }
         }
-
+		
         static void cTocCopy(char *dest, const char* src)
         {
             register short i = 0;

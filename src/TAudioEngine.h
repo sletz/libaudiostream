@@ -100,22 +100,39 @@ class TAudioEngine
 
         void SetMasterVol(long vol)
         {
-            fMixer->SetMasterVol(vol);
+            fMixer->SetVol(vol);
         }
         void SetMasterPan(long pan)
         {
-            fMixer->SetMasterPan(pan);
+            fMixer->SetPan(pan);
         }
 		
-		void SetStopCallback(long chan, StopCallback callback, void* context)
+		void SetStopCallbackChannel(long chan, StopCallback callback, void* context)
 		{
             fMixer->SetStopCallback(chan, callback, context);
         }
-		StopCallback GetStopCallback(long chan)
+		StopCallback GetStopCallbackChannel(long chan)
 		{
 			return fMixer->GetStopCallback(chan);
 		}
-
+		
+		void SetEffectListChannel(long chan, TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+		{
+            fMixer->SetEffectList(chan, effect_list, fadeIn, fadeOut);
+        }
+		TAudioEffectListPtr GetEffectListChannel(long chan)
+		{
+			return fMixer->GetEffectList(chan);
+		}
+		
+		void SetEffectListMaster(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+		{
+            fMixer->SetEffectList(effect_list, fadeIn, fadeOut);
+        }
+		TAudioEffectListPtr GetEffectListMaster()
+		{
+			return fMixer->GetEffectList();
+		}
 };
 
 typedef TAudioEngine * TAudioEnginePtr;

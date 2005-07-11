@@ -59,6 +59,8 @@ extern "C"
     typedef void* AudioEffectListPtr;
 	
 	typedef void (*StopCallback)(void* context);
+	
+	long Version();
 
     /*!
     \brief Create a stream that will produce "silence".
@@ -212,12 +214,45 @@ extern "C"
 
 	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
 	
+	/*!
+    \brief Return the number of effect controls.
+    \param effect The effect pointer.
+    \return The number of effect controls.
+    */
 	long GetControlCountPtr(AudioEffectPtr effect);
+	
+	/*!
+    \brief Return a description on the effect control: control name, min, max and default values
+    \param effect The effect pointer.
+    */
 	void GetControlParamPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
-	void SetControlValuePtr(AudioEffectPtr effect, long control, float f);
+	
+	/*!
+    \brief Set the effect control value.
+    \param effect The effect pointer.
+	\param control The control number between 0 and GetControlCountPtr.
+	\param value The new value as a float.
+    */
+	void SetControlValuePtr(AudioEffectPtr effect, long control, float value);
+	
+	/*!
+    \brief Get the effect control current value.
+    \param effect The effect pointer.
+	\param control The control number between 0 and GetControlCountPtr.
+	\return The effect control current value.
+	*/
 	float GetControlValuePtr(AudioEffectPtr effect, long control);
 	
+	/*!
+    \brief Delete the effect list.
+	\param list_effect The effect list pointer.
+	*/
 	void DeleteEffectListPtr(AudioEffectListPtr list_effect);
+	
+	/*!
+    \brief Delete the effect.
+	\param effect The effect pointer.
+	*/
 	void DeleteEffectPtr(AudioEffectPtr effect);
 
     // Open/Close
@@ -268,9 +303,7 @@ extern "C"
     void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
 	
 	void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
-	StopCallback GetStopCallbackChannel(AudioPlayerPtr player, long chan);
-
-
+	
     // Transport
     /*!
     \brief Start the audio player.
@@ -317,6 +350,8 @@ extern "C"
     \param pan The new panning value.
     */
     void SetPanChannel(AudioPlayerPtr player, long chan, long pan);
+	
+	void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
     /*!
@@ -331,6 +366,8 @@ extern "C"
     \param pan The new panning value.
     */
     void SetPanAudioPlayer(AudioPlayerPtr player, long pan);
+	
+	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
 #ifdef __cplusplus
 }

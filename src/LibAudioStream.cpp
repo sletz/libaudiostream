@@ -51,12 +51,14 @@ extern "C"
 	typedef TAudioStreamPtr AudioStream;
 	typedef AudioStream* AudioStreamPtr;
 
- 	typedef TAudioEffectPtr AudioEffectList;
+ 	typedef TAudioEffectListPtr AudioEffectList;
     typedef TAudioEffectInterfacePtr AudioEffect;	
 	typedef AudioEffectList* AudioEffectListPtr;
     typedef AudioEffect* AudioEffectPtr;	
 	
 	typedef void (*StopCallback)(void* context);
+	
+	long Version();
 
     // Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
@@ -75,7 +77,6 @@ extern "C"
     long AUDIOAPI GetLengthSound(AudioStream s);
     long AUDIOAPI GetChannelsSound(AudioStream s);
     long AUDIOAPI ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
-	
 	void AUDIOAPI ResetSound(AudioStream sound);
 	
 	// Build sound (using pointer on smartptr)
@@ -95,9 +96,8 @@ extern "C"
     long AUDIOAPI GetLengthSoundPtr(AudioStreamPtr s);
     long AUDIOAPI GetChannelsSoundPtr(AudioStreamPtr s);
     long AUDIOAPI ReadSoundPtr(AudioStreamPtr stream, float* buffer, long buffer_size, long channels);
-
-	void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound);
 	void AUDIOAPI ResetSoundPtr(AudioStreamPtr sound);
+	void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound);
 	
     // Effect management
     AudioEffectList AUDIOAPI MakeAudioEffectList();
@@ -142,9 +142,7 @@ extern "C"
     long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, long vol, long pan);
 	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan);
     void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
-	
 	void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
-	StopCallback AUDIOAPI GetStopCallbackChannel(AudioPlayerPtr player, long chan);
 
     // Transport
     void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -157,14 +155,21 @@ extern "C"
     // Params
     void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, long vol);
     void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, long pan);
+	void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
     void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, long pan);
     void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, long vol);
+	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
 #ifdef __cplusplus
 }
 #endif
+
+long Version()
+{
+	return 100;
+}
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
 {
@@ -213,7 +218,7 @@ AudioStream AUDIOAPI MakeInputSound()
 
 AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
 {
-	return TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)s1, (TAudioEffectPtr)list_effect, fadeIn, fadeOut);
+	return TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)s1, (TAudioEffectListPtr)list_effect, fadeIn, fadeOut);
 }
 
 AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format)
@@ -309,7 +314,7 @@ AudioStreamPtr AUDIOAPI MakeInputSoundPtr()
 
 AudioStreamPtr AUDIOAPI MakeTransformSoundPtr(AudioStreamPtr s1, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)*s1, (TAudioEffectPtr)*list_effect, fadeIn, fadeOut));
+    return MakeSoundPtr(TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)*s1, (TAudioEffectListPtr)*list_effect, fadeIn, fadeOut));
 }
 
 AudioStreamPtr AUDIOAPI MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format)
@@ -351,20 +356,20 @@ long AUDIOAPI ReadSoundPtr(AudioStreamPtr s, float* buffer, long buffer_size, lo
 // Effect management
 AudioEffectList AUDIOAPI MakeAudioEffectList()
 {
-    return new TAudioEffect();
+    return new TAudioEffectList();
 }
 
 AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect)
 {
     if (list_effect && effect)
-       TAudioEffectPtr(list_effect)->push_back(TAudioEffectInterfacePtr(effect));
+       TAudioEffectListPtr(list_effect)->push_back(TAudioEffectInterfacePtr(effect));
     return list_effect;
 }
 
 AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect)
 {
     if (list_effect && effect)
-        TAudioEffectPtr(list_effect)->remove(TAudioEffectInterfacePtr(effect));
+        TAudioEffectListPtr(list_effect)->remove(TAudioEffectInterfacePtr(effect));
     return list_effect;
 }
 
@@ -417,20 +422,20 @@ void AUDIOAPI DeleteEffectPtr(AudioEffectPtr effect)
 
 AudioEffectListPtr AUDIOAPI MakeAudioEffectListPtr()
 {
-    return new SMARTP<TAudioEffect>(new TAudioEffect());
+    return new SMARTP<TAudioEffectList>(new TAudioEffectList());
 }
 
 AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
     if (list_effect && effect)
-        TAudioEffectPtr(*list_effect)->push_back(TAudioEffectInterfacePtr(*effect));
+        TAudioEffectListPtr(*list_effect)->push_back(TAudioEffectInterfacePtr(*effect));
     return list_effect;
 }
 
 AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
     if (list_effect && effect)
-        TAudioEffectPtr(*list_effect)->remove(TAudioEffectInterfacePtr(*effect));
+        TAudioEffectListPtr(*list_effect)->remove(TAudioEffectInterfacePtr(*effect));
     return list_effect;
 }
 
@@ -566,12 +571,8 @@ void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info
 void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player,long chan, StopCallback callback, void* context)
 {
     if (player && player->fEngine ) {
-        player->fEngine->SetStopCallback(chan, callback, context);
+        player->fEngine->SetStopCallbackChannel(chan, callback, context);
     }
-}
-StopCallback AUDIOAPI GetStopCallbackChannel(AudioPlayerPtr player, long chan)
-{
-    return (player && player->fEngine) ? player->fEngine->GetStopCallback(chan): 0;
 }
 
 
@@ -619,6 +620,12 @@ void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, long pan)
         player->fEngine->SetPanChannel(chan, pan);
 }
 
+void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+{
+    if (player && player->fEngine)
+        player->fEngine->SetEffectListChannel(chan, *effect_list, fadeIn, fadeOut);
+}
+
 // Master
 void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, long vol)
 {
@@ -630,5 +637,11 @@ void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, long pan)
 {
     if (player && player->fEngine)
         player->fEngine->SetMasterPan(pan);
+}
+
+void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+{
+    if (player && player->fEngine)
+        player->fEngine->SetEffectListMaster(*effect_list, fadeIn, fadeOut);
 }
 

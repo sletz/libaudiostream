@@ -372,7 +372,7 @@
 
 ;; Params
 
-;................................................................................: SetVolSound
+;................................................................................: SetVolChannel
 (defmacro SetVolChannel (player chan vol)
   `(ccl::ppc-ff-call (get-fun-addr "SetVolChannel" *libaudiostream*) 
                      :address ,player
@@ -380,12 +380,22 @@
                      :signed-fullword, vol
                      :void))
 
-;................................................................................: SetPanSound
+;................................................................................: SetPanChannel
 (defmacro SetPanChannel (player chan pan)
   `(ccl::ppc-ff-call (get-fun-addr "SetPanChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :signed-fullword, pan
+                     :void))
+
+;................................................................................: SetEffectListChannel
+(defmacro SetEffectListChannel (player chan effect_list fadein fadeout)
+  `(ccl::ppc-ff-call (get-fun-addr "SetEffectListChannel" *libaudiostream*) 
+                     :address ,player
+                     :signed-fullword, chan
+                     :address, effect_list
+                     :signed-fullword, fadein
+                     :signed-fullword, fadeout
                      :void))
 
 ;; Master
@@ -403,6 +413,16 @@
                      :address ,player
                      :signed-fullword, pan
                      :void))
+
+;................................................................................: SetEffectAudioPlayer
+(defmacro SetEffectListAudioPlayer (player effect_list fadein fadeout)
+  `(ccl::ppc-ff-call (get-fun-addr "SetEffectListAudioPlayer" *libaudiostream*) 
+                     :address ,player
+                     :address, effect_list
+                     :signed-fullword, fadein
+                     :signed-fullword, fadeout
+                     :void))
+
 
 ;;;========================== EFFECTS 
 

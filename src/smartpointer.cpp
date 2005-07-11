@@ -21,12 +21,38 @@
 */
 
 #include "smartpointer.h"
+#include "TThreadCmdManager.h"
 
-unsigned long smartable::removeReference() { 
+unsigned long smartable::removeReference() 
+{ 
 	if (--refCount == 0) {
 		delete this; 
-		//printf("Delete %x\n",this);
 	}
-	//printf("removeReference %ld \n", refCount);
 	return refCount;
+}
+
+void smartable1::removeReferenceAux(smartable1* obj, long u1, long u2, long u3)
+{
+	//printf("removeReferenceAux\n");
+	delete obj;
+}
+
+unsigned long smartable1::removeReference() 
+{ 
+	//printf("smartable1::removeReference %ld\n", refCount);
+	if (--refCount == 0) {
+		//printf("call smartable1::removeReference\n");
+		fManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
+	}
+	return refCount;
+}
+
+void smartable1::Init()
+{
+    fManager = new TThreadCmdManager(1);
+}
+
+void smartable1::Destroy()
+{
+    delete fManager;
 }

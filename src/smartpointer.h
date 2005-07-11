@@ -26,6 +26,8 @@
 #include <cassert>
 #include <stdio.h>
 
+#include "TCmdManager.h"
+
 /*!
 \brief the base class for smart pointers implementation
 
@@ -34,22 +36,36 @@
 	and automatic delete when the reference count drops to zero.
 */
 class smartable {
-	private:
-		unsigned long refCount;		
+			
 	public:
 		//! gives the reference count of the object
 		unsigned refs() const         { return refCount; }
 		//! addReference increments the ref count and checks for refCount overflow
 		void addReference()           { refCount++; assert(refCount != 0); }
 		//! removeReference delete the object when refCount is zero		
-		unsigned long removeReference();
+		virtual unsigned long removeReference();
 		
 	protected:
+		unsigned long refCount;	
 		smartable() : refCount(0) {}
 		smartable(const smartable&): refCount(0) {}
 		//! destructor checks for non-zero refCount
 		virtual ~smartable()    { assert (refCount == 0); }
 		smartable& operator=(const smartable&) { return *this; }
+};
+
+class smartable1 : public smartable {
+
+	private:
+		
+		static void removeReferenceAux(smartable1* obj,long u1, long u2, long u3);
+		static TCmdManagerPtr fManager;
+
+	public:
+	
+		unsigned long removeReference();
+		static void Init();
+		static void Destroy();
 };
 
 /*!

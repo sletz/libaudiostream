@@ -39,12 +39,13 @@ grame@rd.grame.fr
 class TAudioMixer : public TAudioClient
 {
 
-    protected:
+    private:
 
-        list<TAudioChannelPtr> fSoundChannelSeq;	// List of running sound channels
-        TAudioChannelPtr* fSoundChannelTable;		// Table of sound channels
-        TAudioBuffer<float>* fMixBuffer;			// Buffer for mixing
-        long fVol, fPan;	// Master pan and volume
+		TAudioEffectListManager	fEffectList;		// Master effect list
+		list<TAudioChannelPtr>	fSoundChannelSeq;	// List of running sound channels
+        TAudioChannelPtr*		fSoundChannelTable;	// Table of sound channels
+        TAudioBuffer<float>*	fMixBuffer;			// Buffer for mixing
+        long fVol, fPan;							// Master pan and volume
 
         bool IsAvailable(long chan)
         {
@@ -73,18 +74,31 @@ class TAudioMixer : public TAudioClient
         void SetVol(long chan, long vol);
         void SetPan(long chan, long pan);
 
-        void SetMasterVol(long vol)
+        void SetVol(long vol)
         {
             fVol = vol;
         }
-        void SetMasterPan(long pan)
+        void SetPan(long pan)
         {
             fPan = pan;
         }
 		
 		void SetStopCallback(long chan, StopCallback callback, void* context);
 		StopCallback GetStopCallback(long chan);
- };
+		
+		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+		{
+			fEffectList.SetEffectList(effect_list, fadeIn, fadeOut);
+        }
+
+        TAudioEffectListPtr GetEffectList()
+		{
+			return  fEffectList.GetEffectList();
+        }
+		
+		void SetEffectList(long chan, TAudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+		TAudioEffectListPtr GetEffectList(long chan);
+};
 
 typedef TAudioMixer * TAudioMixerPtr;
 

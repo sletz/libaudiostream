@@ -69,9 +69,9 @@ long TBufferedAudioStream::HandleBuffer(TAudioBuffer<float>* buffer, long frames
 
     if (EndFirst(fCurFrame, framesNum, fBuffer->GetSize() / 2)) { // End of first buffer
 
-        if (!fReady)
+        if (!fReady) 
             TAudioGlobals::fDiskError++;
-
+	
         assert((fCurFrame + framesNum) <= fBuffer->GetSize());
 
         if (read) {
@@ -92,11 +92,11 @@ long TBufferedAudioStream::HandleBuffer(TAudioBuffer<float>* buffer, long frames
 
     } else if (EndSecond(fCurFrame, framesNum, fBuffer->GetSize() / 2)) { // End of second buffer
 
-        if (!fReady)
+		if (!fReady) 
             TAudioGlobals::fDiskError++;
 
-        int frames1 = fBuffer->GetSize() - fCurFrame; // Number of frames to be read at the end of the buffer
-        int frames2 = framesNum - frames1;            // Number of frames to be read at the beginning of the "next" buffer
+        long frames1 = fBuffer->GetSize() - fCurFrame; // Number of frames to be read at the end of the buffer
+        long frames2 = framesNum - frames1;            // Number of frames to be read at the beginning of the "next" buffer
 
         assert((fCurFrame + frames1) <= fBuffer->GetSize());
 

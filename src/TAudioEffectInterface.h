@@ -35,7 +35,7 @@ class TAudioEffectInterface;
 
 typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
 
-class TAudioEffectInterface : public smartable
+class TAudioEffectInterface : public smartable1
 {
 
     private:

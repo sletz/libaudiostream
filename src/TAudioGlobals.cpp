@@ -33,7 +33,8 @@ float* TSharedBuffers::fOutBuffer;
 float TPanTable::fPanTable[128];
 float TPanTable::fVolTable[128];
 
-TCmdManager* TCmdManager::fInstance;
+TCmdManagerPtr smartable1::fManager;
+TCmdManagerPtr TCmdManager::fInstance;
 TAudioGlobalsPtr TAudioGlobals::fInstance = 0;
 TAudioBuffer<short>* TAudioGlobals::fInBuffer = 0;
 
@@ -58,6 +59,7 @@ void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_r
                                   buffer_size, stream_buffer_size, rtstream_buffer_size);
     TDTRendererAudioStream::Init();
     TRTRendererAudioStream::Init(thread_num);
+	smartable1::Init();
     TPanTable::FillTable();
 }
 
@@ -65,6 +67,7 @@ void TAudioGlobals::Destroy()
 {
     TDTRendererAudioStream::Destroy();
     TRTRendererAudioStream::Destroy();
+	smartable1::Destroy();
     delete fInstance;
 }
 

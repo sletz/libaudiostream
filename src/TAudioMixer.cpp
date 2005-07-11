@@ -69,14 +69,16 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 		}
 	}
 	
+	// Master Effects
+	fEffectList.Process(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+	
     // Master Pan and Vol
     MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
     MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
-
-    UAudioTools::ReplaceFrameToFrameBlk(outputBuffer,
-                                        fMixBuffer->GetFrame(0),
-                                        TAudioGlobals::fBuffer_Size,
-                                        TAudioGlobals::fOutput, leftvol, rightvol);
+	UAudioTools::MixFrameToFrameBlk(outputBuffer,
+									fMixBuffer->GetFrame(0),
+									TAudioGlobals::fBuffer_Size,
+									TAudioGlobals::fOutput, leftvol, rightvol);
     return true;
 }
 
@@ -177,11 +179,21 @@ void TAudioMixer::Reset()
         channel->SetStream(0);
         channel->SetState(false); // Important : used to mark the insertion state
     }
-
     fSoundChannelSeq.clear();
 }
 
+void TAudioMixer::SetEffectList(long chan, TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+{
+	TAudioChannelPtr channel;
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+        channel->SetEffectList(effect_list, fadeIn, fadeOut);
+}
 
+TAudioEffectListPtr TAudioMixer::GetEffectList(long chan)
+{
+	TAudioChannelPtr channel;
+    return (IsValid(chan) && (channel = fSoundChannelTable[chan])) ? channel->GetEffectList() : 0;
+}
 
 
 

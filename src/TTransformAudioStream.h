@@ -37,14 +37,14 @@ class TTransformAudioStream : public TDecoratedAudioStream
 
     private:
 
-        TAudioEffectPtr fEffectList;  	// Effect list
+        TAudioEffectListPtr fEffectList;  	// Effect list
 		long fFadeIn;	// FadeIn time
         long fFadeOut;	// FadeOut time
 		TAudioBuffer<float>* fBuffer;
 
     public:
 
-        TTransformAudioStream(TAudioStreamPtr stream, TAudioEffectPtr effect, long fadeIn, long fadeOut);
+        TTransformAudioStream(TAudioStreamPtr stream, TAudioEffectListPtr effect, long fadeIn, long fadeOut);
         virtual ~TTransformAudioStream()
         {
     		delete fBuffer;

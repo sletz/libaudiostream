@@ -25,10 +25,6 @@ grame@rd.grame.fr
 #include </opt/local/include/sndfile.h>
 #include <stdio.h>
 
-// steph 
-#include "TAudioStreamFactory.h"
-
-
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
@@ -301,7 +297,7 @@ int main(int argc, char* argv[])
     if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
-	
+			
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");
     printf("Type 'p' to play from the current position\n");
@@ -312,7 +308,7 @@ int main(int argc, char* argv[])
     printf("Type 'n' to go to next test\n");
 	
     ExecTest(player, test0());
-    ExecTest(player, test1());
+	ExecTest(player, test1());
     ExecTest(player, test2());
     ExecTest(player, test3());
     ExecTest(player, test4());
@@ -322,9 +318,11 @@ int main(int argc, char* argv[])
     ExecTest(player, test8());
     ExecTest(player, test9());
 	ExecTest(player, test10());
+	ExecTest(player, test11());
+
 	test20();
 	test21();
-
+	
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
     printf("Quit\n");

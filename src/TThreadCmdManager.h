@@ -191,7 +191,7 @@ class TThreadCmdManager : public TCmdManager
         TThreadCmdManager(long thread);
         ~TThreadCmdManager();
 
-        void ExecCmdAux (CmdPtr fun, long a1, long a2, long a3, long a4, long a5);
+        void ExecCmdAux(CmdPtr fun, long a1, long a2, long a3, long a4, long a5);
         void RunAux();
         void FlushCmds();
 };

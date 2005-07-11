@@ -63,6 +63,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 
 TReadFileAudioStream::~TReadFileAudioStream()
 {
+	printf("~TReadFileAudioStream\n");
     if (fFile) {
         sf_close(fFile);
         fFile = 0;

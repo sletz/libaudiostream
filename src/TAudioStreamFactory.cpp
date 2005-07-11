@@ -119,7 +119,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
     return new TInputAudioStream();
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectPtr effect, long fadeIn, long fadeOut)
+TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)
 {
     return (s1 && effect) ? new TTransformAudioStream(s1, effect, fadeIn, fadeOut) : 0;
 }
