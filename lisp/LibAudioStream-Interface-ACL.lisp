@@ -90,7 +90,12 @@
   (fslot-value-typed 'TChannelInfo :foreign-static-gc e 'fRightOut))
 
 
-;; Open/Close
+;................................................................................: LibAudioStream
+(def-foreign-call 
+	(LibAudioStream "Version")
+  	()
+ :returning :long)
+
 
 ;;; Build sound
 
