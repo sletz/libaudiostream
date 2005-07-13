@@ -125,14 +125,12 @@ class UAudioTools
             }
         }
 
-        static inline void MixFrameToFrameBlk1(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
+		static inline void MixFrameToFrameBlk1(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
         {
             for (int i = 0 ; i < framesNum; i++) {
-                for (int j = 0 ; j < channels; j += 2) { // A REVOIR
-                    int index1 = i * channels + j;
-                    int index2 = index1 + 1;
+                for (int j = 0 ; j < channels; j++) { 
+                    long index1 = i * channels + j;
                     dst[index1] += src[index1];
-                    dst[index2] += src[index2];
                 }
             }
         }
