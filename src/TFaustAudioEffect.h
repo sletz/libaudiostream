@@ -176,7 +176,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 
     private:
 	
-		char fName[32];
+		char fName[512];
 		HANDLE fHandle;
 		dsp* fDsp;
 		newDsp fNew;
@@ -196,7 +196,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 			strcpy(fName, name);
 			fHandle = LoadModule(name);
 			if (!fHandle) 
-				 throw - 1;
+				 throw -1;
 			fNew = (newDsp)GetProc(fHandle, "newDsp");
 			fDelete = (deleteDsp)GetProc(fHandle, "deleteDsp");
 			fGetNumInputs = (getNumInputs)GetProc(fHandle, "getNumInputs");
@@ -207,6 +207,8 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 			fConclude = (conclude)GetProc(fHandle, "conclude");
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSample_Rate);
+			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) // Temporary
+				 throw -2;
 			fBuildUserInterface(fDsp, this);
 		}
         virtual ~TFaustAudioEffect()
