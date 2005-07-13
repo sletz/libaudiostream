@@ -207,8 +207,11 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 			fConclude = (conclude)GetProc(fHandle, "conclude");
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSample_Rate);
-			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) // Temporary
-				 throw -2;
+			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
+				fDelete(fDsp);
+				UnloadModule(fHandle);
+				throw -2;
+			}
 			fBuildUserInterface(fDsp, this);
 		}
         virtual ~TFaustAudioEffect()
