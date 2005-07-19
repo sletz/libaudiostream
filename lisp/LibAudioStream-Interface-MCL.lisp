@@ -119,8 +119,8 @@
 
 (defrecord TChannelInfo
   (fStatus :longint)
-  (fVol :longint)
-  (fPan :longint)
+  (fVol :single-float)
+  (fPan :single-float)
   (fLeftOut :longint)
   (fRightOut :longint))
  
@@ -180,6 +180,15 @@
                                     :address)))
        (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
        sound)))
+
+
+;................................................................................: MakStereoSound
+(defmacro MakeStereoSound (sound)
+  `(let ((sound (ccl::ppc-ff-call (get-fun-addr "MakeStereoSoundPtr" *libaudiostream*) 
+                     :address ,sound 
+                     :address)))
+      (terminate-when-unreachable sound #'(lambda(sound) (print sound) (DeleteSound sound)))
+       sound))
 
 ;................................................................................: MakeFadeSound
 (defmacro MakeFadeSound (sound fadein fadeout)
@@ -328,8 +337,8 @@
                      :address ,player
                      :address ,sound
                      :signed-fullword, chan
-                     :signed-fullword, vol
-                     :signed-fullword, pan
+                     :double-float, vol
+                     :double-float, pan
                      :signed-fullword))
 
 ;................................................................................: GetInfoChannel
@@ -381,7 +390,7 @@
   `(ccl::ppc-ff-call (get-fun-addr "SetVolChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
-                     :signed-fullword, vol
+                     :double-float, vol
                      :void))
 
 ;................................................................................: SetPanChannel
@@ -389,7 +398,7 @@
   `(ccl::ppc-ff-call (get-fun-addr "SetPanChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
-                     :signed-fullword, pan
+                     :double-float, pan
                      :void))
 
 ;................................................................................: SetEffectListChannel
@@ -408,14 +417,14 @@
 (defmacro SetVolAudioPlayer (player vol)
   `(ccl::ppc-ff-call (get-fun-addr "SetVolAudioPlayer" *libaudiostream*) 
                      :address ,player
-                     :signed-fullword, vol
+                     :double-float, vol
                      :void))
 
 ;................................................................................: SetPanSound
 (defmacro SetPanAudioPlayer (player pan)
   `(ccl::ppc-ff-call (get-fun-addr "SetPanAudioPlayer" *libaudiostream*) 
                      :address ,player
-                     :signed-fullword, pan
+                     :double-float, pan
                      :void))
 
 ;................................................................................: SetEffectAudioPlayer

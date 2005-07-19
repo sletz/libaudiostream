@@ -9,8 +9,7 @@
 
 ;(defparameter soundfile1 "Users/letz/levot.wav")
 ;(defparameter soundfile2 "Users/letz/tango.wav")
-;(defparameter effect1 "Users/letz/freeverb.so")
-
+;(defparameter effect1 "/Volumes/Document1/Developpement/ProjectsCVS/FaustCVS/FaustCVS/faust/examples/moduledir/freeverb.so")
 
 ;;;=======================
 ;;; Multi-channel Player
@@ -103,6 +102,8 @@
 (defvar freeverb3 (MakeFaustAudioEffect effect1))
 (defvar freeverb4 (MakeFaustAudioEffect effect1))
 
+(defvar paramEQ1 (MakeFaustAudioEffect effect2))
+
 ;; Print effect parameters
 
 (GetControlParam freeverb1 0)
@@ -115,6 +116,7 @@
       (print (list name min max init)))))
 
 (print-params freeverb1)
+(print-params paramEQ1)
 
 (defvar effect_list1 (MakeAudioEffectList))
 (setq effect_list1 (AddAudioEffect effect_list1 freeverb1))
@@ -158,7 +160,7 @@
 ;; Load audio player channels
 ;;============================
 
-(LoadChannel player s1 1 120 64)
+(LoadChannel player s1 1 1.0 0.5)
 (LoadChannel player s2 2 120 64)
 
 (LoadChannel player s3 3 120 64)
@@ -221,26 +223,29 @@
 ;;==================================================================================
 
 
-;; Set channel volume (0 127)
+;; Set channel volume (0 1)
 ;;============================
 
-(SetVolChannel player 1 80)
-(SetVolChannel player 1 50)
+(SetVolChannel player 1 1.0)
+(SetVolChannel player 1 0.1)
 
-;; Set channel pan (0 127)
+;; Set channel pan (0 1)
 ;;============================
 
-(SetPanChannel player 1 80)
+(SetPanChannel player 1 0.0)
+(SetPanChannel player 1 1.0)
+(SetPanChannel player 1 0.5)
 
-;; Set audio player volume (0 127)
+
+;; Set audio player volume (0 1)
 ;;================================
 
-(SetVolAudioPlayer player 80)
+(SetVolAudioPlayer player 0.8)
 
-;; Set audio player pan  (0 127)
+;; Set audio player pan  (0 1)
 ;;================================
 
-(SetPanAudioPlayer player 64)
+(SetPanAudioPlayer player 0.5)
 
 ;; Streams not used anymore in channels MUST be deleted (typically before loading a new stream in a channel)
 ;;==========================================================================================================
