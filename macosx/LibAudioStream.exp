@@ -1,3 +1,5 @@
+_Version
+
 _MakeNullSoundPtr
 _MakeReadSoundPtr
 _MakeRegionSoundPtr
@@ -33,17 +35,21 @@ _DeleteEffectPtr
 
 _OpenAudioPlayer
 _CloseAudioPlayer
+
 _LoadChannelPtr
 _GetInfoChannel
 _SetStopCallbackChannel
-_GetStopCallbackChannel
 
 _StartAudioPlayer
 _StopAudioPlayer
+
 _StartChannel
 _ContChannel
 _StopChannel
 _SetVolChannel
 _SetPanChannel
+_SetEffectListChannel
+
 _SetVolAudioPlayer
 _SetPanAudioPlayer
+_SetEffectListAudioPlayer
