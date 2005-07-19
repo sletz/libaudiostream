@@ -227,8 +227,8 @@ void test21()
 
 void TestPlay(AudioPlayerPtr player)
 {
-    int vol = 127;
-    int pan = 64;
+    float vol = 1.0f;
+    float pan = 0.5f;
     char c;
 	
     while ((c = getchar()) && (c != 'n')) {
