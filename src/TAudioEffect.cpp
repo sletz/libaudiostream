@@ -23,8 +23,6 @@ grame@rd.grame.fr
 #include "UAudioTools.h"
 #include <stdio.h>
 
-static inline void SwapBuffers(float** input, float** output) {float** tmp = input; input = output; output = tmp;}
-
 void TAudioEffectList::Init(float fade_in_val, float fade_in_time, float fade_out_val, float fade_out_time)
 {
     fFadeIn.setValue(fade_in_val);
@@ -94,7 +92,10 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 			TAudioEffectInterfacePtr process = *iter;
 			process->ProcessAux(input, tmp_output, framesNum, channels);
 			output = tmp_output;
-			SwapBuffers(input, tmp_output);
+			// Swap buffers
+			float** tmp = input;
+			input = tmp_output;
+			output = tmp;
 		}
 		
 		// Interleave...
@@ -117,8 +118,6 @@ void TAudioEffectList::Reset()
 TAudioEffectList::~TAudioEffectList()
 {
 	int i;
-	
-	printf("TAudioEffect::~TAudioEffect\n");
 	
 	for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
 		free(fTemp1[i]);
