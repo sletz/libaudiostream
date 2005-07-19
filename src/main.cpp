@@ -29,6 +29,8 @@ grame@rd.grame.fr
 #define FILENAME2 "/Users/letz/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
 
+#define EFFECT1 "/Users/letz/freeverb.so"
+
 #define IN_CHANNELS 2 // stereo player
 #define OUT_CHANNELS 2 // stereo player
 #define CHANNELS 8
@@ -156,7 +158,7 @@ AudioStreamPtr test10()
     AudioStreamPtr sound1 = MakeRegionSoundPtr(FILENAME1, 400000, 1000000);
     AudioStreamPtr sound2 = MakeRegionSoundPtr(FILENAME1, 400000, 1000000);
 	AudioEffectListPtr list_effect = MakeAudioEffectListPtr();
-    faust_effect = MakeFaustAudioEffectPtr("freeverb.so");
+    faust_effect = MakeFaustAudioEffectPtr(EFFECT1);
     
 	printf("Faust effect: param num %ld\n", GetControlCountPtr(faust_effect));
 	for (int i = 0; i < GetControlCountPtr(faust_effect); i++) {
@@ -167,6 +169,7 @@ AudioStreamPtr test10()
 	}
 	
 	list_effect = AddAudioEffectPtr(list_effect, faust_effect);
+	list_effect = AddAudioEffectPtr(list_effect, MakeVolAudioEffectPtr(0.5));
     return MakeSeqSoundPtr(sound1, MakeTransformSoundPtr(sound2, list_effect, 100, 100), 44100);
 }
 
@@ -176,7 +179,7 @@ AudioStreamPtr test11()
     printf("Input stream + Faust freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectListPtr list_effect = MakeAudioEffectListPtr();
-	faust_effect = MakeFaustAudioEffectPtr("freeverb.so");
+	faust_effect = MakeFaustAudioEffectPtr(EFFECT1);
 	
     printf("Faust effect: param num %ld\n", GetControlCountPtr(faust_effect));
 	for (int i = 0; i < GetControlCountPtr(faust_effect); i++) {
@@ -245,22 +248,22 @@ void TestPlay(AudioPlayerPtr player)
                 break;
 
             case '+':
-                vol += 5;
+                vol += 0.05f;
                 SetVolAudioPlayer(player, vol);
                 break;
 
             case '-':
-                vol -= 5;
+                vol -= 0.05f;
                 SetVolAudioPlayer(player, vol);
                 break;
 
             case '1':
-                pan += 5;
+                pan += 0.05f;
                 SetPanAudioPlayer(player, pan);
                 break;
 
             case '2':
-                pan -= 5;
+                pan -= 0.05f;
                 SetPanAudioPlayer(player, pan);
                 break;
 				
@@ -272,9 +275,21 @@ void TestPlay(AudioPlayerPtr player)
     }
 }
 
+void SaveSound(AudioStreamPtr sound, char* name)
+{
+	AudioStreamPtr writesound = MakeRendererSoundPtr(MakeWriteSoundPtr(name, sound,SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+	printf("GetChannelsSoundPtr %ld\n", GetChannelsSoundPtr(writesound));
+	float buffer[512 * GetChannelsSoundPtr(writesound)];
+    long res;
+    do {
+        res = ReadSoundPtr(writesound, buffer, 512, GetChannelsSoundPtr(writesound));
+        printf("Simulate non real-time rendering : use buffer here %ld\n", res);
+    } while (res == 512);
+}
+
 void ExecTest(AudioPlayerPtr player, AudioStreamPtr sound)
 {
-    int res = LoadChannelPtr(player, sound, 1, 120, 64);
+    int res = LoadChannelPtr(player, sound, 1, 1.0f, 0.5f);
 	SetStopCallbackChannel(player, 1, TestCallback, NULL);
     if (res == NO_ERR) {
         TestPlay(player);
@@ -297,6 +312,23 @@ int main(int argc, char* argv[])
     if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
+	
+	/*
+	AudioStreamPtr sound = MakeTransformSoundPtr(MakeReadSoundPtr ("/Users/letz/son1.wav"),
+							AddAudioEffectPtr(MakeAudioEffectListPtr(), MakeVolAudioEffectPtr(0.9)), 1, 0);
+							
+	SaveSound(sound,"/Users/letz/out1.aiff");
+	
+	sound = MakeTransformSoundPtr(MakeReadSoundPtr ("/Users/letz/levotmono.wav"),
+							AddAudioEffectPtr(MakeAudioEffectListPtr(), MakeVolAudioEffectPtr(0.9)), 1, 0);
+							
+	SaveSound(sound,"/Users/letz/out2.aiff");
+	
+	sound = MakeTransformSoundPtr(MakeReadSoundPtr ("/Users/letz/levotmono.wav"),
+							AddAudioEffectPtr(MakeAudioEffectListPtr(), MakeFaustAudioEffectPtr(EFFECT1)), 1, 0);
+							
+	SaveSound(sound,"/Users/letz/out3.aiff");
+	*/
 			
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");
