@@ -54,8 +54,16 @@ class TPanTable
         {}
         virtual ~TPanTable()
         {}
+		
+		static void TPanTable::GetLR(float vol, float pan, float* left_vol, float* right_vol)
+		{
+			float pan_val1 = cos(pan * PI / 2);
+			float pan_val2 = pan_val1 * pan_val1;
+			*left_vol = vol * pan_val2;
+			*right_vol = vol * (1 - pan_val2);
+		}
 
-        static MY_FLOAT GetVolLeft(short vol, short pan)
+	     static MY_FLOAT GetVolLeft(short vol, short pan)
         {
             // A REVOIR
             return 2*(fVolTable[Range(vol, 0, 127)] * fPanTable[Range(pan, 0, 127)]);
@@ -70,7 +78,7 @@ class TPanTable
         {
             return fVolTable[Range(vol, 0, 127)];
         }
-
+	  
         static void FillTable()
         {
             int i;

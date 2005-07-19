@@ -67,7 +67,7 @@ class TAudioEngine
             return fRenderer->Stop();
         }
 
-        long LoadChannel(TAudioStreamPtr stream, int chan, int vol, int pan)
+        long LoadChannel(TAudioStreamPtr stream, long chan, float vol, float pan)
         {
             return fMixer->Load(stream, chan, vol, pan);
         }
@@ -89,20 +89,20 @@ class TAudioEngine
             fMixer->Stop(chan);
         }
 
-        void SetVolChannel(long chan, long vol)
+        void SetVolChannel(long chan, float vol)
         {
             fMixer->SetVol(chan, vol);
         }
-        void SetPanChannel(long chan, long pan)
+        void SetPanChannel(long chan, float pan)
         {
             fMixer->SetPan(chan, pan);
         }
 
-        void SetMasterVol(long vol)
+        void SetMasterVol(float vol)
         {
             fMixer->SetVol(vol);
         }
-        void SetMasterPan(long pan)
+        void SetMasterPan(float pan)
         {
             fMixer->SetPan(pan);
         }

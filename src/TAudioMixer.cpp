@@ -73,8 +73,10 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 	fEffectList.Process(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
 	
     // Master Pan and Vol
-    MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
-    MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
+    //MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
+    //MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
+	MY_FLOAT leftvol, rightvol;
+	TPanTable::GetLR(fVol, fPan, &leftvol, &rightvol);
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
 									fMixBuffer->GetFrame(0),
 									TAudioGlobals::fBuffer_Size,
@@ -86,7 +88,7 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
-long TAudioMixer::Load(TAudioStreamPtr stream, long chan, long vol, long pan)
+long TAudioMixer::Load(TAudioStreamPtr stream, long chan, float vol, float pan)
 {
     if (IsAvailable(chan)) {
         TAudioChannelPtr channel = fSoundChannelTable[chan];
@@ -138,14 +140,14 @@ void TAudioMixer::Stop(long chan)
         channel->SoundOff();
 }
 
-void TAudioMixer::SetVol(long chan, long vol)
+void TAudioMixer::SetVol(long chan, float vol)
 {
     TAudioChannelPtr channel;
     if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
         channel->SetVol(vol);
 }
 
-void TAudioMixer::SetPan(long chan, long pan)
+void TAudioMixer::SetPan(long chan, float pan)
 {
     TAudioChannelPtr channel;
     if (IsValid(chan) && (channel = fSoundChannelTable[chan]))

@@ -42,8 +42,8 @@ typedef struct ChannelInfo
 {
     long fStatus;
     long fCurFrame;
-    long fVol;
-    long fPan;
+    float fVol;
+    float fPan;
     long fLeftOut;
     long fRightOut;
 }
@@ -145,8 +145,8 @@ class TAudioChannel
 		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
 		TAudioEffectListManager	fEffectList;
 
-        long fVol;	// Master vol
-        long fPan;	// Master pan
+        float fVol;	// Master vol
+        float fPan;	// Master pan
         long fLeftOut;  // Audio left out
         long fRightOut;	// Audio right out
         bool fInserted;	// Insertion state
@@ -198,19 +198,19 @@ class TAudioChannel
             return fRightOut;
         }
 
-		void SetVol(long vol)
+		void SetVol(float vol)
         {
             fVol = vol;
         }
-        long GetVol()
+        float GetVol()
         {
             return fVol;
         }
-        long GetPan()
+        float GetPan()
         {
             return fPan;
         }
-		void SetPan(long pan)
+		void SetPan(float pan)
         {
             fPan = pan;
         }
@@ -232,7 +232,7 @@ class TAudioChannel
 
         TAudioEffectListPtr GetEffectList()
         {
-            return  fEffectList.GetEffectList();
+            return fEffectList.GetEffectList();
         }
 };
 

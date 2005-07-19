@@ -45,7 +45,7 @@ class TAudioMixer : public TAudioClient
 		list<TAudioChannelPtr>	fSoundChannelSeq;	// List of running sound channels
         TAudioChannelPtr*		fSoundChannelTable;	// Table of sound channels
         TAudioBuffer<float>*	fMixBuffer;			// Buffer for mixing
-        long fVol, fPan;							// Master pan and volume
+        float fVol, fPan;							// Master pan and volume
 
         bool IsAvailable(long chan)
         {
@@ -63,7 +63,7 @@ class TAudioMixer : public TAudioClient
         TAudioMixer ();
         virtual ~TAudioMixer();
 
-        long Load(TAudioStreamPtr stream, long channel, long vol, long pan);
+        long Load(TAudioStreamPtr stream, long channel, float vol, float pan);
         void GetInfo(long chan, ChannelInfo* info);
 
         void Start(long chan);
@@ -71,14 +71,14 @@ class TAudioMixer : public TAudioClient
         void Stop(long chan);
         void Reset();
 
-        void SetVol(long chan, long vol);
-        void SetPan(long chan, long pan);
+        void SetVol(long chan, float vol);
+        void SetPan(long chan, float pan);
 
-        void SetVol(long vol)
+        void SetVol(float vol)
         {
             fVol = vol;
         }
-        void SetPan(long pan)
+        void SetPan(float pan)
         {
             fPan = pan;
         }

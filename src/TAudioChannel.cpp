@@ -121,8 +121,10 @@ bool TAudioChannel::Mix(TAudioBuffer<float>* dst, long framesNum, long channels)
 	fEffectList.Process(fMixBuffer->GetFrame(0), framesNum, channels);
 	
 	// Vol and Pan 
-	MY_FLOAT leftvol = TPanTable::GetVolLeft(short(fVol), short(fPan));
-    MY_FLOAT rightvol = TPanTable::GetVolRight(short(fVol), short(fPan));
+	//MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
+    //MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
+	MY_FLOAT leftvol, rightvol;
+	TPanTable::GetLR(fVol, fPan, &leftvol, &rightvol);
     UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, leftvol, rightvol);
 	
 	if (res < framesNum) 	
