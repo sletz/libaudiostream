@@ -32,6 +32,7 @@ grame@rd.grame.fr
 #include "TTransformAudioStream.h"
 #include "TWriteFileAudioStream.h"
 #include "TRendererAudioStream.h"
+#include "TChannelizerAudioStream.h"
 
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
@@ -78,6 +79,11 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
     } else {
         return 0;
     }
+}
+
+TAudioStreamPtr TAudioStreamFactory::MakeStereoSound(TAudioStreamPtr sound)
+{
+	return (sound->Channels() == 1) ? new TChannelizerAudioStream(sound, 2) : sound;
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeLoopSound(TAudioStreamPtr sound, long n)

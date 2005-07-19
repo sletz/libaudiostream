@@ -69,6 +69,7 @@ class AUDIO_EXPORTS TAudioStreamFactory
         static TAudioStreamPtr MakeNullSound(long lengthFrame);
         static TAudioStreamPtr MakeReadSound(string name);
         static TAudioStreamPtr MakeRegionSound(string name, long beginFrame, long endFrame);
+		static TAudioStreamPtr MakeStereoSound(TAudioStreamPtr sound);
         static TAudioStreamPtr MakeLoopSound(TAudioStreamPtr sound, long n);
         static TAudioStreamPtr MakeFadeSound(TAudioStreamPtr sound, long fadeIn, long fadeOut);
         static TAudioStreamPtr MakeCutSound(TAudioStreamPtr s1, long beginFrame, long endFrame);
