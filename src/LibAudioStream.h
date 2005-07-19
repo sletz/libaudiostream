@@ -44,8 +44,8 @@ extern "C"
     typedef struct ChannelInfo {
         long fStatus;  // 1 = playing , 0 = idle
         long fCurFrame;
-        long fVol;
-        long fPan;
+        float fVol;
+        float fPan;
         long fLeftOut;
         long fRightOut;
     }
@@ -82,6 +82,7 @@ extern "C"
     \return A pointer to new stream object or NULL if the wanted region is not part of the file.
     */
     AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
+	AudioStreamPtr MakeStereoSoundPtr(AudioStreamPtr sound);
     /*!
     \brief Create a fade on a stream.
     \param sound The stream to be "faded".
@@ -289,11 +290,11 @@ extern "C"
     \param player The audio player.
     \param sound The stream to be inserted in the channel.
     \param chan The audio channel number to be used.
-    \param vol The volume between 0 and 127.
-    \param pan The panning between 0 and 127.
+    \param vol The volume between 0 and 1.
+    \param pan The panning between 0 and 1.
     \return An error code.
     */
-    long LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan);
+    long LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float pan);
     /*!
     \brief Retrieve information about a sound channel.
     \param player The audio player.
@@ -337,35 +338,35 @@ extern "C"
 
     // Params
     /*!
-    \brief Set the channel volume [0...127]
+    \brief Set the channel volume [0...1]
     \param player The audio player.
     \param chan The audio channel number to be used.
     \param vol The new volume value.
     */
-    void SetVolChannel(AudioPlayerPtr player, long chan, long vol);
+    void SetVolChannel(AudioPlayerPtr player, long chan, float vol);
     /*!
-    \brief Set the channel panning [0...127]
+    \brief Set the channel panning [0...1]
     \param player The audio player.
     \param chan The audio channel number to be used.
     \param pan The new panning value.
     */
-    void SetPanChannel(AudioPlayerPtr player, long chan, long pan);
+    void SetPanChannel(AudioPlayerPtr player, long chan, float pan);
 	
 	void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
     /*!
-    \brief Set the audio player volume [0...127]
+    \brief Set the audio player volume [0...1]
     \param player The audio player.
     \param vol The new volume value.
     */
-    void SetVolAudioPlayer(AudioPlayerPtr player, long vol);
+    void SetVolAudioPlayer(AudioPlayerPtr player, float vol);
     /*!
-    \brief Set the audio player panning [0...127]
+    \brief Set the audio player panning [0...1]
     \param player The audio player.
     \param pan The new panning value.
     */
-    void SetPanAudioPlayer(AudioPlayerPtr player, long pan);
+    void SetPanAudioPlayer(AudioPlayerPtr player, float pan);
 	
 	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 

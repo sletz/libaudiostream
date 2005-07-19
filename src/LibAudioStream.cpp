@@ -64,6 +64,7 @@ extern "C"
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
     AudioStream AUDIOAPI MakeReadSound(char* name);
     AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
+	AudioStream AUDIOAPIMakeStereoSoundPtr(AudioStream sound);
     AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
     AudioStream AUDIOAPI MakeLoopSound(AudioStream sound, long n);
     AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
@@ -83,6 +84,7 @@ extern "C"
 	AudioStreamPtr AUDIOAPI MakeNullSoundPtr(long lengthFrame);
     AudioStreamPtr AUDIOAPI MakeReadSoundPtr(char* name);
     AudioStreamPtr AUDIOAPI MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
+	AudioStreamPtr AUDIOAPI	MakeStereoSoundPtr(AudioStreamPtr sound);
     AudioStreamPtr AUDIOAPI MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut);
     AudioStreamPtr AUDIOAPI MakeLoopSoundPtr(AudioStreamPtr sound, long n);
     AudioStreamPtr AUDIOAPI MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, long endFrame);
@@ -139,8 +141,8 @@ extern "C"
 
 
     // Load a sound in a channel
-    long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, long vol, long pan);
-	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan);
+    long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan);
+	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float pan);
     void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
 	void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
 
@@ -153,13 +155,13 @@ extern "C"
     void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan);	// Stop playing
 
     // Params
-    void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, long vol);
-    void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, long pan);
+    void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol);
+    void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float pan);
 	void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
-    void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, long pan);
-    void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, long vol);
+    void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float pan);
+    void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol);
 	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
 #ifdef __cplusplus
@@ -184,6 +186,11 @@ AudioStream AUDIOAPI MakeReadSound(char* name)
 AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame)
 {
     return TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
+}
+
+AudioStream AUDIOAPI MakeStereoSound(AudioStream sound)
+{
+	return TAudioStreamFactory::MakeStereoSound(sound);
 }
 
 AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut)
@@ -282,6 +289,11 @@ AudioStreamPtr AUDIOAPI MakeRegionSoundPtr(char* name, long beginFrame, long end
 {
 	AudioStream sound = TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 	return (sound) ? MakeSoundPtr(sound) : 0;
+}
+
+AudioStreamPtr AUDIOAPI MakeStereoSoundPtr(AudioStreamPtr sound)
+{
+	return MakeSoundPtr(TAudioStreamFactory::MakeStereoSound((TAudioStreamPtr)*sound));
 }
 
 AudioStreamPtr AUDIOAPI MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut)
@@ -546,7 +558,7 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 }
 
 // SoundFile management
-long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, long vol, long pan)
+long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan)
 {
     if (player && player->fEngine && sound) {
         return player->fEngine->LoadChannel((TAudioStreamPtr)sound, chan, vol, pan);
@@ -554,7 +566,7 @@ long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, l
         return LOAD_ERR;
 }
 
-long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, long vol, long pan)
+long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float pan)
 {
     if (player && player->fEngine && sound) {
         return player->fEngine->LoadChannel((TAudioStreamPtr)*sound, chan, vol, pan);
@@ -609,13 +621,13 @@ void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player)
 }
 
 // Params
-void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, long vol)
+void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol)
 {
     if (player && player->fEngine)
         player->fEngine->SetVolChannel(chan, vol);
 }
 
-void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, long pan)
+void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float pan)
 {
     if (player && player->fEngine)
         player->fEngine->SetPanChannel(chan, pan);
@@ -628,13 +640,13 @@ void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffect
 }
 
 // Master
-void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, long vol)
+void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol)
 {
     if (player && player->fEngine)
         player->fEngine->SetMasterVol(vol);
 }
 
-void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, long pan)
+void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float pan)
 {
     if (player && player->fEngine)
         player->fEngine->SetMasterPan(pan);
