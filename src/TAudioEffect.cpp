@@ -95,7 +95,7 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 			// Swap buffers
 			float** tmp = input;
 			input = tmp_output;
-			output = tmp;
+			tmp_output = tmp;
 		}
 		
 		// Interleave...
