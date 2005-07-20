@@ -36,11 +36,11 @@ class TVolAudioEffect : public TAudioEffectInterface
 
     private:
 
-        float fGain;
+        float fVol;
 
     public:
 
-        TVolAudioEffect(float gain): TAudioEffectInterface(), fGain(gain)
+        TVolAudioEffect(float vol): TAudioEffectInterface(), fVol(vol)
         {}
         virtual ~TVolAudioEffect()
         {}
@@ -49,14 +49,14 @@ class TVolAudioEffect : public TAudioEffectInterface
         {
             for (int i = 0; i < framesNum; i++) {
                 for (int j = 0; j < channels; j++) {
-                    output[j][i] = input[j][i] * fGain;
+                    output[j][i] = input[j][i] * fVol;
                 }
             }
         }
 
         TAudioEffectInterface* Copy()
         {
-            return new TVolAudioEffect(fGain);
+            return new TVolAudioEffect(fVol);
         }
         void Reset()
         {}
@@ -72,19 +72,20 @@ class TVolAudioEffect : public TAudioEffectInterface
 		
 		void GetControlParam(long param, char* label, float* min, float* max, float* init)
 		{
-			strcpy(label, "Volume");
+			strcpy(label, "Vol");
 			*min = 0.0f;
 			*max = 1.0f;
-			*init = 0.8f;
+			*init = 1.0f;
 		}
 		
 		void SetControlValue(long param, float f)
 		{
-			fGain = f;
+			if (param == 0)
+				fVol = f;
 		}
 		float GetControlValue(long param)
 		{
-			return fGain;
+			return (param == 0) ? fVol : 0.0f;
 		}
 };
 
