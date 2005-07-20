@@ -25,6 +25,7 @@ grame@rd.grame.fr
 #include "TFadeAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TAudioEffect.h"
+#include "TPanTable.h"
 
 #ifdef WIN32
 	#if defined(_AFXDLL) || defined(_WINDLL)	// using mfc
@@ -147,6 +148,7 @@ class TAudioChannel
 
         float fVol;	// Master vol
         float fPan;	// Master pan
+		float fLeftVol, fRightVol;
         long fLeftOut;  // Audio left out
         long fRightOut;	// Audio right out
         bool fInserted;	// Insertion state
@@ -201,6 +203,7 @@ class TAudioChannel
 		void SetVol(float vol)
         {
             fVol = vol;
+			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
         }
         float GetVol()
         {
@@ -212,7 +215,8 @@ class TAudioChannel
         }
 		void SetPan(float pan)
         {
-            fPan = pan;
+		    fPan = pan;
+			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
         }
 		
 		void SetStopCallback(StopCallback callback, void* context)

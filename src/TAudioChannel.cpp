@@ -27,15 +27,14 @@ grame@rd.grame.fr
 #include "TAudioGlobals.h"
 
 #include "UAudioTools.h"
-#include "TPanTable.h"
 #include "TNullAudioStream.h"
 
 TAudioChannel::TAudioChannel()
 {
 	SetStream(new TNullAudioStream(0x7FFF));
     fInserted = false;
-    fPan = DEFAULT_PAN;
-    fVol = DEFAULT_VOL;
+    SetVol(DEFAULT_VOL);
+    SetPan(DEFAULT_PAN);
 	fLeftOut = 0;
     fRightOut = 1;
     fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
@@ -121,11 +120,7 @@ bool TAudioChannel::Mix(TAudioBuffer<float>* dst, long framesNum, long channels)
 	fEffectList.Process(fMixBuffer->GetFrame(0), framesNum, channels);
 	
 	// Vol and Pan 
-	//MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
-    //MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
-	MY_FLOAT leftvol, rightvol;
-	TPanTable::GetLR(fVol, fPan, &leftvol, &rightvol);
-    UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, leftvol, rightvol);
+	UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, fLeftVol, fRightVol);
 	
 	if (res < framesNum) 	
 		fStopCallback.Execute();

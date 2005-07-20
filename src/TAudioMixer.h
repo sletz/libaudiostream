@@ -46,6 +46,7 @@ class TAudioMixer : public TAudioClient
         TAudioChannelPtr*		fSoundChannelTable;	// Table of sound channels
         TAudioBuffer<float>*	fMixBuffer;			// Buffer for mixing
         float fVol, fPan;							// Master pan and volume
+		float fLeftVol, fRightVol;
 
         bool IsAvailable(long chan)
         {
@@ -77,10 +78,12 @@ class TAudioMixer : public TAudioClient
         void SetVol(float vol)
         {
             fVol = vol;
+			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
         }
         void SetPan(float pan)
         {
             fPan = pan;
+			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
         }
 		
 		void SetStopCallback(long chan, StopCallback callback, void* context);

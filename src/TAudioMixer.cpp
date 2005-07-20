@@ -32,8 +32,8 @@ grame@rd.grame.fr
 TAudioMixer::TAudioMixer ()
 {
     // Initialisation
-    fVol = DEFAULT_VOL;
-    fPan = DEFAULT_PAN;
+    SetVol(DEFAULT_VOL);
+    SetPan(DEFAULT_PAN);
 
     fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
     fSoundChannelTable = new TAudioChannelPtr[TAudioGlobals::fChannels];
@@ -73,14 +73,10 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 	fEffectList.Process(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
 	
     // Master Pan and Vol
-    //MY_FLOAT leftvol = TPanTable::GetVolLeft(fVol, fPan);
-    //MY_FLOAT rightvol = TPanTable::GetVolRight(fVol, fPan);
-	MY_FLOAT leftvol, rightvol;
-	TPanTable::GetLR(fVol, fPan, &leftvol, &rightvol);
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
 									fMixBuffer->GetFrame(0),
 									TAudioGlobals::fBuffer_Size,
-									TAudioGlobals::fOutput, leftvol, rightvol);
+									TAudioGlobals::fOutput, fLeftVol, fRightVol);
     return true;
 }
 
