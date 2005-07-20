@@ -205,7 +205,8 @@ extern "C"
 	\param gain The gain between 0 and 1.
     \return A pointer to new effect object.
 	*/
-    AudioEffectPtr MakeVolAudioEffectPtr(float gain);
+    AudioEffectPtr MakeVolAudioEffectPtr(float vol);
+	AudioEffectPtr MakePanAudioEffectPtr(float pan);
 	
 	/*!
 	\brief Create an effect decribed in the Faust DSP language.

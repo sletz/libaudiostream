@@ -474,6 +474,14 @@
      (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
      effect))
 
+(defmacro MakePanAudioEffect (gain)
+  `(let ((effect (ccl::ppc-ff-call (get-fun-addr "MakePanAudioEffectPtr" *libaudiostream*) 
+                                   :double-float ,gain
+                                   :address)))
+     (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
+     effect))
+
+
 (defmacro MakeFaustAudioEffect (name)
   `(with-cstrs ((s ,name))
      (let ((effect (ccl::ppc-ff-call (get-fun-addr "MakeFaustAudioEffectPtr" *libaudiostream*) 

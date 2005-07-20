@@ -3,6 +3,7 @@ _Version
 _MakeNullSoundPtr
 _MakeReadSoundPtr
 _MakeRegionSoundPtr
+_MakeStereoSoundPtr
 _MakeFadeSoundPtr
 _MakeLoopSoundPtr
 _MakeCutSoundPtr
@@ -23,6 +24,7 @@ _MakeAudioEffectListPtr
 _AddAudioEffectPtr
 _RemoveAudioEffectPtr
 _MakeVolAudioEffectPtr
+_MakePanAudioEffectPtr
 _MakeFaustAudioEffectPtr
 
 _GetControlCountPtr

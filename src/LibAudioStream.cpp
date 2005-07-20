@@ -24,6 +24,7 @@ grame@rd.grame.fr
 #include "TAudioStreamFactory.h"
 
 #include "TVolAudioEffect.h"
+#include "TPanAudioEffect.h"
 #include "TFaustAudioEffect.h"
 
 #ifdef __cplusplus
@@ -106,7 +107,8 @@ extern "C"
     AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
     AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
 
-    AudioEffect AUDIOAPI MakeVolAudioEffect(float gain);
+    AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
+	AudioEffect AUDIOAPI MakePanAudioEffect(float pan);
 	AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
 	long AUDIOAPI GetControlCount(AudioEffect effect);
 	void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
@@ -117,7 +119,8 @@ extern "C"
     AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
     AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
 
-    AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float gain);
+    AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol);
+	AudioEffectPtr AUDIOAPI MakePanAudioEffectPtr(float pan);
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
 	long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect);
 	void AUDIOAPI GetControlParamPtr(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
@@ -387,9 +390,14 @@ AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEff
     return list_effect;
 }
 
-AudioEffect AUDIOAPI MakeVolAudioEffect(float gain)
+AudioEffect AUDIOAPI MakeVolAudioEffect(float vol)
 {
-    return new TVolAudioEffect(gain);
+    return new TVolAudioEffect(vol);
+}
+
+AudioEffect AUDIOAPI MakePanAudioEffect(float pan)
+{
+    return new TPanAudioEffect(pan);
 }
 
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
@@ -453,10 +461,16 @@ AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect,
     return list_effect;
 }
 
-AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float gain)
+AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol)
 {
-    return new SMARTP<TAudioEffectInterface>(new TVolAudioEffect(gain));
+    return new SMARTP<TAudioEffectInterface>(new TVolAudioEffect(vol));
 }
+
+AudioEffectPtr AUDIOAPI MakePanAudioEffectPtr(float pan)
+{
+    return new SMARTP<TAudioEffectInterface>(new TPanAudioEffect(pan));
+}
+
 
 AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 {
