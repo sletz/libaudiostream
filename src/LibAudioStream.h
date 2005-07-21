@@ -60,7 +60,7 @@ extern "C"
 	
 	typedef void (*StopCallback)(void* context);
 	
-	long Version();
+	long LibVersion();
 
     /*!
     \brief Create a stream that will produce "silence".
