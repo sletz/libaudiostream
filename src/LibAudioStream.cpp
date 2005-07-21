@@ -65,7 +65,7 @@ extern "C"
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
     AudioStream AUDIOAPI MakeReadSound(char* name);
     AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
-	AudioStream AUDIOAPIMakeStereoSoundPtr(AudioStream sound);
+	AudioStream AUDIOAPI MakeStereoSound(AudioStream sound);
     AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
     AudioStream AUDIOAPI MakeLoopSound(AudioStream sound, long n);
     AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
