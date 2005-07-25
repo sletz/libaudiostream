@@ -59,7 +59,7 @@ extern "C"
 	
 	typedef void (*StopCallback)(void* context);
 	
-	long Version();
+	long LibVersion();
 
     // Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
@@ -171,7 +171,7 @@ extern "C"
 }
 #endif
 
-long Version()
+long LibVersion()
 {
 	return 100;
 }
