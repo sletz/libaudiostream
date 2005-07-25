@@ -146,8 +146,8 @@
 
 
 ;................................................................................: LibAudioStream
-(defmacro LibAudioStream ()
-  `(ccl::ppc-ff-call (get-fun-addr "Version" *libaudiostream*) 
+(defmacro LibVersion ()
+  `(ccl::ppc-ff-call (get-fun-addr "LibVersion" *libaudiostream*) 
                                   :signed-fullword))
      
 
