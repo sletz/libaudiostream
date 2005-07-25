@@ -33,6 +33,10 @@ grame@rd.grame.fr
 
 #include "TAudioConstants.h"
 
+#ifdef __Macintosh__
+#include <Accelerate/Accelerate.h>
+#endif
+
 //--------------------
 // Class UAudioTools
 //--------------------
@@ -124,7 +128,7 @@ class UAudioTools
                 }
             }
         }
-
+		
 		static inline void MixFrameToFrameBlk1(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
         {
             for (int i = 0 ; i < framesNum; i++) {
@@ -250,7 +254,7 @@ class UAudioTools
             }
         }
 
-        static inline void Short2FloatMix(short* in, MY_FLOAT* out, long framesNum, long channelsIn, long channelsOut)
+		static inline void Short2FloatMix(short* in, MY_FLOAT* out, long framesNum, long channelsIn, long channelsOut)
         {
             float sample;
             float fGain = 1.0f / float(SHRT_MAX);
@@ -265,15 +269,22 @@ class UAudioTools
                     }
                 }
             } else {
-                for (long i = 0; i < framesNum * channelsOut; i += 4) {
+		
+			#ifdef __Macintosh__
+				float buffer[framesNum * channelsOut];
+				vDSP_vflt16(in, 1, buffer , 1, framesNum * channelsOut);
+				vDSP_vsma(buffer, 1, &fGain, out, 1, out, 1, framesNum * channelsOut);
+			#else
+				for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += float(in[i]) * fGain;
                     out[i + 1] += float(in[i + 1]) * fGain;
                     out[i + 2] += float(in[i + 2]) * fGain;
                     out[i + 3] += float(in[i + 3]) * fGain;
                 }
-            }
+			#endif
+             }
         }
-
+	  		
         static inline void Float2Short(MY_FLOAT* in, short* out, long framesNum, long channelsIn, long channelsOut)
         {
             float fGain = float(SHRT_MAX);
