@@ -69,6 +69,7 @@ _GetControlValue
 _OpenAudioPlayer
 _CloseAudioPlayer
 
+_LoadChannel
 _LoadChannelPtr
 _GetInfoChannel
 _SetStopCallbackChannel
