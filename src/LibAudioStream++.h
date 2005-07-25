@@ -20,8 +20,8 @@ grame@rd.grame.fr
 
 */
 
-#ifndef __LibAudioStream++__
-#define __LibAudioStream++__
+#ifndef __LibAudioStreamPlusPlus__
+#define __LibAudioStreamPlusPlus__
 
 #include "TAudioStream.h"
 #include "TAudioEffectInterface.h"
@@ -287,7 +287,7 @@ void CloseAudioPlayer(AudioPlayerPtr player);
 \param pan The panning between 0 and 1.
 \return An error code.
 */
-long LoadChannelPtr(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan);
+long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan);
 /*!
 \brief Retrieve information about a sound channel.
 \param player The audio player.
