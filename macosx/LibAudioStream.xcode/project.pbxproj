@@ -234,6 +234,27 @@
 			settings = {
 			};
 		};
+		4B1C2D4D0894D242003BC2A6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = "LibAudioStream++.h";
+			path = "../src/LibAudioStream++.h";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B1C2D4E0894D242003BC2A6 = {
+			fileRef = 4B1C2D4D0894D242003BC2A6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B1C2D4F0894D242003BC2A6 = {
+			fileRef = 4B1C2D4D0894D242003BC2A6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4B45BD8207F1C177000405C4 = {
 			fileRef = 4B0391F20585042A006C929E;
 			isa = PBXBuildFile;
@@ -723,6 +744,7 @@
 				4BFC6E8308729C830012D079,
 				4BFC6E8608729C970012D079,
 				4BF92832088E3B16006A013D,
+				4B1C2D4E0894D242003BC2A6,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1292,6 +1314,7 @@
 				4BFC6E8508729C970012D079,
 				4BA0DF44087FEF7F003B1CB3,
 				4BF92833088E3B16006A013D,
+				4B1C2D4F0894D242003BC2A6,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2134,6 +2157,7 @@
 			children = (
 				4B83CA1907FBE5AE00256489,
 				4B83CA1A07FBE5AE00256489,
+				4B1C2D4D0894D242003BC2A6,
 			);
 			isa = PBXGroup;
 			name = Interface;
