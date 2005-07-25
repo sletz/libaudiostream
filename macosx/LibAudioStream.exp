@@ -1,4 +1,4 @@
-_Version
+_LibVersion
 
 _MakeNullSoundPtr
 _MakeReadSoundPtr
@@ -14,11 +14,30 @@ _MakeWriteSoundPtr
 _MakeInputSoundPtr
 _MakeRendererSoundPtr
 
+_MakeNullSound
+_MakeReadSound
+_MakeRegionSound
+_MakeStereoSound
+_MakeFadeSound
+_MakeLoopSound
+_MakeCutSound
+_MakeSeqSound
+_MakeMixSound
+_MakeTransformSound
+_MakeWriteSound
+_MakeInputSound
+_MakeRendererSound
+
 _GetLengthSoundPtr
 _GetChannelsSoundPtr
 _ReadSoundPtr
 _DeleteSoundPtr
 _ResetSoundPtr
+
+_GetLengthSound
+_GetChannelsSound
+_ReadSound
+_ResetSound
 
 _MakeAudioEffectListPtr
 _AddAudioEffectPtr
@@ -34,6 +53,18 @@ _GetControlValuePtr
 
 _DeleteEffectListPtr
 _DeleteEffectPtr
+
+_MakeAudioEffectList
+_AddAudioEffect
+_RemoveAudioEffect
+_MakeVolAudioEffect
+_MakePanAudioEffect
+_MakeFaustAudioEffect
+
+_GetControlCount
+_GetControlParam
+_SetControlValue
+_GetControlValue
 
 _OpenAudioPlayer
 _CloseAudioPlayer
