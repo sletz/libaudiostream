@@ -277,7 +277,7 @@ void SaveSound(AudioStream sound, char* name)
 {
 	AudioStream writesound = MakeRendererSound(MakeWriteSound(name, sound,SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
 	printf("GetChannelsSound %ld\n", GetChannelsSound(writesound));
-	float buffer[512 * GetChannelsSound(writesound)];
+	float buffer[512 * 2];
     long res;
     do {
         res = ReadSound(writesound, buffer, 512, GetChannelsSound(writesound));
@@ -287,7 +287,7 @@ void SaveSound(AudioStream sound, char* name)
 
 void ExecTest(AudioPlayerPtr player, AudioStream sound)
 {
-    int res = LoadChannelPtr(player, sound, 1, 1.0f, 0.5f);
+    int res = LoadChannel(player, sound, 1, 1.0f, 0.5f);
 	SetStopCallbackChannel(player, 1, TestCallback, NULL);
     if (res == NO_ERR) {
         TestPlay(player);
