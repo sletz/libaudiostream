@@ -82,6 +82,11 @@ extern "C"
     \return A pointer to new stream object or NULL if the wanted region is not part of the file.
     */
     AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
+	/*!
+    \brief Transform a stream in a stereo stream.
+    \param sound The stream to be transformed.
+    \return A pointer to new stream object.
+    */
 	AudioStreamPtr MakeStereoSoundPtr(AudioStreamPtr sound);
     /*!
     \brief Create a fade on a stream.
@@ -174,6 +179,10 @@ extern "C"
     \param sound The stream to be deleted.
     */
     void DeleteSoundPtr(AudioStreamPtr sound);
+	/*!
+    \brief reset a stream.
+    \param sound The stream to be reseted.
+    */
 	void ResetSoundPtr(AudioStreamPtr sound);
 
     /* Effect management */
@@ -183,7 +192,6 @@ extern "C"
 	\return A pointer to new effect list.
 	*/
     AudioEffectListPtr MakeAudioEffectListPtr();
-
     /*!
 	\brief Add an effect in an effect list.
     \param list The effect list where the effect is added.
@@ -191,66 +199,61 @@ extern "C"
 	\return A pointer to the modified effect list.
 	*/
     AudioEffectListPtr AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-
-    /*!
+	/*!
 	\brief Remove an effect from an effect list.
     \param list The effect list where the effect is removed.
     \param effect The effect to be removed.
 	\return A pointer to the modified effect list.
 	*/
     AudioEffectListPtr RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-
     /*!
 	\brief Create a volume effect.
-	\param gain The gain between 0 and 1.
-    \return A pointer to new effect object.
+	\param gain The volume between 0 and 1.
+    \return A pointer to new volume object.
 	*/
     AudioEffectPtr MakeVolAudioEffectPtr(float vol);
+	/*!
+	\brief Create a pan effect.
+	\param gain The pan between 0 and 1.
+    \return A pointer to new pan object.
+	*/
 	AudioEffectPtr MakePanAudioEffectPtr(float pan);
-	
 	/*!
 	\brief Create an effect decribed in the Faust DSP language.
 	\param name The name of the Faust effect shared library.
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
-
 	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
-	
 	/*!
     \brief Return the number of effect controls.
     \param effect The effect pointer.
     \return The number of effect controls.
     */
 	long GetControlCountPtr(AudioEffectPtr effect);
-	
 	/*!
     \brief Return a description on the effect control: control name, min, max and default values
     \param effect The effect pointer.
     */
 	void GetControlParamPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
-	
 	/*!
     \brief Set the effect control value.
     \param effect The effect pointer.
 	\param control The control number between 0 and GetControlCountPtr.
 	\param value The new value as a float.
     */
-	void SetControlValuePtr(AudioEffectPtr effect, long control, float value);
-	
+	void SetControlValuePtr(AudioEffectPtr effect, long control, float value);	
 	/*!
     \brief Get the effect control current value.
     \param effect The effect pointer.
 	\param control The control number between 0 and GetControlCountPtr.
 	\return The effect control current value.
 	*/
-	float GetControlValuePtr(AudioEffectPtr effect, long control);
-	
+	float GetControlValuePtr(AudioEffectPtr effect, long control);	
 	/*!
     \brief Delete the effect list.
 	\param list_effect The effect list pointer.
 	*/
-	void DeleteEffectListPtr(AudioEffectListPtr list_effect);
-	
+	void DeleteEffectListPtr(AudioEffectListPtr list_effect);	
 	/*!
     \brief Delete the effect.
 	\param effect The effect pointer.
@@ -285,7 +288,6 @@ extern "C"
     \param player The audio player to be closed.
     */
     void CloseAudioPlayer(AudioPlayerPtr player);
-
     /*!
     \brief Load a sound in a channel.
     \param player The audio player.
@@ -303,7 +305,13 @@ extern "C"
     \param info The channel info structure to be filled.
     */
     void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
-	
+	/*!
+    \brief Set a callback to be called when the channel stops.
+    \param player The audio player.
+	\param chan The audio channel number to be used.
+	\param callback The callback to be used.
+	\param context A pointer to data to be given to the callback.
+    */
 	void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
 	
     // Transport
@@ -317,7 +325,6 @@ extern "C"
     \param player The audio player.
     */
     void StopAudioPlayer(AudioPlayerPtr player);
-
     /*!
     \brief Start a sound region from the beginning.
     \param player The audio player.
@@ -352,7 +359,14 @@ extern "C"
     \param pan The new panning value.
     */
     void SetPanChannel(AudioPlayerPtr player, long chan, float pan);
-	
+	/*!
+    \brief Set the channel audio effect list.
+    \param player The audio player.
+    \param chan The audio channel number to be used.
+    \param effect_list A list of audio effects.
+	\param fadeIn The fadein length in frames.
+    \param fadeOut The fadeout length in frames.
+	*/
 	void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
@@ -368,7 +382,13 @@ extern "C"
     \param pan The new panning value.
     */
     void SetPanAudioPlayer(AudioPlayerPtr player, float pan);
-	
+	/*!
+    \brief Set the master audio effect list.
+    \param player The audio player.
+    \param effect_list A list of audio effects.
+	\param fadeIn The fadein length in frames.
+    \param fadeOut The fadeout length in frames.
+	*/
 	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
 #ifdef __cplusplus
