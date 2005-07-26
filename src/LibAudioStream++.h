@@ -50,17 +50,14 @@ typedef struct ChannelInfo {
 ChannelInfo;
 
 class TAudioStream : public smartable {};
+typedef SMARTP<TAudioStream> TAudioStreamPtr;
 class TAudioEffectInterface : public smartable1 {};
-typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
+typedef SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
 class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>,  public smartable1 {};
+typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Opaque pointers
 typedef void* AudioPlayerPtr;
-
-typedef SMARTP<TAudioStream> TAudioStreamPtr;
-typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
-typedef SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
-
 typedef TAudioStreamPtr AudioStream;
 typedef TAudioEffectListPtr AudioEffectList;
 typedef TAudioEffectInterfacePtr AudioEffect;	
