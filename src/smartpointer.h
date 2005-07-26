@@ -26,8 +26,6 @@
 #include <cassert>
 #include <stdio.h>
 
-#include "TCmdManager.h"
-
 /*!
 \brief the base class for smart pointers implementation
 
@@ -54,12 +52,14 @@ class smartable {
 		smartable& operator=(const smartable&) { return *this; }
 };
 
+class TCmdManager;
+
 class smartable1 : public smartable {
 
 	private:
 		
 		static void removeReferenceAux(smartable1* obj,long u1, long u2, long u3);
-		static TCmdManagerPtr fManager;
+		static TCmdManager* fManager;
 
 	public:
 	
@@ -108,7 +108,7 @@ template<class T> class SMARTP {
 			assert (fSmartPtr != 0);
 			return *fSmartPtr;
 		}
-
+	
 		//! operator -> overloading to access the actual class pointer
 		T* operator->() const	{ 
 			// checks for null dereference
@@ -140,6 +140,5 @@ template<class T> class SMARTP {
 		//! dynamic cast support
 		template<class T2> SMARTP& cast(const SMARTP<T2>& p_) { return operator=(dynamic_cast<T*>(p_)); }
 };
-
 
 #endif
