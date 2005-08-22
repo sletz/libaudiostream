@@ -15,7 +15,7 @@ along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-grame@rd.grame.fr
+research@grame.fr
 
 */
 
@@ -25,18 +25,22 @@ grame@rd.grame.fr
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
 
-#ifdef __Macintosh__
-#include <dlfcn.h>
-#define HANDLE void* 
-#define LoadModule(name) dlopen((name), RTLD_LAZY);
-#define UnloadModule(handle) dlclose((handle));
-#define GetProc(handle, name) dlsym((handle), (name));
-#elif WIN32
+#ifdef WIN32
+
 #include <windows.h>
 #define HANDLE HINSTANCE 
 #define LoadModule(name) LoadLibrary((name));
 #define UnloadModule(handle) FreeLibrary((handle));
 #define GetProc(handle, name) GetProcAddress((handle), (name));
+
+#else
+
+#include <dlfcn.h>
+#define HANDLE void* 
+#define LoadModule(name) dlopen((name), RTLD_LAZY);
+#define UnloadModule(handle) dlclose((handle));
+#define GetProc(handle, name) dlsym((handle), (name));
+
 #endif
 
 #include <vector>
