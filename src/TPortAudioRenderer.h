@@ -24,7 +24,7 @@ research@grame.fr
 #define __TPortAudioRenderer__
 
 #include "TAudioRenderer.h"
-#include "portaudiov18.h"
+#include "portaudio.h"
 
 //--------------------------
 // Class TPortAudioRenderer
