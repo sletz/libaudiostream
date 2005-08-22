@@ -1404,7 +1404,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-D__Macintosh__  -D__JACK__";
-				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a";
+				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a -ljack";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
