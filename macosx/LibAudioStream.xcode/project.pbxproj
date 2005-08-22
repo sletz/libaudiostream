@@ -39,6 +39,8 @@
 //024
 		0249A662FF388D9811CA2CEA = {
 			children = (
+				D3C5192308B9CD8D00C1962D,
+				D3C5192408B9CD8D00C1962D,
 				0249A663FF388D9811CA2CEA,
 				F666DED703EC03FB01D11C03,
 			);
@@ -86,15 +88,15 @@
 			children = (
 				F5F4A853032657D901053105,
 				4BA0DEDE087FE455003B1CB3,
-				F5C1FF600328B7FA01053105,
 				F5EDBD21032F870801053105,
-				4BA6AC5A044AF64500053105,
 				F5D82C3D032DEAA101053105,
-				F5EDBD20032F86EF01053105,
 				F5C1FF5F0328B7D201053105,
 				F5C1FF5D0328B7A301053105,
+				F5EDBD20032F86EF01053105,
 				F5C1FF5C0328B78201053105,
+				F5C1FF600328B7FA01053105,
 				F5C1FF5B0328B76601053105,
+				4BA6AC5A044AF64500053105,
 				F5C1FF5A0328B73A01053105,
 				0249A662FF388D9811CA2CEA,
 				1AB674ADFE9D54B511CA2CBB,
@@ -651,11 +653,11 @@
 				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
 				FRAMEWORK_VERSION = A;
 				GCC_VERSION = 4.0;
-				HEADER_SEARCH_PATHS = /opt/local/include;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__ ";
-				OTHER_LDFLAGS = "-flat_namespace /opt/local/lib/libsndfile.a PortAudioLib -framework AudioToolbox -framework Accelerate";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -1180,6 +1182,8 @@
 		4BC077CB080FA1F700F44F75 = {
 			buildActionMask = 2147483647;
 			files = (
+				D3C5192508B9CD8D00C1962D,
+				D3C5192608B9CD8D00C1962D,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1370,6 +1374,8 @@
 		4BD0E9880446D6E400053105 = {
 			buildActionMask = 2147483647;
 			files = (
+				D3084C2608BA0AC500C68850,
+				D3084C2708BA0AC600C68850,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1394,11 +1400,11 @@
 				DYLIB_CURRENT_VERSION = 1;
 				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
 				FRAMEWORK_VERSION = A;
-				HEADER_SEARCH_PATHS = /opt/local/include;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__Types__ -D__Macintosh__ -D__POWERPC__  -D__JACK__";
-				OTHER_LDFLAGS = "-flat_namespace  /opt/local/lib/libsndfile.a  PortAudioLib -framework AudioToolbox -framework Accelerate -lJack";
+				OTHER_CFLAGS = "-D__Macintosh__  -D__JACK__";
+				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -1841,6 +1847,56 @@
 //4B2
 //4B3
 //4B4
+//D30
+//D31
+//D32
+//D33
+//D34
+		D3084C2608BA0AC500C68850 = {
+			fileRef = D3C5192308B9CD8D00C1962D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3084C2708BA0AC600C68850 = {
+			fileRef = D3C5192408B9CD8D00C1962D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3C5192308B9CD8D00C1962D = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Accelerate.framework;
+			path = /System/Library/Frameworks/Accelerate.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D3C5192408B9CD8D00C1962D = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = AudioToolbox.framework;
+			path = /System/Library/Frameworks/AudioToolbox.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		D3C5192508B9CD8D00C1962D = {
+			fileRef = D3C5192308B9CD8D00C1962D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D3C5192608B9CD8D00C1962D = {
+			fileRef = D3C5192408B9CD8D00C1962D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D30
+//D31
+//D32
+//D33
+//D34
 //F50
 //F51
 //F52
