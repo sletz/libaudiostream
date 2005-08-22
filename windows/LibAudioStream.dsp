@@ -210,6 +210,10 @@ SOURCE=..\src\TWriteFileAudioStream.cpp
 # End Group
 # Begin Source File
 
+SOURCE=..\src\TAudioGlobals.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\libsndfile.lib
 # End Source File
 # Begin Source File
