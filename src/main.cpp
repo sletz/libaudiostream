@@ -22,7 +22,7 @@ research@grame.fr
 
 
 #include "LibAudioStream++.h"
-#include </opt/local/include/sndfile.h>
+#include "sndfile.h"
 #include <stdio.h>
 
 #define FILENAME1 "/Users/letz/levot.wav"
