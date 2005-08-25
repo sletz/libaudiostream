@@ -161,16 +161,16 @@
 ;;============================
 
 (LoadChannel player s1 1 1.0 0.5)
-(LoadChannel player s2 2 120 64)
+(LoadChannel player s2 2 1.0 0.5)
 
-(LoadChannel player s3 3 120 64)
-(LoadChannel player s4 4 120 64)
+(LoadChannel player s3 3 1.0 0.5)
+(LoadChannel player s4 4 1.0 0.5)
 
-(LoadChannel player s5 5 120 64)
-(LoadChannel player s6 6 120 64)
+(LoadChannel player s5 5 1.0 0.5)
+(LoadChannel player s6 6 1.0 0.5)
 
-(LoadChannel player s7 7 120 64)
-(LoadChannel player s8 8 120 64)
+(LoadChannel player s7 7 1.0 0.5)
+(LoadChannel player s8 8 1.0 0.5)
 
 
 ;; Channels can be started/stopped/continued individually 
@@ -227,7 +227,7 @@
 ;;============================
 
 (SetVolChannel player 1 1.0)
-(SetVolChannel player 1 0.1)
+(SetVolChannel player 1 0.5)
 
 ;; Set channel pan (0 1)
 ;;============================
