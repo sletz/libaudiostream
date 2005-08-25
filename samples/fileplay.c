@@ -37,7 +37,7 @@ static int playfile (char * filename, long beginFrame, long endFrame)
 
 	do {
 		GetInfoChannel (player, 1, &info);
-	} while (info.fStatus != kIdleChannel);
+	} while (info.fStatus);
 			
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
