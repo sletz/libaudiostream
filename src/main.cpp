@@ -144,7 +144,7 @@ AudioStream test9()
     printf("Sequence of a region with a transformed region (volume effect)\n");
     printf("--------------------------------------------------------------\n\n");
     AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 600000);
-    AudioStream sound2 = MakeRegionSound(FILENAME1, 400000, 600000);
+    AudioStream sound2 = MakeRegionSound(FILENAME1, 44100, 90000);
     AudioEffectList list_effect = MakeAudioEffectList();
     list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.25));
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
@@ -275,7 +275,7 @@ void TestPlay(AudioPlayerPtr player)
 
 void SaveSound(AudioStream sound, char* name)
 {
-	AudioStream writesound = MakeRendererSound(MakeWriteSound(name, sound,SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+	AudioStream writesound = MakeRendererSound(MakeWriteSound(name, sound, SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
 	printf("GetChannelsSound %ld\n", GetChannelsSound(writesound));
 	float buffer[512 * 2];
     long res;
