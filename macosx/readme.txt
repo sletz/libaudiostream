@@ -1,6 +1,10 @@
 
 The project includes static versions of the sndfile and portaudio libraries.
 
-To compile with the Xcode project:
+- for libsndfile, see at http://www.mega-nerd.com/libsndfile/
+The version 1.0.11 is used
 
-- Install jack: http://www.jackosx.com
+- for portaudio, see at http://www.portaudio.com/
+The version 18.1 is used
+
+To compile Jack support with the Xcode project, install Jack from  http://www.jackosx.com
