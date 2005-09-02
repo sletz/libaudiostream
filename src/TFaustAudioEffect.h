@@ -290,20 +290,20 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 				
 		void GetControlParam(long param, char* label, float* min, float* max, float* init)
 		{
-			assert(param < fUITable.size()); 
-			fUITable[param]->GetControlParam(label, min, max, init);
+			if (param < long(fUITable.size()))
+				fUITable[param]->GetControlParam(label, min, max, init);
 		}
 		
 		void SetControlValue(long param, float f) 
 		{
-			assert(param < fUITable.size()); 
-			fUITable[param]->SetControlValue(f);
+			if (param < long(fUITable.size())); 
+				fUITable[param]->SetControlValue(f);
 		}
 		
 		float GetControlValue(long param) 
 		{
-			assert(param < fUITable.size()); 
-			return fUITable[param]->GetControlValue();
+			if (param < long(fUITable.size())); 
+				return fUITable[param]->GetControlValue();
 		}
 };
 
