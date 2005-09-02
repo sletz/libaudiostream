@@ -310,23 +310,6 @@ int main(int argc, char* argv[])
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
 	
-	/*
-	AudioStream sound = MakeTransformSoundPtr(MakeReadSoundPtr ("/Users/letz/son1.wav"),
-							AddAudioEffect(MakeAudioEffectList(), MakeVolAudioEffect(0.9)), 1, 0);
-							
-	SaveSound(sound,"/Users/letz/out1.aiff");
-	
-	sound = MakeTransformSoundPtr(MakeReadSoundPtr ("/Users/letz/levotmono.wav"),
-							AddAudioEffect(MakeAudioEffectList(), MakeVolAudioEffect(0.9)), 1, 0);
-							
-	SaveSound(sound,"/Users/letz/out2.aiff");
-	
-	sound = MakeTransformSoundPtr(MakeReadSoundPtr ("/Users/letz/levotmono.wav"),
-							AddAudioEffect(MakeAudioEffectList(), MakeFaustAudioEffect(EFFECT1)), 1, 0);
-							
-	SaveSound(sound,"/Users/letz/out3.aiff");
-	*/
-			
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");
     printf("Type 'p' to play from the current position\n");
