@@ -26,7 +26,7 @@ research@grame.fr
 #include <stdlib.h>
 #include <errno.h>
 
-#ifdef __APPLE__ 
+#if defined(__APPLE__) || defined(linux)
 
 void* TThreadCmdManager::CmdHandler(void* arg)
 {
@@ -78,7 +78,7 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
     // Init variables
     lfinit(&fFreeCmd);
 
-#ifdef __APPLE__    
+#if defined(__APPLE__) || defined(linux)   
 	pthread_mutex_init(&fLock, NULL);
     pthread_cond_init(&fCond, NULL);
 #elif WIN32
@@ -93,7 +93,7 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
     }
 	fifoinit(&fRunningCmd);
 
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(linux)
 	struct sched_param param;
     param.sched_priority = 99;
     for (i = 0; i < thread_num; i++) {
@@ -117,19 +117,19 @@ TThreadCmdManager::~TThreadCmdManager()
     
     // Wait for thread exit
     for (unsigned int i = 0; i < fThreadList.size(); i++) {
-    #ifdef __APPLE__
+	#if defined(__APPLE__)
         mach_port_t machThread = pthread_mach_thread_np(fThreadList[i]);
         thread_terminate(machThread); 
     #elif WIN32
 		TerminateThread(fThreadList[i],0);
 		//WaitForSingleObject(fThreadList[i], INFINITE);
-	#else
+	#elif defined(linux)
 		pthread_cancel(fThreadList[i]);
         pthread_join(fThreadList[i], NULL); 
     #endif
     }  
 
-	#ifdef __APPLE__
+	#if defined(__APPLE__) || defined(linux)
 		pthread_mutex_destroy(&fLock);
 		pthread_cond_destroy(&fCond);
 	#elif WIN32
@@ -171,7 +171,7 @@ void TThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long arg3, 
         cmd->arg4 = arg4;
         cmd->arg5 = arg5;
 	// Signal the condition to wake the thread
-	#ifdef __APPLE__       
+	#if defined(__APPLE__) || defined(linux)      
         pthread_mutex_lock(&fLock);
         fifoput(&fRunningCmd, (fifocell*)cmd);
         pthread_mutex_unlock(&fLock);

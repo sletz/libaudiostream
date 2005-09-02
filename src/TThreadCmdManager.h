@@ -23,7 +23,7 @@ research@grame.fr
 #ifndef __TThreadCmdManager__
 #define __TThreadCmdManager__
 
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(linux)
 #include <pthread.h>
 #elif WIN32
 #include <windows.h>
@@ -54,8 +54,7 @@ typedef struct TCmd
     long arg3;
     long arg4;
     long arg5;
-}
-TCmd;
+}TCmd;
 
 #define MAXCOMMAND 256
 
