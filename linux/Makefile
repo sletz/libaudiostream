@@ -2,7 +2,7 @@
 CPPSRC = $(wildcard ../src/[^m]*.cpp)
 CSRC = $(wildcard ../src/atomic/*ifo.c)
 OBJ = $(patsubst %.cpp, %.o, $(CPPSRC)) $(patsubst %.c, %.o, $(CSRC))
-CXXFLAGS = -Wall -I../src/atomic
+CXXFLAGS = -Wall -I../src/atomic -D__JACK__
 
 TARGET = libaudiostream.a
 
