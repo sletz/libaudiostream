@@ -175,7 +175,7 @@ class TThreadCmdManager : public TCmdManager
 	    lifo fFreeCmd;      // Commands free list
         fifo fRunningCmd;   // Running commands
 
-	#ifdef __APPLE__
+	#if defined(__APPLE__) || defined(linux)
 		std::vector<pthread_t> fThreadList; // Execution thread
 		pthread_mutex_t fLock;  // Mutex
         pthread_cond_t fCond;   // Condition variable
