@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /incremental:yes /machine:I386 /nodefaultlib:"LIBCMT"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /incremental:yes /machine:I386 /nodefaultlib:"LIBCMT" /out:"LibAudioStream.dll"
 
 !ELSEIF  "$(CFG)" == "LibAudioStream - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /debug /machine:I386 /out:"LibAudioStream.dll" /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no /nodefaultlib
 
 !ENDIF 
@@ -214,11 +214,11 @@ SOURCE=..\src\TAudioGlobals.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\libsndfile.lib
+SOURCE=.\PortAudio.lib
 # End Source File
 # Begin Source File
 
-SOURCE=.\PortAudio.lib
+SOURCE=.\libsndfile.lib
 # End Source File
 # End Target
 # End Project

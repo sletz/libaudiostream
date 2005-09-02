@@ -15,6 +15,30 @@ Package=<4>
 
 ###############################################################################
 
+Project: "fileplay"=.\fileplay.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fileplaycpp"=.\fileplaycpp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "testPlayer"=.\testPlayer.dsp - Package Owner=<4>
 
 Package=<5>
