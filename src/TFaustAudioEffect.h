@@ -205,7 +205,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 			fDelete = (deleteDsp)GetProc(fHandle, "deleteDsp");
 			fGetNumInputs = (getNumInputs)GetProc(fHandle, "getNumInputs");
 			fGetNumOutputs = (getNumOutputs)GetProc(fHandle, "getNumOutputs");
-			fBuildUserInterface = (buildUserInterface) GetProc(fHandle, "buildUserInterface");
+			fBuildUserInterface = (buildUserInterface)GetProc(fHandle, "buildUserInterface");
 			fInit = (init)GetProc(fHandle, "init");
 			fCompute = (compute)GetProc(fHandle, "compute");
 			fConclude = (conclude)GetProc(fHandle, "conclude");
@@ -302,8 +302,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 		
 		float GetControlValue(long param) 
 		{
-			if (param < long(fUITable.size())); 
-				return fUITable[param]->GetControlValue();
+			return (param < long(fUITable.size())) ? fUITable[param]->GetControlValue() : 0.0f;
 		}
 };
 

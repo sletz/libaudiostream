@@ -52,7 +52,7 @@ class TLoopAudioStream : public TDecoratedAudioStream
         TAudioStreamPtr CutBegin(long frames);
         long Length()
         {
-            return fLoopNum*fStream->Length();
+            return fLoopNum * fStream->Length();
         }
         TAudioStreamPtr Copy()
         {
