@@ -33,8 +33,6 @@ float* TSharedBuffers::fOutBuffer = NULL;
 float TPanTable::fPanTable[128];
 float TPanTable::fVolTable[128];
 
-float TPanTable::fluid_pan_tab[ FLUID_PAN_SIZE];
-
 TCmdManagerPtr smartable1::fManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
