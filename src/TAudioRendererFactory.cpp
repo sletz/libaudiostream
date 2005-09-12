@@ -20,15 +20,22 @@ research@grame.fr
 
 */
 
-#include "TPortAudioRenderer.h"
 #include "TAudioRendererFactory.h"
 #ifdef __JACK__
 #include "TJackAudioRenderer.h"
 #endif
+#ifdef __PORTAUDIO__
+#include "TPortAudioRenderer.h"
+#endif
 
 TAudioRendererPtr TAudioRendererFactory::MakePortAudioRenderer()
 {
+#ifdef __PORTAUDIO__
     return new TPortAudioRenderer();
+#else
+#warning PortAudio renderer is not compiled
+    return NULL;
+#endif
 }
 
 TAudioRendererPtr TAudioRendererFactory::MakeJackAudioRenderer()
@@ -36,6 +43,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeJackAudioRenderer()
 #ifdef __JACK__
     return new TJackAudioRenderer();
 #else
+#warning Jack renderer is not compiled
     return NULL;
 #endif
 }

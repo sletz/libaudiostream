@@ -67,7 +67,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 
 TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFrame, long endFrame)
 {
-    if (beginFrame >= 0 && beginFrame < endFrame) {
+	if (beginFrame >= 0 && beginFrame <= endFrame) {
         try {
             TAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
             endFrame = UTools::Min(sound->Length(), endFrame);
