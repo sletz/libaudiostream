@@ -20,7 +20,6 @@ research@grame.fr
 */
 
 #include "TAudioEngine.h"
-#include <assert.h>
 
 long TAudioEngine::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {

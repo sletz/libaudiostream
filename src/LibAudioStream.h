@@ -282,7 +282,7 @@ extern "C"
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
     \param rtstream_buffer_size The input stream buffer size.
     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
-    \param thread_num The number of additionnal low-priority threads used to precompute data
+    \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
     \return A pointer to new audio player object.
     */
     AudioPlayerPtr OpenAudioPlayer(long inChan,
@@ -337,13 +337,13 @@ extern "C"
     */
     void StopAudioPlayer(AudioPlayerPtr player);
     /*!
-    \brief Start a sound region from the beginning.
+    \brief Start a sound channel from the beginning.
     \param player The audio player.
     \param chan The audio channel number to be used.
     */
     void StartChannel(AudioPlayerPtr player, long chan);
     /*!
-    \brief Play a sound region from the current location.
+    \brief Play a sound channel from the current location.
     \param player The audio player.
     \param chan The audio channel number to be used.
     */

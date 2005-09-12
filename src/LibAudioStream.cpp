@@ -258,7 +258,7 @@ long AUDIOAPI ReadSound(AudioStream s, float* buffer, long buffer_size, long cha
 {
     if (s && buffer) {
         TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
-		 UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
+		UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
         return ((TAudioStreamPtr)s)->Read(&process, buffer_size, 0, channels);
     } else {
         return 0;
@@ -516,6 +516,9 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
     long tmpBufferSize = buffer_size;
     long tmpSampleRate = sample_rate;
     int res;
+	
+	if (thread_num < 1) 
+		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");
 
     TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);
 

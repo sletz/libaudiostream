@@ -265,7 +265,7 @@ float GetControlValue(AudioEffect effect, long control);
 \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
 \param rtstream_buffer_size The input stream buffer size.
 \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
-\param thread_num The number of additionnal low-priority threads used to precompute data
+\param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
 \return A pointer to new audio player object.
 */
 AudioPlayerPtr OpenAudioPlayer(long inChan,
@@ -320,13 +320,13 @@ void StartAudioPlayer(AudioPlayerPtr player);
 */
 void StopAudioPlayer(AudioPlayerPtr player);
 /*!
-\brief Start a sound region from the beginning.
+\brief Start a sound channel from the beginning.
 \param player The audio player.
 \param chan The audio channel number to be used.
 */
 void StartChannel(AudioPlayerPtr player, long chan);
 /*!
-\brief Play a sound region from the current location.
+\brief Play a sound channel from the current location.
 \param player The audio player.
 \param chan The audio channel number to be used.
 */
@@ -358,8 +358,8 @@ void SetPanChannel(AudioPlayerPtr player, long chan, float pan);
 \param player The audio player.
 \param chan The audio channel number to be used.
 \param effect_list A list of audio effects.
-\param fadeIn The fadein length in frames.
-\param fadeOut The fadeout length in frames.
+\param fadeIn The fadein length in frames to be used when starting the effect chain.
+\param fadeOut The fadeout length in frames to be used when stopping the effect chain.
 */
 void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut);
 
@@ -380,8 +380,8 @@ void SetPanAudioPlayer(AudioPlayerPtr player, float pan);
 \brief Set the master audio effect list.
 \param player The audio player.
 \param effect_list A list of audio effects.
-\param fadeIn The fadein length in frames.
-\param fadeOut The fadeout length in frames.
+\param fadeIn The fadein length in frames to be used when stopping the effect chain.
+\param fadeOut The fadeout length in frames to be used when stopping the effect chain.
 */
 void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
 

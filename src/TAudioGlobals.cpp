@@ -27,15 +27,18 @@ research@grame.fr
 #include "TSharedBuffers.h"
 
 // Globals
-float* TSharedBuffers::fInBuffer;
-float* TSharedBuffers::fOutBuffer;
+float* TSharedBuffers::fInBuffer = NULL;
+float* TSharedBuffers::fOutBuffer = NULL;
 
 float TPanTable::fPanTable[128];
 float TPanTable::fVolTable[128];
 
-TCmdManagerPtr smartable1::fManager;
-TCmdManagerPtr TCmdManager::fInstance;
-TAudioGlobalsPtr TAudioGlobals::fInstance = 0;
+float TPanTable::fluid_pan_tab[ FLUID_PAN_SIZE];
+
+TCmdManagerPtr smartable1::fManager = NULL;
+TCmdManagerPtr TCmdManager::fInstance = NULL;
+TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
+long TAudioGlobals::fClientCount = 0;
 TAudioBuffer<short>* TAudioGlobals::fInBuffer = 0;
 
 long TAudioGlobals::fInput = 0;
@@ -55,20 +58,25 @@ TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_rate,
                          long buffer_size, long stream_buffer_size, long rtstream_buffer_size, long thread_num)
 {
-    fInstance = new TAudioGlobals(inChan, outChan, channels, sample_rate,
-                                  buffer_size, stream_buffer_size, rtstream_buffer_size);
-    TDTRendererAudioStream::Init();
-    TRTRendererAudioStream::Init(thread_num);
-	smartable1::Init();
-    TPanTable::FillTable();
+	if (fClientCount++ == 0 && !fInstance) {
+		fInstance = new TAudioGlobals(inChan, outChan, channels, sample_rate,
+									  buffer_size, stream_buffer_size, rtstream_buffer_size);
+		TDTRendererAudioStream::Init();
+		TRTRendererAudioStream::Init(thread_num);
+		smartable1::Init();
+		TPanTable::FillTable();
+	}
 }
 
 void TAudioGlobals::Destroy()
 {
-    TDTRendererAudioStream::Destroy();
-    TRTRendererAudioStream::Destroy();
-	smartable1::Destroy();
-    delete fInstance;
+	if (--fClientCount == 0 && fInstance) {
+		TDTRendererAudioStream::Destroy();
+		TRTRendererAudioStream::Destroy();
+		smartable1::Destroy();
+		delete fInstance;
+		fInstance = NULL;
+	}
 }
 
 TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,

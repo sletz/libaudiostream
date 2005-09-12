@@ -26,11 +26,11 @@ research@grame.fr
 void TAudioEffectList::Init(float fade_in_val, float fade_in_time, float fade_out_val, float fade_out_time)
 {
     fFadeIn.setValue(fade_in_val);
-    fFadeIn.setTarget(1.0);
+    fFadeIn.setTarget(1.0f);
     fFadeIn.setTime(UAudioTools::ConvertFrameToSec(fade_in_time));
 
     fFadeOut.setValue(fade_out_val);
-    fFadeOut.setTarget(0.0);
+    fFadeOut.setTarget(0.0f);
     fFadeOut.setTime(UAudioTools::ConvertFrameToSec(fade_out_time));
 }
 
@@ -61,13 +61,13 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 		int i,j;
 		
 		// Fades
-		switch (fStatus ) {
+		switch (fStatus) {
 		
 			case kFadeIn:
 				for (i = 0 ; i < framesNum; i++) {
 					UAudioTools::MultFrame(&buffer[i * channels], fFadeIn.tick(), channels); // To improve...
 				}
-				if (fFadeIn.lastOut() >= 1.0) 
+				if (fFadeIn.lastOut() >= 1.0f) 
 					fStatus = kPlaying;
 				break;
 			
@@ -75,7 +75,7 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 				for (i = 0 ; i < framesNum; i++) {
 					UAudioTools::MultFrame(&buffer[i * channels], fFadeOut.tick(), channels); // To improve...
 				}
-				if (fFadeOut.lastOut() <= 0.0) 
+				if (fFadeOut.lastOut() <= 0.0f) 
 					fStatus = kIdle;
 				break;
 		}

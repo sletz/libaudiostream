@@ -23,8 +23,6 @@ research@grame.fr
 #ifndef __TAudioClient__
 #define __TAudioClient__
 
-#include <assert.h>
-
 //--------------------
 // Class TAudioClient
 //--------------------

@@ -30,8 +30,8 @@ research@grame.fr
 int TPortAudioRenderer::Process(void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
                                 PaTimestamp outTime, void *userData)
 {
-    TPortAudioRendererPtr engine = (TPortAudioRendererPtr)userData;
-    engine->Run((float*)inputBuffer, (float*)outputBuffer, framesPerBuffer);
+    TPortAudioRendererPtr renderer = (TPortAudioRendererPtr)userData;
+    renderer->Run((float*)inputBuffer, (float*)outputBuffer, framesPerBuffer);
     return 0;
 }
 
@@ -180,8 +180,7 @@ long TPortAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 
     if (err != paNoError)
         goto error;
-    TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
-    return NO_ERR;
+    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));

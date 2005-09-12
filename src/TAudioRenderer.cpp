@@ -30,7 +30,7 @@ long TAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* s
     fOutput = *outChan;
     fBufferSize = *bufferSize;
     fSampleRate = *sampleRate;
-    return 0;
+    return NO_ERR;
 }
 
 void TAudioRenderer::Run(float* inputBuffer, float* outputBuffer, long frames)

@@ -27,26 +27,26 @@ research@grame.fr
 
 int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 {
-    TJackAudioRendererPtr engine = (TJackAudioRendererPtr) arg;
+    TJackAudioRendererPtr renderer = (TJackAudioRendererPtr)arg;
 
-    float * input1 = (float *)jack_port_get_buffer(engine->fInput_port1, nframes);
-    float * input2 = (float *)jack_port_get_buffer(engine->fInput_port2, nframes);
+    float* input1 = (float*)jack_port_get_buffer(renderer->fInput_port1, nframes);
+    float* input2 = (float*)jack_port_get_buffer(renderer->fInput_port2, nframes);
 
-    float * output1 = (float *)jack_port_get_buffer(engine->fOutput_port1, nframes);
-    float * output2 = (float *)jack_port_get_buffer(engine->fOutput_port2, nframes);
+    float* output1 = (float*)jack_port_get_buffer(renderer->fOutput_port1, nframes);
+    float* output2 = (float*)jack_port_get_buffer(renderer->fOutput_port2, nframes);
 
     // Copy input and interleaving
     for (jack_nframes_t i = 0; i < nframes; i++) {
-        engine->fInputBuffer[2*i] = input1[i];
-        engine->fInputBuffer[2*i + 1] = input2[i];
+        renderer->fInputBuffer[2 * i] = input1[i];
+        renderer->fInputBuffer[2 * i + 1] = input2[i];
     }
 
-    engine->Run(engine->fInputBuffer, engine->fOutputBuffer, nframes);
+    renderer->Run(renderer->fInputBuffer, renderer->fOutputBuffer, nframes);
 
     // Copy output and de-interleaving
     for (jack_nframes_t i = 0; i < nframes; i++) {
-        output1[i] = engine->fOutputBuffer[2 * i];
-        output2[i] = engine->fOutputBuffer[2 * i + 1];
+        output1[i] = renderer->fOutputBuffer[2 * i];
+        output2[i] = renderer->fOutputBuffer[2 * i + 1];
     }
 
     return 0;
@@ -76,16 +76,23 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 
     // To be finished
     fInput_port1 = jack_port_register(fClient, "in1", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+	if (!fInput_port1)
+		goto error;
     fInput_port2 = jack_port_register(fClient, "in2", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+	if (!fInput_port2)
+		goto error;
 
     fOutput_port1 = jack_port_register(fClient, "out1", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	if (!fOutput_port1)
+		goto error;
     fOutput_port2 = jack_port_register(fClient, "out2", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	if (!fOutput_port2)
+		goto error;
 
     *sampleRate = jack_get_sample_rate(fClient);
     *bufferSize = jack_get_buffer_size(fClient);
 
-    TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
-    return NO_ERR;
+    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening jack client\n");
@@ -146,7 +153,6 @@ long TJackAudioRenderer::Start()
     return NO_ERR;
 
 error:
-
     printf("Error while activating client\n");
     return OPEN_ERR;
 }

@@ -38,7 +38,8 @@ class AUDIO_EXPORTS TAudioGlobals
 
     private:
 
-        static TAudioGlobals* fInstance;   	// Unique instance
+        static TAudioGlobals* fInstance;   	// Unique instance`
+		static long fClientCount;
 
     public:
 

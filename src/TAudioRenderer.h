@@ -53,8 +53,7 @@ typedef struct RendererInfo
     long fOutputLatencyMs;		// Ouput latency in millisecond
     long fInputLatencyFrame;	// Input latency in frames
     long fInputLatencyMs;		// Input latency in millisecond
-}
-RendererInfo;
+}RendererInfo;
 
 //----------------------
 // Class TAudioRenderer
@@ -78,7 +77,7 @@ class AUDIO_EXPORTS TAudioRenderer
 
     public:
 
-        TAudioRenderer(): fSampleRate(0)
+        TAudioRenderer():fSampleRate(0)
         {}
         virtual ~TAudioRenderer()
         {}
@@ -102,11 +101,11 @@ class AUDIO_EXPORTS TAudioRenderer
 
         long ConvertSample2Ms(long sample)
         {
-            return long((float(sample)*1000.0f) / fSampleRate);
+            return long((float(sample) * 1000.0f) / fSampleRate);
         }
         long ConvertMs2Sample(long ms)
         {
-            return long((float(ms)*fSampleRate) / 1000.0f);
+            return long((float(ms) * fSampleRate) / 1000.0f);
         }
 };
 
