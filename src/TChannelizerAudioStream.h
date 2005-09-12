@@ -48,8 +48,7 @@ class TChannelizerAudioStream : public TDecoratedAudioStream
         {}
 
 		// The used UAudioTools::Short2FloatMix already does a limited form of "channels mapping", thus Read does not need to be redefined
-      	
-		
+     	
 		long Channels()
         {
             return fChannels;
