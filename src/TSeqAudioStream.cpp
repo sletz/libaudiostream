@@ -35,8 +35,8 @@ TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long cr
         fStream1 = s1;
         fStream2 = s2;
     }
-
-    fFramesNum = s1->Length() - crossFade;
+	
+    fFramesNum = UTools::Max(0, s1->Length() - crossFade); 
     fCrossFade = crossFade;
     fStream = fStream1;
     fCurFrame = 0;
