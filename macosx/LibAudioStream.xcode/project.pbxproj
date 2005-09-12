@@ -272,8 +272,6 @@
 		4B5146E707F186810059C4C8 = {
 			buildActionMask = 2147483647;
 			files = (
-				4B62EF390882A62500956A42,
-				4B62EF3B0882A62600956A42,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,12 +280,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BA0DEDF087FE455003B1CB3,
-				4B62EF360882A60600956A42,
-				4B62EF370882A61C00956A42,
-				4B62EF380882A62500956A42,
-				4B62EF3A0882A62500956A42,
-				4B62EF3C0882A63500956A42,
-				4B62EF3D0882A63E00956A42,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,54 +370,6 @@
 		};
 		4B51474E07F18D9F0059C4C8 = {
 			fileRef = 4B51474D07F18D9F0059C4C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF360882A60600956A42 = {
-			fileRef = 4BFCA3C408718BFB00EC8A46;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF370882A61C00956A42 = {
-			fileRef = F5C1D59F0330CB2F01053105;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF380882A62500956A42 = {
-			fileRef = 4BC6136207F4990300ACC53C;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF390882A62500956A42 = {
-			fileRef = 4B51474A07F18D980059C4C8;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF3A0882A62500956A42 = {
-			fileRef = 4BC6136407F4990B00ACC53C;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF3B0882A62600956A42 = {
-			fileRef = 4BCC1A8007F1AA7E003E6784;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF3C0882A63500956A42 = {
-			fileRef = F5C1D5E90330CCD601053105;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4B62EF3D0882A63E00956A42 = {
-			fileRef = 4B6B22F6071FB980005E6873;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -609,6 +553,27 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		4BAC748E08CD8D6E00F6E555 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = TChannelizerAudioStream.h;
+			path = ../src/TChannelizerAudioStream.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BAC748F08CD8D6F00F6E555 = {
+			fileRef = 4BAC748E08CD8D6E00F6E555;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BAC749008CD8D6F00F6E555 = {
+			fileRef = 4BAC748E08CD8D6E00F6E555;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4BB2752F056B798A00053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -656,7 +621,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-D__PORTAUDIO__";
 				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -753,6 +718,7 @@
 				4BFC6E8608729C970012D079,
 				4BF92832088E3B16006A013D,
 				4B1C2D4E0894D242003BC2A6,
+				4BAC748F08CD8D6F00F6E555,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1325,6 +1291,7 @@
 				4BA0DF44087FEF7F003B1CB3,
 				4BF92833088E3B16006A013D,
 				4B1C2D4F0894D242003BC2A6,
+				4BAC749008CD8D6F00F6E555,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1403,7 +1370,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-D__Macintosh__  -D__JACK__";
+				OTHER_CFLAGS = "-D__JACK__ -D__PORTAUDIO__";
 				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a -ljack";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2159,6 +2126,7 @@
 				4BFC6E8408729C970012D079,
 				4BFC6E7E08729C6F0012D079,
 				F5C1D5FC0330CD3801053105,
+				4BAC748E08CD8D6E00F6E555,
 				4BFC6E8108729C830012D079,
 				4BA3E1780459506A00053105,
 				4B6B22F6071FB980005E6873,
