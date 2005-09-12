@@ -296,7 +296,7 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 		
 		void SetControlValue(long param, float f) 
 		{
-			if (param < long(fUITable.size())); 
+			if (param < long(fUITable.size()))
 				fUITable[param]->SetControlValue(f);
 		}
 		
