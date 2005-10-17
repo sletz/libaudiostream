@@ -67,9 +67,9 @@ class TAudioEngine
             return fRenderer->Stop();
         }
 
-        long LoadChannel(TAudioStreamPtr stream, long chan, float vol, float pan)
+        long LoadChannel(TAudioStreamPtr stream, long chan, float vol, float panLeft, float panRight)
         {
-            return fMixer->Load(stream, chan, vol, pan);
+            return fMixer->Load(stream, chan, vol, panLeft, panRight);
         }
         void GetInfoChannel(long chan, ChannelInfo* info)
         {
@@ -93,18 +93,18 @@ class TAudioEngine
         {
             fMixer->SetVol(chan, vol);
         }
-        void SetPanChannel(long chan, float pan)
+        void SetPanChannel(long chan, float panLeft, float panRight)
         {
-            fMixer->SetPan(chan, pan);
+            fMixer->SetPan(chan, panLeft, panRight);
         }
 
         void SetMasterVol(float vol)
         {
             fMixer->SetVol(vol);
         }
-        void SetMasterPan(float pan)
+        void SetMasterPan(float panLeft, float panRight)
         {
-            fMixer->SetPan(pan);
+            fMixer->SetPan(panLeft, panRight);
         }
 		
 		void SetStopCallbackChannel(long chan, StopCallback callback, void* context)

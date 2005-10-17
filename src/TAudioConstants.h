@@ -56,6 +56,9 @@ typedef unsigned char Boolean;
 #define DEFAULT_VOL 1.0f		// (0 .. 1)
 #define DEFAULT_PAN 0.5f		// (0 .. 1)
 
+#define DEFAULT_PAN_LEFT 1.0f		// (0 .. 1)
+#define DEFAULT_PAN_RIGHT 0.0f		// (0 .. 1)
+
 // Number of chhanels
 #define RT_CHANNELS 2
 #define MIXER_BUFFER_SIZE BUFFER_SIZE*CHANNELS

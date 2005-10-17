@@ -69,6 +69,7 @@ extern "C"
 {
 #endif
 
+
 long LibVersion();
 
 /*!
@@ -212,16 +213,23 @@ AudioEffectList AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
 AudioEffectList RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
 /*!
 \brief Create a volume effect.
-\param gain The volume between 0 and 1.
+\param vol The volume between 0 and 1.
 \return A pointer to new volume object.
 */
 AudioEffect MakeVolAudioEffect(float vol);
 /*!
-\brief Create a pan effect.
-\param gain The pan between 0 and 1.
-\return A pointer to new pan object.
+\brief Create a mono pan effect.
+\param pan The pan between 0 and 1.
+\return A pointer to new mono pan object.
 */
-AudioEffect MakePanAudioEffect(float pan);
+AudioEffect MakeMonoPanAudioEffect(float pan);
+/*!
+\brief Create a stereo pan effect.
+\param panLeft The left pan between 0 and 1.
+\param rightPan The right pan between 0 and 1.
+\return A pointer to new stereo pan object.
+*/
+AudioEffect MakeStereoPanAudioEffect(float panLeft, float rightPan);
 /*!
 \brief Create an effect decribed in the Faust DSP language.
 \param name The name of the Faust effect shared library.
@@ -291,7 +299,7 @@ void CloseAudioPlayer(AudioPlayerPtr player);
 \param pan The panning between 0 and 1.
 \return An error code.
 */
-long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan);
+long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight);
 /*!
 \brief Retrieve information about a sound channel.
 \param player The audio player.
@@ -352,7 +360,7 @@ void SetVolChannel(AudioPlayerPtr player, long chan, float vol);
 \param chan The audio channel number to be used.
 \param pan The new panning value.
 */
-void SetPanChannel(AudioPlayerPtr player, long chan, float pan);
+void SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight);
 /*!
 \brief Set the channel audio effect list.
 \param player The audio player.
@@ -375,7 +383,7 @@ void SetVolAudioPlayer(AudioPlayerPtr player, float vol);
 \param player The audio player.
 \param pan The new panning value.
 */
-void SetPanAudioPlayer(AudioPlayerPtr player, float pan);
+void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
 /*!
 \brief Set the master audio effect list.
 \param player The audio player.
@@ -385,9 +393,11 @@ void SetPanAudioPlayer(AudioPlayerPtr player, float pan);
 */
 void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
 
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif
 

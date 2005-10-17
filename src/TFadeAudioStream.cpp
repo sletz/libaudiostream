@@ -94,7 +94,7 @@ long TFadeAudioStream::FadeIn(TAudioBuffer<float>* buffer, long framesNum, long 
 
     UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos),
                                     fMixBuffer->GetFrame(framePos),
-                                    framesNum, channels, 1.0f, 1.0f);
+                                    framesNum, channels);
 
     if (res < framesNum) {
         //fStream->Stop(); // Stops the stream (possibly force flush)
@@ -118,7 +118,7 @@ long TFadeAudioStream::FadeOut(TAudioBuffer<float>* buffer, long framesNum, long
 
     UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos),
                                     fMixBuffer->GetFrame(framePos),
-                                    framesNum, channels, 1.0f, 1.0f);
+                                    framesNum, channels);
 
     if ((res < framesNum) || (fFadeOut.lastOut() <= 0.0f)) {
         //fStream->Stop(); // Stops the stream (possibly force flush)

@@ -44,7 +44,8 @@ typedef struct ChannelInfo
     long fStatus;
     long fCurFrame;
     float fVol;
-    float fPan;
+    float fPanLeft;
+	float fPanRight;
     long fLeftOut;
     long fRightOut;
 }
@@ -146,12 +147,16 @@ class TAudioChannel
 		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
 		TAudioEffectListManager	fEffectList;
 
-        float fVol;	// Master vol
-        float fPan;	// Master pan
-		float fLeftVol, fRightVol;
-        long fLeftOut;  // Audio left out
-        long fRightOut;	// Audio right out
-        bool fInserted;	// Insertion state
+        float fVol;			// Volume
+        float fPanLeft;		// Pan for left signal
+		float fPanRight;	// Pan for right signal
+		float fLLVol;		// Volume for left output for left channel
+		float fLRVol;		// Volume for right output for left channel
+		float fRLVol;		// Volume for left output for right channel
+		float fRRVol;		// Volume for right output for right channel
+        long fLeftOut;		// Audio left out
+        long fRightOut;		// Audio right out
+        bool fInserted;		// Insertion state
 
     public:
 
@@ -203,20 +208,28 @@ class TAudioChannel
 		void SetVol(float vol)
         {
             fVol = vol;
-			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
+			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
+			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
         }
         float GetVol()
         {
             return fVol;
         }
-        float GetPan()
+        float GetPanLeft()
         {
-            return fPan;
+            return fPanLeft;
         }
-		void SetPan(float pan)
+		float GetPanRight()
         {
-		    fPan = pan;
-			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
+            return fPanRight;
+        }
+		void SetPan(float panLeft, float panRight)
+        {
+		    fPanLeft = panLeft;
+			fPanRight = panRight;
+			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
+			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
+			printf("SetPan %f %f %f %f\n", fLLVol, fLRVol, fRLVol, fRRVol);
         }
 		
 		void SetStopCallback(StopCallback callback, void* context)

@@ -7,6 +7,9 @@
 
 ;; This file contains definitions for entry points of the LibAudioStream library
 ;; It must be used with the LibAudioStream.Framework located in /System/Library/Frameworks
+;; 
+;; 14/09/05: Adaptation for new panning 
+
 
 ;; Utilities
 ;;===========
@@ -120,7 +123,8 @@
 (defrecord TChannelInfo
   (fStatus :longint)
   (fVol :single-float)
-  (fPan :single-float)
+  (fPanLeft :single-float)
+  (fPanRight :single-float)
   (fLeftOut :longint)
   (fRightOut :longint))
  
@@ -133,8 +137,11 @@
  `(rref ,e :TChannelInfo.fVol))
 
 ;;................................................................................: pan
-(defmacro pan (e)
- `(rref ,e :TChannelInfo.fPan))
+(defmacro panLeft (e)
+ `(rref ,e :TChannelInfo.fPanLeft))
+
+(defmacro panRight (e)
+ `(rref ,e :TChannelInfo.fPanRight))
 
 ;;................................................................................: left-out
 (defmacro left-out (e)
@@ -332,13 +339,14 @@
 
 ;; Channels
 ;................................................................................: LoadChannel
-(defmacro LoadChannel (player sound chan vol pan)
+(defmacro LoadChannel (player sound chan vol panLeft panRight)
   `(ccl::ppc-ff-call (get-fun-addr "LoadChannelPtr" *libaudiostream*) 
                      :address ,player
                      :address ,sound
                      :signed-fullword, chan
                      :double-float, vol
-                     :double-float, pan
+                     :double-float, panLeft
+                     :double-float, panRight
                      :signed-fullword))
 
 ;................................................................................: GetInfoChannel
@@ -394,11 +402,12 @@
                      :void))
 
 ;................................................................................: SetPanChannel
-(defmacro SetPanChannel (player chan pan)
+(defmacro SetPanChannel (player chan panLeft panRight)
   `(ccl::ppc-ff-call (get-fun-addr "SetPanChannel" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
-                     :double-float, pan
+                     :double-float, panLeft
+                     :double-float, panRight
                      :void))
 
 ;................................................................................: SetEffectListChannel
@@ -421,10 +430,11 @@
                      :void))
 
 ;................................................................................: SetPanSound
-(defmacro SetPanAudioPlayer (player pan)
+(defmacro SetPanAudioPlayer (player panLeft panRight)
   `(ccl::ppc-ff-call (get-fun-addr "SetPanAudioPlayer" *libaudiostream*) 
                      :address ,player
-                     :double-float, pan
+                     :double-float, panLeft
+                     :double-float, panRight
                      :void))
 
 ;................................................................................: SetEffectAudioPlayer
@@ -474,14 +484,21 @@
      (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
      effect))
 
-(defmacro MakePanAudioEffect (gain)
-  `(let ((effect (ccl::ppc-ff-call (get-fun-addr "MakePanAudioEffectPtr" *libaudiostream*) 
-                                   :double-float ,gain
+(defmacro MakeMonoPanAudioEffect (pan)
+  `(let ((effect (ccl::ppc-ff-call (get-fun-addr "MakeMonoPanAudioEffectPtr" *libaudiostream*) 
+                                   :double-float ,pan
                                    :address)))
      (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
      effect))
 
-
+(defmacro MakeStereoPanAudioEffect (panLeft panRight)
+  `(let ((effect (ccl::ppc-ff-call (get-fun-addr "MakeStereoPanAudioEffectPtr" *libaudiostream*) 
+                                   :double-float ,panLeft
+                                   :double-float ,panRight
+                                   :address)))
+     (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
+     effect))
+     
 (defmacro MakeFaustAudioEffect (name)
   `(with-cstrs ((s ,name))
      (let ((effect (ccl::ppc-ff-call (get-fun-addr "MakeFaustAudioEffectPtr" *libaudiostream*) 

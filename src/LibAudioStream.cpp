@@ -27,10 +27,6 @@ research@grame.fr
 #include "TPanAudioEffect.h"
 #include "TFaustAudioEffect.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
@@ -41,8 +37,8 @@ extern "C"
     enum {kPortAudioRenderer = 0, kJackRenderer};
 
     struct AudioPlayer {
-        TAudioRendererPtr	fRenderer;
-        TAudioEngine*	fEngine;
+        TAudioRendererPtr fRenderer;
+        TAudioEngine* fEngine;
     };
 
     // Opaque pointers
@@ -57,9 +53,8 @@ extern "C"
 	
 	typedef void (*StopCallback)(void* context);
 	
-	long LibVersion();
-
-    // Build sound (using smartptr)
+	/*
+	// Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
     AudioStream AUDIOAPI MakeReadSound(char* name);
     AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
@@ -78,6 +73,51 @@ extern "C"
     long AUDIOAPI GetChannelsSound(AudioStream s);
     long AUDIOAPI ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
 	void AUDIOAPI ResetSound(AudioStream sound);
+	
+		
+    // Effect management (using smartptr)
+    AudioEffectList AUDIOAPI MakeAudioEffectList();
+    AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
+    AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
+
+    AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
+	AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
+	AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
+	AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
+	long AUDIOAPI GetControlCount(AudioEffect effect);
+	void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
+	void AUDIOAPI SetControlValue(AudioEffect effect, long param, float f);
+	float AUDIOAPI GetControlValue(AudioEffect effect, long param);
+	*/
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+	
+	long LibVersion();
+
+    // Build sound (using smartptr)
+	
+    AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
+    AudioStream AUDIOAPI MakeReadSound(char* name);
+    AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
+	AudioStream AUDIOAPI MakeStereoSound(AudioStream sound);
+    AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
+    AudioStream AUDIOAPI MakeLoopSound(AudioStream sound, long n);
+    AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
+    AudioStream AUDIOAPI MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
+    AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2);
+    AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
+    AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format);
+    AudioStream AUDIOAPI MakeInputSound();
+    AudioStream AUDIOAPI MakeRendererSound(AudioStream s);
+
+    long AUDIOAPI GetLengthSound(AudioStream s);
+    long AUDIOAPI GetChannelsSound(AudioStream s);
+    long AUDIOAPI ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
+	void AUDIOAPI ResetSound(AudioStream sound);
+	
 	
 	// Build sound (using pointer on smartptr)
 	AudioStreamPtr AUDIOAPI MakeNullSoundPtr(long lengthFrame);
@@ -100,25 +140,29 @@ extern "C"
 	void AUDIOAPI ResetSoundPtr(AudioStreamPtr sound);
 	void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound);
 	
-    // Effect management
+    // Effect management (using smartptr)
+	
     AudioEffectList AUDIOAPI MakeAudioEffectList();
     AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
     AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
 
     AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
-	AudioEffect AUDIOAPI MakePanAudioEffect(float pan);
+	AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
+	AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
 	AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
 	long AUDIOAPI GetControlCount(AudioEffect effect);
 	void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
 	void AUDIOAPI SetControlValue(AudioEffect effect, long param, float f);
 	float AUDIOAPI GetControlValue(AudioEffect effect, long param);
 	
+	
 	AudioEffectListPtr AUDIOAPI MakeAudioEffectListPtr();
     AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
     AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
 
     AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol);
-	AudioEffectPtr AUDIOAPI MakePanAudioEffectPtr(float pan);
+	AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan);
+	AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight);
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
 	long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect);
 	void AUDIOAPI GetControlParamPtr(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
@@ -142,8 +186,8 @@ extern "C"
 
 
     // Load a sound in a channel
-    long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan);
-	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float pan);
+    long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight);
+	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight);
     void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
 	void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
 
@@ -157,14 +201,14 @@ extern "C"
 
     // Params
     void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol);
-    void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float pan);
+    void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight);
 	void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
-    void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float pan);
+    void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
     void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol);
 	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-	
+
 #ifdef __cplusplus
 }
 #endif
@@ -393,9 +437,14 @@ AudioEffect AUDIOAPI MakeVolAudioEffect(float vol)
     return new TVolAudioEffect(vol);
 }
 
-AudioEffect AUDIOAPI MakePanAudioEffect(float pan)
+AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan)
 {
-    return new TPanAudioEffect(pan);
+    return new TMonoPanAudioEffect(pan);
+}
+
+AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight)
+{
+    return new TStereoPanAudioEffect(panLeft, panRight);
 }
 
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
@@ -464,11 +513,15 @@ AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol)
     return new SMARTP<TAudioEffectInterface>(new TVolAudioEffect(vol));
 }
 
-AudioEffectPtr AUDIOAPI MakePanAudioEffectPtr(float pan)
+AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan)
 {
-    return new SMARTP<TAudioEffectInterface>(new TPanAudioEffect(pan));
+    return new SMARTP<TAudioEffectInterface>(new TMonoPanAudioEffect(pan));
 }
 
+AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight)
+{
+    return new SMARTP<TAudioEffectInterface>(new TStereoPanAudioEffect(panLeft, panRight));
+}
 
 AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 {
@@ -573,18 +626,18 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 }
 
 // SoundFile management
-long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float pan)
+long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight)
 {
     if (player && player->fEngine && sound) {
-        return player->fEngine->LoadChannel((TAudioStreamPtr)sound, chan, vol, pan);
+        return player->fEngine->LoadChannel((TAudioStreamPtr)sound, chan, vol, panLeft, panRight);
     } else
         return LOAD_ERR;
 }
 
-long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float pan)
+long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight)
 {
     if (player && player->fEngine && sound) {
-        return player->fEngine->LoadChannel((TAudioStreamPtr)*sound, chan, vol, pan);
+        return player->fEngine->LoadChannel((TAudioStreamPtr)*sound, chan, vol, panLeft, panRight);
     } else
         return LOAD_ERR;
 }
@@ -642,10 +695,10 @@ void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol)
         player->fEngine->SetVolChannel(chan, vol);
 }
 
-void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float pan)
+void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight)
 {
     if (player && player->fEngine)
-        player->fEngine->SetPanChannel(chan, pan);
+        player->fEngine->SetPanChannel(chan, panLeft, panRight);
 }
 
 void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
@@ -661,10 +714,10 @@ void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol)
         player->fEngine->SetMasterVol(vol);
 }
 
-void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float pan)
+void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight)
 {
     if (player && player->fEngine)
-        player->fEngine->SetMasterPan(pan);
+        player->fEngine->SetMasterPan(panLeft, panRight);
 }
 
 void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)

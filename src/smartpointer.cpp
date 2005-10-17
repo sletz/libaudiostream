@@ -54,5 +54,6 @@ void smartable1::Init()
 
 void smartable1::Destroy()
 {
+	fManager->FlushCmds(); // Hum...
     delete fManager;
 }

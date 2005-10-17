@@ -21,7 +21,8 @@
 #define STREAM_BUFFER	131072 * 4
 
 #define VOL	  1.0f
-#define PAN   0.5f
+#define PAN_LEFT   1.0f
+#define PAN_RIGHT  0.0f
 
 static int playfile (char * filename, long beginFrame, long endFrame)
 {
@@ -32,7 +33,7 @@ static int playfile (char * filename, long beginFrame, long endFrame)
     AudioStreamPtr sound  = MakeRegionSoundPtr (filename, beginFrame, endFrame);
 
     StartAudioPlayer(player);
-	LoadChannelPtr (player, sound, 1, VOL, PAN);
+	LoadChannelPtr (player, sound, 1, VOL, PAN_LEFT, PAN_RIGHT);
 	StartChannel(player, 1);
 
 	do {

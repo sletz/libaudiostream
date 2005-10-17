@@ -160,17 +160,17 @@
 ;; Load audio player channels
 ;;============================
 
-(LoadChannel player s1 1 1.0 0.5)
-(LoadChannel player s2 2 1.0 0.5)
+(LoadChannel player s1 1 1.0 1.0 0.0)
+(LoadChannel player s2 2 1.0 1.0 0.0)
 
-(LoadChannel player s3 3 1.0 0.5)
-(LoadChannel player s4 4 1.0 0.5)
+(LoadChannel player s3 3 1.0 1.0 0.0)
+(LoadChannel player s4 4 1.0 1.0 0.0)
 
-(LoadChannel player s5 5 1.0 0.5)
-(LoadChannel player s6 6 1.0 0.5)
+(LoadChannel player s5 5 1.0 1.0 0.0)
+(LoadChannel player s6 6 1.0 1.0 0.0)
 
-(LoadChannel player s7 7 1.0 0.5)
-(LoadChannel player s8 8 1.0 0.5)
+(LoadChannel player s7 7 1.0 1.0 0.0)
+(LoadChannel player s8 8 1.0 1.0 0.0)
 
 
 ;; Channels can be started/stopped/continued individually 
@@ -232,20 +232,20 @@
 ;; Set channel pan (0 1)
 ;;============================
 
-(SetPanChannel player 1 0.0)
-(SetPanChannel player 1 1.0)
-(SetPanChannel player 1 0.5)
+(SetPanChannel player 1 1.0 1.0)  // full left
+(SetPanChannel player 1 0.0 0.0)  // full right
+(SetPanChannel player 1 1.0 0.0)  // center
 
 
 ;; Set audio player volume (0 1)
 ;;================================
 
-(SetVolAudioPlayer player 0.8)
+(SetVolAudioPlayer player 0.6)
 
 ;; Set audio player pan  (0 1)
 ;;================================
 
-(SetPanAudioPlayer player 0.5)
+(SetPanAudioPlayer player 1.0 1.0)
 
 ;; Streams not used anymore in channels MUST be deleted (typically before loading a new stream in a channel)
 ;;==========================================================================================================

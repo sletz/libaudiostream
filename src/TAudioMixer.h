@@ -45,9 +45,14 @@ class TAudioMixer : public TAudioClient
 		list<TAudioChannelPtr>	fSoundChannelSeq;	// List of running sound channels
         TAudioChannelPtr*		fSoundChannelTable;	// Table of sound channels
         TAudioBuffer<float>*	fMixBuffer;			// Buffer for mixing
-        float fVol, fPan;							// Master pan and volume
-		float fLeftVol, fRightVol;
-
+		float fVol;
+		float fPanLeft;		// Pan for left signal
+		float fPanRight;	// Pan for right signal
+		float fLLVol;		// Volume for left output for left channel
+		float fLRVol;		// Volume for right output for left channel
+		float fRLVol;		// Volume for left output for right channel
+		float fRRVol;		// Volume for right output for right channel
+  
         bool IsAvailable(long chan)
         {
             return ((chan >= 0) && (chan < TAudioGlobals::fChannels) && !fSoundChannelTable[chan]->GetState());
@@ -64,7 +69,7 @@ class TAudioMixer : public TAudioClient
         TAudioMixer ();
         virtual ~TAudioMixer();
 
-        long Load(TAudioStreamPtr stream, long channel, float vol, float pan);
+        long Load(TAudioStreamPtr stream, long channel, float vol, float panLeft, float panRight);
         void GetInfo(long chan, ChannelInfo* info);
 
         void Start(long chan);
@@ -73,17 +78,20 @@ class TAudioMixer : public TAudioClient
         void Reset();
 
         void SetVol(long chan, float vol);
-        void SetPan(long chan, float pan);
+        void SetPan(long chan, float panLeft, float panRight);
 
         void SetVol(float vol)
         {
             fVol = vol;
-			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
+			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
+			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
         }
-        void SetPan(float pan)
+        void SetPan(float panLeft, float panRight)
         {
-            fPan = pan;
-			TPanTable::GetLR(fVol, fPan, &fLeftVol, &fRightVol);
+            fPanLeft = panLeft;
+			fPanRight = panRight;
+			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
+			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
         }
 		
 		void SetStopCallback(long chan, StopCallback callback, void* context);

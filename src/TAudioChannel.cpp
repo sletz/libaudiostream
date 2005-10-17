@@ -34,7 +34,7 @@ TAudioChannel::TAudioChannel()
 	SetStream(new TNullAudioStream(0x7FFF));
     fInserted = false;
     SetVol(DEFAULT_VOL);
-    SetPan(DEFAULT_PAN);
+    SetPan(DEFAULT_PAN_LEFT, DEFAULT_PAN_RIGHT);
 	fLeftOut = 0;
     fRightOut = 1;
     fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
@@ -101,7 +101,8 @@ void TAudioChannel::GetInfo(ChannelInfo* info)
     info->fStatus = fFadeStream.GetStatus();
     info->fCurFrame = fFadeStream.GetFrame();
     info->fVol = fVol;
-    info->fPan = fPan;
+    info->fPanLeft = fPanLeft;
+	info->fPanRight = fPanRight;
     info->fLeftOut = fLeftOut;
     info->fRightOut = fRightOut;
 }
@@ -120,7 +121,11 @@ bool TAudioChannel::Mix(TAudioBuffer<float>* dst, long framesNum, long channels)
 	fEffectList.Process(fMixBuffer->GetFrame(0), framesNum, channels);
 	
 	// Vol and Pan 
-	UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, fLeftVol, fRightVol);
+	if (fFadeStream.Channels() == 1) {
+		UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, fLLVol, fLRVol);
+	} else {
+		UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, fLLVol, fLRVol, fRLVol, fRRVol);
+	}
 	
 	if (res < framesNum) 	
 		fStopCallback.Execute();

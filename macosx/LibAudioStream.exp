@@ -43,7 +43,8 @@ _MakeAudioEffectListPtr
 _AddAudioEffectPtr
 _RemoveAudioEffectPtr
 _MakeVolAudioEffectPtr
-_MakePanAudioEffectPtr
+_MakeMonoPanAudioEffectPtr
+_MakeStereoPanAudioEffectPtr
 _MakeFaustAudioEffectPtr
 
 _GetControlCountPtr
@@ -58,7 +59,8 @@ _MakeAudioEffectList
 _AddAudioEffect
 _RemoveAudioEffect
 _MakeVolAudioEffect
-_MakePanAudioEffect
+_MakeMonoPanAudioEffect
+_MakeStereoPanAudioEffect
 _MakeFaustAudioEffect
 
 _GetControlCount

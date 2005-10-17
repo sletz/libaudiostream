@@ -29,7 +29,7 @@ class FilePlayer {
 		
 		void Play (char *file, long beginFrame, long endFrame) {
 			AudioStream stream = MakeRegionSound (file, beginFrame, endFrame);
-			LoadChannel (fPlayer, stream, 1, 1.0f, 0.5f);
+			LoadChannel (fPlayer, stream, 1, 1.0f, 1.0f, 0.0f);
 			StartChannel(fPlayer, 1);
 		} 
 		

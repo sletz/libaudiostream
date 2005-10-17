@@ -33,7 +33,7 @@ TAudioMixer::TAudioMixer ()
 {
     // Initialisation
     SetVol(DEFAULT_VOL);
-    SetPan(DEFAULT_PAN);
+    SetPan(DEFAULT_PAN_LEFT, DEFAULT_PAN_RIGHT);
 
     fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
     fSoundChannelTable = new TAudioChannelPtr[TAudioGlobals::fChannels];
@@ -76,7 +76,7 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
 									fMixBuffer->GetFrame(0),
 									TAudioGlobals::fBuffer_Size,
-									TAudioGlobals::fOutput, fLeftVol, fRightVol);
+									TAudioGlobals::fOutput, fLLVol, fLRVol, fRLVol, fRRVol);
     return true;
 }
 
@@ -84,7 +84,7 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
-long TAudioMixer::Load(TAudioStreamPtr stream, long chan, float vol, float pan)
+long TAudioMixer::Load(TAudioStreamPtr stream, long chan, float vol, float panLeft, float panRight)
 {
     if (IsAvailable(chan)) {
         TAudioChannelPtr channel = fSoundChannelTable[chan];
@@ -92,7 +92,7 @@ long TAudioMixer::Load(TAudioStreamPtr stream, long chan, float vol, float pan)
         assert(stream);
         channel->SetStream(stream); // Owner of the old stream pointer has to do the desallocation
         channel->SetVol(vol);
-        channel->SetPan(pan);
+        channel->SetPan(panLeft, panRight);
         return NO_ERR;
     } else {
         printf("Allocate : Channel already inserted  %ld\n", chan);
@@ -143,11 +143,11 @@ void TAudioMixer::SetVol(long chan, float vol)
         channel->SetVol(vol);
 }
 
-void TAudioMixer::SetPan(long chan, float pan)
+void TAudioMixer::SetPan(long chan, float panLeft, float panRight)
 {
     TAudioChannelPtr channel;
     if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
-        channel->SetPan(pan);
+        channel->SetPan(panLeft, panRight);
 }
 
 void TAudioMixer::SetStopCallback(long chan, StopCallback callback, void* context)

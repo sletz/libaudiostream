@@ -38,7 +38,7 @@ research@grame.fr
 \brief Pan effect.
 */
 
-class TPanAudioEffect : public TAudioEffectInterface
+class TMonoPanAudioEffect : public TAudioEffectInterface
 {
 
     private:
@@ -48,16 +48,16 @@ class TPanAudioEffect : public TAudioEffectInterface
 
     public:
 
-        TPanAudioEffect(float pan): TAudioEffectInterface(), fPan(pan)
+        TMonoPanAudioEffect(float pan): TAudioEffectInterface(), fPan(pan)
         {
 			TPanTable::GetLR(1.0f, fPan, &fLeftVol, &fRightVol);
 		}
-        virtual ~TPanAudioEffect()
+        virtual ~TMonoPanAudioEffect()
         {}
 		
 		void Process(float** input, float** output, long framesNum, long channels)
         {
-		      for (int i = 0; i < framesNum; i++) {
+			for (int i = 0; i < framesNum; i++) {
 				output[0][i] = input[0][i] * fLeftVol;
 				output[1][i] = input[1][i] * fRightVol;
 			}
@@ -65,7 +65,7 @@ class TPanAudioEffect : public TAudioEffectInterface
 
 		TAudioEffectInterface* Copy()
         {
-            return new TPanAudioEffect(fPan);
+            return new TMonoPanAudioEffect(fPan);
         }
         
 		void Reset() 
@@ -76,10 +76,10 @@ class TPanAudioEffect : public TAudioEffectInterface
             return 2;
         }
 		
-		void SetControlValue(long param, float f)
+		void SetControlValue(long param, float pan)
 		{
 			if (param == 0) {
-				fPan = f;
+				fPan = pan;
 				TPanTable::GetLR(1.0f, fPan, &fLeftVol, &fRightVol);
 			}
 		}
@@ -99,10 +99,97 @@ class TPanAudioEffect : public TAudioEffectInterface
 			strcpy(label, "Pan");
 			*min = 0.0f;
 			*max = 1.0f;
-			*init = 0.5f;
+			*init = DEFAULT_PAN;
 		}
 };
 
-typedef TPanAudioEffect * TPanAudioEffectPtr;
+typedef TMonoPanAudioEffect * TMonoPanAudioEffectPtr;
+
+class TStereoPanAudioEffect : public TAudioEffectInterface
+{
+
+    private:
+
+		float fPanLeft;		// Pan for left signal
+		float fPanRight;	// Pan for right signal
+		float fLLVol;		// Volume for left output for left channel
+		float fLRVol;		// Volume for right output for left channel
+		float fRLVol;		// Volume for left output for right channel
+		float fRRVol;		// Volume for right output for right channel
+
+    public:
+
+        TStereoPanAudioEffect(float panLeft, float panRight): TAudioEffectInterface(), fPanLeft(panLeft), fPanRight(panRight)
+        {
+			TPanTable::GetLR(1.0f, fPanLeft, &fLLVol, &fLRVol);
+			TPanTable::GetLR(1.0f, fPanRight, &fRLVol, &fRRVol);
+		}
+        virtual ~TStereoPanAudioEffect()
+        {}
+		
+		void Process(float** input, float** output, long framesNum, long channels)
+        {
+			for (int i = 0; i < framesNum; i++) {
+				output[0][i] = input[0][i] * fLLVol + input[1][i] * fRLVol;
+				output[1][i] = input[0][i] * fLRVol + input[1][i] * fRRVol;
+			}
+        }
+
+		TAudioEffectInterface* Copy()
+        {
+            return new TStereoPanAudioEffect(fPanLeft, fPanRight);
+        }
+        
+		void Reset() 
+		{}
+		
+        long Channels()
+		{
+            return 2;
+        }
+		
+		void SetControlValue(long param, float pan)
+		{
+			if (param == 0) {
+				fPanLeft = pan;
+				TPanTable::GetLR(1.0f, fPanLeft, &fLLVol, &fLRVol);
+			}
+			if (param == 1) {
+				fPanRight = pan;
+				TPanTable::GetLR(1.0f, fPanRight, &fRLVol, &fRRVol);
+			}
+		}
+		
+		float GetControlValue(long param)
+		{
+			if (param == 0)  
+				return fPanLeft;
+			else if (param == 1)  
+				return fPanRight;
+			else 
+				return 0.0f;
+		}
+		
+		long GetControlCount()
+		{
+			return 2;
+		}
+		
+		void GetControlParam(long param, char* label, float* min, float* max, float* init)
+		{
+			*min = 0.0f;
+			*max = 1.0f;
+			if (param == 0) {
+				strcpy(label, "PanLeft");
+				*init = DEFAULT_PAN_LEFT; 
+			}
+			if (param == 1) {
+				strcpy(label, "PanRight");
+				*init = DEFAULT_PAN_RIGHT;
+			}
+		}
+};
+
+typedef TStereoPanAudioEffect * TStereoPanAudioEffectPtr;
 
 #endif

@@ -28,6 +28,7 @@ research@grame.fr
 #define FILENAME1 "/Users/letz/levot.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
+#define FILENAME4 "/Users/letz/levotmono.wav"
 
 #define EFFECT1 "/Users/letz/freeverb.so"
 
@@ -49,6 +50,7 @@ AudioStream test0()
     printf("-------------- \n\n");
     AudioStream s1;
 	s1 = MakeRegionSound(FILENAME1, 200000, 500000);
+	//s1 = MakeStereoSound(MakeRegionSound(FILENAME4, 200000, 500000));
     return s1;
 }
 
@@ -226,7 +228,8 @@ void test21()
 void TestPlay(AudioPlayerPtr player)
 {
     float vol = 1.0f;
-    float pan = 0.5f;
+    float panLeft = 1.0f;
+	float panRight = 1.0f;
     char c;
 	
     while ((c = getchar()) && (c != 'n')) {
@@ -256,13 +259,15 @@ void TestPlay(AudioPlayerPtr player)
                 break;
 
             case '1':
-                pan += 0.05f;
-                SetPanAudioPlayer(player, pan);
+                panLeft += 0.05f;
+				panRight -= 0.05f;
+                SetPanAudioPlayer(player, panLeft, panRight);
                 break;
 
             case '2':
-                pan -= 0.05f;
-                SetPanAudioPlayer(player, pan);
+				panLeft += 0.05f;
+				panRight -= 0.05f;
+                SetPanAudioPlayer(player, panLeft, panRight);
                 break;
 				
 			 case 'c': // To be used only when faust effects are running....
@@ -287,7 +292,8 @@ void SaveSound(AudioStream sound, char* name)
 
 void ExecTest(AudioPlayerPtr player, AudioStream sound)
 {
-    int res = LoadChannel(player, sound, 1, 1.0f, 0.5f);
+	printf("ExecTest channels %ld \n", GetChannelsSound(sound));
+    int res = LoadChannel(player, sound, 1, 1.0f, 0.0f, 1.0f);
 	SetStopCallbackChannel(player, 1, TestCallback, NULL);
     if (res == NO_ERR) {
         TestPlay(player);
