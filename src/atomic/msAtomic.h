@@ -54,7 +54,7 @@
 # error "msAtomic.h : target compiler and processor undefined"
 #endif
 
-static inline long msAtomicInc (TAtomic * volatile val)
+static inline long msAtomicInc (volatile TAtomic * val)
 {
     volatile long actual;
     do {
@@ -63,7 +63,7 @@ static inline long msAtomicInc (TAtomic * volatile val)
 	return actual;
 }
 
-static inline long msAtomicDec (TAtomic * volatile val)
+static inline long msAtomicDec (volatile TAtomic * val)
 {
     volatile long actual;
     do {
