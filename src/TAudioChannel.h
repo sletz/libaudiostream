@@ -229,8 +229,7 @@ class TAudioChannel
 			fPanRight = panRight;
 			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
 			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
-			printf("SetPan %f %f %f %f\n", fLLVol, fLRVol, fRLVol, fRRVol);
-        }
+		}
 		
 		void SetStopCallback(StopCallback callback, void* context)
         {
