@@ -33,7 +33,6 @@ research@grame.fr
 #include "TWriteFileAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TChannelizerAudioStream.h"
-
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 #include <assert.h>

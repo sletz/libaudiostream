@@ -21,7 +21,6 @@ research@grame.fr
 
 #include "TAudioEffect.h"
 #include "UAudioTools.h"
-#include <stdio.h>
 
 void TAudioEffectList::Init(float fade_in_val, float fade_in_time, float fade_out_val, float fade_out_time)
 {

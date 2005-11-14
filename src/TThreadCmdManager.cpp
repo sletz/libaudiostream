@@ -21,7 +21,6 @@ research@grame.fr
 
 #include "TThreadCmdManager.h"
 #include "TThreadUtils.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>

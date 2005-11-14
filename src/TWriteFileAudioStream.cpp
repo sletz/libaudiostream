@@ -22,7 +22,6 @@ research@grame.fr
 
 #include "TWriteFileAudioStream.h"
 #include "TAudioGlobals.h"
-
 #include "UAudioTools.h"
 #include "UTools.h"
 #include <stdio.h>

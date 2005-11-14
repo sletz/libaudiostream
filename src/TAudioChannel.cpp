@@ -25,7 +25,6 @@ research@grame.fr
 
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
-
 #include "UAudioTools.h"
 #include "TNullAudioStream.h"
 

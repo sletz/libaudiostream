@@ -26,7 +26,6 @@ research@grame.fr
 #include "UAudioTools.h"
 #include "TAudioBuffer.h"
 #include "smartpointer.h"
-
 #include <stdio.h>
 
 //--------------------
@@ -35,14 +34,6 @@ research@grame.fr
 /*!
 \brief The base class for all streams.
 */ 
-/*
-The Stop method may be used by subclasses to implement clean stream stopping (for example, flushing the disk for
-disk based stream, closing socket for a network based stream...etc..)
-Calling the Stop method when necessary is the reponsability of the object that uses the stream.
- 
-Be carefull : Closing may be done by another thread and no synchronization is done between the Stop method 
-and the possible other thread.
-*/
 
 class TAudioStream;
 
@@ -70,10 +61,6 @@ class TAudioStream : public smartable
         // Reset the stream to it's beginning
         virtual void Reset()
         {}
-
-        // Stop the stream
-        //virtual void Stop()
-        //{}
 
         // Cut the beginning of the stream
         virtual TAudioStreamPtr CutBegin(long frames)
@@ -168,14 +155,6 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             assert(fStream);
             fStream->Reset();
         }
-
-		/*
-        virtual void Stop()
-        {
-            assert(fStream);
-            fStream->Stop();
-        }
-		*/
 
         virtual TAudioStreamPtr CutBegin(long frames)
         {

@@ -119,8 +119,7 @@ class UAudioTools
 		
 		static inline void MixFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
         {
-			//printf("MixFrameToFrameBlk \n");
-            for (int i = 0 ; i < framesNum; i++) {
+			for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
                     int index1 = i * channels + j;
                     int index2 = index1 + 1;
@@ -132,8 +131,7 @@ class UAudioTools
 
         static inline void MixFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels, MY_FLOAT leftamp, MY_FLOAT rightamp)
         {
-			//printf("MixFrameToFrameBlk \n");
-            for (int i = 0 ; i < framesNum; i++) {
+			for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
                     int index1 = i * channels + j;
                     int index2 = index1 + 1;
@@ -145,8 +143,7 @@ class UAudioTools
 		
 		static inline void MixFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels, MY_FLOAT leftamp_L, MY_FLOAT rightamp_L, MY_FLOAT leftamp_R, MY_FLOAT rightamp_R)
         {
-			//printf("MixFrameToFrameStereoBlk \n");
-            for (int i = 0 ; i < framesNum; i++) {
+			for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
                     int index1 = i * channels + j;
                     int index2 = index1 + 1;

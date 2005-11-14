@@ -22,14 +22,13 @@ research@grame.fr
 #ifndef __TPanAudioEffect__
 #define __TPanAudioEffect__
 
-#include <math.h>
-
 #if !defined(PI)
  #define PI (MY_FLOAT) 3.14159265359
 #endif
 
 #include "TAudioEffectInterface.h"
 #include "TPanTable.h"
+#include <math.h>
 
 //-----------------------
 // Class TPanAudioEffect

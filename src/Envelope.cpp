@@ -15,7 +15,7 @@
 
 #include "Envelope.h"
 
-Envelope :: Envelope() : Object()
+Envelope::Envelope():Object()
 {
     target = (MY_FLOAT) 0.0;
     value = (MY_FLOAT) 0.0;
@@ -23,24 +23,24 @@ Envelope :: Envelope() : Object()
     state = 0;
 }
 
-Envelope :: ~Envelope()
+Envelope::~Envelope()
 {}
 
-void Envelope :: keyOn()
+void Envelope::keyOn()
 {
     target = (MY_FLOAT) 1.0;
     if (value != target)
         state = 1;
 }
 
-void Envelope :: keyOff()
+void Envelope::keyOff()
 {
     target = (MY_FLOAT) 0.0;
     if (value != target)
         state = 1;
 }
 
-void Envelope :: setRate(MY_FLOAT aRate)
+void Envelope::setRate(MY_FLOAT aRate)
 {
     if (aRate < 0.0) {
         printf("negative rates not allowed!!, correcting\n");
@@ -49,7 +49,7 @@ void Envelope :: setRate(MY_FLOAT aRate)
         rate = aRate;
 }
 
-void Envelope :: setTime(MY_FLOAT aTime)
+void Envelope::setTime(MY_FLOAT aTime)
 {
     if (aTime < 0.0) {
         printf("negative times not allowed!!, correcting\n");
@@ -58,21 +58,21 @@ void Envelope :: setTime(MY_FLOAT aTime)
         rate = ONE_OVER_SRATE / aTime ;
 }
 
-void Envelope :: setTarget(MY_FLOAT aTarget)
+void Envelope::setTarget(MY_FLOAT aTarget)
 {
     target = aTarget;
     if (value != target)
         state = 1;
 }
 
-void Envelope :: setValue(MY_FLOAT aValue)
+void Envelope::setValue(MY_FLOAT aValue)
 {
     state = 0;
     target = aValue;
     value = aValue;
 }
 
-MY_FLOAT Envelope :: tick()
+MY_FLOAT Envelope::tick()
 {
     if (state) {
         if (target > value) {
@@ -92,13 +92,13 @@ MY_FLOAT Envelope :: tick()
     return value;
 }
 
-int Envelope :: informTick()
+int Envelope::informTick()
 {
     this->tick();
     return state;
 }
 
-MY_FLOAT Envelope :: lastOut()
+MY_FLOAT Envelope::lastOut()
 {
     return value;
 }

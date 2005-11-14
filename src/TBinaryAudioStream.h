@@ -54,15 +54,7 @@ class TBinaryAudioStream : public TDecoratedAudioStream
             fStream2->Reset();
         }
 		
-		/*
-        virtual void Stop()
-        {
-            fStream1->Stop();
-            fStream2->Stop();
-        }
-		*/
-
-        virtual TAudioStreamPtr CutBegin(long frames) = 0;
+		virtual TAudioStreamPtr CutBegin(long frames) = 0;
         virtual long Length() = 0;
         virtual long Channels() = 0;
         virtual TAudioStreamPtr Copy() = 0;

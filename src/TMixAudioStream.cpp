@@ -22,7 +22,6 @@ research@grame.fr
 #include "TMixAudioStream.h"
 #include "UAudioTools.h"
 #include "TAudioGlobals.h"
-
 #include <assert.h>
 
 long TMixAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)

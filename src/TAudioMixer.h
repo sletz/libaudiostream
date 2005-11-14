@@ -26,7 +26,6 @@ research@grame.fr
 #include "TAudioClient.h"
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
-
 #include <list>
 
 //-------------------

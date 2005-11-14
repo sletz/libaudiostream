@@ -14,9 +14,9 @@
    I do set up some redefinable variables in Object.h.
 */
 
-Object :: Object()
+Object::Object()
 {}
-Object :: ~Object()
+Object::~Object()
 {}
 
 

@@ -23,7 +23,6 @@ research@grame.fr
 #include "TReadFileAudioStream.h"
 #include "TCmdManager.h"
 #include "TAudioGlobals.h"
-
 #include "UAudioTools.h"
 #include "UTools.h"
 #include <stdio.h>

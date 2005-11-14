@@ -21,7 +21,6 @@ research@grame.fr
 
 #include "TBufferedAudioStream.h"
 #include "TAudioGlobals.h"
-
 #include "UAudioTools.h"
 #include "UTools.h"
 #include  <string.h>

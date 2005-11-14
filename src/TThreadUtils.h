@@ -24,7 +24,6 @@ research@grame.fr
 #ifndef __TThreadUtils__
 #define __TThreadUtils__
 
-
 #if(defined(__ppc__) && defined(__APPLE__))
 
 #ifdef __cplusplus
