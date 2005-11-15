@@ -293,7 +293,7 @@ void SaveSound(AudioStream sound, char* name)
 void ExecTest(AudioPlayerPtr player, AudioStream sound)
 {
 	printf("ExecTest channels %ld \n", GetChannelsSound(sound));
-    int res = LoadChannel(player, sound, 1, 1.0f, 0.0f, 1.0f);
+    int res = LoadChannel(player, sound, 1, 1.0f, 1.0f, 0.0f);
 	SetStopCallbackChannel(player, 1, TestCallback, NULL);
     if (res == NO_ERR) {
         TestPlay(player);
@@ -326,6 +326,7 @@ int main(int argc, char* argv[])
     printf("Type 'n' to go to next test\n");
 	
     ExecTest(player, test0());
+	
 	ExecTest(player, test1());
     ExecTest(player, test2());
     ExecTest(player, test3());
