@@ -50,8 +50,7 @@ typedef unsigned char Boolean;
 #define STEREO_BUFFER_SIZE BUFFER_SIZE*2
 
 #define SAMPLE_RATE 44100.0f
-#define FADE_TIME (long)(0.35f*SAMPLE_RATE)  	// in frames
-#define FADE_TIME1 (long)(0.15f*SAMPLE_RATE)  	// in frames
+#define FADE_TIME1 64  	// in frames
 
 #define DEFAULT_VOL 1.0f		// (0 .. 1)
 #define DEFAULT_PAN 0.5f		// (0 .. 1)
