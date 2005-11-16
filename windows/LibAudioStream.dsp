@@ -223,6 +223,28 @@ SOURCE=.\PortAudio.lib
 # Begin Source File
 
 SOURCE=.\libsndfile.lib
+
+!IF  "$(CFG)" == "LibAudioStream - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "LibAudioStream - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\libsndfileDbg.lib
+
+!IF  "$(CFG)" == "LibAudioStream - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "LibAudioStream - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # End Target
 # End Project
