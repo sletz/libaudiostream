@@ -104,6 +104,12 @@ error:
 
 long TJackAudioRenderer::Close()
 {
+	// To be finished
+    jack_port_unregister(fClient, fInput_port1);
+	jack_port_unregister(fClient, fInput_port2);
+	jack_port_unregister(fClient, fOutput_port1);
+	jack_port_unregister(fClient, fOutput_port2);
+		
     if (fClient && jack_client_close(fClient)) {
         printf ("Cannot close client");
         return CLOSE_ERR;
