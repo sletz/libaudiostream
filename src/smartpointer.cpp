@@ -40,7 +40,7 @@ void smartable1::removeReferenceAux(smartable1* obj, long u1, long u2, long u3)
 unsigned long smartable1::removeReference() 
 { 
 	//printf("smartable1::removeReference %ld\n", refCount);
-	if (--refCount == 0) {
+	if (--refCount == 0 && fManager) {
 		//printf("call smartable1::removeReference\n");
 		fManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
 	}
@@ -56,4 +56,5 @@ void smartable1::Destroy()
 {
 	fManager->FlushCmds(); // Hum...
     delete fManager;
+	fManager = NULL;
 }
