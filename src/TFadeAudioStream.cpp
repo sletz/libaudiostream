@@ -162,7 +162,7 @@ void TChannelFadeAudioStream::SetStream(TAudioStreamPtr stream, long fadeIn, lon
     fStream = stream;
     fStatus = kIdle;
     fCurFrame = 0;
-    fFramesNum = fStream->Length() - fFadeOutFrames; // Number of frames - FadeOut
+	fFramesNum = fStream->Length() - fFadeOutFrames; // Number of frames - FadeOut
     Init(0.0f, float(fFadeInFrames), 1.0f, float(fFadeOutFrames));
 }
 

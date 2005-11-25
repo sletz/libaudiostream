@@ -33,15 +33,12 @@ unsigned long smartable::removeReference()
 
 void smartable1::removeReferenceAux(smartable1* obj, long u1, long u2, long u3)
 {
-	//printf("removeReferenceAux\n");
 	delete obj;
 }
 
 unsigned long smartable1::removeReference() 
 { 
-	//printf("smartable1::removeReference %ld\n", refCount);
 	if (--refCount == 0 && fManager) {
-		//printf("call smartable1::removeReference\n");
 		fManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
 	}
 	return refCount;

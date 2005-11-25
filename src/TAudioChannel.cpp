@@ -66,8 +66,9 @@ TAudioStreamPtr TAudioChannel::GetStream()
 
 void TAudioChannel::SoundOn()
 {
-	if (fFadeStream.IsIdle()) 
+	if (fFadeStream.IsIdle()) {
 		fFadeStream.FadeIn();
+	}
 	fStopCallback.Activate();
 }
 
