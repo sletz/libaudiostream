@@ -39,6 +39,7 @@
 //024
 		0249A662FF388D9811CA2CEA = {
 			children = (
+				4B170FAF0928F05100FD62F8,
 				D3C5192308B9CD8D00C1962D,
 				D3C5192408B9CD8D00C1962D,
 				0249A663FF388D9811CA2CEA,
@@ -236,6 +237,20 @@
 			settings = {
 			};
 		};
+		4B170FAF0928F05100FD62F8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = LibAudioStream.framework;
+			path = build/LibAudioStream.framework;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B170FB00928F05100FD62F8 = {
+			fileRef = 4B170FAF0928F05100FD62F8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4B1C2D4D0894D242003BC2A6 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -287,6 +302,7 @@
 		4B5146E907F186810059C4C8 = {
 			buildActionMask = 2147483647;
 			files = (
+				4B170FB00928F05100FD62F8,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,8 +322,8 @@
 				4B5146EA07F186810059C4C8,
 			);
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = /Volumes/Document1/Developpement/ProjectsCVS/libaudiostreamCVS/macosx/build;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-framework LibAudioStream";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = testPlayer;
