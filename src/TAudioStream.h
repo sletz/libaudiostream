@@ -31,13 +31,14 @@ research@grame.fr
 //--------------------
 // Class TAudioStream
 //--------------------
-/*!
-\brief The base class for all streams.
-*/ 
 
 class TAudioStream;
 
 typedef SMARTP<TAudioStream>  TAudioStreamPtr;
+
+/*!
+\brief The base class for all streams.
+*/ 
 
 class TAudioStream : public smartable
 {
