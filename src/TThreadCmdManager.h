@@ -25,6 +25,7 @@ research@grame.fr
 
 #if defined(__APPLE__) || defined(linux)
 #include <pthread.h>
+#include <mach/thread_act.h>
 #elif WIN32
 #include <windows.h>
 #endif
