@@ -39,15 +39,16 @@ class TJackAudioRenderer : public TAudioRenderer
 
     private:
 
-        jack_client_t * fClient;
+        jack_client_t* fClient;
 
-        jack_port_t * fInput_port1;
-        jack_port_t * fInput_port2;
-        jack_port_t * fOutput_port1;
-        jack_port_t * fOutput_port2;
+        jack_port_t** fInput_ports;
+        jack_port_t** fOutput_ports;
 
         float* fInputBuffer;
         float* fOutputBuffer;
+		
+		long fInput;
+		long fOutput;
 
         static int Process(jack_nframes_t nframes, void *arg);
 
