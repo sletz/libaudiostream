@@ -24,7 +24,7 @@ research@grame.fr
 #include <sndfile.h>
 #include <stdio.h>
 #define IN_CHANNELS 2 // stereo player
-#define OUT_CHANNELS 0 // stereo player
+#define OUT_CHANNELS 2 // stereo player
 #define CHANNELS 8
 
 
@@ -61,6 +61,7 @@ int main(int argc, char* argv[])
 
 				case 'b':
 					StartChannel(player, 1);
+					SetVolAudioPlayer(player, 0.0f);
 					break;
 
 				case 'c':
