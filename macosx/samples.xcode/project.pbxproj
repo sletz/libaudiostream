@@ -50,6 +50,7 @@
 			targets = (
 				8DD76FA90486AB0100D96B5E,
 				D3E4124E08BDFA6300B0CBFF,
+				4BF614AE0959C14600BF8A52,
 			);
 		};
 		08FB7794FE84155DC02AAC07 = {
@@ -67,9 +68,10 @@
 		08FB7795FE84155DC02AAC07 = {
 			children = (
 				D3E4125308BDFA9400B0CBFF,
-				D3E4125108BDFA7E00B0CBFF,
 				D3E4124A08BDFA2100B0CBFF,
+				D3E4125108BDFA7E00B0CBFF,
 				D3E4124408BDF9E300B0CBFF,
+				4BF614B70959C15E00BF8A52,
 			);
 			isa = PBXGroup;
 			name = Source;
@@ -90,6 +92,7 @@
 			children = (
 				8DD76FB20486AB0100D96B5E,
 				D3E4124F08BDFA6300B0CBFF,
+				4BF614B50959C14600BF8A52,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -101,6 +104,101 @@
 //1A2
 //1A3
 //1A4
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4BF614AE0959C14600BF8A52 = {
+			buildPhases = (
+				4BF614AF0959C14600BF8A52,
+				4BF614B10959C14600BF8A52,
+				4BF614B30959C14600BF8A52,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = recorder;
+			};
+			dependencies = (
+			);
+			isa = PBXNativeTarget;
+			name = recorder;
+			productInstallPath = "$(HOME)/bin";
+			productName = samples;
+			productReference = 4BF614B50959C14600BF8A52;
+			productType = "com.apple.product-type.tool";
+		};
+		4BF614AF0959C14600BF8A52 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BF614B80959C15E00BF8A52,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BF614B10959C14600BF8A52 = {
+			buildActionMask = 2147483647;
+			files = (
+				4BF614B20959C14600BF8A52,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BF614B20959C14600BF8A52 = {
+			fileRef = D3E4124608BDFA0200B0CBFF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BF614B30959C14600BF8A52 = {
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				4BF614B40959C14600BF8A52,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		4BF614B40959C14600BF8A52 = {
+			fileRef = D3E4124A08BDFA2100B0CBFF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BF614B50959C14600BF8A52 = {
+			explicitFileType = "compiled.mach-o.executable";
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = recorder;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4BF614B70959C15E00BF8A52 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = record.cpp;
+			path = ../samples/record.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BF614B80959C15E00BF8A52 = {
+			fileRef = 4BF614B70959C15E00BF8A52;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
 //8D0
 //8D1
 //8D2
