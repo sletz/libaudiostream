@@ -72,7 +72,12 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
         printf("Jack server not running?\n");
         goto error;
     }
+	
+	if ((*sampleRate != jack_get_sample_rate(fClient)) || (*bufferSize != jack_get_buffer_size(fClient))
+		goto error;
 
+	*sampleRate = jack_get_sample_rate(fClient);
+    *bufferSize = jack_get_buffer_size(fClient);
     jack_set_process_callback(fClient, Process, this);
 	
 	fInput = *inChan;
@@ -93,10 +98,7 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 			goto error;
 	}
 
-	*sampleRate = jack_get_sample_rate(fClient);
-    *bufferSize = jack_get_buffer_size(fClient);
-
-    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
+	return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening jack client\n");
