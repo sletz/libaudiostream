@@ -27,10 +27,6 @@ research@grame.fr
 #define OUT_CHANNELS 0 // stereo player
 #define CHANNELS 8
 
-AudioStream Record(char* name)
-{
-    return MakeWriteSound(name, MakeInputSound(), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
-}
 
 int main(int argc, char* argv[])
 {
@@ -44,19 +40,20 @@ int main(int argc, char* argv[])
 		 exit(0);
 	}
 	
+	printf("Type 'b' to start recording\n");
+	printf("Type 'c' to continue recording\n");
+    printf("Type 's' to stop recording\n");
+	printf("Type 'q' to quit\n");
+	
 	// Try to open Jack version
     AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
     // Is failure opens PortAudio version
     if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
+	AudioStream record_stream = MakeWriteSound(argv[1], MakeInputSound(), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 	
-	printf("Type 'b' to start recording\n");
-	printf("Type 'c' to continue recording\n");
-    printf("Type 's' to stop recording\n");
-	printf("Type 'q' to quit\n");
-	
-	int res = LoadChannel(player, Record(argv[1]), 1, 1.0f, 1.0f, 0.0f);
+	int res = LoadChannel(player, record_stream, 1, 1.0f, 1.0f, 0.0f);
 	if (res == NO_ERR) {
         while ((c = getchar()) && (c != 'q')) {
 
