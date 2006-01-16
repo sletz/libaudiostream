@@ -73,7 +73,7 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
         goto error;
     }
 	
-	if ((*sampleRate != jack_get_sample_rate(fClient)) || (*bufferSize != jack_get_buffer_size(fClient))
+	if ((*sampleRate != jack_get_sample_rate(fClient)) || (*bufferSize != jack_get_buffer_size(fClient)))
 		goto error;
 
 	*sampleRate = jack_get_sample_rate(fClient);
