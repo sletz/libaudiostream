@@ -27,8 +27,8 @@ research@grame.fr
 
 #define PA_SAMPLE_TYPE paFloat32
 
-int TPortAudioRenderer::Process(void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer,
-                                PaTimestamp outTime, void *userData)
+int TPortAudioRenderer::Process(void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer,
+                                PaTimestamp outTime, void* userData)
 {
     TPortAudioRendererPtr renderer = (TPortAudioRendererPtr)userData;
     renderer->Run((float*)inputBuffer, (float*)outputBuffer, framesPerBuffer);
@@ -83,7 +83,7 @@ void TPortAudioRenderer::DisplayDevices()
 
 int TPortAudioRenderer::GetFirstValidInputDevice()
 {
-    const PaDeviceInfo *pdi;
+    const PaDeviceInfo* pdi;
     int i, numDevices;
 
     numDevices = Pa_CountDevices();
@@ -99,7 +99,7 @@ int TPortAudioRenderer::GetFirstValidInputDevice()
 
 int TPortAudioRenderer::GetFirstValidOutputDevice()
 {
-    const PaDeviceInfo *pdi;
+    const PaDeviceInfo* pdi;
     int i, numDevices;
 
     numDevices = Pa_CountDevices();
@@ -116,7 +116,7 @@ int TPortAudioRenderer::GetFirstValidOutputDevice()
 long TPortAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
     PaError err;
-    const PaDeviceInfo *pdi;
+    const PaDeviceInfo* pdi;
     int numDevices;
     int inDevice;
     int outDevice;

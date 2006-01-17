@@ -38,13 +38,13 @@ class TPortAudioRenderer : public TAudioRenderer
 
     private:
 
-        PortAudioStream * fStream;
+        PortAudioStream* fStream;
 
-        static int Process(void *inputBuffer,
-                           void *outputBuffer,
+        static int Process(void* inputBuffer,
+                           void* outputBuffer,
                            unsigned long framesPerBuffer,
                            PaTimestamp outTime,
-                           void *userData);
+                           void* userData);
 
         void DisplayDevices();
         int GetFirstValidInputDevice();
