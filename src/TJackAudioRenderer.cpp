@@ -73,8 +73,14 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
         goto error;
     }
 	
-	if ((*sampleRate != jack_get_sample_rate(fClient)) || (*bufferSize != jack_get_buffer_size(fClient)))
+	if (*sampleRate != jack_get_sample_rate(fClient)) {
+		printf("Warning: requested sample rate = %ld different from driver sample rate = %d \n", *sampleRate, jack_get_sample_rate(fClient));
+	}
+	
+	if (*bufferSize != jack_get_buffer_size(fClient)) { 
+		printf("Error: requested buffer size = %ld different from driver bufffer size = %d \n", *bufferSize, jack_get_buffer_size(fClient));
 		goto error;
+	}
 
 	*sampleRate = jack_get_sample_rate(fClient);
     *bufferSize = jack_get_buffer_size(fClient);
@@ -142,7 +148,7 @@ long TJackAudioRenderer::Start()
 				printf("Cannot connect input ports\n");
 			}
 		}
-        free (ports);
+        free(ports);
     }
 
     if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
@@ -153,7 +159,7 @@ long TJackAudioRenderer::Start()
 				printf("Cannot connect output ports\n");
 			}
 		}
-		free (ports);
+		free(ports);
     }
 
     return NO_ERR;
@@ -168,8 +174,9 @@ long TJackAudioRenderer::Stop()
     if (jack_deactivate(fClient)) {
         printf("Cannot deactivate client");
         return OPEN_ERR;
-    }
-    return NO_ERR;
+    } else {
+		return NO_ERR;
+	}
 }
 
 void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
