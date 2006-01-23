@@ -27,6 +27,9 @@ research@grame.fr
 #ifdef __PORTAUDIO__
 #include "TPortAudioRenderer.h"
 #endif
+#ifdef __COREAUDIO__
+#include "TCoreAudioRenderer.h"
+#endif
 
 TAudioRendererPtr TAudioRendererFactory::MakePortAudioRenderer()
 {
@@ -48,4 +51,13 @@ TAudioRendererPtr TAudioRendererFactory::MakeJackAudioRenderer()
 #endif
 }
 
+TAudioRendererPtr TAudioRendererFactory::MakeCoreAudioRenderer()
+{
+#ifdef __COREAUDIO__
+    return new TCoreAudioRenderer();
+#else
+#warning CoreAudio renderer is not compiled
+    return NULL;
+#endif
+}
 

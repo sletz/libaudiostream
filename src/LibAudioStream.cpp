@@ -34,7 +34,7 @@ research@grame.fr
 	#define	AUDIOAPI
 #endif
 
-    enum {kPortAudioRenderer = 0, kJackRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
 
     struct AudioPlayer {
         TAudioRendererPtr fRenderer;
@@ -587,6 +587,10 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
 
         case kJackRenderer:
             player->fRenderer = TAudioRendererFactory::MakeJackAudioRenderer();
+            break;
+		
+		 case kCoreAudioRenderer:
+            player->fRenderer = TAudioRendererFactory::MakeCoreAudioRenderer();
             break;
     }
 

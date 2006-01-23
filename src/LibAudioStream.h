@@ -42,7 +42,7 @@ extern "C"
 #define FILE_NOT_FOUND_ERR -4
 
     enum {kPlayingChannel = 0, kIdleChannel};
-    enum {kPortAudioRenderer = 0, kJackRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
 
     /*!
     \brief Sound channel info

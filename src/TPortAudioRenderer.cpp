@@ -205,8 +205,9 @@ long TPortAudioRenderer::Start()
     if (err != paNoError) {
         printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
         return OPEN_ERR;
-    } else
+    } else {
         return NO_ERR;
+	}
 }
 
 long TPortAudioRenderer::Stop()
@@ -216,8 +217,9 @@ long TPortAudioRenderer::Stop()
     if (err != paNoError) {
         printf("Error while closing device : device close error %s\n", Pa_GetErrorText(err));
         return OPEN_ERR;
-    } else
+    } else {
         return NO_ERR;
+	}
 }
 
 void TPortAudioRenderer::GetInfo(RendererInfoPtr info)

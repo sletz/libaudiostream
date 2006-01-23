@@ -37,6 +37,7 @@ class AUDIO_EXPORTS TAudioRendererFactory
 
         static TAudioRendererPtr MakePortAudioRenderer();
         static TAudioRendererPtr MakeJackAudioRenderer();
+		static TAudioRendererPtr MakeCoreAudioRenderer();
 };
 
 #endif
