@@ -26,6 +26,8 @@ research@grame.fr
 #include "AudioExports.h"
 #include "TAudioRenderer.h"
 
+enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
+
 /*!
 \brief A Factory for audio renderers.
 */
@@ -33,11 +35,9 @@ research@grame.fr
 class AUDIO_EXPORTS TAudioRendererFactory
 {
 
-    public:
+	public:
 
-        static TAudioRendererPtr MakePortAudioRenderer();
-        static TAudioRendererPtr MakeJackAudioRenderer();
-		static TAudioRendererPtr MakeCoreAudioRenderer();
+        static TAudioRendererPtr MakeAudioRenderer(int renderer);
 };
 
 #endif

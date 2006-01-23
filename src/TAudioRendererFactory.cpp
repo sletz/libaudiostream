@@ -31,33 +31,35 @@ research@grame.fr
 #include "TCoreAudioRenderer.h"
 #endif
 
-TAudioRendererPtr TAudioRendererFactory::MakePortAudioRenderer()
+TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
-#ifdef __PORTAUDIO__
-    return new TPortAudioRenderer();
-#else
-#warning PortAudio renderer is not compiled
-    return NULL;
-#endif
-}
+	switch (renderer) {
 
-TAudioRendererPtr TAudioRendererFactory::MakeJackAudioRenderer()
-{
-#ifdef __JACK__
-    return new TJackAudioRenderer();
-#else
-#warning Jack renderer is not compiled
-    return NULL;
-#endif
-}
+        case kPortAudioRenderer:
+		#ifdef __PORTAUDIO__
+			return new TPortAudioRenderer();
+		#else
+		#warning PortAudio renderer is not compiled
+			return NULL;
+		#endif
 
-TAudioRendererPtr TAudioRendererFactory::MakeCoreAudioRenderer()
-{
-#ifdef __COREAUDIO__
-    return new TCoreAudioRenderer();
-#else
-#warning CoreAudio renderer is not compiled
-    return NULL;
-#endif
+        case kJackRenderer:
+		#ifdef __JACK__
+			return new TJackAudioRenderer();
+		#else
+		#warning Jack renderer is not compiled
+			return NULL;
+		#endif
+	
+		 case kCoreAudioRenderer:
+		#ifdef __COREAUDIO__
+			return new TCoreAudioRenderer();
+		#else
+		#warning CoreAudio renderer is not compiled
+			return NULL;
+		#endif
+			
+		default:
+			return NULL;
+    }
 }
-
