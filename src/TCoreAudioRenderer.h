@@ -41,7 +41,6 @@ class TCoreAudioRenderer : public TAudioRenderer
     private:
 
 		AudioBufferList* fInputData;
-		AudioBufferList* fOutputData;
 		AudioDeviceID fDeviceID;
 		AudioUnit fAUHAL;
 		

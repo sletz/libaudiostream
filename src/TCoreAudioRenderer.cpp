@@ -325,26 +325,11 @@ long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
     }
 	PrintStreamDesc(&dstFormat);
 	
-	/*
-    srcFormat.mSampleRate = *samplerate;
-    srcFormat.mFormatID = kAudioFormatLinearPCM;
-    srcFormat.mFormatFlags = kLinearPCMFormatFlagIsBigEndian |
-                             kLinearPCMFormatFlagIsPacked |
-                             kLinearPCMFormatFlagIsFloat;
-    srcFormat.mBytesPerPacket = sizeof(float);
-    srcFormat.mFramesPerPacket = 1;
-    srcFormat.mBytesPerFrame = sizeof(float);
-    srcFormat.mChannelsPerFrame = *outChan;
-	srcFormat.mBitsPerChannel = 32;
-	*/
-	
 	srcFormat.mSampleRate = *samplerate;
-	
     srcFormat.mFormatID = kAudioFormatLinearPCM;
 	srcFormat.mBitsPerChannel = 32;
 	srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
 	srcFormat.mChannelsPerFrame = *outChan;
-	
 	srcFormat.mFramesPerPacket = 1;
 	srcFormat.mBytesPerFrame = srcFormat.mBitsPerChannel * srcFormat.mChannelsPerFrame / 8;
     srcFormat.mBytesPerPacket = srcFormat.mBytesPerFrame * srcFormat.mFramesPerPacket;
@@ -356,31 +341,15 @@ long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
         printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Input\n");
         printError(err1);
     }
-
 	
     dstFormat.mSampleRate = *samplerate;
-	/*
-    dstFormat.mFormatID = kAudioFormatLinearPCM;
-    dstFormat.mFormatFlags = kLinearPCMFormatFlagIsBigEndian |
-                             kLinearPCMFormatFlagIsPacked |
-                             kLinearPCMFormatFlagIsFloat;
-    dstFormat.mBytesPerPacket = *inChan * sizeof(float);
-    dstFormat.mFramesPerPacket = 1;
-    dstFormat.mBytesPerFrame = *inChan * sizeof(float);
-    dstFormat.mChannelsPerFrame = *inChan;
-    dstFormat.mBitsPerChannel = 32;
-	*/
-	
-	dstFormat.mSampleRate = *samplerate;
-    dstFormat.mFormatID = kAudioFormatLinearPCM;
+	dstFormat.mFormatID = kAudioFormatLinearPCM;
 	dstFormat.mBitsPerChannel = 32;
 	dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
 	dstFormat.mChannelsPerFrame = *inChan;
-	
 	dstFormat.mFramesPerPacket = 1;
 	dstFormat.mBytesPerFrame = dstFormat.mBitsPerChannel * dstFormat.mChannelsPerFrame / 8;
     dstFormat.mBytesPerPacket = dstFormat.mBytesPerFrame * dstFormat.mFramesPerPacket;
-	
 	
 	PrintStreamDesc(&dstFormat);
 
@@ -469,7 +438,7 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    //info->fCurFrame = long(Pa_StreamTime(fStream));
+    //info->fCurFrame = long(Pa_StreamTime(fStream)); // To finish
     info->fCurMs = ConvertSample2Ms(info->fCurFrame);
 }
 
