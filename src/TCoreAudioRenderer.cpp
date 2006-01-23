@@ -29,11 +29,6 @@ research@grame.fr
 
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
-    if (!inDesc) {
-        printf("Can't print a NULL desc!\n");
-        return ;
-    }
-
     printf("- - - - - - - - - - - - - - - - - - - -\n");
     printf("  Sample Rate:%f\n", inDesc->mSampleRate);
     printf("  Format ID:%.*s\n", (int) sizeof(inDesc->mFormatID), (char*)&inDesc->mFormatID);
