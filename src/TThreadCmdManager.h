@@ -23,11 +23,13 @@ research@grame.fr
 #ifndef __TThreadCmdManager__
 #define __TThreadCmdManager__
 
-#if defined(__APPLE__) || defined(linux)
-#include <pthread.h>
-#include <mach/thread_act.h>
+#if defined(__APPLE__)
+# include <pthread.h>
+# include <mach/thread_act.h>
+#elif defined(linux)
+# include <pthread.h>
 #elif WIN32
-#include <windows.h>
+# include <windows.h>
 #endif
 
 #include "TCmdManager.h"
