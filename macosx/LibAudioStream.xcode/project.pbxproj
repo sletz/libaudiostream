@@ -87,6 +87,8 @@
 		};
 		08FB7794FE84155DC02AAC07 = {
 			children = (
+				4B7BD8DC097D0EF30029D6DC,
+				4B7BD8D8097D0ED00029D6DC,
 				F5F4A853032657D901053105,
 				4BA0DEDE087FE455003B1CB3,
 				F5EDBD21032F870801053105,
@@ -269,6 +271,34 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
+		4B6BBBBB0998A952000CEAAB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = TCoreAudioRenderer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B6BBBBC0998A952000CEAAB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = TCoreAudioRenderer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B6BBBBD0998A952000CEAAB = {
+			fileRef = 4B6BBBBB0998A952000CEAAB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B6BBBBE0998A952000CEAAB = {
+			fileRef = 4B6BBBBC0998A952000CEAAB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4B7AFA7E085CB187002CD798 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -295,6 +325,34 @@
 			path = ../src/TFaustAudioEffect.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
+		};
+		4B7BD8D8097D0ED00029D6DC = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = AudioUnit.framework;
+			path = /System/Library/Frameworks/AudioUnit.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4B7BD8D9097D0ED00029D6DC = {
+			fileRef = 4B7BD8D8097D0ED00029D6DC;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B7BD8DC097D0EF30029D6DC = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreAudio.framework;
+			path = /System/Library/Frameworks/CoreAudio.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4B7BD8DD097D0EF30029D6DC = {
+			fileRef = 4B7BD8DC097D0EF30029D6DC;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		4B83CA1907FBE5AE00256489 = {
 			fileEncoding = 30;
@@ -334,6 +392,8 @@
 		};
 		4BA6AC5A044AF64500053105 = {
 			children = (
+				4B6BBBBB0998A952000CEAAB,
+				4B6BBBBC0998A952000CEAAB,
 				4B0391DF0585040A006C929E,
 				4BB27531056B7DF100053105,
 				4BB2752F056B798A00053105,
@@ -447,7 +507,7 @@
 			dependencies = (
 			);
 			isa = PBXNativeTarget;
-			name = LibAudioStreamPA;
+			name = "LibAudioStream PortAudio";
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = AudioEngineFramework;
 			productReference = 4BEA61E6095806CD001F733A;
@@ -1067,7 +1127,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = "__JACK__ __PORTAUDIO__";
+				GCC_PREPROCESSOR_DEFINITIONS = "__JACK__ __PORTAUDIO__ __COREAUDIO__";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
@@ -1085,7 +1145,7 @@
 			dependencies = (
 			);
 			isa = PBXNativeTarget;
-			name = "LibAudioStreamPA+Jack";
+			name = "LibAudioStream PortAudio+CoreAudio+Jack";
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = AudioEngineFramework;
 			productReference = 4BEA623C095806CD001F733A;
@@ -1142,6 +1202,7 @@
 				4BEA6216095806CD001F733A,
 				4BEA6217095806CD001F733A,
 				4BEA6218095806CD001F733A,
+				4B6BBBBE0998A952000CEAAB,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1481,6 +1542,7 @@
 				4BEA6234095806CD001F733A,
 				4BEA6235095806CD001F733A,
 				4BEA6236095806CD001F733A,
+				4B6BBBBD0998A952000CEAAB,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1658,6 +1720,8 @@
 			files = (
 				4BEA6238095806CD001F733A,
 				4BEA6239095806CD001F733A,
+				4B7BD8D9097D0ED00029D6DC,
+				4B7BD8DD097D0EF30029D6DC,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
