@@ -23,7 +23,7 @@ research@grame.fr
 #define __TPanAudioEffect__
 
 #if !defined(PI)
- #define PI (MY_FLOAT) 3.14159265359
+ #define PI (float) 3.14159265359
 #endif
 
 #include "TAudioEffectInterface.h"

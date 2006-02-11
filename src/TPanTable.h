@@ -25,7 +25,7 @@ research@grame.fr
 #include <math.h>
 
 #if !defined(PI)
- #define PI (MY_FLOAT) 3.14159265359
+ #define PI (float)3.14159265359
 #endif
 
 //------------------
@@ -40,8 +40,8 @@ class TPanTable
 
     private:
 
-        static MY_FLOAT fPanTable[128];
-        static MY_FLOAT fVolTable[128];
+        static float fPanTable[128];
+        static float fVolTable[128];
 
         static int Range(int val, int min, int max)
         {
@@ -61,7 +61,7 @@ class TPanTable
 			*right_vol = vol * cos(pan * PI/2.0);
 		}
 	
-		static MY_FLOAT GetVol(short vol)
+		static float GetVol(short vol)
         {
             return fVolTable[Range(vol, 0, 127)];
         }

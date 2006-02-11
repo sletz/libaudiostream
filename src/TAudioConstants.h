@@ -28,8 +28,6 @@ typedef unsigned char Boolean;
 
 #define ADVANCE 131072
 
-#define MY_FLOAT float
-
 #define SAMPLE_SIZE  	2 // sample size in Byte
 
 #define kBufferNum  	10

@@ -16,7 +16,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
 research@grame.fr
-TAudioBuffer<float>*
+
 */
 
 #ifndef __TAudioEffectInterface__

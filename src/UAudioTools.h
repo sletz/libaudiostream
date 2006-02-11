@@ -78,9 +78,9 @@ class UAudioTools
             }
         }
 
-        static inline void MixMonoToStereoBlk(MY_FLOAT* dst, MY_FLOAT* src, long nbsamples, MY_FLOAT leftamp, MY_FLOAT rightamp)
+        static inline void MixMonoToStereoBlk(float* dst, float* src, long nbsamples, float leftamp, float rightamp)
         {
-            MY_FLOAT x, y;
+            float x, y;
             long i, j;
 
             for ( i = 0, j = 0 ; i < nbsamples; i += 2, j += 4) {
@@ -105,9 +105,9 @@ class UAudioTools
             }
         }
 
-        static inline void MixStereoToStereoBlk(MY_FLOAT* dst, MY_FLOAT* src, long nbsamples, MY_FLOAT leftamp, MY_FLOAT rightamp)
+        static inline void MixStereoToStereoBlk(float* dst, float* src, long nbsamples, float leftamp, float rightamp)
         {
-            MY_FLOAT x, y ;
+            float x, y ;
 
             for (long i = 0 ; i < nbsamples; i += 2) {
                 x = src[i];
@@ -117,7 +117,7 @@ class UAudioTools
             }
         }
 		
-		static inline void MixFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
+		static inline void MixFrameToFrameBlk(float* dst, float* src, long framesNum, long channels)
         {
 			for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
@@ -129,7 +129,7 @@ class UAudioTools
             }
 		}
 
-        static inline void MixFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels, MY_FLOAT leftamp, MY_FLOAT rightamp)
+        static inline void MixFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {
 			for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
@@ -141,7 +141,7 @@ class UAudioTools
             }
 		}
 		
-		static inline void MixFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels, MY_FLOAT leftamp_L, MY_FLOAT rightamp_L, MY_FLOAT leftamp_R, MY_FLOAT rightamp_R)
+		static inline void MixFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp_L, float rightamp_L, float leftamp_R, float rightamp_R)
         {
 			for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
@@ -153,7 +153,7 @@ class UAudioTools
             }
 		}
 		
-		static inline void MixFrameToFrameBlk1(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
+		static inline void MixFrameToFrameBlk1(float* dst, float* src, long framesNum, long channels)
         {
             for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j++) { 
@@ -163,7 +163,7 @@ class UAudioTools
             }
         }
 
-        static inline void ReplaceFrameToFrameBlk(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels, MY_FLOAT leftamp, MY_FLOAT rightamp)
+        static inline void ReplaceFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {
             for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
@@ -175,7 +175,7 @@ class UAudioTools
             }
         }
 
-        static inline void ReplaceFrameToFrameBlk1(MY_FLOAT* dst, MY_FLOAT* src, long framesNum, long channels)
+        static inline void ReplaceFrameToFrameBlk1(float* dst, float* src, long framesNum, long channels)
         {
             for (int i = 0 ; i < framesNum; i++) {
                 for (int j = 0 ; j < channels; j += 2) { // A REVOIR
@@ -197,14 +197,14 @@ class UAudioTools
             memset(dst, 0, sizeof(short) * nbsamples);
         }
 
-        static inline void ZeroStereoBlk(MY_FLOAT* dst, long nbsamples)
+        static inline void ZeroStereoBlk(float* dst, long nbsamples)
         {
-            memset(dst, 0, sizeof(MY_FLOAT) * nbsamples);
+            memset(dst, 0, sizeof(float) * nbsamples);
         }
 
-        static inline void ZeroFloatBlk(MY_FLOAT* dst, long framesNum, long channels)
+        static inline void ZeroFloatBlk(float* dst, long framesNum, long channels)
         {
-            memset(dst, 0, sizeof(MY_FLOAT) * framesNum * channels);
+            memset(dst, 0, sizeof(float) * framesNum * channels);
         }
 
         static inline void ZeroShortBlk(short* dst, long framesNum, long channels)
@@ -212,14 +212,14 @@ class UAudioTools
             memset(dst, 0, sizeof(short) * framesNum * channels);
         }
 
-        static inline void Float2ShortStereo(MY_FLOAT* in, short* out, long nbsamples)
+        static inline void Float2ShortStereo(float* in, short* out, long nbsamples)
         {
             for (long i = 0;i < nbsamples; i++) {
                 out[i] = (in[i] >= 1.0) ? SHRT_MAX : (in[i] <= -1.0) ? SHRT_MIN : short(in[i] * float(SHRT_MAX));
             }
         }
 
-        static inline void Float2LongMulti(MY_FLOAT* in, long * out, long framesNum, long nbchan, long chan1, long chan2)
+        static inline void Float2LongMulti(float* in, long * out, long framesNum, long nbchan, long chan1, long chan2)
         {
             for (long i = 0;i < framesNum; i++) {
                 out[(i*nbchan) + chan1]
@@ -229,7 +229,7 @@ class UAudioTools
             }
         }
 
-        static inline void Short2FloatStereo(short* in, MY_FLOAT* out, long nbsamples)
+        static inline void Short2FloatStereo(short* in, float* out, long nbsamples)
         {
             float fGain = 1.0f / float(SHRT_MAX);
             for (long i = 0; i < nbsamples; i++) {
@@ -237,7 +237,7 @@ class UAudioTools
             }
         }
 
-        static inline void Short2FloatMono(short* in, MY_FLOAT* out, long nbsamples)
+        static inline void Short2FloatMono(short* in, float* out, long nbsamples)
         {
             float sample;
             float fGain = 1.0f / float(SHRT_MAX);
@@ -254,7 +254,7 @@ class UAudioTools
             return (sample < -1.0f) ? -1.0f : (sample > 1.0f) ? 1.0f : sample;
         }
 
-        static inline void Short2Float(short* in, MY_FLOAT* out, long framesNum, long channelsIn, long channelsOut)
+        static inline void Short2Float(short* in, float* out, long framesNum, long channelsIn, long channelsOut)
         {
             float sample;
             float fGain = 1.0f / float(SHRT_MAX);
@@ -278,7 +278,7 @@ class UAudioTools
             }
         }
 
-		static inline void Short2FloatMix(short* in, MY_FLOAT* out, long framesNum, long channelsIn, long channelsOut)
+		static inline void Short2FloatMix(short* in, float* out, long framesNum, long channelsIn, long channelsOut)
         {
             float sample;
             float fGain = 1.0f / float(SHRT_MAX);
@@ -318,7 +318,7 @@ class UAudioTools
 			}
         }
 	  		
-        static inline void Float2Short(MY_FLOAT* in, short* out, long framesNum, long channelsIn, long channelsOut)
+        static inline void Float2Short(float* in, short* out, long framesNum, long channelsIn, long channelsOut)
         {
             float fGain = float(SHRT_MAX);
 
@@ -337,7 +337,7 @@ class UAudioTools
             }
         }
 
-        static inline void Float2ShortMix(MY_FLOAT* in, short* out, long framesNum, long channelsIn, long channelsOut)
+        static inline void Float2ShortMix(float* in, short* out, long framesNum, long channelsIn, long channelsOut)
         {
             float fGain = float(SHRT_MAX);
 
@@ -357,7 +357,7 @@ class UAudioTools
             }
         }
 
-        static inline void Float2FloatMix(MY_FLOAT* in, MY_FLOAT* out, long framesNum, long channelsIn, long channelsOut)
+        static inline void Float2FloatMix(float* in, float* out, long framesNum, long channelsIn, long channelsOut)
         {
             if (channelsIn < channelsOut) {  // distribute channels
                 for (long i = 0; i < framesNum; i++) {
