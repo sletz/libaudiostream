@@ -154,6 +154,8 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, AudioDevi
 	} else {
 		return kAudioHardwareBadDeviceError;
 	}
+	
+	return noErr;
 }
 
 long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* samplerate)
