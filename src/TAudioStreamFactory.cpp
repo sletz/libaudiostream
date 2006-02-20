@@ -107,6 +107,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
     } else {
         return 0;
     }
+	return 0;
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeSeqSound(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade)
