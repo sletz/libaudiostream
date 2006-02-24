@@ -96,7 +96,6 @@ extern "C"
 	long LibVersion();
 
     // Build sound (using smartptr)
-	
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
     AudioStream AUDIOAPI MakeReadSound(char* name);
     AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
@@ -115,7 +114,6 @@ extern "C"
     long AUDIOAPI GetChannelsSound(AudioStream s);
     long AUDIOAPI ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
 	void AUDIOAPI ResetSound(AudioStream sound);
-	
 	
 	// Build sound (using pointer on smartptr)
 	AudioStreamPtr AUDIOAPI MakeNullSoundPtr(long lengthFrame);
@@ -139,7 +137,6 @@ extern "C"
 	void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound);
 	
     // Effect management (using smartptr)
-	
     AudioEffectList AUDIOAPI MakeAudioEffectList();
     AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
     AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
@@ -152,7 +149,6 @@ extern "C"
 	void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
 	void AUDIOAPI SetControlValue(AudioEffect effect, long param, float f);
 	float AUDIOAPI GetControlValue(AudioEffect effect, long param);
-	
 	
 	AudioEffectListPtr AUDIOAPI MakeAudioEffectListPtr();
     AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
@@ -193,7 +189,7 @@ extern "C"
     void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
     void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
 
-    void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan); // Start a sound region from the beginning
+    void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan);	// Start a sound region from the beginning
     void AUDIOAPI ContChannel(AudioPlayerPtr player, long chan);	// Play a sound region from the current location
     void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan);	// Stop playing
 
