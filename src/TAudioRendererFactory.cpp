@@ -47,7 +47,11 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 		#ifdef __JACK__
 			return new TJackAudioRenderer();
 		#else
-		#warning Jack renderer is not compiled
+		#ifdef WIN32
+			#pragma message ("Jack renderer is not compiled")
+		#else
+			#warning Jack renderer is not compiled
+		#endif
 			return NULL;
 		#endif
 	
@@ -55,7 +59,11 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 		#ifdef __COREAUDIO__
 			return new TCoreAudioRenderer();
 		#else
-		#warning CoreAudio renderer is not compiled
+		#ifdef WIN32
+			#pragma message ("CoreAudio renderer is not compiled")
+		#else
+			#warning CoreAudio renderer is not compiled
+		#endif
 			return NULL;
 		#endif
 			
