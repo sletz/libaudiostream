@@ -104,7 +104,7 @@
 				0249A662FF388D9811CA2CEA,
 				1AB674ADFE9D54B511CA2CBB,
 				4BEA61E4095806CD001F733A,
-				4BEA623B095806CD001F733A,
+				4BA41DF009BC83E5006C4A44,
 			);
 			isa = PBXGroup;
 			name = AudioEngine.prprj;
@@ -389,6 +389,21 @@
 			path = ../src/TRendererAudioStream.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
+		};
+		4BA41DF009BC83E5006C4A44 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
+			name = "Info-LibAudioStreamPA_CA_Jack.plist";
+			path = "../Info-LibAudioStreamPA_CA_Jack.plist";
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4BA41DF109BC83E5006C4A44 = {
+			fileRef = 4BA41DF009BC83E5006C4A44;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		4BA6AC5A044AF64500053105 = {
 			children = (
@@ -1129,7 +1144,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "__JACK__ __PORTAUDIO__ __COREAUDIO__";
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "Info-LibAudioStreamPA_Jack.plist";
+				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-flat_namespace libportaudio.a libsndfile.a -ljack";
@@ -1507,6 +1522,7 @@
 		4BEA6219095806CD001F733A = {
 			buildActionMask = 2147483647;
 			files = (
+				4BA41DF109BC83E5006C4A44,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1744,13 +1760,6 @@
 			);
 			isa = PBXRezBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4BEA623B095806CD001F733A = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
-			path = "Info-LibAudioStreamPA_Jack.plist";
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		4BEA623C095806CD001F733A = {
 			explicitFileType = wrapper.framework;
