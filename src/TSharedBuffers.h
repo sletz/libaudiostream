@@ -23,7 +23,7 @@ research@grame.fr
 #ifndef __TSharedBuffers_
 #define __TSharedBuffers_
 
-//Global Input/ouput buffers
+// Global Input/output buffers
 
 //----------------------
 // Class TSharedBuffers
