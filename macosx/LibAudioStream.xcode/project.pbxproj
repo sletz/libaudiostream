@@ -103,8 +103,8 @@
 				F5C1FF5A0328B73A01053105,
 				0249A662FF388D9811CA2CEA,
 				1AB674ADFE9D54B511CA2CBB,
-				4BEA61E4095806CD001F733A,
-				4BA41DF009BC83E5006C4A44,
+				4B8E185609FCD83000D586F5,
+				4B8E185809FCD83A00D586F5,
 			);
 			isa = PBXGroup;
 			name = AudioEngine.prprj;
@@ -372,6 +372,34 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
+		4B8E185609FCD83000D586F5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
+			path = "Info-LibAudioStreamPA.plist";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B8E185709FCD83000D586F5 = {
+			fileRef = 4B8E185609FCD83000D586F5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B8E185809FCD83A00D586F5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.xml;
+			path = "Info-LibAudioStreamPA_CA_Jack.plist";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B8E185909FCD83A00D586F5 = {
+			fileRef = 4B8E185809FCD83A00D586F5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4BA0DEDE087FE455003B1CB3 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -389,21 +417,6 @@
 			path = ../src/TRendererAudioStream.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		4BA41DF009BC83E5006C4A44 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
-			name = "Info-LibAudioStreamPA_CA_Jack.plist";
-			path = "../Info-LibAudioStreamPA_CA_Jack.plist";
-			refType = 3;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4BA41DF109BC83E5006C4A44 = {
-			fileRef = 4BA41DF009BC83E5006C4A44;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		4BA6AC5A044AF64500053105 = {
 			children = (
@@ -876,6 +889,7 @@
 		4BEA61C3095806CD001F733A = {
 			buildActionMask = 2147483647;
 			files = (
+				4B8E185709FCD83000D586F5,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1103,13 +1117,6 @@
 			);
 			isa = PBXRezBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4BEA61E4095806CD001F733A = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
-			path = "Info-LibAudioStreamPA.plist";
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		4BEA61E5095806CD001F733A = {
 			compilerSpec = com.apple.compilers.gcc.4_0;
@@ -1522,7 +1529,7 @@
 		4BEA6219095806CD001F733A = {
 			buildActionMask = 2147483647;
 			files = (
-				4BA41DF109BC83E5006C4A44,
+				4B8E185909FCD83A00D586F5,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
