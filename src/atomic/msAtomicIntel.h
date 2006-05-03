@@ -46,6 +46,31 @@ static inline char CAS (volatile void * addr, volatile void * value, void * newv
 	return ret;
 }
 
+#ifdef __APPLE__ 
+
+/*
+On MacIntel, version 4.0.1 of the gcc compiler gives the following error: can't find a register in class 'BREG' while reloading 'asm'
+To solve that, %%ebx register has to be saved and restored.
+*/
+
+static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
+{
+	register char ret;
+	__asm__ __volatile__ (
+		"# CAS2 \n\t"
+		"xchgl %%esi, %%ebx \n\t"
+		LOCK "cmpxchg8b (%1) \n\t"
+		"sete %0             \n\t"
+		"xchgl %%ebx, %%esi \n\t" /* Restore %ebx.  */
+		:"=a" (ret)
+		:"D" (addr), "d" (v2), "a" (v1), "S" (n1), "c" (n2)
+		
+	);
+	return ret;
+}
+
+#else
+
 static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
 {
 	register char ret;
@@ -58,5 +83,7 @@ static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long
 	);
 	return ret;
 }
+
+#endif
 
 #endif
