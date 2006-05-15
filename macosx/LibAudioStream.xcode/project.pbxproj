@@ -1119,7 +1119,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4BEA61E5095806CD001F733A = {
-			compilerSpec = com.apple.compilers.gcc.4_0;
+			compilerSpec = com.apple.compilers.gcc;
 			fileType = sourcecode.c;
 			isEditable = 1;
 			isa = PBXBuildRule;
