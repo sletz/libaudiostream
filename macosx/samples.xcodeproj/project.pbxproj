@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4BF614B20959C14600BF8A52 /* LibAudioStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E4124608BDFA0200B0CBFF /* LibAudioStream.framework */; };
+		4BF614B40959C14600BF8A52 /* LibAudioStream.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D3E4124A08BDFA2100B0CBFF /* LibAudioStream.h */; };
+		4BF614B80959C15E00BF8A52 /* record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BF614B70959C15E00BF8A52 /* record.cpp */; };
+		D3E4124508BDF9E300B0CBFF /* fileplay.c in Sources */ = {isa = PBXBuildFile; fileRef = D3E4124408BDF9E300B0CBFF /* fileplay.c */; };
+		D3E4124708BDFA0200B0CBFF /* LibAudioStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E4124608BDFA0200B0CBFF /* LibAudioStream.framework */; };
+		D3E4124B08BDFA2100B0CBFF /* LibAudioStream.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D3E4124A08BDFA2100B0CBFF /* LibAudioStream.h */; };
+		D3E4125208BDFA7E00B0CBFF /* fileplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3E4125108BDFA7E00B0CBFF /* fileplay.cpp */; };
+		D3E4125808BDFAAC00B0CBFF /* LibAudioStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E4124608BDFA0200B0CBFF /* LibAudioStream.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		014CEA520018CE5811CA2923 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		014CEA530018CE5811CA2923 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4BF614B30959C14600BF8A52 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				4BF614B40959C14600BF8A52 /* LibAudioStream.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		8DD76FAF0486AB0100D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				D3E4124B08BDFA2100B0CBFF /* LibAudioStream.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4BF614B50959C14600BF8A52 /* recorder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = recorder; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BF614B70959C15E00BF8A52 /* record.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = record.cpp; path = ../samples/record.cpp; sourceTree = SOURCE_ROOT; };
+		8DD76FB20486AB0100D96B5E /* fileplay */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fileplay; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3E4124408BDF9E300B0CBFF /* fileplay.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fileplay.c; path = ../samples/fileplay.c; sourceTree = SOURCE_ROOT; };
+		D3E4124608BDFA0200B0CBFF /* LibAudioStream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LibAudioStream.framework; path = build/LibAudioStream.framework; sourceTree = SOURCE_ROOT; };
+		D3E4124A08BDFA2100B0CBFF /* LibAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LibAudioStream.h; path = ../src/LibAudioStream.h; sourceTree = SOURCE_ROOT; };
+		D3E4124F08BDFA6300B0CBFF /* fileplay++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "fileplay++"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3E4125108BDFA7E00B0CBFF /* fileplay.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fileplay.cpp; path = ../samples/fileplay.cpp; sourceTree = SOURCE_ROOT; };
+		D3E4125308BDFA9400B0CBFF /* LibAudioStream++.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "LibAudioStream++.h"; path = "../src/LibAudioStream++.h"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4BF614B10959C14600BF8A52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BF614B20959C14600BF8A52 /* LibAudioStream.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DD76FAD0486AB0100D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3E4124708BDFA0200B0CBFF /* LibAudioStream.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3E4124D08BDFA6300B0CBFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3E4125808BDFAAC00B0CBFF /* LibAudioStream.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* samples */ = {
+			isa = PBXGroup;
+			children = (
+				D3E4124608BDFA0200B0CBFF /* LibAudioStream.framework */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6A0FF2B0290797F04C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = samples;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D3E4125308BDFA9400B0CBFF /* LibAudioStream++.h */,
+				D3E4124A08BDFA2100B0CBFF /* LibAudioStream.h */,
+				D3E4125108BDFA7E00B0CBFF /* fileplay.cpp */,
+				D3E4124408BDF9E300B0CBFF /* fileplay.c */,
+				4BF614B70959C15E00BF8A52 /* record.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76FB20486AB0100D96B5E /* fileplay */,
+				D3E4124F08BDFA6300B0CBFF /* fileplay++ */,
+				4BF614B50959C14600BF8A52 /* recorder */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4BF614AE0959C14600BF8A52 /* recorder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BEEDA900A19178D00806945 /* Build configuration list for PBXNativeTarget "recorder" */;
+			buildPhases = (
+				4BF614AF0959C14600BF8A52 /* Sources */,
+				4BF614B10959C14600BF8A52 /* Frameworks */,
+				4BF614B30959C14600BF8A52 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = recorder;
+			};
+			dependencies = (
+			);
+			name = recorder;
+			productInstallPath = "$(HOME)/bin";
+			productName = samples;
+			productReference = 4BF614B50959C14600BF8A52 /* recorder */;
+			productType = "com.apple.product-type.tool";
+		};
+		8DD76FA90486AB0100D96B5E /* fileplay C */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BEEDA880A19178D00806945 /* Build configuration list for PBXNativeTarget "fileplay C" */;
+			buildPhases = (
+				8DD76FAB0486AB0100D96B5E /* Sources */,
+				8DD76FAD0486AB0100D96B5E /* Frameworks */,
+				8DD76FAF0486AB0100D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = fileplay;
+			};
+			dependencies = (
+			);
+			name = "fileplay C";
+			productInstallPath = "$(HOME)/bin";
+			productName = samples;
+			productReference = 8DD76FB20486AB0100D96B5E /* fileplay */;
+			productType = "com.apple.product-type.tool";
+		};
+		D3E4124E08BDFA6300B0CBFF /* fileplay++ */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BEEDA8C0A19178D00806945 /* Build configuration list for PBXNativeTarget "fileplay++" */;
+			buildPhases = (
+				D3E4124C08BDFA6300B0CBFF /* Sources */,
+				D3E4124D08BDFA6300B0CBFF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "fileplay++";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = "fileplay++";
+			productName = "fileplay++";
+			productReference = D3E4124F08BDFA6300B0CBFF /* fileplay++ */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4BEEDA940A19178D00806945 /* Build configuration list for PBXProject "samples" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				014CEA520018CE5811CA2923 /* Development */,
+				014CEA530018CE5811CA2923 /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* samples */;
+			projectDirPath = "";
+			targets = (
+				8DD76FA90486AB0100D96B5E /* fileplay C */,
+				D3E4124E08BDFA6300B0CBFF /* fileplay++ */,
+				4BF614AE0959C14600BF8A52 /* recorder */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4BF614AF0959C14600BF8A52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BF614B80959C15E00BF8A52 /* record.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DD76FAB0486AB0100D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3E4124508BDF9E300B0CBFF /* fileplay.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3E4124C08BDFA6300B0CBFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3E4125208BDFA7E00B0CBFF /* fileplay.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4BEEDA890A19178D00806945 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = fileplay;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BEEDA8A0A19178D00806945 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = fileplay;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BEEDA8B0A19178D00806945 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = fileplay;
+			};
+			name = Default;
+		};
+		4BEEDA8D0A19178D00806945 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "fileplay++";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BEEDA8E0A19178D00806945 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "fileplay++";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BEEDA8F0A19178D00806945 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "fileplay++";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		4BEEDA910A19178D00806945 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = recorder;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BEEDA920A19178D00806945 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = recorder;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BEEDA930A19178D00806945 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = recorder;
+			};
+			name = Default;
+		};
+		4BEEDA950A19178D00806945 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4BEEDA960A19178D00806945 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4BEEDA970A19178D00806945 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BEEDA880A19178D00806945 /* Build configuration list for PBXNativeTarget "fileplay C" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BEEDA890A19178D00806945 /* Development */,
+				4BEEDA8A0A19178D00806945 /* Deployment */,
+				4BEEDA8B0A19178D00806945 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BEEDA8C0A19178D00806945 /* Build configuration list for PBXNativeTarget "fileplay++" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BEEDA8D0A19178D00806945 /* Development */,
+				4BEEDA8E0A19178D00806945 /* Deployment */,
+				4BEEDA8F0A19178D00806945 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BEEDA900A19178D00806945 /* Build configuration list for PBXNativeTarget "recorder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BEEDA910A19178D00806945 /* Development */,
+				4BEEDA920A19178D00806945 /* Deployment */,
+				4BEEDA930A19178D00806945 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BEEDA940A19178D00806945 /* Build configuration list for PBXProject "samples" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BEEDA950A19178D00806945 /* Development */,
+				4BEEDA960A19178D00806945 /* Deployment */,
+				4BEEDA970A19178D00806945 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
