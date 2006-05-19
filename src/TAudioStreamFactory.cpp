@@ -59,7 +59,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
     try {
         return new TReadFileAudioStream(name, 0);
     } catch (int n) {
-        printf("MakeFileSound exception %d \n", n);
+        printf("MakeReadSound exception %d \n", n);
         return 0;
     }
 }
