@@ -24,8 +24,16 @@ research@grame.fr
 #define __TJackAudioRenderer__
 
 #include "TAudioRenderer.h"
-#include <jack/jack.h>
-#include <jack/types.h>
+
+#ifdef WIN32
+	#include "jack.h"
+	#include "types.h"
+#else
+	#include <jack/jack.h>
+	#include <jack/types.h>
+#endif
+
+#define MAX_PORTS 32
 
 //--------------------------
 // Class TJackAudioRenderer

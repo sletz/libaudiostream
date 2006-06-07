@@ -25,12 +25,18 @@ research@grame.fr
 #include "TSharedBuffers.h"
 #include "UTools.h"
 
+#ifdef WIN32
+	#define vsnprintf _vsnprintf
+	#define snprintf _snprintf
+#endif
+
 int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 {
+	int i;
     TJackAudioRendererPtr renderer = (TJackAudioRendererPtr)arg;
 
     // Copy input and interleaving
-	for (int i = 0; i < renderer->fInput; i++) {
+	for (i = 0; i < renderer->fInput; i++) {
 		float* input = (float*)jack_port_get_buffer(renderer->fInput_ports[i], nframes);
 		for (jack_nframes_t j = 0; j < nframes; j++) {
 			renderer->fInputBuffer[renderer->fInput * j + i] = input[j];
@@ -40,7 +46,7 @@ int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
     renderer->Run(renderer->fInputBuffer, renderer->fOutputBuffer, nframes);
 
     // Copy output and de-interleaving
-	for (int i = 0; i < renderer->fOutput; i++) {
+	for (i = 0; i < renderer->fOutput; i++) {
 		float* output = (float*)jack_port_get_buffer(renderer->fOutput_ports[i], nframes);
 		for (jack_nframes_t j = 0; j < nframes; j++) {
 			 output[j] = renderer->fOutputBuffer[renderer->fOutput * j + i];
@@ -52,6 +58,7 @@ int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 
 TJackAudioRenderer::TJackAudioRenderer(): TAudioRenderer()
 {
+	fInput = fOutput = MAX_PORTS;
     fInputBuffer = new float[TAudioGlobals::fBuffer_Size * TAudioGlobals::fChannels];
     fOutputBuffer = new float[TAudioGlobals::fBuffer_Size * TAudioGlobals::fChannels];
 	fInput_ports = (jack_port_t**)calloc(fInput, sizeof(jack_port_t*));
@@ -68,6 +75,8 @@ TJackAudioRenderer::~TJackAudioRenderer()
 
 long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
+	int i;
+
     if ((fClient = jack_client_new("AudioPlayer")) == 0) {
         printf("Jack server not running?\n");
         goto error;
@@ -85,19 +94,22 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 	*sampleRate = jack_get_sample_rate(fClient);
     *bufferSize = jack_get_buffer_size(fClient);
     jack_set_process_callback(fClient, Process, this);
+
+	assert(*inChan < MAX_PORTS);
+	assert(*outChan < MAX_PORTS);
 	
 	fInput = *inChan;
 	fOutput = *outChan;
 		
 	char buf[256];
 	
-	for (int i = 0; i < fInput; i++) {
+	for (i = 0; i < fInput; i++) {
 		snprintf(buf, sizeof(buf) - 1, "in%d", i + 1);
 		fInput_ports[i] = jack_port_register(fClient, buf, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
 		if (!fInput_ports[i])
 			goto error;
 	}
-	for (int i = 0; i < fOutput; i++) {
+	for (i = 0; i < fOutput; i++) {
 		snprintf(buf, sizeof(buf) - 1, "out%d", i + 1);
 		fOutput_ports[i] = jack_port_register(fClient, buf, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 		if (!fOutput_ports[i])
@@ -116,10 +128,12 @@ error:
 
 long TJackAudioRenderer::Close()
 {
-	for (int i = 0; i < fInput; i++) {
+	int i;
+
+	for (i = 0; i < fInput; i++) {
 		jack_port_unregister(fClient, fInput_ports[i]);
 	}
-	for (int i = 0; i < fOutput; i++) {
+	for (i = 0; i < fOutput; i++) {
 		jack_port_unregister(fClient, fOutput_ports[i]);
 	}
 	
