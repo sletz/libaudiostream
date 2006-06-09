@@ -11,8 +11,8 @@
 		4B6BBBBE0998A952000CEAAB /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B6BBBBC0998A952000CEAAB /* TCoreAudioRenderer.h */; };
 		4B7BD8D9097D0ED00029D6DC /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8D8097D0ED00029D6DC /* AudioUnit.framework */; };
 		4B7BD8DD097D0EF30029D6DC /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8DC097D0EF30029D6DC /* CoreAudio.framework */; };
-		4BB7316F09CF2BF800418F03 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BB7316E09CF2BF800418F03 /* Info-LibAudioStreamPA_CA_Jack.plist */; };
-		4BC911F40A250DB10052626B /* LibAudioStream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B170FAF0928F05100FD62F8 /* LibAudioStream.framework */; };
+		4B8E185709FCD83000D586F5 /* Info-LibAudioStreamPA.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8E185609FCD83000D586F5 /* Info-LibAudioStreamPA.plist */; };
+		4B8E185909FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */; };
 		4BEA6194095806CD001F733A /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BEA6195095806CD001F733A /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 		4BEA6196095806CD001F733A /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
@@ -183,6 +183,7 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
+		0249A663FF388D9811CA2CEA /* libstdc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libstdc++.a"; path = "/usr/lib/libstdc++.a"; sourceTree = "<absolute>"; };
 		4B0391DF0585040A006C929E /* TAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioRenderer.h; path = ../src/TAudioRenderer.h; sourceTree = SOURCE_ROOT; };
 		4B0391E00585040A006C929E /* TAudioRendererFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TAudioRendererFactory.cpp; path = ../src/TAudioRendererFactory.cpp; sourceTree = SOURCE_ROOT; };
 		4B0391E10585040A006C929E /* TAudioRendererFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioRendererFactory.h; path = ../src/TAudioRendererFactory.h; sourceTree = SOURCE_ROOT; };
@@ -205,20 +206,20 @@
 		4B7BD8DC097D0EF30029D6DC /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		4B83CA1907FBE5AE00256489 /* LibAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = LibAudioStream.cpp; path = ../src/LibAudioStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B83CA1A07FBE5AE00256489 /* LibAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LibAudioStream.h; path = ../src/LibAudioStream.h; sourceTree = SOURCE_ROOT; };
+		4B8E185609FCD83000D586F5 /* Info-LibAudioStreamPA.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-LibAudioStreamPA.plist"; sourceTree = SOURCE_ROOT; };
+		4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-LibAudioStreamPA_CA_Jack.plist"; sourceTree = SOURCE_ROOT; };
 		4BA0DEDE087FE455003B1CB3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = SOURCE_ROOT; };
 		4BA3E1780459506A00053105 /* TRendererAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TRendererAudioStream.h; path = ../src/TRendererAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4BAC748E08CD8D6E00F6E555 /* TChannelizerAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TChannelizerAudioStream.h; path = ../src/TChannelizerAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4BB2752F056B798A00053105 /* TAudioClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioClient.h; path = ../src/TAudioClient.h; sourceTree = SOURCE_ROOT; };
 		4BB27531056B7DF100053105 /* TAudioRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TAudioRenderer.cpp; path = ../src/TAudioRenderer.cpp; sourceTree = SOURCE_ROOT; };
-		4BB7316E09CF2BF800418F03 /* Info-LibAudioStreamPA_CA_Jack.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-LibAudioStreamPA_CA_Jack.plist"; sourceTree = SOURCE_ROOT; };
 		4BC6136207F4990300ACC53C /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../src/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136407F4990B00ACC53C /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../src/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136907F499E200ACC53C /* TAudioStreamFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioStreamFactory.h; path = ../src/TAudioStreamFactory.h; sourceTree = SOURCE_ROOT; };
 		4BCC1A8007F1AA7E003E6784 /* lflifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lflifo.h; path = ../src/atomic/lflifo.h; sourceTree = SOURCE_ROOT; };
-		4BEA61E4095806CD001F733A /* Info-LibAudioStreamPA.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-LibAudioStreamPA.plist"; sourceTree = "<group>"; };
 		4BEA61E6095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEA623C095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BF92831088E3B16006A013D /* TPanAudioEffect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TPanAudioEffect.h; path = ../src/TPanAudioEffect.h; sourceTree = SOURCE_ROOT; };
 		4BFC6E5C08727E9A0012D079 /* smartpointer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = smartpointer.h; path = ../src/smartpointer.h; sourceTree = SOURCE_ROOT; };
 		4BFC6E7E08729C6F0012D079 /* TThreadUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TThreadUtils.h; path = ../src/TThreadUtils.h; sourceTree = SOURCE_ROOT; };
@@ -294,7 +295,6 @@
 				4BEA6239095806CD001F733A /* AudioToolbox.framework in Frameworks */,
 				4B7BD8D9097D0ED00029D6DC /* AudioUnit.framework in Frameworks */,
 				4B7BD8DD097D0EF30029D6DC /* CoreAudio.framework in Frameworks */,
-				4BC911F40A250DB10052626B /* LibAudioStream.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +315,7 @@
 				4B170FAF0928F05100FD62F8 /* LibAudioStream.framework */,
 				D3C5192308B9CD8D00C1962D /* Accelerate.framework */,
 				D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */,
+				0249A663FF388D9811CA2CEA /* libstdc++.a */,
 				F666DED703EC03FB01D11C03 /* JavaVM.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -339,8 +340,8 @@
 				F5C1FF5A0328B73A01053105 /* Stream */,
 				0249A662FF388D9811CA2CEA /* External Frameworks and Libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
-				4BEA61E4095806CD001F733A /* Info-LibAudioStreamPA.plist */,
-				4BB7316E09CF2BF800418F03 /* Info-LibAudioStreamPA_CA_Jack.plist */,
+				4B8E185609FCD83000D586F5 /* Info-LibAudioStreamPA.plist */,
+				4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */,
 			);
 			name = AudioEngine.prprj;
 			sourceTree = "<group>";
@@ -636,7 +637,7 @@
 /* Begin PBXNativeTarget section */
 		4BEA6192095806CD001F733A /* LibAudioStream PortAudio */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B6FB16009CF2BD800E42A1F /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio" */;
+			buildConfigurationList = 4B95A73E0A39EF5C00916AF3 /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio" */;
 			buildPhases = (
 				4BEA6193095806CD001F733A /* Headers */,
 				4BEA61C3095806CD001F733A /* Resources */,
@@ -657,7 +658,7 @@
 		};
 		4BEA61E7095806CD001F733A /* LibAudioStream PortAudio+CoreAudio+Jack */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B6FB16409CF2BD800E42A1F /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio+CoreAudio+Jack" */;
+			buildConfigurationList = 4B95A7420A39EF5C00916AF3 /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio+CoreAudio+Jack" */;
 			buildPhases = (
 				4BEA61E8095806CD001F733A /* Headers */,
 				4BEA6219095806CD001F733A /* Resources */,
@@ -677,7 +678,7 @@
 		};
 		4BEA623D095806CD001F733A /* testPlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B6FB16809CF2BD800E42A1F /* Build configuration list for PBXNativeTarget "testPlayer" */;
+			buildConfigurationList = 4B95A7460A39EF5C00916AF3 /* Build configuration list for PBXNativeTarget "testPlayer" */;
 			buildPhases = (
 				4BEA623E095806CD001F733A /* Headers */,
 				4BEA623F095806CD001F733A /* Sources */,
@@ -699,7 +700,7 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 4B6FB16C09CF2BD800E42A1F /* Build configuration list for PBXProject "LibAudioStream" */;
+			buildConfigurationList = 4B95A74A0A39EF5C00916AF3 /* Build configuration list for PBXProject "LibAudioStream" */;
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* AudioEngine.prprj */;
 			projectDirPath = "";
@@ -716,6 +717,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B8E185709FCD83000D586F5 /* Info-LibAudioStreamPA.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,7 +725,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BB7316F09CF2BF800418F03 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */,
+				4B8E185909FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,7 +837,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		4B6FB16109CF2BD800E42A1F /* Development */ = {
+		4B95A73F0A39EF5C00916AF3 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -847,12 +849,13 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = __PORTAUDIO__;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-D__PORTAUDIO__";
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudio.a,
@@ -874,7 +877,7 @@
 			};
 			name = Development;
 		};
-		4B6FB16209CF2BD800E42A1F /* Deployment */ = {
+		4B95A7400A39EF5C00916AF3 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -884,11 +887,12 @@
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = __PORTAUDIO__;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-D__PORTAUDIO__";
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudio.a,
@@ -910,7 +914,7 @@
 			};
 			name = Deployment;
 		};
-		4B6FB16309CF2BD800E42A1F /* Default */ = {
+		4B95A7410A39EF5C00916AF3 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -918,11 +922,12 @@
 				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = __PORTAUDIO__;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-D__PORTAUDIO__";
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudio.a,
@@ -943,32 +948,28 @@
 			};
 			name = Default;
 		};
-		4B6FB16509CF2BD800E42A1F /* Development */ = {
+		4B95A7430A39EF5C00916AF3 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build\"";
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__JACK__,
-					__PORTAUDIO__,
-					__COREAUDIO__,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__JACK__",
+					"-D__PORTAUDIO__",
+					"-D__COREAUDIO__",
+				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudio.a,
@@ -991,29 +992,25 @@
 			};
 			name = Development;
 		};
-		4B6FB16609CF2BD800E42A1F /* Deployment */ = {
+		4B95A7440A39EF5C00916AF3 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build\"";
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__JACK__,
-					__PORTAUDIO__,
-					__COREAUDIO__,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__JACK__",
+					"-D__PORTAUDIO__",
+					"-D__COREAUDIO__",
+				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudio.a,
@@ -1036,27 +1033,23 @@
 			};
 			name = Deployment;
 		};
-		4B6FB16709CF2BD800E42A1F /* Default */ = {
+		4B95A7450A39EF5C00916AF3 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build\"";
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__JACK__,
-					__PORTAUDIO__,
-					__COREAUDIO__,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__JACK__",
+					"-D__PORTAUDIO__",
+					"-D__COREAUDIO__",
+				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudio.a,
@@ -1078,7 +1071,7 @@
 			};
 			name = Default;
 		};
-		4B6FB16909CF2BD800E42A1F /* Development */ = {
+		4B95A7470A39EF5C00916AF3 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1103,7 +1096,7 @@
 			};
 			name = Development;
 		};
-		4B6FB16A09CF2BD800E42A1F /* Deployment */ = {
+		4B95A7480A39EF5C00916AF3 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1124,7 +1117,7 @@
 			};
 			name = Deployment;
 		};
-		4B6FB16B09CF2BD800E42A1F /* Default */ = {
+		4B95A7490A39EF5C00916AF3 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = /Volumes/Document1/Developpement/ProjectsCVS/libaudiostreamCVS/macosx/build;
@@ -1142,19 +1135,19 @@
 			};
 			name = Default;
 		};
-		4B6FB16D09CF2BD800E42A1F /* Development */ = {
+		4B95A74B0A39EF5C00916AF3 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Development;
 		};
-		4B6FB16E09CF2BD800E42A1F /* Deployment */ = {
+		4B95A74C0A39EF5C00916AF3 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Deployment;
 		};
-		4B6FB16F09CF2BD800E42A1F /* Default */ = {
+		4B95A74D0A39EF5C00916AF3 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -1163,42 +1156,42 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B6FB16009CF2BD800E42A1F /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio" */ = {
+		4B95A73E0A39EF5C00916AF3 /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B6FB16109CF2BD800E42A1F /* Development */,
-				4B6FB16209CF2BD800E42A1F /* Deployment */,
-				4B6FB16309CF2BD800E42A1F /* Default */,
+				4B95A73F0A39EF5C00916AF3 /* Development */,
+				4B95A7400A39EF5C00916AF3 /* Deployment */,
+				4B95A7410A39EF5C00916AF3 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4B6FB16409CF2BD800E42A1F /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio+CoreAudio+Jack" */ = {
+		4B95A7420A39EF5C00916AF3 /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio+CoreAudio+Jack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B6FB16509CF2BD800E42A1F /* Development */,
-				4B6FB16609CF2BD800E42A1F /* Deployment */,
-				4B6FB16709CF2BD800E42A1F /* Default */,
+				4B95A7430A39EF5C00916AF3 /* Development */,
+				4B95A7440A39EF5C00916AF3 /* Deployment */,
+				4B95A7450A39EF5C00916AF3 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4B6FB16809CF2BD800E42A1F /* Build configuration list for PBXNativeTarget "testPlayer" */ = {
+		4B95A7460A39EF5C00916AF3 /* Build configuration list for PBXNativeTarget "testPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B6FB16909CF2BD800E42A1F /* Development */,
-				4B6FB16A09CF2BD800E42A1F /* Deployment */,
-				4B6FB16B09CF2BD800E42A1F /* Default */,
+				4B95A7470A39EF5C00916AF3 /* Development */,
+				4B95A7480A39EF5C00916AF3 /* Deployment */,
+				4B95A7490A39EF5C00916AF3 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4B6FB16C09CF2BD800E42A1F /* Build configuration list for PBXProject "LibAudioStream" */ = {
+		4B95A74A0A39EF5C00916AF3 /* Build configuration list for PBXProject "LibAudioStream" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B6FB16D09CF2BD800E42A1F /* Development */,
-				4B6FB16E09CF2BD800E42A1F /* Deployment */,
-				4B6FB16F09CF2BD800E42A1F /* Default */,
+				4B95A74B0A39EF5C00916AF3 /* Development */,
+				4B95A74C0A39EF5C00916AF3 /* Deployment */,
+				4B95A74D0A39EF5C00916AF3 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
