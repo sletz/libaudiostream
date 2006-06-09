@@ -52,7 +52,8 @@ extern "C"
         long fStatus;  // 1 = playing , 0 = idle
         long fCurFrame;
         float fVol;
-        float fPan;
+        float fPanLeft;
+		float fPanRight;
         long fLeftOut;
         long fRightOut;
     }

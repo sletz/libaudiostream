@@ -87,8 +87,7 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 	}
 	
 	if (*bufferSize != long(jack_get_buffer_size(fClient))) { 
-		printf("Error: requested buffer size = %ld different from driver bufffer size = %d \n", *bufferSize, jack_get_buffer_size(fClient));
-		goto error;
+		printf("Warning: requested buffer size = %ld different from driver buffer size = %d \n", *bufferSize, jack_get_buffer_size(fClient));
 	}
 
 	*sampleRate = jack_get_sample_rate(fClient);
