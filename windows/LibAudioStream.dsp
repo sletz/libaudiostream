@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAUDIOSTREAM_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "." /I "../src/atomic" /I "../src/" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAUDIOSTREAM_EXPORTS" /D "MXMLEXPORT" /D "__PORTAUDIO__" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "." /I "../src/atomic" /I "../src/" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAUDIOSTREAM_EXPORTS" /D "MXMLEXPORT" /D "__PORTAUDIO__" /FR /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x40c /d "NDEBUG"
@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAUDIOSTREAM_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GR /GX /ZI /Od /I "." /I "../src/atomic" /I "../src/" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAUDIOSTREAM_EXPORTS" /D "MXMLEXPORT" /D "__PORTAUDIO__" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /I "." /I "../src/atomic" /I "../src/" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAUDIOSTREAM_EXPORTS" /D "MXMLEXPORT" /D "__PORTAUDIO__" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x40c /d "_DEBUG"
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /debug /machine:I386 /out:"LibAudioStream.dll" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dsound.lib winmm.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"LIBCMTD" /out:"LibAudioStream.dll" /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no /nodefaultlib
 
 !ENDIF 
@@ -223,28 +223,6 @@ SOURCE=.\PortAudio.lib
 # Begin Source File
 
 SOURCE=.\libsndfile.lib
-
-!IF  "$(CFG)" == "LibAudioStream - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "LibAudioStream - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\libsndfileDbg.lib
-
-!IF  "$(CFG)" == "LibAudioStream - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "LibAudioStream - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project
