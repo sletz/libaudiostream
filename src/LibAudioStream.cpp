@@ -332,32 +332,32 @@ AudioStreamPtr AUDIOAPI MakeRegionSoundPtr(char* name, long beginFrame, long end
 
 AudioStreamPtr AUDIOAPI MakeStereoSoundPtr(AudioStreamPtr sound)
 {
-	return MakeSoundPtr(TAudioStreamFactory::MakeStereoSound((TAudioStreamPtr)*sound));
+	return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeStereoSound((TAudioStreamPtr)*sound)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeFadeSound((TAudioStreamPtr)*sound, fadeIn, fadeOut));
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeFadeSound((TAudioStreamPtr)*sound, fadeIn, fadeOut)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeLoopSoundPtr(AudioStreamPtr sound, long n)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeLoopSound((TAudioStreamPtr)*sound, n));
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeLoopSound((TAudioStreamPtr)*sound, n)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, long endFrame)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeCutSound((TAudioStreamPtr)*sound, beginFrame, endFrame));
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeCutSound((TAudioStreamPtr)*sound, beginFrame, endFrame)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeSeqSound((TAudioStreamPtr)*s1, (TAudioStreamPtr)*s2, crossFade));
+    return (s1 && s2) ? MakeSoundPtr(TAudioStreamFactory::MakeSeqSound((TAudioStreamPtr)*s1, (TAudioStreamPtr)*s2, crossFade)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeMixSound((TAudioStreamPtr)*s1, (TAudioStreamPtr)*s2));
+    return (s1 && s2) ? MakeSoundPtr(TAudioStreamFactory::MakeMixSound((TAudioStreamPtr)*s1, (TAudioStreamPtr)*s2)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeInputSoundPtr()
@@ -367,17 +367,19 @@ AudioStreamPtr AUDIOAPI MakeInputSoundPtr()
 
 AudioStreamPtr AUDIOAPI MakeTransformSoundPtr(AudioStreamPtr s1, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)*s1, (TAudioEffectListPtr)*list_effect, fadeIn, fadeOut));
+    return (s1 && list_effect) 
+		? MakeSoundPtr(TAudioStreamFactory::MakeTransformSound((TAudioStreamPtr)*s1, (TAudioEffectListPtr)*list_effect, fadeIn, fadeOut))
+		: 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeWriteSound(name, (TAudioStreamPtr)*s, format));
+    return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeWriteSound(name, (TAudioStreamPtr)*s, format)) : 0;
 }
 
 AudioStreamPtr AUDIOAPI MakeRendererSoundPtr(AudioStreamPtr s)
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeDTRenderer((TAudioStreamPtr)*s));
+    return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeDTRenderer((TAudioStreamPtr)*s)) : 0;
 }
 
 long AUDIOAPI GetLengthSoundPtr(AudioStreamPtr s)

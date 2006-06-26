@@ -82,7 +82,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
 
 TAudioStreamPtr TAudioStreamFactory::MakeStereoSound(TAudioStreamPtr sound)
 {
-	return (sound->Channels() == 1) ? new TChannelizerAudioStream(sound, 2) : sound;
+	return (sound && sound->Channels() == 1) ? new TChannelizerAudioStream(sound, 2) : sound;
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeLoopSound(TAudioStreamPtr sound, long n)

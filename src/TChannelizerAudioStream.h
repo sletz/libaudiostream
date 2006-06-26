@@ -54,6 +54,12 @@ class TChannelizerAudioStream : public TDecoratedAudioStream
             return fChannels;
         }
 
+		TAudioStreamPtr CutBegin(long frames)
+        {
+            assert(fStream);
+            return new TChannelizerAudioStream(fStream->CutBegin(frames), fChannels);
+        }
+
 		TAudioStreamPtr Copy()
         {
             return new TChannelizerAudioStream(fStream->Copy(), fChannels);
