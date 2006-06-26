@@ -28,8 +28,8 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,1,0
- PRODUCTVERSION 1,0,1,0
+ FILEVERSION 1,0,2,0
+ PRODUCTVERSION 1,0,2,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -47,14 +47,14 @@ BEGIN
             VALUE "Comments", "build with libsndfile 1.0.11 and portaudio 18.1\0"
             VALUE "CompanyName", "Grame\0"
             VALUE "FileDescription", "LibAudioStream\0"
-            VALUE "FileVersion", "1, 0, 1, 0\0"
+            VALUE "FileVersion", "1, 0, 2, 0\0"
             VALUE "InternalName", "LibAudioStream\0"
             VALUE "LegalCopyright", "Copyright Grame © 2005-2006\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "LibAudioStream.dll\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "LibAudioStream\0"
-            VALUE "ProductVersion", "1, 0, 1, 0\0"
+            VALUE "ProductVersion", "1, 0, 2, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -90,40 +90,6 @@ BEGIN
     "\0"
 END
 
-#endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_DIALOG1 DIALOG DISCARDABLE  0, 0, 186, 90
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "1"
-FONT 8, "MS Sans Serif"
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
-BEGIN
-    IDD_DIALOG1, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 179
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 83
-    END
-END
 #endif    // APSTUDIO_INVOKED
 
 #endif    // French (France) resources

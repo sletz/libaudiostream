@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by resource.rc
 //
-#define IDD_DIALOG1                     102
 
 // Next default values for new objects
 // 
