@@ -26,6 +26,10 @@ research@grame.fr
 #include "TRendererAudioStream.h"
 #include "TSharedBuffers.h"
 
+#ifndef WIN32
+	#include <sys/errno.h>
+#endif
+
 // Globals
 float* TSharedBuffers::fInBuffer = NULL;
 float* TSharedBuffers::fOutBuffer = NULL;
@@ -49,9 +53,36 @@ long TAudioGlobals::fRTStream_Buffer_Size = 0;
 
 long TAudioGlobals::fSample_Rate = 0;
 long TAudioGlobals::fDiskError = 0;
+long TAudioGlobals::fFileMax = 0;
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
+
+static int SetMaximumFiles(long filecount)
+{
+#ifdef WIN32
+	return 0;
+#else
+    struct rlimit lim;
+    lim.rlim_cur = lim.rlim_max = (rlim_t)filecount;
+    return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
+#endif
+}
+
+static int GetMaximumFiles(long *filecount) 
+{
+#ifdef WIN32
+	return 0;
+#else
+    struct rlimit lim;
+    if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
+        *filecount = (long)lim.rlim_max;
+        return 0;
+    } else {
+		return errno;
+	}
+#endif
+}
 
 void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_rate,
                          long buffer_size, long stream_buffer_size, long rtstream_buffer_size, long thread_num)
@@ -63,6 +94,8 @@ void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_r
 		TRTRendererAudioStream::Init(thread_num);
 		smartable1::Init();
 		TPanTable::FillTable();
+		GetMaximumFiles(&fFileMax);
+		SetMaximumFiles(1024);
 	}
 }
 
@@ -74,6 +107,7 @@ void TAudioGlobals::Destroy()
 		smartable1::Destroy();
 		delete fInstance;
 		fInstance = NULL;
+		SetMaximumFiles(fFileMax);
 	}
 }
 
