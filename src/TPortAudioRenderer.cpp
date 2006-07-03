@@ -174,7 +174,7 @@ long TPortAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
                         *sampleRate,
                         *bufferSize,
                         0,                  //  number of buffers, if zero then use default minimum
-                        paClipOff,
+                        paNoFlag,
                         Process,
                         this);
 
