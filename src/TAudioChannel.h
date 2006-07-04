@@ -243,7 +243,7 @@ class TAudioChannel
 		
 		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
         {
-			fEffectList.SetEffectList(effect_list, fadeIn ,fadeOut);
+			fEffectList.SetEffectList(effect_list, fadeIn, fadeOut);
         }
 
         TAudioEffectListPtr GetEffectList()
