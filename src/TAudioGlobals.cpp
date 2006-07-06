@@ -28,6 +28,7 @@ research@grame.fr
 
 #ifndef WIN32
 	#include <sys/errno.h>
+	#include <sys/resource.h>
 #endif
 
 // Globals
