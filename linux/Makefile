@@ -11,8 +11,11 @@ $(TARGET) : $(OBJ)
 	ar -ru $(TARGET) $(OBJ) 
 	ranlib  $(TARGET)
 
+test :
+	g++  -I../src  ../src/main.cpp -lportaudio -ljack -lsndfile -lstdc++ libaudiostream.a -o testplayer
+
 samples :
-	gcc  -I../src  ../samples/fileplay.cpp -lportaudio -ljack -lsndfile -lstdc++ libaudiostream.a -o fileplay
+	g++  -I../src  ../samples/fileplay.cpp -lportaudio -ljack -lsndfile -lstdc++ libaudiostream.a -o fileplay
 
 clean :
 	rm -f $(TARGET) $(OBJ)
