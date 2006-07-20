@@ -52,6 +52,7 @@ class TAudioEngine
 
         virtual ~TAudioEngine()
         {
+			fRenderer->RemoveClient(fMixer);
             delete fMixer;
         }
 

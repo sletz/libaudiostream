@@ -61,6 +61,7 @@ extern "C"
 
     // Opaque pointers
     typedef void* AudioPlayerPtr;
+	typedef void* AudioManagerPtr;
  	typedef void* AudioStreamPtr;
 	
     typedef void* AudioEffectPtr;
@@ -302,11 +303,23 @@ extern "C"
                                    long rtstream_buffer_size,
                                    long renderer,
                                    long thread_num);
+	/*!
+    \brief Opens the audio client, to be added to an externally allocated audio manager.
+	*/					
+	AudioPlayerPtr OpenAudioClient(AudioManagerPtr manager);	
+	 							   						   
     /*!
     \brief Close the audio player.
     \param player The audio player to be closed.
     */
     void CloseAudioPlayer(AudioPlayerPtr player);
+	
+	/*!
+    \brief Close an audio client that was previously added to an external allocated audio manager using OpenAudioClient.
+    \param player The audio client to be closed.
+    */					
+	void CloseAudioClient(AudioPlayerPtr player);
+	
     /*!
     \brief Load a sound in a channel.
     \param player The audio player.

@@ -36,13 +36,14 @@ research@grame.fr
 
     struct AudioPlayer {
         TAudioRendererPtr fRenderer;
-        TAudioEngine* fEngine;
+        TAudioEnginePtr fEngine;
     };
 
     // Opaque pointers
     typedef AudioPlayer* AudioPlayerPtr;
 	typedef TAudioStreamPtr AudioStream;
 	typedef AudioStream* AudioStreamPtr;
+	typedef TAudioRendererPtr AudioManagerPtr;
 
  	typedef TAudioEffectListPtr AudioEffectList;
     typedef TAudioEffectInterfacePtr AudioEffect;	
@@ -176,8 +177,10 @@ extern "C"
                                             long rtstream_buffer_size, 
                                             long renderer,
                                             long thread_num);
+	AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr manager);	
+									
     void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player);
-
+	void AUDIOAPI CloseAudioClient(AudioPlayerPtr player);
 
     // Load a sound in a channel
     long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight);
@@ -209,7 +212,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 103;
+	return 104;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -594,10 +597,29 @@ error:
     return 0;
 }
 
+AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr manager)
+{
+	AudioPlayerPtr player = (AudioPlayerPtr)calloc(1, sizeof(AudioPlayer));
+    if (!player)
+        goto error;
+		
+	player->fRenderer = manager;
+		
+	player->fEngine = new TAudioEngine(player->fRenderer);
+    if (!player->fEngine)
+        goto error;
+		
+	return player;
+
+error:
+    CloseAudioClient(player);
+    return 0;
+}
+
 void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 {
     if (!player)
-        return ;
+        return;
 
     if (player->fEngine) {
         player->fEngine->Close();
@@ -610,6 +632,19 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 
     free(player);
 	TAudioGlobals::Destroy();
+}
+
+void AUDIOAPI CloseAudioClient(AudioPlayerPtr player)
+{
+    if (!player)
+        return;
+
+    if (player->fEngine) {
+        player->fEngine->Close();
+        delete player->fEngine;
+    }
+
+    free(player);
 }
 
 // SoundFile management
