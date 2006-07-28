@@ -72,33 +72,26 @@ void TAudioChannel::SoundOn()
 	fStopCallback.Activate();
 }
 
-// Synchonous stop : wait for the FadeOut to finish
+// Stop : if sync, wait for the FadeOut to finish
 
-void TAudioChannel::SoundOff()
+void TAudioChannel::SoundOff(bool sync)
 {
 	if (!fFadeStream.IsIdle()) {
         fFadeStream.FadeOut();
-		ChannelInfo info;
-
+	
         // Wait until Fade Out ends
-		int count = 0;
-        do {
-            GetInfo(&info);
-            AudioSleep(50);
-        } while (info.fStatus != TFadeAudioStream::kIdle && count++ < 10);
+		if (sync) {
+			ChannelInfo info;
+			int count = 0;
+			do {
+				GetInfo(&info);
+				AudioSleep(50);
+			} while (info.fStatus != TFadeAudioStream::kIdle && count++ < 10);
+		}
 		
 		fStopCallback.Desactivate();
     }
 }
-
-void TAudioChannel::SoundOffAsync()
-{
-	if (!fFadeStream.IsIdle()) {
-        fFadeStream.FadeOut();
-		fStopCallback.Desactivate();
-    }
-}
-
 
 void TAudioChannel::Reset()
 {

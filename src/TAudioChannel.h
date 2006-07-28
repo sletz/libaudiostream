@@ -165,9 +165,8 @@ class TAudioChannel
 
         // Control
         void SoundOn();
-        void SoundOff();
-		void SoundOffAsync();
-        void Reset();
+        void SoundOff(bool sync);
+	    void Reset();
 
         // Mixing
         bool Mix(TAudioBuffer<float>* out, long framesNum, long channels);
