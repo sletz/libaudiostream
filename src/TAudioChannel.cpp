@@ -91,6 +91,15 @@ void TAudioChannel::SoundOff()
     }
 }
 
+void TAudioChannel::SoundOffAsync()
+{
+	if (!fFadeStream.IsIdle()) {
+        fFadeStream.FadeOut();
+		fStopCallback.Desactivate();
+    }
+}
+
+
 void TAudioChannel::Reset()
 {
 	fFadeStream.Reset();

@@ -219,7 +219,13 @@ extern "C"
 	\return A pointer to the modified effect list.
 	*/
     AudioEffectListPtr RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-    /*!
+	/*!
+	\brief Clear all effects from the list.
+	\param list The effect list to be cleared.
+	\return A pointer to the modified effect list.
+	*/
+	AudioEffectListPtr ClearAudioEffectListPtr(AudioEffectListPtr list_effect);
+	/*!
 	\brief Create a volume effect.
 	\param gain The volume between 0 and 1.
     \return A pointer to new volume object.
@@ -370,11 +376,17 @@ extern "C"
     */
     void ContChannel(AudioPlayerPtr player, long chan);
     /*!
-    \brief Stop playing a channel.
+    \brief Stop playing a channel, waiting for the stop fadeout to finish.
     \param player The audio player.
     \param chan The audio channel number to be used.
     */
     void StopChannel(AudioPlayerPtr player, long chan);
+	/*!
+    \brief Stop playing a channel, immediately returning without waiting for the stop fadeout to finish.
+    \param player The audio player.
+    \param chan The audio channel number to be used.
+    */
+	void AbortChannel(AudioPlayerPtr player, long chan);
 
     // Params
     /*!

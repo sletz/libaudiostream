@@ -166,6 +166,7 @@ class TAudioChannel
         // Control
         void SoundOn();
         void SoundOff();
+		void SoundOffAsync();
         void Reset();
 
         // Mixing

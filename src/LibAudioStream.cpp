@@ -141,6 +141,7 @@ extern "C"
     AudioEffectList AUDIOAPI MakeAudioEffectList();
     AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
     AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
+	AudioEffectList AUDIOAPI ClearAudioEffectList(AudioEffectList list_effect);
 
     AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
 	AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
@@ -154,6 +155,7 @@ extern "C"
 	AudioEffectListPtr AUDIOAPI MakeAudioEffectListPtr();
     AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
     AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
+	AudioEffectListPtr AUDIOAPI ClearAudioEffectListPtr(AudioEffectListPtr list_effect);
 
     AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol);
 	AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan);
@@ -195,6 +197,7 @@ extern "C"
     void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan);	// Start a sound region from the beginning
     void AUDIOAPI ContChannel(AudioPlayerPtr player, long chan);	// Play a sound region from the current location
     void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan);	// Stop playing
+	void AUDIOAPI AbortChannel(AudioPlayerPtr player, long chan);	// Stop playing
 
     // Params
     void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol);
@@ -212,7 +215,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 104;
+	return 105;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -431,6 +434,13 @@ AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEff
     return list_effect;
 }
 
+AudioEffectList AUDIOAPI ClearAudioEffectList(AudioEffectList list_effect)
+{
+	if (list_effect)
+        TAudioEffectListPtr(list_effect)->clear();
+    return list_effect;
+}
+
 AudioEffect AUDIOAPI MakeVolAudioEffect(float vol)
 {
     return new TVolAudioEffect(vol);
@@ -506,6 +516,14 @@ AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect,
         TAudioEffectListPtr(*list_effect)->remove(TAudioEffectInterfacePtr(*effect));
     return list_effect;
 }
+
+AudioEffectListPtr AUDIOAPI ClearAudioEffectListPtr(AudioEffectListPtr list_effect)
+{
+	if (list_effect)
+        TAudioEffectListPtr(*list_effect)->clear();
+    return list_effect;
+}
+
 
 AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol)
 {
@@ -696,6 +714,12 @@ void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan)
 {
     if (player && player->fEngine)
         player->fEngine->StopChannel(chan);
+}
+
+void AUDIOAPI AbortChannel(AudioPlayerPtr player, long chan)
+{
+    if (player && player->fEngine)
+        player->fEngine->AbortChannel(chan);
 }
 
 void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player)

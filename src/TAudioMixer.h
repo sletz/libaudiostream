@@ -74,6 +74,7 @@ class TAudioMixer : public TAudioClient
         void Start(long chan);
         void Play(long chan);
         void Stop(long chan);
+		void Abort(long chan);
         void Reset();
 
         void SetVol(long chan, float vol);

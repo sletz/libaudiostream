@@ -136,6 +136,13 @@ void TAudioMixer::Stop(long chan)
         channel->SoundOff();
 }
 
+void TAudioMixer::Abort(long chan)
+{
+    TAudioChannelPtr channel;
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+        channel->SoundOffAsync();
+}
+
 void TAudioMixer::SetVol(long chan, float vol)
 {
     TAudioChannelPtr channel;

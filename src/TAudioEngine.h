@@ -90,6 +90,11 @@ class TAudioEngine
             fMixer->Stop(chan);
         }
 
+		 void AbortChannel(long chan)
+        {
+            fMixer->Abort(chan);
+        }
+
         void SetVolChannel(long chan, float vol)
         {
             fMixer->SetVol(chan, vol);
