@@ -288,7 +288,7 @@ extern "C"
 
     // Open/Close
     /*!
-    \brief Opens the audio player.
+    \brief Open the audio player.
     \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
     \param outChan The number of output channels.
     \param channels The number of stream channels.
@@ -434,7 +434,6 @@ extern "C"
     \param fadeOut The fadeout length in frames.
 	*/
 	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-
 
 /*! @} */
 

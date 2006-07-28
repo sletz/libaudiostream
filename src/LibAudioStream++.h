@@ -59,6 +59,8 @@ typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Opaque pointers
 typedef void* AudioPlayerPtr;
+typedef void* AudioManagerPtr;
+
 typedef TAudioStreamPtr AudioStream;
 typedef TAudioEffectListPtr AudioEffectList;
 typedef TAudioEffectInterfacePtr AudioEffect;	
@@ -271,7 +273,7 @@ float GetControlValue(AudioEffect effect, long control);
 
 // Open/Close
 /*!
-\brief Opens the audio player.
+\brief Open the audio player.
 \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
 \param outChan The number of output channels.
 \param channels The number of stream channels.
@@ -293,10 +295,22 @@ AudioPlayerPtr OpenAudioPlayer(long inChan,
 							   long renderer,
 							   long thread_num);
 /*!
+\brief Open the audio client, to be added to an externally allocated audio manager.
+*/					
+AudioPlayerPtr OpenAudioClient(AudioManagerPtr manager);	
+
+/*!
 \brief Close the audio player.
 \param player The audio player to be closed.
 */
 void CloseAudioPlayer(AudioPlayerPtr player);
+
+/*!
+\brief Close an audio client that was previously added to an external allocated audio manager using OpenAudioClient.
+\param player The audio client to be closed.
+*/					
+void CloseAudioClient(AudioPlayerPtr player);
+
 /*!
 \brief Load a sound in a channel.
 \param player The audio player.
@@ -405,7 +419,6 @@ void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
 \param fadeOut The fadeout length in frames to be used when stopping the effect chain.
 */
 void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
-
 
 #ifdef __cplusplus
 }
