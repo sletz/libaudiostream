@@ -524,7 +524,6 @@ AudioEffectListPtr AUDIOAPI ClearAudioEffectListPtr(AudioEffectListPtr list_effe
     return list_effect;
 }
 
-
 AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol)
 {
     return new SMARTP<TAudioEffectInterface>(new TVolAudioEffect(vol));
