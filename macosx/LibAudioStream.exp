@@ -42,6 +42,7 @@ _ResetSound
 _MakeAudioEffectListPtr
 _AddAudioEffectPtr
 _RemoveAudioEffectPtr
+_ClearAudioEffectListPtr
 _MakeVolAudioEffectPtr
 _MakeMonoPanAudioEffectPtr
 _MakeStereoPanAudioEffectPtr
@@ -58,6 +59,7 @@ _DeleteEffectPtr
 _MakeAudioEffectList
 _AddAudioEffect
 _RemoveAudioEffect
+_ClearAudioEffectList
 _MakeVolAudioEffect
 _MakeMonoPanAudioEffect
 _MakeStereoPanAudioEffect
@@ -82,6 +84,7 @@ _StopAudioPlayer
 _StartChannel
 _ContChannel
 _StopChannel
+_AbortChannel
 _SetVolChannel
 _SetPanChannel
 _SetEffectListChannel
