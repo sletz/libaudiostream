@@ -656,11 +656,9 @@ void AUDIOAPI CloseAudioClient(AudioPlayerPtr player)
     if (!player)
         return;
 
-    if (player->fEngine) {
-        player->fEngine->Close();
+    if (player->fEngine) 
         delete player->fEngine;
-    }
-
+  
     free(player);
 }
 
