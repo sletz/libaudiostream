@@ -21,12 +21,19 @@ research@grame.fr
 */
 
 #include "TAudioRendererFactory.h"
+
 #ifdef __JACK__
 #include "TJackAudioRenderer.h"
 #endif
+
 #ifdef __PORTAUDIO__
-#include "TPortAudioRenderer.h"
+	#ifdef __PORTAUDIOV19__
+		#include "TPortAudioV19Renderer.h"
+	#else
+		#include "TPortAudioRenderer.h"
+	#endif
 #endif
+
 #ifdef __COREAUDIO__
 #include "TCoreAudioRenderer.h"
 #endif
@@ -37,7 +44,11 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 
         case kPortAudioRenderer:
 		#ifdef __PORTAUDIO__
-			return new TPortAudioRenderer();
+			#ifdef __PORTAUDIOV19__
+				return new TPortAudioV19Renderer();
+			#else
+				return new TPortAudioRenderer();
+			#endif
 		#else
 		#warning PortAudio renderer is not compiled
 			return NULL;
