@@ -113,7 +113,7 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
                                      UInt32 inNumberFrames,
                                      AudioBufferList *ioData)
 {
-    TCoreAudioRenderer* renderer = (TCoreAudioRenderer*)inRefCon;
+    TCoreAudioRendererPtr renderer = (TCoreAudioRendererPtr)inRefCon;
     AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
 	memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a  *mix*
 	renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
