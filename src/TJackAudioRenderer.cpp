@@ -146,7 +146,7 @@ long TJackAudioRenderer::Close()
 
 long TJackAudioRenderer::Start()
 {
-    const char** ports;
+    const char** ports = NULL;
 
     if (jack_activate(fClient)) {
         printf("Cannot activate client");
