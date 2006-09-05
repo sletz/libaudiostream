@@ -27,6 +27,8 @@ research@grame.fr
 
 #define DEBUG 1
 
+// TODO : use jackdmp code...
+
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
     printf("- - - - - - - - - - - - - - - - - - - -\n");
@@ -257,7 +259,7 @@ long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
         printError(err1);
     }
 
-    in_nChannels = outSize / sizeof(SInt32);
+    in_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
 
     err1 = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, &outSize, &isWritable);
     if (err1 != noErr) {
@@ -265,7 +267,7 @@ long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
         printError(err1);
     }
 
-    out_nChannels = outSize / sizeof(SInt32);
+    out_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
 
     if (*outChan > out_nChannels) {
         printf("This device hasn't required output channels\n");
