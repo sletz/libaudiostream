@@ -71,7 +71,9 @@ _SetControlValue
 _GetControlValue
 
 _OpenAudioPlayer
+_OpenAudioClient
 _CloseAudioPlayer
+_CloseAudioClient
 
 _LoadChannel
 _LoadChannelPtr
@@ -92,3 +94,15 @@ _SetEffectListChannel
 _SetVolAudioPlayer
 _SetPanAudioPlayer
 _SetEffectListAudioPlayer
+
+_MakeAudioRenderer
+_DeleteAudioRenderer
+_OpenAudioRenderer
+_CloseAudioRenderer
+_StartAudioRenderer
+_StopAudioRenderer
+_AddAudioClient
+_RemoveAudioClient
+
+_AudioGlobalsInit
+_AudioGlobalsDestroy

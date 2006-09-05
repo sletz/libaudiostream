@@ -63,6 +63,7 @@ extern "C"
     typedef void* AudioPlayerPtr;
 	typedef void* AudioManagerPtr;
  	typedef void* AudioStreamPtr;
+	typedef void* AudioClientPtr;
 	
     typedef void* AudioEffectPtr;
     typedef void* AudioEffectListPtr;
@@ -434,6 +435,27 @@ extern "C"
     \param fadeOut The fadeout length in frames.
 	*/
 	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	
+	AudioManagerPtr MakeAudioRenderer(long renderer);
+	void DeleteAudioRenderer(AudioManagerPtr renderer);
+	
+	int OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+	void CloseAudioRenderer(AudioManagerPtr renderer); 
+	void StartAudioRenderer(AudioManagerPtr renderer); 
+	void StopAudioRenderer(AudioManagerPtr renderer); 
+	
+	void AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	void RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	
+	void AudioGlobalsInit(long inChan, 
+						long outChan, 
+						long channels, 
+						long sample_rate,
+						long buffer_size, 
+						long stream_buffer_size, 
+						long rtstream_buffer_size,
+						long thread_num);
+	void AudioGlobalsDestroy();
 
 /*! @} */
 

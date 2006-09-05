@@ -44,6 +44,7 @@ research@grame.fr
 	typedef TAudioStreamPtr AudioStream;
 	typedef AudioStream* AudioStreamPtr;
 	typedef TAudioRendererPtr AudioManagerPtr;
+	typedef TAudioClientPtr AudioClientPtr;
 
  	typedef TAudioEffectListPtr AudioEffectList;
     typedef TAudioEffectInterfacePtr AudioEffect;	
@@ -208,6 +209,29 @@ extern "C"
     void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
     void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol);
 	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	
+	// Renderer
+	AudioManagerPtr AUDIOAPI MakeAudioRenderer(long renderer);
+	void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr renderer);
+	
+	int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+	void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer); 
+	void AUDIOAPI StartAudioRenderer(AudioManagerPtr renderer); 
+	void AUDIOAPI StopAudioRenderer(AudioManagerPtr renderer); 
+	
+	void AUDIOAPI AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	void AUDIOAPI RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	
+	// Globals
+	void AUDIOAPI AudioGlobalsInit(long inChan, 
+									long outChan, 
+									long channels, 
+									long sample_rate,
+									long buffer_size, 
+									long stream_buffer_size, 
+									long rtstream_buffer_size,
+									long thread_num);
+	void AUDIOAPI AudioGlobalsDestroy();
 
 #ifdef __cplusplus
 }
@@ -215,7 +239,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 105;
+	return 106;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -769,3 +793,61 @@ void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr
         player->fEngine->SetEffectListMaster(*effect_list, fadeIn, fadeOut);
 }
 
+// Globals
+AudioManagerPtr AUDIOAPI MakeAudioRenderer(long renderer)
+{
+	return static_cast<AudioManagerPtr>(TAudioRendererFactory::MakeAudioRenderer(renderer));
+}
+
+void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr obj)
+{
+	TAudioRendererPtr renderer = static_cast<TAudioRendererPtr>(obj);
+	delete renderer;
+}
+
+int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+{
+	return static_cast<TAudioRendererPtr>(renderer)->Open(inChan, outChan, bufferSize, sampleRate);
+}
+
+void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer)
+{
+	static_cast<TAudioRendererPtr>(renderer)->Close();
+}
+
+void AUDIOAPI StartAudioRenderer(AudioManagerPtr renderer)
+{
+	static_cast<TAudioRendererPtr>(renderer)->Start();
+}
+
+void AUDIOAPI StopAudioRenderer(AudioManagerPtr renderer)
+{
+	static_cast<TAudioRendererPtr>(renderer)->Stop();
+}
+
+void AUDIOAPI AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client)
+{
+	static_cast<TAudioRendererPtr>(renderer)->AddClient(static_cast<TAudioClientPtr>(client));
+}
+
+void AUDIOAPI RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client)
+{
+	static_cast<TAudioRendererPtr>(renderer)->RemoveClient(static_cast<TAudioClientPtr>(client));
+}
+
+void AUDIOAPI AudioGlobalsInit(long inChan, 
+								long outChan, 
+								long channels, 
+								long sample_rate,
+								long buffer_size, 
+								long stream_buffer_size, 
+								long rtstream_buffer_size,
+								long thread_num)
+{
+	TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);
+}
+
+void AUDIOAPI AudioGlobalsDestroy()
+{
+	TAudioGlobals::Destroy();
+}
