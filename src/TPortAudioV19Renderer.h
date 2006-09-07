@@ -44,7 +44,7 @@ class TPortAudioV19Renderer : public TAudioRenderer
                            void* outputBuffer,
                            unsigned long framesPerBuffer,
                            const PaStreamCallbackTimeInfo* timeInfo,
-						   PaStreamCallbackFlags statusFlags,
+			   PaStreamCallbackFlags statusFlags,
                            void* userData);
 
         void DisplayDevices();

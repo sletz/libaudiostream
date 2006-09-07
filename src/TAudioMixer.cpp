@@ -20,6 +20,10 @@ research@grame.fr
 
 */
 
+#ifdef WIN32 
+#pragma warning (disable : 4786)
+#endif
+
 #include "TAudioMixer.h"
 #include "UAudioTools.h"
 #include "TPanTable.h"

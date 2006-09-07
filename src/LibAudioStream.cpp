@@ -36,7 +36,7 @@ research@grame.fr
 
     struct AudioPlayer {
         TAudioRendererPtr fRenderer;
-        TAudioEnginePtr fEngine;
+		TAudioMixerPtr	fMixer;  	
     };
 
     // Opaque pointers
@@ -483,7 +483,7 @@ AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight)
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 {
 	try {
-		return new TFaustAudioEffect(name);
+		return new TModuleFaustAudioEffect(name);
 	} catch (int n) {
 		printf("MakeFaustAudioEffect exception %d \n", n);
 		return 0;
@@ -566,7 +566,7 @@ AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRigh
 AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 {
 	try {
-		return new SMARTP<TAudioEffectInterface>(new TFaustAudioEffect(name));
+		return new SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
 	} catch (int n) {
 		printf("MakeFaustAudioEffect exception %d \n", n);
 		return 0;
@@ -619,16 +619,16 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
     if (!player)
         goto error;
 
-	player->fRenderer = TAudioRendererFactory::MakeAudioRenderer(renderer);
-     
+	player->fRenderer = TAudioRendererFactory::MakeAudioRenderer(renderer); 
     if (!player->fRenderer)
         goto error;
 
-    player->fEngine = new TAudioEngine(player->fRenderer);
-    if (!player->fEngine)
+	player->fMixer = new TAudioMixer;
+    if (!player->fMixer)
         goto error;
 
-    res = player->fEngine->Open(&tmpInChan, &tmpOutChan, &tmpBufferSize, &tmpSampleRate);
+	player->fRenderer->AddClient(player->fMixer);
+	res = player->fRenderer->Open(&tmpInChan, &tmpOutChan, &tmpBufferSize, &tmpSampleRate);
 
     if (res == NO_ERR)
         return player;
@@ -646,10 +646,11 @@ AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr manager)
 		
 	player->fRenderer = manager;
 		
-	player->fEngine = new TAudioEngine(player->fRenderer);
-    if (!player->fEngine)
+	player->fMixer = new TAudioMixer;
+    if (!player->fMixer)
         goto error;
-		
+
+	player->fRenderer->AddClient(player->fMixer);		
 	return player;
 
 error:
@@ -662,12 +663,13 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
     if (!player)
         return;
 
-    if (player->fEngine) {
-        player->fEngine->Close();
-        delete player->fEngine;
+	if (player->fMixer) {    
+		player->fRenderer->RemoveClient(player->fMixer);
+        delete player->fMixer;
     }
 
     if (player->fRenderer) {
+		player->fRenderer->Close();
         delete player->fRenderer;
     }
 
@@ -680,8 +682,10 @@ void AUDIOAPI CloseAudioClient(AudioPlayerPtr player)
     if (!player)
         return;
 
-    if (player->fEngine) 
-        delete player->fEngine;
+	if (player->fMixer) {
+		player->fRenderer->RemoveClient(player->fMixer);
+        delete player->fMixer;
+    }
   
     free(player);
 }
@@ -689,108 +693,107 @@ void AUDIOAPI CloseAudioClient(AudioPlayerPtr player)
 // SoundFile management
 long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight)
 {
-    if (player && player->fEngine && sound) {
-        return player->fEngine->LoadChannel(static_cast<TAudioStreamPtr>(sound), chan, vol, panLeft, panRight);
+    if (player && player->fMixer && sound) {
+        return player->fMixer->Load(static_cast<TAudioStreamPtr>(sound), chan, vol, panLeft, panRight);
     } else
         return LOAD_ERR;
 }
 
 long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight)
 {
-    if (player && player->fEngine && sound) {
-        return player->fEngine->LoadChannel(static_cast<TAudioStreamPtr>(*sound), chan, vol, panLeft, panRight);
+    if (player && player->fMixer && sound) {
+        return player->fMixer->Load(static_cast<TAudioStreamPtr>(*sound), chan, vol, panLeft, panRight);
     } else
         return LOAD_ERR;
 }
 
 void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info)
 {
-    if (player && player->fEngine && info) {
-        player->fEngine->GetInfoChannel(chan, info);
+    if (player && player->fMixer && info) {
+        player->fMixer->GetInfo(chan, info);
     }
 }
 
 void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player,long chan, StopCallback callback, void* context)
 {
-    if (player && player->fEngine ) {
-        player->fEngine->SetStopCallbackChannel(chan, callback, context);
+    if (player && player->fMixer) {
+        player->fMixer->SetStopCallback(chan, callback, context);
     }
 }
-
 
 // Transport
 void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fEngine)
-        player->fEngine->StartChannel(chan);
+    if (player && player->fMixer)
+        player->fMixer->Start(chan);
 }
 
 void AUDIOAPI ContChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fEngine)
-        player->fEngine->PlayChannel(chan);
+    if (player && player->fMixer)
+        player->fMixer->Play(chan);
 }
 
 void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fEngine)
-        player->fEngine->StopChannel(chan);
+    if (player && player->fMixer)
+        player->fMixer->Stop(chan);
 }
 
 void AUDIOAPI AbortChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fEngine)
-        player->fEngine->AbortChannel(chan);
+    if (player && player->fMixer)
+        player->fMixer->Abort(chan);
 }
 
 void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player)
 {
-    if (player && player->fEngine)
-        player->fEngine->Start();
+    if (player && player->fMixer && player->fRenderer)
+        player->fRenderer->Start();
 }
 
 void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player)
 {
-    if (player && player->fEngine)
-        player->fEngine->Stop();
+    if (player && player->fMixer && player->fRenderer)
+        player->fRenderer->Stop();
 }
 
 // Params
 void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol)
 {
-    if (player && player->fEngine)
-        player->fEngine->SetVolChannel(chan, vol);
+    if (player && player->fMixer)
+        player->fMixer->SetVol(chan, vol);
 }
 
 void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight)
 {
-    if (player && player->fEngine)
-        player->fEngine->SetPanChannel(chan, panLeft, panRight);
+    if (player && player->fMixer)
+        player->fMixer->SetPan(chan, panLeft, panRight);
 }
 
 void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
-    if (player && player->fEngine)
-        player->fEngine->SetEffectListChannel(chan, *effect_list, fadeIn, fadeOut);
+    if (player && player->fMixer)
+        player->fMixer->SetEffectList(chan, *effect_list, fadeIn, fadeOut);
 }
 
 // Master
 void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol)
 {
-    if (player && player->fEngine)
-        player->fEngine->SetMasterVol(vol);
+    if (player && player->fMixer)
+        player->fMixer->SetVol(vol);
 }
 
 void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight)
 {
-    if (player && player->fEngine)
-        player->fEngine->SetMasterPan(panLeft, panRight);
+    if (player && player->fMixer)
+        player->fMixer->SetPan(panLeft, panRight);
 }
 
 void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
-    if (player && player->fEngine)
-        player->fEngine->SetEffectListMaster(*effect_list, fadeIn, fadeOut);
+    if (player && player->fMixer)
+        player->fMixer->SetEffectList(*effect_list, fadeIn, fadeOut);
 }
 
 // Globals

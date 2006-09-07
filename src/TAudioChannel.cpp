@@ -23,6 +23,10 @@ research@grame.fr
 // Class TAudioChannel
 //---------------------
 
+#ifdef WIN32 
+#pragma warning (disable : 4786)
+#endif
+
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"

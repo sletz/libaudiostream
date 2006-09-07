@@ -175,80 +175,21 @@ typedef void (* conclude) (dsp* self);
 \brief Faust effect.
 */
 
-class TFaustAudioEffect : public TAudioEffectInterface, public UI
+class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 {
-
-    private:
+	protected:
 	
-		char fName[512];
-		HANDLE fHandle;
-		dsp* fDsp;
-		newDsp fNew;
-		deleteDsp fDelete;
-		getNumInputs fGetNumInputs;
-		getNumOutputs fGetNumOutputs;
-		buildUserInterface fBuildUserInterface;
-		init fInit;
-		compute fCompute;
-		conclude fConclude;
 		vector<UIObject*> fUITable;
-		
+
     public:
 
-        TFaustAudioEffect(const char* name): TAudioEffectInterface()
-        {
-			strcpy(fName, name);
-			fHandle = LoadModule(name);
-			if (!fHandle) 
-				 throw -1;
-			fNew = (newDsp)GetProc(fHandle, "newDsp");
-			fDelete = (deleteDsp)GetProc(fHandle, "deleteDsp");
-			fGetNumInputs = (getNumInputs)GetProc(fHandle, "getNumInputs");
-			fGetNumOutputs = (getNumOutputs)GetProc(fHandle, "getNumOutputs");
-			fBuildUserInterface = (buildUserInterface)GetProc(fHandle, "buildUserInterface");
-			fInit = (init)GetProc(fHandle, "init");
-			fCompute = (compute)GetProc(fHandle, "compute");
-			fConclude = (conclude)GetProc(fHandle, "conclude");
-			fDsp = fNew();
-			fInit(fDsp, TAudioGlobals::fSample_Rate);
-			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
-				fDelete(fDsp);
-				UnloadModule(fHandle);
-				throw -2;
-			}
-			fBuildUserInterface(fDsp, this);
-		}
-        virtual ~TFaustAudioEffect()
+        TFaustAudioEffectBase(): TAudioEffectInterface(),UI()
+        {}
+        virtual ~TFaustAudioEffectBase()
         {
 			for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) 
 				delete *iter;
-				
-			if (fHandle) {
-				fDelete(fDsp);
-				UnloadModule(fHandle);
-			}
 		}
-
-        void Process(float** input, float** output, long framesNum, long channels)
-        {
-			fCompute(fDsp, framesNum, input, output);
-		}
-
-        TAudioEffectInterface* Copy()
-        {
-            return new TFaustAudioEffect(fName);
-        }
-        void Reset()
-        {
-			fDelete(fDsp);
-			fDsp = fNew();
-			fInit(fDsp, TAudioGlobals::fSample_Rate);
-			fBuildUserInterface(fDsp, this);
-		}
-        long Channels()
-        {
-            return fGetNumInputs(fDsp);
-        }
 		
 		void addButton(char* label, float* zone) {fUITable.push_back(new Button(label, zone));}
 		
@@ -282,6 +223,9 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 		void openHorizontalBox(char* label) {}
 		void openVerticalBox(char* label) {}
 		void closeBox() {}
+
+		virtual void show() {}
+		virtual void run() {}
 		
 		long GetControlCount()
 		{
@@ -306,6 +250,132 @@ class TFaustAudioEffect : public TAudioEffectInterface, public UI
 		}
 };
 
-typedef TFaustAudioEffect * TFaustAudioEffectPtr;
+typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
+
+
+/*!
+\brief Faust effect.
+*/
+
+class TModuleFaustAudioEffect : public TFaustAudioEffectBase
+{
+
+    private:
+	
+		char fName[512];
+		HANDLE fHandle;
+		dsp* fDsp;
+		newDsp fNew;
+		deleteDsp fDelete;
+		getNumInputs fGetNumInputs;
+		getNumOutputs fGetNumOutputs;
+		buildUserInterface fBuildUserInterface;
+		init fInit;
+		compute fCompute;
+		conclude fConclude;
+		
+    public:
+
+        TModuleFaustAudioEffect(const char* name): TFaustAudioEffectBase()
+        {
+			strcpy(fName, name);
+			fHandle = LoadModule(name);
+			if (!fHandle) 
+				 throw -1;
+			fNew = (newDsp)GetProc(fHandle, "newDsp");
+			fDelete = (deleteDsp)GetProc(fHandle, "deleteDsp");
+			fGetNumInputs = (getNumInputs)GetProc(fHandle, "getNumInputs");
+			fGetNumOutputs = (getNumOutputs)GetProc(fHandle, "getNumOutputs");
+			fBuildUserInterface = (buildUserInterface)GetProc(fHandle, "buildUserInterface");
+			fInit = (init)GetProc(fHandle, "init");
+			fCompute = (compute)GetProc(fHandle, "compute");
+			fConclude = (conclude)GetProc(fHandle, "conclude");
+			fDsp = fNew();
+			fInit(fDsp, TAudioGlobals::fSample_Rate);
+			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
+				fDelete(fDsp);
+				UnloadModule(fHandle);
+				throw -2;
+			}
+			fBuildUserInterface(fDsp, this);
+		}
+        virtual ~TModuleFaustAudioEffect()
+        {
+			if (fHandle) {
+				fDelete(fDsp);
+				UnloadModule(fHandle);
+			}
+		}
+
+        void Process(float** input, float** output, long framesNum, long channels)
+        {
+			fCompute(fDsp, framesNum, input, output);
+		}
+
+        TAudioEffectInterface* Copy()
+        {
+            return new TModuleFaustAudioEffect(fName);
+        }
+        void Reset()
+        {
+			fInit(fDsp, TAudioGlobals::fSample_Rate);
+		}
+        long Channels()
+        {
+            return fGetNumInputs(fDsp);
+        }
+		
+};
+
+typedef TModuleFaustAudioEffect * TModuleFaustAudioEffectPtr;
+
+
+/*!
+\brief Faust effect.
+*/
+
+/*
+class TCodeFaustAudioEffect : public TFaustAudioEffectBase
+{
+
+    private:
+	
+		dsp* fDsp;
+			
+    public:
+
+        TCodeFaustAudioEffect(dsp* code): TFaustAudioEffectBase(), fDsp(code)
+        {
+			fDsp->init(TAudioGlobals::fSample_Rate);
+			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
+				throw -2;
+			}
+			fDsp->buildUserInterface(this);
+		}
+        virtual ~TCodeFaustAudioEffect()
+        {}
+
+        void Process(float** input, float** output, long framesNum, long channels)
+        {
+			fDsp->compute(framesNum, input, output);
+		}
+
+        TAudioEffectInterface* Copy()
+        {
+            return new TCodeFaustAudioEffect(fDsp);
+        }
+        void Reset()
+        {
+			fDsp->init(TAudioGlobals::fSample_Rate);
+		}
+        long Channels()
+        {
+            return fDsp->getNumInputs();
+        }
+		
+};
+
+typedef TCodeFaustAudioEffect * TCodeFaustAudioEffectPtr;
+*/
 
 #endif

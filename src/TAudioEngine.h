@@ -38,7 +38,7 @@ class TAudioEngine
 
     protected:
 
-        TAudioMixerPtr	fMixer;  	// Writer of Audio output
+        TAudioMixerPtr	fMixer;  		// Writer of Audio output
         TAudioRendererPtr fRenderer; 	// Renderer
 
     public:
