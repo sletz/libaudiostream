@@ -27,15 +27,19 @@ research@grame.fr
 //-----------------------------
 // Class TAudioEffectInterface
 //-----------------------------
-/*!
-\brief The base class for audio effects.
-*/
 
 class TAudioEffectInterface;
 
 typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
 
-class TAudioEffectInterface : public smartable1
+/*!
+\brief The base class for audio effects.
+*/
+
+// Using smartable1 cause crah when desallocating the object: desactivated for now
+// class TAudioEffectInterface : public smartable1
+
+class TAudioEffectInterface : public smartable
 {
 
     private:

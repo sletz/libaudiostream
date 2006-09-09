@@ -29,7 +29,7 @@ research@grame.fr
 enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
 
 /*!
-\brief A Factory for audio renderers.
+\brief A factory for audio renderers.
 */
 
 class AUDIO_EXPORTS TAudioRendererFactory

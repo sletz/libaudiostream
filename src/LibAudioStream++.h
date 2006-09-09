@@ -140,7 +140,7 @@ AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
 */
 AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
 /*!
-\brief Apply an effect on a stream.
+\brief Apply a list of effects on a stream.
 \param sound The stream to be transformed.
 \param effect_list The effect list to be used.
 \param fadeIn A fadein section frames before the effect is fully applied.
@@ -188,7 +188,7 @@ long GetChannelsSound(AudioStream sound);
 */
 long ReadSound(AudioStream sound, float* buffer, long buffer_size, long channels);
 /*!
-\brief reset a stream.
+\brief Reset a stream.
 \param sound The stream to be reseted.
 */
 void ResetSound(AudioStream sound);
@@ -306,7 +306,7 @@ AudioPlayerPtr OpenAudioClient(AudioManagerPtr manager);
 void CloseAudioPlayer(AudioPlayerPtr player);
 
 /*!
-\brief Close an audio client that was previously added to an external allocated audio manager using OpenAudioClient.
+\brief Close an audio client that was previously added to an external allocated audio renderer using OpenAudioClient.
 \param player The audio client to be closed.
 */					
 void CloseAudioClient(AudioPlayerPtr player);

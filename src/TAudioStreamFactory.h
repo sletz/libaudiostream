@@ -52,7 +52,7 @@ typedef TAudioStreamPtr BinayOp(TAudioStreamPtr s1, TAudioStreamPtr s2);
 // Class TAudioStreamFactory
 //---------------------------
 /*!
-\brief A Factory for streams.
+\brief A factory for streams.
 */
 
 class AUDIO_EXPORTS TAudioStreamFactory

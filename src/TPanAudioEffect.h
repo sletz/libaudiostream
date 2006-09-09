@@ -34,7 +34,7 @@ research@grame.fr
 // Class TPanAudioEffect
 //-----------------------
 /*!
-\brief Pan effect.
+\brief Mono pan effect.
 */
 
 class TMonoPanAudioEffect : public TAudioEffectInterface
@@ -103,6 +103,10 @@ class TMonoPanAudioEffect : public TAudioEffectInterface
 };
 
 typedef TMonoPanAudioEffect * TMonoPanAudioEffectPtr;
+
+/*!
+\brief Stereo pan effect.
+*/
 
 class TStereoPanAudioEffect : public TAudioEffectInterface
 {

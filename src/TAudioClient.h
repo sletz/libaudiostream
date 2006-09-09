@@ -27,7 +27,7 @@ research@grame.fr
 // Class TAudioClient
 //--------------------
 /*!
-\brief The base class for Audio clients
+\brief The base class for audio clients
 */
 
 class TAudioClient

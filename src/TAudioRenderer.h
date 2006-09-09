@@ -37,7 +37,7 @@ using namespace std;
 
 typedef struct RendererInfo * RendererInfoPtr;
 /*!
-\brief To get Renderer state.
+\brief To get renderer state.
 */
 typedef struct RendererInfo
 {
@@ -57,7 +57,7 @@ typedef struct RendererInfo
 // Class TAudioRenderer
 //----------------------
 /*!
-\brief The base class for Audio renderer
+\brief The base class for audio renderer.
 */
 
 class AUDIO_EXPORTS TAudioRenderer

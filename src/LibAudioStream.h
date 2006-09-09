@@ -141,7 +141,7 @@ extern "C"
     */
     AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     /*!
-    \brief Apply an effect on a stream.
+    \brief Apply a list of effects on a stream.
     \param sound The stream to be transformed.
     \param effect_list The effect list to be used.
     \param fadeIn A fadein section frames before the effect is fully applied.
@@ -194,7 +194,7 @@ extern "C"
     */
     void DeleteSoundPtr(AudioStreamPtr sound);
 	/*!
-    \brief reset a stream.
+    \brief Reset a stream.
     \param sound The stream to be reseted.
     */
 	void ResetSoundPtr(AudioStreamPtr sound);
@@ -311,9 +311,11 @@ extern "C"
                                    long renderer,
                                    long thread_num);
 	/*!
-    \brief Opens the audio client, to be added to an externally allocated audio manager.
+    \brief Opens the audio client, to be added to an externally allocated renderer
+	\param renderer The audio renderer that will "drive" (call Audio callback) the player.
+	\return A pointer to new audio player object.
 	*/					
-	AudioPlayerPtr OpenAudioClient(AudioManagerPtr manager);	
+	AudioPlayerPtr OpenAudioClient(AudioManagerPtr renderer);	
 	 							   						   
     /*!
     \brief Close the audio player.
@@ -322,7 +324,7 @@ extern "C"
     void CloseAudioPlayer(AudioPlayerPtr player);
 	
 	/*!
-    \brief Close an audio client that was previously added to an external allocated audio manager using OpenAudioClient.
+    \brief Close an audio client that was previously added to an external allocated audio renderer using OpenAudioClient.
     \param player The audio client to be closed.
     */					
 	void CloseAudioClient(AudioPlayerPtr player);
@@ -436,17 +438,69 @@ extern "C"
 	*/
 	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
+	/*!
+    \brief Create a new audio renderer.
+    \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+	\return A pointer to new audio renderer object.
+	*/
 	AudioManagerPtr MakeAudioRenderer(long renderer);
+	/*!
+    \brief Delete an audio renderer.
+    \param renderer The renderer to be deleted.
+	*/
 	void DeleteAudioRenderer(AudioManagerPtr renderer);
 	
+	/*!
+    \brief Open the audio renderer.
+    \param renderer The audio used.
+	\param inChan The number of input channels. <B>Only stereo players are currently supported </b>. On input, contains the wanted value, on return the really used one.
+	\param outChan The number of output channels.  On input, contains the wanted value, on return the really used one.
+	\param buffer_size The audio player internal buffer size.  On input, contains the wanted value, on return the really used one.
+    \param sample_rate The sampling rate.  On input, contains the wanted value, on return the really used one.
+ 	\return An error code.
+	*/
 	int OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+	/*!
+    \brief Close an audio renderer.
+    \param renderer The audio renderer to be closed.
+	*/
 	void CloseAudioRenderer(AudioManagerPtr renderer); 
+	
+	/*!
+    \brief Start an audio renderer.
+    \param renderer The audio renderer to be started.
+	*/	
 	void StartAudioRenderer(AudioManagerPtr renderer); 
+	/*!
+    \brief Stop an audio renderer.
+    \param renderer The audio renderer to be stoped.
+	*/
 	void StopAudioRenderer(AudioManagerPtr renderer); 
 	
+	/*!
+    \brief Add an audio client to the renderer internal client list.
+    \param renderer The audio renderer to be used.
+	\param client The audio client to be added.
+	*/
 	void AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	/*!
+    \brief Remove an audio client from the renderer internal client list.
+    \param renderer The audio renderer to be used.
+	\param client The audio client to be removed.
+	*/
 	void RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
 	
+	/*!
+    \brief Init the global audio context. There is <B> unique </B> to be accesed by all components that need it.
+    \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
+    \param outChan The number of output channels.
+    \param channels The number of stream channels.
+    \param sample_rate The sampling rate.
+    \param buffer_size The audio player internal buffer size.
+    \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
+    \param rtstream_buffer_size The input stream buffer size.
+    \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
+    */
 	void AudioGlobalsInit(long inChan, 
 						long outChan, 
 						long channels, 
@@ -455,6 +509,9 @@ extern "C"
 						long stream_buffer_size, 
 						long rtstream_buffer_size,
 						long thread_num);
+	/*!
+    \brief Destroy the global audio context.
+  	*/
 	void AudioGlobalsDestroy();
 
 /*! @} */

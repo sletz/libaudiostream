@@ -180,7 +180,7 @@ extern "C"
                                             long rtstream_buffer_size, 
                                             long renderer,
                                             long thread_num);
-	AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr manager);	
+	AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr renderer);	
 									
     void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player);
 	void AUDIOAPI CloseAudioClient(AudioPlayerPtr player);
@@ -638,13 +638,13 @@ error:
     return 0;
 }
 
-AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr manager)
+AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr renderer)
 {
 	AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
     if (!player)
         goto error;
 		
-	player->fRenderer = manager;
+	player->fRenderer = renderer;
 		
 	player->fMixer = new TAudioMixer;
     if (!player->fMixer)
