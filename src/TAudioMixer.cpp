@@ -112,6 +112,7 @@ void TAudioMixer::Start(long chan)
         channel->Reset();
         channel->SoundOn();
         channel->SetState(true);
+		// This is supposed to be unsafe since fSoundChannelSeq list is also read in AudioCallback thread... but no crash even occured
         fSoundChannelSeq.push_front(channel);
     } else {
         printf("Start : Channel already playing : %ld\n", chan);
@@ -125,6 +126,7 @@ void TAudioMixer::Play(long chan)
     if (IsAvailable(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SoundOn();
         channel->SetState(true);
+		// This is supposed to be unsafe since fSoundChannelSeq list is also read in AudioCallback thread... but no crash even occured
         fSoundChannelSeq.push_front(channel);
     } else {
         printf("Start : Channel already playing : %ld\n", chan);
