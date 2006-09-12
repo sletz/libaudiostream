@@ -43,8 +43,8 @@ class TAudioClient
 		/*!
 		\brief Audio callback called by the AudioManager.
 		\param inputBuffer The input buffer as a array of interleaved float samples (stereo here).
-		\param outputBuffer The ouput buffer as a array of interleaved float samples (stereo here).
-		\param frames The input/ouput buffer number of frames.
+		\param outputBuffer The output buffer as a array of interleaved float samples (stereo here).
+		\param frames The input/output buffer number of frames.
 		\return true if success, false otherwise.
 		*/
         virtual bool AudioCallback(float* inputBuffer, float* outputBuffer, long frames) = 0;
