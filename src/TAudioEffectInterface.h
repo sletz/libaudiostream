@@ -82,6 +82,5 @@ class TAudioEffectInterface : public smartable
 		virtual float GetControlValue(long param) = 0;
 };
 
-//typedef TAudioEffectInterface * TAudioEffectInterfacePtr;
 
 #endif
