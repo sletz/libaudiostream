@@ -27,7 +27,7 @@ research@grame.fr
 // Class TAudioClient
 //--------------------
 /*!
-\brief The base class for audio clients
+\brief The base class for Audio clients
 */
 
 class TAudioClient
@@ -40,6 +40,13 @@ class TAudioClient
         virtual ~TAudioClient()
         {}
 
+		/*!
+		\brief Audio callback called by the AudioManager.
+		\param inputBuffer The input buffer as a array of interleaved float samples (stereo here).
+		\param outputBuffer The ouput buffer as a array of interleaved float samples (stereo here).
+		\param frames The input/ouput buffer number of frames.
+		\return true if success, false otherwise.
+		*/
         virtual bool AudioCallback(float* inputBuffer, float* outputBuffer, long frames) = 0;
 };
 
