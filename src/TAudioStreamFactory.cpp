@@ -97,7 +97,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeFadeSound(TAudioStreamPtr sound, long f
 
 TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long beginFrame, long endFrame)
 {
-    if (beginFrame < endFrame && sound) {
+    if (beginFrame >= 0 && beginFrame < endFrame && sound) {
         TAudioStreamPtr begin = sound->CutBegin(beginFrame);
         if (begin) {
             return new TCutEndAudioStream(begin, UTools::Min(sound->Length(), endFrame) - beginFrame);
