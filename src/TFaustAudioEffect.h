@@ -162,6 +162,30 @@ class Slider : public UIObject {
 		}
 };
 
+class Bargraph : public UIObject {
+
+	private:
+	
+		float fMin;
+		float fMax;
+	
+	public:	
+	
+		Bargraph(char* label, float* zone, float min, float max)
+			:UIObject(label,zone),fMin(min),fMax(max) {}
+		virtual ~Bargraph() {}	
+		
+		void SetControlValue(float f) {*fZone = range(fMin, fMax, f);}
+		
+		virtual void GetControlParam(char* label, float* min, float* max, float* init)
+		{
+			UIObject::GetControlParam(label, min, max, init);
+			*min = fMin;
+			*max = fMax;
+			*init = 0.f;
+		}
+};
+
 typedef dsp* (* newDsp) ();
 typedef void (* deleteDsp) (dsp* self); 						
 typedef int (* getNumInputs) (dsp* self);
@@ -214,8 +238,14 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 		
 		virtual void addNumDisplay(char* label, float* zone, int precision) {}
 		virtual void addTextDisplay(char* label, float* zone, char* names[], float min, float max) {}
-		virtual void addHorizontalBargraph(char* label, float* zone, float min, float max) {}
-		virtual void addVerticalBargraph(char* label, float* zone, float min, float max) {}
+		virtual void addHorizontalBargraph(char* label, float* zone, float min, float max) 
+		{
+			fUITable.push_back(new Bargraph(label, zone, min, max));
+		}
+		virtual void addVerticalBargraph(char* label, float* zone, float min, float max)
+		{
+			fUITable.push_back(new Bargraph(label, zone, min, max));
+		}
 		void addCallback(float* zone, uiCallback foo, void* data);
 		
 		void openFrameBox(char* label) {}
