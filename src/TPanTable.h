@@ -55,7 +55,7 @@ class TPanTable
         virtual ~TPanTable()
         {}
 		
-		static void TPanTable::GetLR(float vol, float pan, float* left_vol, float* right_vol)
+		static void GetLR(float vol, float pan, float* left_vol, float* right_vol)
 		{
 			*left_vol = vol * sin(pan * PI/2.0);
 			*right_vol = vol * cos(pan * PI/2.0);
