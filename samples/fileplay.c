@@ -32,17 +32,32 @@ static int playfile (char * filename, long beginFrame, long endFrame)
 {
     ChannelInfo info;
 	AudioStreamPtr sound;
-	/*
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 
+	AudioPlayerPtr player;
+	
+	player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 
+                     		SAMPLE_RATE, AUDIO_BUFFER, FILE_BUFFER, STREAM_BUFFER, 
+                     		kJackRenderer, 1);
+	if (!player) {
+		fprintf(stdout, "cannot start player with Jack API, try PortAudio...\n");
+		player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 
                             SAMPLE_RATE, AUDIO_BUFFER, FILE_BUFFER, STREAM_BUFFER, 
-                            kPortAudioRenderer, 1);
-	*/
-	AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 
-                            SAMPLE_RATE, AUDIO_BUFFER, FILE_BUFFER, STREAM_BUFFER, 
-                            kJackRenderer, 1);
-	sound  = MakeRegionSoundPtr (filename, beginFrame, endFrame);
+                            kPortAudioRenderer, 1);					
+	}	
+							
+	if (!player) {
+		fprintf(stdout, "cannot start player with PortAudio API, now quit...\n");
+		return -1;
+	}
+							
+	sound  = MakeStereoSoundPtr(MakeRegionSoundPtr (filename, beginFrame, endFrame));
+	
+	if (!sound) {
+		fprintf(stdout, "sound %s cannot be opened: check name and parameters\n", filename);
+		return -1;
+	}
+	
 	StartAudioPlayer(player);
-	LoadChannelPtr (player, sound, 1, VOL, PAN_LEFT, PAN_RIGHT);
+	LoadChannelPtr(player, sound, 1, VOL, PAN_LEFT, PAN_RIGHT);
 	StartChannel(player, 1);
 	
 	do {
@@ -53,8 +68,7 @@ static int playfile (char * filename, long beginFrame, long endFrame)
 			sleep(1);
 		#endif
 	} while (info.fStatus);
-	
-			
+				
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
     DeleteSoundPtr (sound);

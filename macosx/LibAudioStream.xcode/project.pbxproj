@@ -451,7 +451,7 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			name = TAudioClient.h;
-			path = ../src/TAudioClient.h;
+			path = ../../VEMUS/ScoreProcessingSVN/ScoreProcessing/dev/include/audiostream/TAudioClient.h;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};

@@ -26,13 +26,16 @@ research@grame.fr
 #include <stdio.h>
 
 #define FILENAME1 "/Users/letz/levot.wav"
+//#define FILENAME1 "/Users/letz/attak.aiff"
+//#define FILENAME1 "/Users/letz/levotmono.wav"
 #define FILENAME2 "/Users/letz/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
 #define FILENAME4 "/Users/letz/levotmono.wav"
 
 #define EFFECT1 "/Users/letz/freeverb.so"
+//#define EFFECT1 "/Users/letz/bandfilter.so"
 
-#define IN_CHANNELS 2 // stereo player
+#define IN_CHANNELS 0 // stereo player
 #define OUT_CHANNELS 2 // stereo player
 #define CHANNELS 8
 
@@ -49,7 +52,9 @@ AudioStream test0()
     printf("Build a region \n");
     printf("-------------- \n\n");
     AudioStream s1;
-	s1 = MakeRegionSound(FILENAME1, 200000, 500000);
+	//s1 = MakeRegionSound(FILENAME1, 200000, 500000);
+	s1 = MakeRegionSound(FILENAME1, 0, 500000);
+	//s1 = MakeReadSound(FILENAME1);
 	//s1 = MakeStereoSound(MakeRegionSound(FILENAME4, 200000, 500000));
     return s1;
 }
@@ -75,6 +80,7 @@ AudioStream test2()
     return MakeFadeSound(MakeMixSound(s2, s1), 44100, 44100);
 }
 
+
 AudioStream test3()
 {
     printf("-----------------------------------------------\n");
@@ -84,6 +90,28 @@ AudioStream test3()
     s1 = MakeRegionSound(FILENAME1, 200000, 500000);
     s2 = MakeRegionSound(FILENAME2, 200000, 700000);
     return MakeSeqSound(s1, s2, 88200);
+}
+
+AudioStream test3bis()
+{
+    printf("-----------------------------------------------\n");
+    printf("Build a sequence of 2 regions with a crossfade \n");
+    printf("-----------------------------------------------\n\n");
+    AudioStream s1, s2;
+    s1 = MakeStereoSound(MakeReadSound("/Users/letz/cs2.aiff"));
+    s2 = MakeStereoSound(MakeReadSound("/Users/letz/cs4.aiff"));
+    return MakeSeqSound(s1, s2, 44100/2);
+}
+
+AudioStream test3ter()
+{
+    printf("-----------------------------------------------\n");
+    printf("Build a sequence of 2 regions with a crossfade \n");
+    printf("-----------------------------------------------\n\n");
+    AudioStream s1, s2;
+    s1 = MakeReadSound("/Users/letz/cs2.aiff");
+    s2 = MakeReadSound("/Users/letz/cs4.aiff");
+    return MakeSeqSound(s1, s2, 44100/2);
 }
 
 AudioStream test4()
@@ -285,7 +313,7 @@ void SaveSound(AudioStream sound, char* name)
 	float buffer[512 * 2];
     long res;
     do {
-        res = ReadSound(writesound, buffer, 512, GetChannelsSound(writesound));
+		res = ReadSound(writesound, buffer, 512, 2);
         printf("Simulate non real-time rendering : use buffer here %ld\n", res);
     } while (res == 512);
 }
@@ -310,10 +338,19 @@ int main(int argc, char* argv[])
     printf("----------------------------\n\n");
 	
 	// Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
+    
+	//AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
+	AudioPlayerPtr player = NULL;
     // Is failure opens PortAudio version
-    if (!player)
+	//if (!player)
+      //  player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
+	if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
+	   
+	if (!player) {
+		printf("Cannot open audio player... exit\n");
+		exit(1);
+	}   
     StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");
@@ -325,11 +362,15 @@ int main(int argc, char* argv[])
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
 	
-    ExecTest(player, test0());
+	//ExecTest(player, test0());
+	//ExecTest(player, test1());
+	//ExecTest(player, test2());
+	//ExecTest(player, test3());
+	//ExecTest(player, test3ter());
+	SaveSound(test3bis(),"/Users/letz/seq.aiff");
+	//SaveSound(test3ter(),"/Users/letz/seq.aiff");
 	
-	ExecTest(player, test1());
-    ExecTest(player, test2());
-    ExecTest(player, test3());
+	/*
     ExecTest(player, test4());
     ExecTest(player, test5());
     ExecTest(player, test6());
@@ -338,9 +379,10 @@ int main(int argc, char* argv[])
     ExecTest(player, test9());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
-
+	
 	test20();
 	test21();
+	*/
 	
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
