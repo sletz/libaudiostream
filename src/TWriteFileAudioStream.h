@@ -57,7 +57,7 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
         TWriteFileAudioStream(string name, TAudioBuffer<short>* buffer, TAudioStreamPtr stream, long format);
         virtual ~TWriteFileAudioStream();
 
-        long TWriteFileAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
+        long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
 
         void Reset();
        
