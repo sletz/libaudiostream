@@ -27,7 +27,6 @@ research@grame.fr
 #include "TPanAudioEffect.h"
 #include "TFaustAudioEffect.h"
 
-
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
 #else
@@ -41,15 +40,18 @@ research@grame.fr
 
     // Opaque pointers
     typedef AudioPlayer* AudioPlayerPtr;
-	typedef TAudioStreamPtr AudioStream;
+	typedef TAudioStreamPtr AudioStream;			// smart pointer type
 	typedef AudioStream* AudioStreamPtr;
-	typedef TAudioRendererPtr AudioManagerPtr;
-	typedef TAudioClientPtr AudioClientPtr;
 
- 	typedef TAudioEffectListPtr AudioEffectList;
-    typedef TAudioEffectInterfacePtr AudioEffect;	
+	typedef TAudioRenderer* AudioManagerPtr;	
+	typedef TAudioClient* AudioClientPtr;
+
+ 	typedef TAudioEffectListPtr AudioEffectList;	// smart pointer type
+    typedef TAudioEffectInterfacePtr AudioEffect;	// smart pointer type
+
 	typedef AudioEffectList* AudioEffectListPtr;
     typedef AudioEffect* AudioEffectPtr;	
+	typedef TAudioEffectInterface* AudioEffectInterfacePtr;
 	
 	typedef void (*StopCallback)(void* context);
 	
@@ -162,10 +164,16 @@ extern "C"
 	AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan);
 	AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight);
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
+	AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
+
 	long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect);
 	void AUDIOAPI GetControlParamPtr(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
 	void AUDIOAPI SetControlValuePtr(AudioEffectPtr effect, long param, float f);
 	float AUDIOAPI GetControlValuePtr(AudioEffectPtr effect, long param);
+	
+	void AUDIOAPI SetStateEffectPtr(AudioEffectPtr effect, long state);
+	long AUDIOAPI GetStateEffectPtr(AudioEffectPtr effect);
+	void AUDIOAPI ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 	
 	void AUDIOAPI DeleteEffectListPtr(AudioEffectListPtr list_effect);
 	void AUDIOAPI DeleteEffectPtr(AudioEffectPtr effect);
@@ -573,6 +581,11 @@ AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 	}
 }
 
+AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect)
+{
+    return new SMARTP<TAudioEffectInterface>(new TWrapperAudioEffect(static_cast<TAudioEffectInterface*>(effect)));
+}
+
 long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect) 
 {
 	return static_cast<TAudioEffectInterfacePtr>(*effect)->GetControlCount();
@@ -591,6 +604,21 @@ void AUDIOAPI SetControlValuePtr(AudioEffectPtr effect, long control, float f)
 float AUDIOAPI GetControlValuePtr(AudioEffectPtr effect, long control)
 {
 	return static_cast<TAudioEffectInterfacePtr>(*effect)->GetControlValue(control);
+}
+
+void AUDIOAPI SetStateEffectPtr(AudioEffectPtr effect, long state)
+{
+	static_cast<TAudioEffectInterfacePtr>(*effect)->SetState(bool(state));
+}
+
+long AUDIOAPI GetStateEffectPtr(AudioEffectPtr effect)
+{
+	return static_cast<TAudioEffectInterfacePtr>(*effect)->GetState();
+}
+
+void AUDIOAPI ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels)
+{
+	static_cast<TAudioEffectInterfacePtr>(*effect)->Process(input, output, framesNum, channels);
 }
 
 // Open/Close
