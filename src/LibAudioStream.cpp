@@ -26,6 +26,7 @@ research@grame.fr
 #include "TVolAudioEffect.h"
 #include "TPanAudioEffect.h"
 #include "TFaustAudioEffect.h"
+#include "TWrapperAudioEffect.h"
 
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)

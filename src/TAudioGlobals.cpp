@@ -38,7 +38,7 @@ float* TSharedBuffers::fOutBuffer = NULL;
 float TPanTable::fPanTable[128];
 float TPanTable::fVolTable[128];
 
-TCmdManagerPtr smartable1::fManager = NULL;
+TCmdManagerPtr la_smartable1::fManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
 long TAudioGlobals::fClientCount = 0;
@@ -93,7 +93,7 @@ void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_r
 									  buffer_size, stream_buffer_size, rtstream_buffer_size);
 		TDTRendererAudioStream::Init();
 		TRTRendererAudioStream::Init(thread_num);
-		smartable1::Init();
+		la_smartable1::Init();
 		TPanTable::FillTable();
 		GetMaximumFiles(&fFileMax);
 		SetMaximumFiles(1024);
@@ -105,7 +105,7 @@ void TAudioGlobals::Destroy()
 	if (--fClientCount == 0 && fInstance) {
 		TDTRendererAudioStream::Destroy();
 		TRTRendererAudioStream::Destroy();
-		smartable1::Destroy();
+		la_smartable1::Destroy();
 		delete fInstance;
 		fInstance = NULL;
 		SetMaximumFiles(fFileMax);

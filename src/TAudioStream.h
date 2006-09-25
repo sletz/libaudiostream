@@ -25,7 +25,7 @@ research@grame.fr
 #include "TAudioConstants.h"
 #include "UAudioTools.h"
 #include "TAudioBuffer.h"
-#include "smartpointer.h"
+#include "la_smartpointer.h"
 #include <stdio.h>
 
 //--------------------
@@ -40,7 +40,7 @@ typedef SMARTP<TAudioStream>  TAudioStreamPtr;
 \brief The base class for all streams.
 */ 
 
-class TAudioStream : public smartable
+class TAudioStream : public la_smartable
 {
 
     public:

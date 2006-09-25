@@ -67,6 +67,7 @@ extern "C"
 	
     typedef void* AudioEffectPtr;
     typedef void* AudioEffectListPtr;
+	typedef void* AudioEffectInterfacePtr;
 	
 	typedef void (*StopCallback)(void* context);
 
@@ -251,6 +252,9 @@ extern "C"
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
 	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
+
+	AudioEffectPtr MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
+
 	/*!
     \brief Return the number of effect controls.
     \param effect The effect pointer.
@@ -280,6 +284,12 @@ extern "C"
     \brief Delete the effect list.
 	\param list_effect The effect list pointer.
 	*/
+
+	void SetStateEffectPtr(AudioEffectPtr effect, long state);
+	long GetStateEffectPtr(AudioEffectPtr effect);
+
+	void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
+
 	void DeleteEffectListPtr(AudioEffectListPtr list_effect);	
 	/*!
     \brief Delete the effect.

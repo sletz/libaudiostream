@@ -22,24 +22,20 @@ research@grame.fr
 #ifndef __TAudioEffectInterface__
 #define __TAudioEffectInterface__
 
-#include "smartpointer.h"
+#include "la_smartpointer.h"
 
 //-----------------------------
 // Class TAudioEffectInterface
 //-----------------------------
-
-class TAudioEffectInterface;
-
-typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
 
 /*!
 \brief The base class for audio effects.
 */
 
 // Using smartable1 cause crah when desallocating the object: desactivated for now
-// class TAudioEffectInterface : public smartable1
+// class TAudioEffectInterface : public la_smartable1
 
-class TAudioEffectInterface : public smartable
+class LA_EXPORT TAudioEffectInterface : public virtual la_smartable
 {
 
     private:
@@ -71,6 +67,7 @@ class TAudioEffectInterface : public smartable
         }
 
         // Pure virtual : to be implemented by sub-classes
+		
         virtual void Process(float** input, float** output, long framesNum, long channels) = 0;
         virtual TAudioEffectInterface* Copy() = 0;
         virtual void Reset() = 0;
@@ -80,7 +77,10 @@ class TAudioEffectInterface : public smartable
 		virtual void GetControlParam(long param, char* label, float* min, float* max, float* init) = 0;
 		virtual void SetControlValue(long param, float f) = 0; 
 		virtual float GetControlValue(long param) = 0;
+
 };
+
+typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
 
 
 #endif
