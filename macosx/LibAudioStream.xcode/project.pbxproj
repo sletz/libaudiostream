@@ -400,6 +400,48 @@
 			settings = {
 			};
 		};
+		4B94C8BA0AC9563800775F58 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = la_smartpointer.h;
+			path = ../src/la_smartpointer.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B94C8BB0AC9563800775F58 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = la_smartpointer.cpp;
+			path = ../src/la_smartpointer.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B94C8BC0AC9563800775F58 = {
+			fileRef = 4B94C8BA0AC9563800775F58;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B94C8BD0AC9563800775F58 = {
+			fileRef = 4B94C8BB0AC9563800775F58;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B94C8BE0AC9563800775F58 = {
+			fileRef = 4B94C8BA0AC9563800775F58;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B94C8BF0AC9563800775F58 = {
+			fileRef = 4B94C8BB0AC9563800775F58;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4BA0DEDE087FE455003B1CB3 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -584,13 +626,13 @@
 				4BEA61B9095806CD001F733A,
 				4BEA61BA095806CD001F733A,
 				4BEA61BB095806CD001F733A,
-				4BEA61BC095806CD001F733A,
 				4BEA61BD095806CD001F733A,
 				4BEA61BE095806CD001F733A,
 				4BEA61BF095806CD001F733A,
 				4BEA61C0095806CD001F733A,
 				4BEA61C1095806CD001F733A,
 				4BEA61C2095806CD001F733A,
+				4B94C8BE0AC9563800775F58,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -838,15 +880,6 @@
 			settings = {
 			};
 		};
-		4BEA61BC095806CD001F733A = {
-			fileRef = 4BFC6E5C08727E9A0012D079;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
 		4BEA61BD095806CD001F733A = {
 			fileRef = 4BFC6E7E08729C6F0012D079;
 			isa = PBXBuildFile;
@@ -923,7 +956,7 @@
 				4BEA61DC095806CD001F733A,
 				4BEA61DD095806CD001F733A,
 				4BEA61DE095806CD001F733A,
-				4BEA61DF095806CD001F733A,
+				4B94C8BF0AC9563800775F58,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1084,12 +1117,6 @@
 			settings = {
 			};
 		};
-		4BEA61DF095806CD001F733A = {
-			fileRef = 4BFCA3C408718BFB00EC8A46;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4BEA61E0095806CD001F733A = {
 			buildActionMask = 2147483647;
 			files = (
@@ -1216,7 +1243,6 @@
 				4BEA620E095806CD001F733A,
 				4BEA620F095806CD001F733A,
 				4BEA6210095806CD001F733A,
-				4BEA6211095806CD001F733A,
 				4BEA6212095806CD001F733A,
 				4BEA6213095806CD001F733A,
 				4BEA6214095806CD001F733A,
@@ -1225,6 +1251,7 @@
 				4BEA6217095806CD001F733A,
 				4BEA6218095806CD001F733A,
 				4B6BBBBE0998A952000CEAAB,
+				4B94C8BC0AC9563800775F58,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1472,15 +1499,6 @@
 			settings = {
 			};
 		};
-		4BEA6211095806CD001F733A = {
-			fileRef = 4BFC6E5C08727E9A0012D079;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
 		4BEA6212095806CD001F733A = {
 			fileRef = 4BFC6E7E08729C6F0012D079;
 			isa = PBXBuildFile;
@@ -1564,8 +1582,8 @@
 				4BEA6233095806CD001F733A,
 				4BEA6234095806CD001F733A,
 				4BEA6235095806CD001F733A,
-				4BEA6236095806CD001F733A,
 				4B6BBBBD0998A952000CEAAB,
+				4B94C8BD0AC9563800775F58,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1732,12 +1750,6 @@
 			settings = {
 			};
 		};
-		4BEA6236095806CD001F733A = {
-			fileRef = 4BFCA3C408718BFB00EC8A46;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4BEA6237095806CD001F733A = {
 			buildActionMask = 2147483647;
 			files = (
@@ -1863,15 +1875,6 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
-		4BFC6E5C08727E9A0012D079 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = smartpointer.h;
-			path = ../src/smartpointer.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
 		4BFC6E7E08729C6F0012D079 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1896,15 +1899,6 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = TCmdHandler.h;
 			path = ../src/TCmdHandler.h;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4BFCA3C408718BFB00EC8A46 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = smartpointer.cpp;
-			path = ../src/smartpointer.cpp;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -2249,8 +2243,8 @@
 		F5C1FF5C0328B78201053105 = {
 			children = (
 				4B51474207F18D680059C4C8,
-				4BFC6E5C08727E9A0012D079,
-				4BFCA3C408718BFB00EC8A46,
+				4B94C8BA0AC9563800775F58,
+				4B94C8BB0AC9563800775F58,
 				F5C1D5D50330CC8501053105,
 				F5C1D5D60330CC8501053105,
 				F5C1D5BD0330CC5A01053105,
