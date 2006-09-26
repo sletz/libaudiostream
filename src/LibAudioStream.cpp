@@ -174,6 +174,8 @@ extern "C"
 	
 	void AUDIOAPI SetStateEffectPtr(AudioEffectPtr effect, long state);
 	long AUDIOAPI GetStateEffectPtr(AudioEffectPtr effect);
+	void AUDIOAPI ResetEffectPtr(AudioEffectPtr effect);
+
 	void AUDIOAPI ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 	
 	void AUDIOAPI DeleteEffectListPtr(AudioEffectListPtr list_effect);
@@ -248,7 +250,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 106;
+	return 108;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -615,6 +617,11 @@ void AUDIOAPI SetStateEffectPtr(AudioEffectPtr effect, long state)
 long AUDIOAPI GetStateEffectPtr(AudioEffectPtr effect)
 {
 	return static_cast<TAudioEffectInterfacePtr>(*effect)->GetState();
+}
+
+void AUDIOAPI ResetEffectPtr(AudioEffectPtr effect)
+{
+	static_cast<TAudioEffectInterfacePtr>(*effect)->Reset();
 }
 
 void AUDIOAPI ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels)

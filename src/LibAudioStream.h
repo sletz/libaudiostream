@@ -288,6 +288,8 @@ extern "C"
 	void SetStateEffectPtr(AudioEffectPtr effect, long state);
 	long GetStateEffectPtr(AudioEffectPtr effect);
 
+	void ResetEffectPtr(AudioEffectPtr effect);
+
 	void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 
 	void DeleteEffectListPtr(AudioEffectListPtr list_effect);	
