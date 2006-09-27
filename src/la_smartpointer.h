@@ -39,7 +39,7 @@
 
 #else
 
-# define LA_EXPORT
+# define LA_EXPORT __attribute__ ((visibility("default")))
 #endif
 
 /*!

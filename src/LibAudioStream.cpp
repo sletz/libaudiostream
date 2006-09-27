@@ -31,7 +31,7 @@ research@grame.fr
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
 #else
-	#define	AUDIOAPI
+	#define	AUDIOAPI __attribute__ ((visibility("default")))
 #endif
 
     struct AudioPlayer {

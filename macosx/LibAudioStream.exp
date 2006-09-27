@@ -47,11 +47,16 @@ _MakeVolAudioEffectPtr
 _MakeMonoPanAudioEffectPtr
 _MakeStereoPanAudioEffectPtr
 _MakeFaustAudioEffectPtr
+_MakeWrapperAudioEffectPtr
 
 _GetControlCountPtr
 _GetControlParamPtr
 _SetControlValuePtr
 _GetControlValuePtr
+_SetStateEffectPtr
+_GetStateEffectPtr
+_ProcessEffectPtr
+_ResetEffectPtr
 
 _DeleteEffectListPtr
 _DeleteEffectPtr
@@ -65,10 +70,12 @@ _MakeMonoPanAudioEffect
 _MakeStereoPanAudioEffect
 _MakeFaustAudioEffect
 
+
 _GetControlCount
 _GetControlParam
 _SetControlValue
 _GetControlValue
+
 
 _OpenAudioPlayer
 _OpenAudioClient
