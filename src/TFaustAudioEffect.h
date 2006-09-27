@@ -29,17 +29,17 @@ research@grame.fr
 
 #include <windows.h>
 #define HANDLE HINSTANCE 
-#define LoadModule(name) LoadLibrary((name));
-#define UnloadModule(handle) FreeLibrary((handle));
-#define GetProc(handle, name) GetProcAddress((handle), (name));
+#define LoadFaustModule(name) LoadLibrary((name));
+#define UnloadFaustModule(handle) FreeLibrary((handle));
+#define GetFaustProc(handle, name) GetProcAddress((handle), (name));
 
 #else
 
 #include <dlfcn.h>
 #define HANDLE void* 
-#define LoadModule(name) dlopen((name), RTLD_LAZY);
-#define UnloadModule(handle) dlclose((handle));
-#define GetProc(handle, name) dlsym((handle), (name));
+#define LoadFaustModule(name) dlopen((name), RTLD_LAZY);
+#define UnloadFaustModule(handle) dlclose((handle));
+#define GetFaustProc(handle, name) dlsym((handle), (name));
 
 #endif
 
@@ -309,22 +309,22 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
         TModuleFaustAudioEffect(const char* name): TFaustAudioEffectBase()
         {
 			strcpy(fName, name);
-			fHandle = LoadModule(name);
+			fHandle = LoadFaustModule(name);
 			if (!fHandle) 
 				 throw -1;
-			fNew = (newDsp)GetProc(fHandle, "newDsp");
-			fDelete = (deleteDsp)GetProc(fHandle, "deleteDsp");
-			fGetNumInputs = (getNumInputs)GetProc(fHandle, "getNumInputs");
-			fGetNumOutputs = (getNumOutputs)GetProc(fHandle, "getNumOutputs");
-			fBuildUserInterface = (buildUserInterface)GetProc(fHandle, "buildUserInterface");
-			fInit = (init)GetProc(fHandle, "init");
-			fCompute = (compute)GetProc(fHandle, "compute");
-			fConclude = (conclude)GetProc(fHandle, "conclude");
+			fNew = (newDsp)GetFaustProc(fHandle, "newDsp");
+			fDelete = (deleteDsp)GetFaustProc(fHandle, "deleteDsp");
+			fGetNumInputs = (getNumInputs)GetFaustProc(fHandle, "getNumInputs");
+			fGetNumOutputs = (getNumOutputs)GetFaustProc(fHandle, "getNumOutputs");
+			fBuildUserInterface = (buildUserInterface)GetFaustProc(fHandle, "buildUserInterface");
+			fInit = (init)GetFaustProc(fHandle, "init");
+			fCompute = (compute)GetFaustProc(fHandle, "compute");
+			fConclude = (conclude)GetFaustProc(fHandle, "conclude");
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSample_Rate);
 			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
 				fDelete(fDsp);
-				UnloadModule(fHandle);
+				UnloadFaustModule(fHandle);
 				throw -2;
 			}
 			fBuildUserInterface(fDsp, this);
@@ -333,7 +333,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
         {
 			if (fHandle) {
 				fDelete(fDsp);
-				UnloadModule(fHandle);
+				UnloadFaustModule(fHandle);
 			}
 		}
 
