@@ -11,42 +11,57 @@
 using namespace std;
 
 class FilePlayer {
+
 	private:
-		enum { kIn=2, kOut=2, kChans=8, kSRate=44100, kAudioBuff=512, kFileBuff=65536 * 4 };
+	
+		enum { kIn = 2, kOut = 2, kChans = 8, kSRate = 44100, kAudioBuff = 512, kFileBuff = 65536 * 4 };
 		AudioPlayerPtr fPlayer;
 
 	public:
-		FilePlayer()	{ 
+	
+		FilePlayer()	
+		{ 
 			fPlayer = OpenAudioPlayer(kIn, kOut, kChans, kSRate, kAudioBuff, kFileBuff, kFileBuff, kPortAudioRenderer, 1);
+			if (!fPlayer) {
+				printf("cannot start player with PortAudio API, now quit...\n");
+				return;
+			}
 			StartAudioPlayer(fPlayer);
 		}
 
-		virtual ~FilePlayer()	{
-			StopChannel (fPlayer, 1);
-    		StopAudioPlayer (fPlayer);
+		virtual ~FilePlayer()	
+		{
+			StopChannel(fPlayer, 1);
+    		StopAudioPlayer(fPlayer);
     		CloseAudioPlayer(fPlayer);
 		}
 		
-		void Play (char *file, long beginFrame, long endFrame) {
+		void Play(char *file, long beginFrame, long endFrame) 
+		{
 			AudioStream stream = MakeRegionSound (file, beginFrame, endFrame);
-			LoadChannel (fPlayer, stream, 1, 1.0f, 1.0f, 0.0f);
+			if (!stream) {
+				printf("cannot ooen filenam = %s, now quit...\n", file);
+				return;
+			}
+			LoadChannel(fPlayer, stream, 1, 1.0f, 1.0f, 0.0f);
 			StartChannel(fPlayer, 1);
 		} 
 		
-		long Status () {
+		long Status() 
+		{
 			ChannelInfo info;
-			GetInfoChannel (fPlayer, 1, &info);
+			GetInfoChannel(fPlayer, 1, &info);
 			return info.fStatus;
 		} 
 
 };
 
-int main (int argc, char *argv[]) {
+int main (int argc, char *argv[]) 
+{
 	if (argc != 4) {
 		cerr << "usage: fileplay 'file' 'start' 'end'\n" << endl;
 		return 1;
-	}
-	else {
+	} else {
 		FilePlayer player;
 		int start = atoi(argv[2]);
 		int end   = atoi(argv[3]);

@@ -23,7 +23,7 @@ research@grame.fr
 #ifndef __LibAudioStreamPlusPlus__
 #define __LibAudioStreamPlusPlus__
 
-#include "smartpointer.h"
+#include "la_smartpointer.h"
 #include <list>
 
 #define NO_ERR 0
@@ -50,11 +50,12 @@ typedef struct ChannelInfo {
 }
 ChannelInfo;
 
-class TAudioStream : public smartable {};
+class TAudioStream : public la_smartable {};
 typedef SMARTP<TAudioStream> TAudioStreamPtr;
-class TAudioEffectInterface : public smartable1 {};
+//class TAudioEffectInterface : public la_smartable1 {};
+class TAudioEffectInterface : public la_smartable {};
 typedef SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
-class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>,  public smartable1 {};
+class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>,  public la_smartable1 {};
 typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Opaque pointers
