@@ -28,7 +28,7 @@
 #define PAN_LEFT   1.0f
 #define PAN_RIGHT  0.0f
 
-static int playfile (char * filename, long beginFrame, long endFrame)
+static int playfile(char * filename, long beginFrame, long endFrame)
 {
     ChannelInfo info;
 	AudioStreamPtr sound;
@@ -49,7 +49,7 @@ static int playfile (char * filename, long beginFrame, long endFrame)
 		return -1;
 	}
 							
-	sound  = MakeStereoSoundPtr(MakeRegionSoundPtr (filename, beginFrame, endFrame));
+	sound = MakeStereoSoundPtr(MakeRegionSoundPtr(filename, beginFrame, endFrame));
 	
 	if (!sound) {
 		fprintf(stdout, "sound %s cannot be opened: check name and parameters\n", filename);
@@ -75,7 +75,7 @@ static int playfile (char * filename, long beginFrame, long endFrame)
 	return 0;
 }
 
-int main (int argc, char *argv[]) 
+int main(int argc, char *argv[]) 
 {
 	if (argc != 4) {
 		fprintf (stderr, "usage: fileplay 'file' 'start' 'end'\n");

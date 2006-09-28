@@ -38,9 +38,9 @@ class FilePlayer {
 		
 		void Play(char *file, long beginFrame, long endFrame) 
 		{
-			AudioStream stream = MakeRegionSound (file, beginFrame, endFrame);
+			AudioStream stream = MakeStereoSound(MakeRegionSound(file, beginFrame, endFrame));
 			if (!stream) {
-				printf("cannot ooen filenam = %s, now quit...\n", file);
+				printf("cannot ooen filename = %s, now quit...\n", file);
 				return;
 			}
 			LoadChannel(fPlayer, stream, 1, 1.0f, 1.0f, 0.0f);
@@ -56,7 +56,7 @@ class FilePlayer {
 
 };
 
-int main (int argc, char *argv[]) 
+int main(int argc, char *argv[]) 
 {
 	if (argc != 4) {
 		cerr << "usage: fileplay 'file' 'start' 'end'\n" << endl;

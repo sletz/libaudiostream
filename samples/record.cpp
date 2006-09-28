@@ -23,8 +23,8 @@ research@grame.fr
 #include "LibAudioStream++.h"
 #include <sndfile.h>
 #include <stdio.h>
-#define IN_CHANNELS 2 // stereo player
-#define OUT_CHANNELS 2 // stereo player
+#define IN_CHANNELS 2	// stereo player
+#define OUT_CHANNELS 2	// stereo player
 #define CHANNELS 8
 #define SAMPLE_RATE  44100
 
