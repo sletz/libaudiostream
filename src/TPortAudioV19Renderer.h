@@ -30,7 +30,7 @@ research@grame.fr
 // Class TPortAudioV19Renderer
 //-----------------------------
 /*!
-\brief Use the <A HREF=http://www.portaudio.com> PortAudio API </A>  to access sound drivers.
+\brief Use the <A HREF=http://www.portaudio.com> PortAudio V19 API </A>  to access sound drivers.
 */
 
 class TPortAudioV19Renderer : public TAudioRenderer
@@ -41,11 +41,11 @@ class TPortAudioV19Renderer : public TAudioRenderer
         PaStream* fStream;
 
         static int Process(void* inputBuffer,
-                           void* outputBuffer,
-                           unsigned long framesPerBuffer,
-                           const PaStreamCallbackTimeInfo* timeInfo,
-			   PaStreamCallbackFlags statusFlags,
-                           void* userData);
+							void* outputBuffer,
+							unsigned long framesPerBuffer,
+							const PaStreamCallbackTimeInfo* timeInfo,
+							PaStreamCallbackFlags statusFlags,
+							void* userData);
 
         void DisplayDevices();
         int GetFirstValidInputDevice();
