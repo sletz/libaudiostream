@@ -56,8 +56,19 @@ extern "C"
 		float fPanRight;
         long fLeftOut;
         long fRightOut;
-    }
-    ChannelInfo;
+    } ChannelInfo;
+	
+	/*!
+    \brief Audio device info
+    */
+	typedef struct DeviceInfo* DeviceInfoPtr;
+	typedef struct DeviceInfo {
+		const char* name;      
+		long maxInputChannels;
+		long maxOutputChannels; 
+		long defaultBufferSize; 
+		double defaultSampleRate;
+	} DeviceInfo;
 
     // Opaque pointers
     typedef void* AudioPlayerPtr;
@@ -76,6 +87,31 @@ extern "C"
     \return the library version number as a 3 digits long value.
     */
 	long LibVersion();
+	
+	/*!
+	\brief Scan and return the number of available devices on the machine.
+	\return The number of available devices.
+	*/
+	long GetDeviceCount();
+
+	/*!
+	\brief Fill DeviceInfo structure for a given device.
+	\param deviceNum The device index between 0 and GetDeviceCount.
+	\param buffer_size The audio player internal buffer size.
+	*/
+	void GetDeviceInfo(long deviceNum, DeviceInfo* info);
+
+	/*!
+	\brief Get the default input device index.
+	\return The default input device index.
+	*/
+	long GetDefaultInputDevice();
+
+	/*!
+	\brief Get the default output device index.
+	\return The default output device index.
+	*/
+	long GetDefaultOutputDevice();
 
     /*!
     \brief Create a stream that will produce "silence".

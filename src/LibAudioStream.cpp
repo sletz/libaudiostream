@@ -98,7 +98,15 @@ extern "C"
 {
 #endif
 	
-	long LibVersion();
+	long AUDIOAPI LibVersion();
+	
+	// Device scanning
+	/*
+	long AUDIOAPI GetDeviceCount();
+	void AUDIOAPI GetDeviceInfo(long deviceNum, DeviceInfo* info);
+	long AUDIOAPI GetDefaultInputDevice();
+	long AUDIOAPI GetDefaultOutputDevice();
+	*/
 
     // Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
