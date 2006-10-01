@@ -45,7 +45,7 @@ extern "C"
     enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
 
     /*!
-    \brief Sound channel info
+    \brief Sound channel info.
     */
     typedef struct ChannelInfo* ChannelInfoPtr;
     typedef struct ChannelInfo {
@@ -59,15 +59,15 @@ extern "C"
     } ChannelInfo;
 	
 	/*!
-    \brief Audio device info
+    \brief Audio device info.
     */
 	typedef struct DeviceInfo* DeviceInfoPtr;
 	typedef struct DeviceInfo {
-		const char* name;      
-		long maxInputChannels;
-		long maxOutputChannels; 
-		long defaultBufferSize; 
-		double defaultSampleRate;
+		char fName[64];      
+		long fMaxInputChannels;
+		long fMaxOutputChannels; 
+		long fDefaultBufferSize; 
+		double fDefaultSampleRate;
 	} DeviceInfo;
 
     // Opaque pointers
@@ -90,28 +90,32 @@ extern "C"
 	
 	/*!
 	\brief Scan and return the number of available devices on the machine.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 	\return The number of available devices.
 	*/
-	long GetDeviceCount();
+	long GetDeviceCount(AudioManagerPtr renderer);
 
 	/*!
 	\brief Fill DeviceInfo structure for a given device.
-	\param deviceNum The device index between 0 and GetDeviceCount.
-	\param buffer_size The audio player internal buffer size.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+	\param deviceNum The device index between 0 and GetDeviceCount.	
+	\param info The device info structure to be filled.
 	*/
-	void GetDeviceInfo(long deviceNum, DeviceInfo* info);
+	void GetDeviceInfo(AudioManagerPtr renderer, long deviceNum, DeviceInfo* info);
 
 	/*!
 	\brief Get the default input device index.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 	\return The default input device index.
 	*/
-	long GetDefaultInputDevice();
+	long GetDefaultInputDevice(AudioManagerPtr renderer);
 
 	/*!
 	\brief Get the default output device index.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 	\return The default output device index.
 	*/
-	long GetDefaultOutputDevice();
+	long GetDefaultOutputDevice(AudioManagerPtr renderer);
 
     /*!
     \brief Create a stream that will produce "silence".
@@ -358,6 +362,13 @@ extern "C"
                                    long rtstream_buffer_size,
                                    long renderer,
                                    long thread_num);
+								   
+	/*!
+    \brief Close the audio player.
+    \param player The audio player to be closed.
+    */
+    void CloseAudioPlayer(AudioPlayerPtr player);								   
+								   
 	/*!
     \brief Opens the audio client, to be added to an externally allocated renderer
 	\param renderer The audio renderer that will "drive" (call Audio callback) the player.
@@ -365,15 +376,9 @@ extern "C"
 	*/					
 	AudioPlayerPtr OpenAudioClient(AudioManagerPtr renderer);	
 	 							   						   
-    /*!
-    \brief Close the audio player.
-    \param player The audio player to be closed.
-    */
-    void CloseAudioPlayer(AudioPlayerPtr player);
-	
-	/*!
-    \brief Close an audio client that was previously added to an external allocated audio renderer using OpenAudioClient.
-    \param player The audio client to be closed.
+ 	/*!
+    \brief Close an audio client that was previously added to an externally allocated audio renderer using OpenAudioClient.
+    \param player The audio client to be closed and be "detached" from the renderer.
     */					
 	void CloseAudioClient(AudioPlayerPtr player);
 	
@@ -507,7 +512,7 @@ extern "C"
     \param sample_rate The sampling rate.  On input, contains the wanted value, on return the really used one.
  	\return An error code.
 	*/
-	int OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+	int OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);  // AJOUTER in/out device
 	/*!
     \brief Close an audio renderer.
     \param renderer The audio renderer to be closed.

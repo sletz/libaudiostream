@@ -52,11 +52,9 @@ class TPortAudioRenderer : public TAudioRenderer
 
     public:
 
-        TPortAudioRenderer(): TAudioRenderer()
-        {}
-        virtual ~TPortAudioRenderer()
-        {}
-
+        TPortAudioRenderer();
+        virtual ~TPortAudioRenderer();
+  
         long Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate);
         long Close();
 
@@ -64,6 +62,11 @@ class TPortAudioRenderer : public TAudioRenderer
         long Stop();
 
         void GetInfo(RendererInfoPtr info);
+		
+		long GetDeviceCount();
+		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		long GetDefaultInputDevice();
+		long GetDefaultOutputDevice();
 };
 
 typedef TPortAudioRenderer * TPortAudioRendererPtr;

@@ -201,3 +201,55 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fCurFrame = jack_frame_time(fClient);
     info->fCurMs = ConvertSample2Ms(info->fCurFrame);
 }
+
+long TJackAudioRenderer::GetDeviceCount()
+{
+	return 1;
+}
+
+void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
+{
+	const char** ports = NULL;
+	int i;
+	
+    if ((fClient = jack_client_new("DummyAudioPlayer")) == 0) {
+        printf("Jack server not running?\n");
+        info->fMaxInputChannels = 0;
+		info->fMaxOutputChannels = 0;
+		info->fDefaultSampleRate = 0;	
+		info->fDefaultBufferSize = 0;
+		return;
+    }
+	
+    if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) == NULL) {
+        printf("Cannot find any physical capture ports\n");
+    } else {
+		for (i = 0; ports[i]; i++) {}
+		info->fMaxInputChannels = i;
+        free(ports);
+    }
+	
+	if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
+        printf("Cannot find any physical playback ports\n");
+    } else {
+		for (i = 0; ports[i]; i++) {}
+		info->fMaxOutputChannels = i;
+        free(ports);
+    }
+	
+	strcpy(info->fName, "Jack duplex");
+	info->fDefaultSampleRate = double(jack_get_sample_rate(fClient));	
+	info->fDefaultBufferSize = jack_get_buffer_size(fClient);
+	
+	jack_client_close(fClient);
+}
+
+long TJackAudioRenderer::GetDefaultInputDevice()
+{
+	return 0;
+}
+
+long TJackAudioRenderer::GetDefaultOutputDevice()
+{
+	return 0;
+}

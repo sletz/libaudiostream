@@ -113,6 +113,17 @@ int TPortAudioRenderer::GetFirstValidOutputDevice()
     return paNoDevice;
 }
 
+TPortAudioRenderer::TPortAudioRenderer(): TAudioRenderer()
+{
+    if (Pa_Initialize() != paNoError)
+        throw new std::bad_alloc;
+}
+
+TPortAudioRenderer::~TPortAudioRenderer()
+{
+	Pa_Terminate();
+}
+
 long TPortAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
     PaError err;
@@ -124,9 +135,11 @@ long TPortAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
     printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n",
            *inChan, *outChan, *bufferSize, *sampleRate);
 
+	/*
     err = Pa_Initialize();
     if (err != paNoError)
         goto error;
+	*/
 
     numDevices = Pa_CountDevices();
     if (numDevices < 0) {
@@ -184,7 +197,7 @@ long TPortAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 
 error:
     printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
-    Pa_Terminate();
+    //Pa_Terminate();
     fStream = 0;
     return OPEN_ERR;
 }
@@ -193,7 +206,7 @@ long TPortAudioRenderer::Close()
 {
     if (fStream) {
         Pa_CloseStream(fStream);
-        Pa_Terminate();
+        //Pa_Terminate();
     }
     return NO_ERR;
 }
@@ -237,5 +250,46 @@ void TPortAudioRenderer::GetInfo(RendererInfoPtr info)
 	info->fOutputLatencyFrame = 0;
     info->fOutputLatencyMs = 0;
 #endif
+}
+
+long TPortAudioRenderer::GetDeviceCount()
+{
+	return Pa_CountDevices();
+}
+
+void TPortAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
+{
+	const PaDeviceInfo* pdi;
+	pdi = Pa_GetDeviceInfo(deviceNum);
+	
+	info->fMaxInputChannels = pdi->maxInputChannels;
+	info->fMaxOutputChannels = pdi->maxOutputChannels;
+	strcpy(info->fName, pdi->name);
+	info->fDefaultBufferSize = 512;
+	info->fDefaultSampleRate = 0; // init value
+	
+	// Check if 44100 is OK
+	if (pdi->numSampleRates == -1) { // range supported
+		if ( pdi->sampleRates[0] <= 44100 && 44100 <= pdi->sampleRates[1]) {
+			info->fDefaultSampleRate = 44100;
+		}
+	} else {
+		for (int i = 0; i < pdi->numSampleRates; i++) {
+			if ( pdi->sampleRates[i] == 44100) {
+				info->fDefaultSampleRate = 44100;
+				break;
+			}
+		}
+	}
+}
+
+long TPortAudioRenderer::GetDefaultInputDevice()
+{
+	return Pa_GetDefaultInputDeviceID();
+}
+
+long TPortAudioRenderer::GetDefaultOutputDevice()
+{
+	return Pa_GetDefaultOutputDeviceID();
 }
 

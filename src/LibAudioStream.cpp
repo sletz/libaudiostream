@@ -101,12 +101,10 @@ extern "C"
 	long AUDIOAPI LibVersion();
 	
 	// Device scanning
-	/*
-	long AUDIOAPI GetDeviceCount();
-	void AUDIOAPI GetDeviceInfo(long deviceNum, DeviceInfo* info);
-	long AUDIOAPI GetDefaultInputDevice();
-	long AUDIOAPI GetDefaultOutputDevice();
-	*/
+	long AUDIOAPI GetDeviceCount(AudioManagerPtr renderer);
+	void AUDIOAPI GetDeviceInfo(AudioManagerPtr renderer, long deviceNum, DeviceInfo* info);
+	long AUDIOAPI GetDefaultInputDevice(AudioManagerPtr renderer);
+	long AUDIOAPI GetDefaultOutputDevice(AudioManagerPtr renderer);
 
     // Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);

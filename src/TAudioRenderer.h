@@ -39,8 +39,7 @@ typedef struct RendererInfo * RendererInfoPtr;
 /*!
 \brief To get renderer state.
 */
-typedef struct RendererInfo
-{
+typedef struct RendererInfo {
     long fInput;   				// Number of input channels
     long fOutput;   			// Number of output channels
     long fSampleRate; 			// Sampling Rate
@@ -51,7 +50,19 @@ typedef struct RendererInfo
     long fOutputLatencyMs;		// Ouput latency in millisecond
     long fInputLatencyFrame;	// Input latency in frames
     long fInputLatencyMs;		// Input latency in millisecond
-}RendererInfo;
+} RendererInfo;
+
+typedef struct DeviceInfo* DeviceInfoPtr;
+/*!
+\brief Audio device info.
+*/
+typedef struct DeviceInfo {
+	char fName[64];      
+	long fMaxInputChannels;
+	long fMaxOutputChannels; 
+	long fDefaultBufferSize; 
+	double fDefaultSampleRate;
+} DeviceInfo;
 
 //----------------------
 // Class TAudioRenderer
@@ -96,6 +107,11 @@ class AUDIO_EXPORTS TAudioRenderer
         virtual long Stop() = 0;
 
         virtual void GetInfo(RendererInfoPtr info) = 0;
+		
+		virtual long GetDeviceCount() = 0;
+		virtual void GetDeviceInfo(long deviceNum, DeviceInfoPtr info) = 0;
+		virtual long GetDefaultInputDevice() = 0;
+		virtual long GetDefaultOutputDevice() = 0;
 
         long ConvertSample2Ms(long sample)
         {

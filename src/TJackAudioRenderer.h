@@ -47,7 +47,7 @@ class TJackAudioRenderer : public TAudioRenderer
 
     private:
 
-        jack_client_t* fClient;
+		jack_client_t* fClient;
 
         jack_port_t** fInput_ports;
         jack_port_t** fOutput_ports;
@@ -70,8 +70,13 @@ class TJackAudioRenderer : public TAudioRenderer
 
         long Start();
         long Stop();
-
+	
         void GetInfo(RendererInfoPtr info);
+		
+		long GetDeviceCount();
+		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		long GetDefaultInputDevice();
+		long GetDefaultOutputDevice();
 };
 
 typedef TJackAudioRenderer * TJackAudioRendererPtr;
