@@ -24,7 +24,16 @@ research@grame.fr
 #include "UAudioTools.h"
 #include "TSharedBuffers.h"
 
-long TAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+long TAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+{
+    fInput = *inChan;
+    fOutput = *outChan;
+    fBufferSize = *bufferSize;
+    fSampleRate = *sampleRate;
+    return NO_ERR;
+}
+
+long TAudioRenderer::Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
     fInput = *inChan;
     fOutput = *outChan;

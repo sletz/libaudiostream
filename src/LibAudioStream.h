@@ -72,7 +72,7 @@ extern "C"
 
     // Opaque pointers
     typedef void* AudioPlayerPtr;
-	typedef void* AudioManagerPtr;
+	typedef void* AudioRendererPtr;
  	typedef void* AudioStreamPtr;
 	typedef void* AudioClientPtr;
 	
@@ -93,7 +93,7 @@ extern "C"
 	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 	\return The number of available devices.
 	*/
-	long GetDeviceCount(AudioManagerPtr renderer);
+	long GetDeviceCount(AudioRendererPtr renderer);
 
 	/*!
 	\brief Fill DeviceInfo structure for a given device.
@@ -101,21 +101,21 @@ extern "C"
 	\param deviceNum The device index between 0 and GetDeviceCount.	
 	\param info The device info structure to be filled.
 	*/
-	void GetDeviceInfo(AudioManagerPtr renderer, long deviceNum, DeviceInfo* info);
+	void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
 
 	/*!
 	\brief Get the default input device index.
 	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 	\return The default input device index.
 	*/
-	long GetDefaultInputDevice(AudioManagerPtr renderer);
+	long GetDefaultInputDevice(AudioRendererPtr renderer);
 
 	/*!
 	\brief Get the default output device index.
 	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 	\return The default output device index.
 	*/
-	long GetDefaultOutputDevice(AudioManagerPtr renderer);
+	long GetDefaultOutputDevice(AudioRendererPtr renderer);
 
     /*!
     \brief Create a stream that will produce "silence".
@@ -287,12 +287,17 @@ extern "C"
 	*/
 	AudioEffectPtr MakeStereoPanAudioEffectPtr(float panLeft, float rightPan);
 	/*!
-	\brief Create an effect decribed in the Faust DSP language.
+	\brief Create an effect described in the Faust DSP language.
 	\param name The name of the Faust effect shared library.
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
 	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
 
+	/*!
+	\brief Create an effect by "wrapping" an externally built effect.
+	\param effect The effect to be wrapped.
+    \return A pointer to new effect object or NULL if the effect cannot be located or created.
+	*/
 	AudioEffectPtr MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
 
 	/*!
@@ -321,17 +326,35 @@ extern "C"
 	*/
 	float GetControlValuePtr(AudioEffectPtr effect, long control);	
 	/*!
+    \brief Set the effect running state.
+	\param effect The effect to be used.
+	\param state The running state.
+	*/
+	void SetStateEffectPtr(AudioEffectPtr effect, long state);	
+	/*!
+    \brief Get the effect running state.
+	\param effect The effect to be used.
+	\return state The running state.
+	*/
+	long GetStateEffectPtr(AudioEffectPtr effect);
+	/*!
+    \brief Reset the effect to intial state.
+	\param effect The effect to be resetted.
+	*/
+	void ResetEffectPtr(AudioEffectPtr effect);
+	/*!
+    \brief Process an audio buffer with the effect.
+	\param effect The effect to be used.
+	\param input The input audio buffer.
+	\param output The output audio buffer.
+	\param framesNum The number of frame of input/output buffers.
+	\param channels The number of channels of input/output buffers.
+	*/
+	void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
+	/*!
     \brief Delete the effect list.
 	\param list_effect The effect list pointer.
 	*/
-
-	void SetStateEffectPtr(AudioEffectPtr effect, long state);
-	long GetStateEffectPtr(AudioEffectPtr effect);
-
-	void ResetEffectPtr(AudioEffectPtr effect);
-
-	void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
-
 	void DeleteEffectListPtr(AudioEffectListPtr list_effect);	
 	/*!
     \brief Delete the effect.
@@ -374,7 +397,7 @@ extern "C"
 	\param renderer The audio renderer that will "drive" (call Audio callback) the player.
 	\return A pointer to new audio player object.
 	*/					
-	AudioPlayerPtr OpenAudioClient(AudioManagerPtr renderer);	
+	AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer);	
 	 							   						   
  	/*!
     \brief Close an audio client that was previously added to an externally allocated audio renderer using OpenAudioClient.
@@ -496,12 +519,12 @@ extern "C"
     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
 	\return A pointer to new audio renderer object.
 	*/
-	AudioManagerPtr MakeAudioRenderer(long renderer);
+	AudioRendererPtr MakeAudioRenderer(long renderer);
 	/*!
     \brief Delete an audio renderer.
     \param renderer The renderer to be deleted.
 	*/
-	void DeleteAudioRenderer(AudioManagerPtr renderer);
+	void DeleteAudioRenderer(AudioRendererPtr renderer);
 	
 	/*!
     \brief Open the audio renderer.
@@ -512,36 +535,36 @@ extern "C"
     \param sample_rate The sampling rate.  On input, contains the wanted value, on return the really used one.
  	\return An error code.
 	*/
-	int OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);  // AJOUTER in/out device
+	int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate);  // AJOUTER in/out device
 	/*!
     \brief Close an audio renderer.
     \param renderer The audio renderer to be closed.
 	*/
-	void CloseAudioRenderer(AudioManagerPtr renderer); 
+	void CloseAudioRenderer(AudioRendererPtr renderer); 
 	
 	/*!
     \brief Start an audio renderer.
     \param renderer The audio renderer to be started.
 	*/	
-	void StartAudioRenderer(AudioManagerPtr renderer); 
+	void StartAudioRenderer(AudioRendererPtr renderer); 
 	/*!
     \brief Stop an audio renderer.
     \param renderer The audio renderer to be stoped.
 	*/
-	void StopAudioRenderer(AudioManagerPtr renderer); 
+	void StopAudioRenderer(AudioRendererPtr renderer); 
 	
 	/*!
     \brief Add an audio client to the renderer internal client list.
     \param renderer The audio renderer to be used.
 	\param client The audio client to be added.
 	*/
-	void AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	void AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
 	/*!
     \brief Remove an audio client from the renderer internal client list.
     \param renderer The audio renderer to be used.
 	\param client The audio client to be removed.
 	*/
-	void RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	void RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
 	
 	/*!
     \brief Init the global audio context. There is <B> unique </B> to be accesed by all components that need it.

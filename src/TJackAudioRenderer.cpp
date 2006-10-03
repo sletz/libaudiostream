@@ -73,7 +73,7 @@ TJackAudioRenderer::~TJackAudioRenderer()
 	free(fOutput_ports);
 }
 
-long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+long TJackAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
 	int i;
 
@@ -115,7 +115,7 @@ long TJackAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 			goto error;
 	}
 
-	return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
+	return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening jack client\n");
@@ -123,6 +123,11 @@ error:
         jack_client_close(fClient);
     fClient = 0;
     return OPEN_ERR;
+}
+
+long TJackAudioRenderer::Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* samplerate)
+{
+	return OpenDefault(inChan, outChan, bufferSize, samplerate);
 }
 
 long TJackAudioRenderer::Close()
@@ -204,7 +209,13 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
 
 long TJackAudioRenderer::GetDeviceCount()
 {
-	return 1;
+	if ((fClient = jack_client_new("DummyAudioPlayer")) == 0) {
+        printf("Jack server not running?\n");
+  		return 0;
+    } else {
+		jack_client_close(fClient);
+		return 1;
+	}
 }
 
 void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)

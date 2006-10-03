@@ -231,7 +231,7 @@ extern "C"
 	AudioManagerPtr AUDIOAPI MakeAudioRenderer(long renderer);
 	void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr renderer);
 	
-	int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+	int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
 	void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer); 
 	void AUDIOAPI StartAudioRenderer(AudioManagerPtr renderer); 
 	void AUDIOAPI StopAudioRenderer(AudioManagerPtr renderer); 
@@ -256,7 +256,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 108;
+	return 109;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -528,7 +528,6 @@ float AUDIOAPI GetControlValue(AudioEffect effect, long control)
 }
 
 // Effect management with pointer
-
 void AUDIOAPI DeleteEffectListPtr(AudioEffectListPtr list_effect) 
 {
 	delete list_effect;
@@ -670,7 +669,7 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
         goto error;
 
 	player->fRenderer->AddClient(player->fMixer);
-	res = player->fRenderer->Open(&tmpInChan, &tmpOutChan, &tmpBufferSize, &tmpSampleRate);
+	res = player->fRenderer->OpenDefault(&tmpInChan, &tmpOutChan, &tmpBufferSize, &tmpSampleRate);
 
     if (res == NO_ERR)
         return player;
@@ -850,9 +849,9 @@ void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr obj)
 	delete renderer;
 }
 
-int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
-	return static_cast<TAudioRendererPtr>(renderer)->Open(inChan, outChan, bufferSize, sampleRate);
+	return static_cast<TAudioRendererPtr>(renderer)->Open(inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
 void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer)
@@ -896,3 +895,25 @@ void AUDIOAPI AudioGlobalsDestroy()
 {
 	TAudioGlobals::Destroy();
 }
+
+long AUDIOAPI GetDeviceCount(AudioManagerPtr renderer)
+{
+	return static_cast<TAudioRendererPtr>(renderer)->GetDeviceCount();
+}
+
+void AUDIOAPI GetDeviceInfo(AudioManagerPtr renderer, long deviceNum, DeviceInfo* info)
+{
+	static_cast<TAudioRendererPtr>(renderer)->GetDeviceInfo(deviceNum, info);
+}
+
+long AUDIOAPI GetDefaultInputDevice(AudioManagerPtr renderer)
+{
+	return static_cast<TAudioRendererPtr>(renderer)->GetDefaultInputDevice();
+}
+
+long AUDIOAPI GetDefaultOutputDevice(AudioManagerPtr renderer)
+{
+	return static_cast<TAudioRendererPtr>(renderer)->GetDefaultOutputDevice();
+}
+
+
