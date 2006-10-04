@@ -113,3 +113,8 @@ _RemoveAudioClient
 
 _AudioGlobalsInit
 _AudioGlobalsDestroy
+
+_GetDeviceCount
+_GetDeviceInfo
+_GetDefaultInputDevice
+_GetDefaultOutputDevice

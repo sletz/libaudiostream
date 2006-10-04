@@ -160,9 +160,8 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, AudioDevi
 	return noErr;
 }
 
-long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, long* samplerate)
+long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* samplerate)
 {
-
 	OSStatus err = noErr;
     ComponentResult err1;
     UInt32 outSize;
@@ -391,12 +390,17 @@ long TCoreAudioRenderer::Open(long* inChan, long* outChan, long* bufferSize, lon
 	fInputData->mBuffers[0].mNumberChannels = *inChan;
 	fInputData->mBuffers[0].mDataByteSize = *inChan * (*bufferSize) * sizeof(float);
  	
-    return NO_ERR;
+    return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, samplerate);
 
 error:
     AudioUnitUninitialize(fAUHAL);
     CloseComponent(fAUHAL);
     return OPEN_ERR;
+}
+
+long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* samplerate)
+{
+	return NO_ERR;
 }
 
 long TCoreAudioRenderer::Close()
@@ -441,3 +445,14 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fCurMs = ConvertSample2Ms(info->fCurFrame);
 }
 
+long TCoreAudioRenderer::GetDeviceCount()
+{}
+
+void TCoreAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
+{}
+
+long TCoreAudioRenderer::GetDefaultInputDevice()
+{}
+
+long TCoreAudioRenderer::GetDefaultOutputDevice()
+{}
