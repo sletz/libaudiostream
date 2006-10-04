@@ -257,10 +257,10 @@ void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 
 long TJackAudioRenderer::GetDefaultInputDevice()
 {
-	return 0;
+	return 0; // Only 1 device avaiable...
 }
 
 long TJackAudioRenderer::GetDefaultOutputDevice()
 {
-	return 0;
+	return 0; // Only 1 device avaiable...
 }

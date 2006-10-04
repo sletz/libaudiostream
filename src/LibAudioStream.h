@@ -23,7 +23,6 @@ research@grame.fr
 #ifndef __LibAudioStream__
 #define __LibAudioStream__
 
-
 /*!
 \addtogroup interface LibAudioStream programming interface
 
@@ -89,35 +88,6 @@ extern "C"
 	long LibVersion();
 	
 	/*!
-	\brief Scan and return the number of available devices on the machine.
-	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
-	\return The number of available devices.
-	*/
-	long GetDeviceCount(AudioRendererPtr renderer);
-
-	/*!
-	\brief Fill DeviceInfo structure for a given device.
-	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
-	\param deviceNum The device index between 0 and GetDeviceCount.	
-	\param info The device info structure to be filled.
-	*/
-	void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
-
-	/*!
-	\brief Get the default input device index.
-	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
-	\return The default input device index.
-	*/
-	long GetDefaultInputDevice(AudioRendererPtr renderer);
-
-	/*!
-	\brief Get the default output device index.
-	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
-	\return The default output device index.
-	*/
-	long GetDefaultOutputDevice(AudioRendererPtr renderer);
-
-    /*!
     \brief Create a stream that will produce "silence".
     \param lengthFrame The number of null frame to be produced.
     \return A pointer to new stream object.
@@ -240,8 +210,7 @@ extern "C"
     */
 	void ResetSoundPtr(AudioStreamPtr sound);
 
-    /* Effect management */
-
+    // Effect management
     /*!
 	\brief Create an effect list.
 	\return A pointer to new effect list.
@@ -514,6 +483,34 @@ extern "C"
 	*/
 	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
+	// Devices scanning
+	/*!
+	\brief Scan and return the number of available devices on the machine.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+	\return The number of available devices.
+	*/
+	long GetDeviceCount(AudioRendererPtr renderer);
+	/*!
+	\brief Fill DeviceInfo structure for a given device.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+	\param deviceNum The device index between 0 and GetDeviceCount.	
+	\param info The device info structure to be filled.
+	*/
+	void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
+	/*!
+	\brief Get the default input device index.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+	\return The default input device index.
+	*/
+	long GetDefaultInputDevice(AudioRendererPtr renderer);
+	/*!
+	\brief Get the default output device index.
+	\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+	\return The default output device index.
+	*/
+	long GetDefaultOutputDevice(AudioRendererPtr renderer);
+	
+	// Renderer
 	/*!
     \brief Create a new audio renderer.
     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
@@ -525,7 +522,6 @@ extern "C"
     \param renderer The renderer to be deleted.
 	*/
 	void DeleteAudioRenderer(AudioRendererPtr renderer);
-	
 	/*!
     \brief Open the audio renderer.
     \param renderer The audio used.
