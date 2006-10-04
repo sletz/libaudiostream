@@ -28,7 +28,42 @@
 #define PAN_LEFT   1.0f
 #define PAN_RIGHT  0.0f
 
-static int playfile(char * filename, long beginFrame, long endFrame)
+static void DisplayDevice(AudioRendererPtr manager)
+{
+	int i;
+	
+	for (i = 0; i < GetDeviceCount(manager); i++) {
+		DeviceInfo info;
+		GetDeviceInfo(manager, i, &info);
+		
+		printf("Device name: %s\n", info.fName);
+		printf("Device max input: %ld\n", info.fMaxInputChannels);
+		printf("Device max output: %ld\n", info.fMaxOutputChannels);
+		printf("Device default buffer size: %ld\n", info.fDefaultBufferSize);
+		printf("Device default sample rate: %f\n", info.fDefaultSampleRate);
+		
+		printf("Device default input device: %ld\n", GetDefaultInputDevice(manager));
+		printf("Device default output device: %ld\n", GetDefaultOutputDevice(manager));
+	}
+}
+
+static void DisplayAllDevices()
+{
+	AudioRendererPtr manager1 = MakeAudioRenderer(kJackRenderer);
+	AudioRendererPtr manager2 = MakeAudioRenderer(kPortAudioRenderer);
+	printf("--------------------\n");
+	printf("Jack Device\n");
+	printf("--------------------\n");
+	DisplayDevice(manager1);
+	printf("--------------------\n");
+	printf("PortAudio Device\n");
+	printf("--------------------\n");
+	DisplayDevice(manager2);
+	DeleteAudioRenderer(manager1);
+	DeleteAudioRenderer(manager2);
+}
+
+static int PlayFile(char * filename, long beginFrame, long endFrame)
 {
     ChannelInfo info;
 	AudioStreamPtr sound;
@@ -83,8 +118,9 @@ int main(int argc, char *argv[])
 	} else {
 		int start = atoi(argv[2]);
 		int end = atoi(argv[3]);
-		fprintf (stdout, "playing file %s from %d to %d\n", argv[1], start, end);
-		playfile (argv[1], start * SAMPLE_RATE, end * SAMPLE_RATE);
+		fprintf(stdout, "playing file %s from %d to %d\n", argv[1], start, end);
+		DisplayAllDevices();
+		PlayFile(argv[1], start * SAMPLE_RATE, end * SAMPLE_RATE);
 	}
 	return 0;
 }
