@@ -40,11 +40,12 @@ static void DisplayDevice(AudioRendererPtr manager)
 		printf("Device max input: %ld\n", info.fMaxInputChannels);
 		printf("Device max output: %ld\n", info.fMaxOutputChannels);
 		printf("Device default buffer size: %ld\n", info.fDefaultBufferSize);
-		printf("Device default sample rate: %f\n", info.fDefaultSampleRate);
-		
-		printf("Device default input device: %ld\n", GetDefaultInputDevice(manager));
-		printf("Device default output device: %ld\n", GetDefaultOutputDevice(manager));
+		printf("Device default sample rate: %f\n", info.fDefaultSampleRate);	
 	}
+
+	printf("Device default input device: %ld\n", GetDefaultInputDevice(manager));
+	printf("Device default output device: %ld\n", GetDefaultOutputDevice(manager));
+
 }
 
 static void DisplayAllDevices()
