@@ -97,6 +97,10 @@ SOURCE=..\src\Envelope.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\la_smartpointer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\atomic\lffifo.c
 # End Source File
 # Begin Source File
@@ -110,10 +114,6 @@ SOURCE=..\src\LibAudioStream.cpp
 # Begin Source File
 
 SOURCE=..\src\Object.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\smartpointer.cpp
 # End Source File
 # Begin Source File
 
