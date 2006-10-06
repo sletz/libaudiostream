@@ -36,10 +36,10 @@
 # else
 #  define LA_EXPORT _declspec (dllimport)
 # endif
-
-#else
-
+#elif __APPLE__
 # define LA_EXPORT __attribute__ ((visibility("default")))
+#else
+# define LA_EXPORT
 #endif
 
 /*!
