@@ -40,45 +40,49 @@ research@grame.fr
 
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
-	switch (renderer) {
+	try {
+		switch (renderer) {
 
-        case kPortAudioRenderer:
-		#ifdef __PORTAUDIO__
-			#ifdef __PORTAUDIOV19__
-				return new TPortAudioV19Renderer();
+			case kPortAudioRenderer:
+			#ifdef __PORTAUDIO__
+				#ifdef __PORTAUDIOV19__
+					return new TPortAudioV19Renderer();
+				#else
+					return new TPortAudioRenderer();
+				#endif
 			#else
-				return new TPortAudioRenderer();
+			#warning PortAudio renderer is not compiled
+				return NULL;
 			#endif
-		#else
-		#warning PortAudio renderer is not compiled
-			return NULL;
-		#endif
 
-        case kJackRenderer:
-		#ifdef __JACK__
-			return new TJackAudioRenderer();
-		#else
-		#ifdef WIN32
-			#pragma message ("Jack renderer is not compiled")
-		#else
-			#warning Jack renderer is not compiled
-		#endif
-			return NULL;
-		#endif
-	
-		 case kCoreAudioRenderer:
-		#ifdef __COREAUDIO__
-			return new TCoreAudioRenderer();
-		#else
-		#ifdef WIN32
-			#pragma message ("CoreAudio renderer is not compiled")
-		#else
-			#warning CoreAudio renderer is not compiled
-		#endif
-			return NULL;
-		#endif
-			
-		default:
-			return NULL;
-    }
+			case kJackRenderer:
+			#ifdef __JACK__
+				return new TJackAudioRenderer();
+			#else
+			#ifdef WIN32
+				#pragma message ("Jack renderer is not compiled")
+			#else
+				#warning Jack renderer is not compiled
+			#endif
+				return NULL;
+			#endif
+		
+			 case kCoreAudioRenderer:
+			#ifdef __COREAUDIO__
+				return new TCoreAudioRenderer();
+			#else
+			#ifdef WIN32
+				#pragma message ("CoreAudio renderer is not compiled")
+			#else
+				#warning CoreAudio renderer is not compiled
+			#endif
+				return NULL;
+			#endif
+				
+			default:
+				return NULL;
+		}
+	} catch (...) {
+		return NULL;
+	}
 }
