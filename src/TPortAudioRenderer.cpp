@@ -115,8 +115,12 @@ int TPortAudioRenderer::GetFirstValidOutputDevice()
 
 TPortAudioRenderer::TPortAudioRenderer(): TAudioRenderer()
 {
-    if (Pa_Initialize() != paNoError)
+	PaError err;
+	
+    if ((err = Pa_Initialize()) != paNoError) {
+		printf("Pa_Initialize error: %s\n", Pa_GetErrorText(err));
         throw new std::bad_alloc;
+	}
 }
 
 TPortAudioRenderer::~TPortAudioRenderer()
