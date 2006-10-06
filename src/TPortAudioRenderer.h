@@ -20,32 +20,31 @@ research@grame.fr
 
 */
 
-#ifndef __TPortAudioV19Renderer__
-#define __TPortAudioV19Renderer__
+#ifndef __TPortAudioRenderer__
+#define __TPortAudioRenderer__
 
 #include "TAudioRenderer.h"
 #include "portaudio.h"
 
-//-----------------------------
-// Class TPortAudioV19Renderer
-//-----------------------------
+//--------------------------
+// Class TPortAudioRenderer
+//--------------------------
 /*!
-\brief Use the <A HREF=http://www.portaudio.com> PortAudio V19 API </A>  to access sound drivers.
+\brief Use the <A HREF=http://www.portaudio.com> PortAudio API </A>  to access sound drivers.
 */
 
-class TPortAudioV19Renderer : public TAudioRenderer
+class TPortAudioRenderer : public TAudioRenderer
 {
 
     private:
 
-        PaStream* fStream;
+        PortAudioStream* fStream;
 
         static int Process(void* inputBuffer,
-							void* outputBuffer,
-							unsigned long framesPerBuffer,
-							const PaStreamCallbackTimeInfo* timeInfo,
-							PaStreamCallbackFlags statusFlags,
-							void* userData);
+                           void* outputBuffer,
+                           unsigned long framesPerBuffer,
+                           PaTimestamp outTime,
+                           void* userData);
 
         void DisplayDevices();
         int GetFirstValidInputDevice();
@@ -53,21 +52,25 @@ class TPortAudioV19Renderer : public TAudioRenderer
 
     public:
 
-        TPortAudioV19Renderer(): TAudioRenderer()
-        {}
-        virtual ~TPortAudioV19Renderer()
-        {}
-
-        long Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+        TPortAudioRenderer();
+        virtual ~TPortAudioRenderer();
+  
+        long OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+		long Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
         long Close();
 
         long Start();
         long Stop();
 
         void GetInfo(RendererInfoPtr info);
+		
+		long GetDeviceCount();
+		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		long GetDefaultInputDevice();
+		long GetDefaultOutputDevice();
 };
 
-typedef TPortAudioV19Renderer * TPortAudioV19RendererPtr;
+typedef TPortAudioRenderer * TPortAudioRendererPtr;
 
 #endif
 

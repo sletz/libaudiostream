@@ -20,22 +20,22 @@ research@grame.fr
 
 */
 
-#include "TPortAudioV19Renderer.h"
+#include "TPortAudioRenderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
 #define PA_SAMPLE_TYPE paFloat32
 
-int TPortAudioV19Renderer::Process(void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer,
-									const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData)
+int TPortAudioRenderer::Process(void* inputBuffer, void* outputBuffer, unsigned long framesPerBuffer,
+                                PaTimestamp outTime, void* userData)
 {
-    TPortAudioV19RendererPtr renderer = (TPortAudioV19RendererPtr)userData;
+    TPortAudioRendererPtr renderer = (TPortAudioRendererPtr)userData;
     renderer->Run((float*)inputBuffer, (float*)outputBuffer, framesPerBuffer);
     return 0;
 }
 
-void TPortAudioV19Renderer::DisplayDevices()
+void TPortAudioRenderer::DisplayDevices()
 {
     const PaDeviceInfo *pdi;
     int i, j, numDevices;
@@ -81,7 +81,7 @@ void TPortAudioV19Renderer::DisplayDevices()
     }
 }
 
-int TPortAudioV19Renderer::GetFirstValidInputDevice()
+int TPortAudioRenderer::GetFirstValidInputDevice()
 {
     const PaDeviceInfo* pdi;
     int i, numDevices;
@@ -97,7 +97,7 @@ int TPortAudioV19Renderer::GetFirstValidInputDevice()
     return paNoDevice;
 }
 
-int TPortAudioV19Renderer::GetFirstValidOutputDevice()
+int TPortAudioRenderer::GetFirstValidOutputDevice()
 {
     const PaDeviceInfo* pdi;
     int i, numDevices;
@@ -113,26 +113,36 @@ int TPortAudioV19Renderer::GetFirstValidOutputDevice()
     return paNoDevice;
 }
 
-long TPortAudioV19Renderer::Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+TPortAudioRenderer::TPortAudioRenderer(): TAudioRenderer()
+{
+    if (Pa_Initialize() != paNoError)
+        throw new std::bad_alloc;
+}
+
+TPortAudioRenderer::~TPortAudioRenderer()
+{
+	Pa_Terminate();
+}
+
+/*
+long TPortAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
 {
     PaError err;
     const PaDeviceInfo* pdi;
     int numDevices;
     int inDevice;
     int outDevice;
-	PaStreamParameters inputParameters;
-    PaStreamParameters outputParameters;
 
     printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n",
            *inChan, *outChan, *bufferSize, *sampleRate);
 
-    err = Pa_Initialize();
-    if (err != paNoError)
-        goto error;
-
+	// err = Pa_Initialize();
+    // if (err != paNoError)
+	//    goto error;
+	
     numDevices = Pa_CountDevices();
     if (numDevices < 0) {
-        printf("ERROR: Pa_CountDevices returned 0x%x\n", numDevices );
+        printf("ERROR: Pa_CountDevices returned 0x%x\n", numDevices);
         err = numDevices;
         goto error;
     } else {
@@ -163,45 +173,116 @@ long TPortAudioV19Renderer::Open(long* inChan, long* outChan, long* bufferSize, 
         *outChan = (*outChan < pdi->maxOutputChannels) ? *outChan : pdi->maxOutputChannels;
         printf("Ouput channel number %ld\n", *outChan);
     }
-	
-	
-	inputParameters.device = inDevice;
-    inputParameters.channelCount = *inChan;
-    inputParameters.sampleFormat = paFloat32 | paNonInterleaved;		// 32 bit floating point output
-    inputParameters.suggestedLatency = (inDevice != paNoDevice)		// TODO: check how to setup this on ASIO
-                                       ? Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency
-                                       : 0;
-    inputParameters.hostApiSpecificStreamInfo = NULL;
-
-    outputParameters.device = outDevice;
-    outputParameters.channelCount = outchannels;
-    outputParameters.sampleFormat = *outChan  | paNonInterleaved;		// 32 bit floating point output
-    outputParameters.suggestedLatency = (outDevice != paNoDevice)	// TODO: check how to setup this on ASIO
-                                        ? Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency
-                                        : 0;
-    outputParameters.hostApiSpecificStreamInfo = NULL;
 
     err = Pa_OpenStream(&fStream,
-                        (inDevice == paNoDevice) ? 0 : &inputParameters,
-                        (outDevice == paNoDevice) ? 0 : &outputParameters,
+                        (*inChan > 0) ? inDevice : paNoDevice,
+                        *inChan,
+                        PA_SAMPLE_TYPE,
+                        0,
+                        (*outChan > 0) ? outDevice : paNoDevice,
+                        *outChan,
+                        PA_SAMPLE_TYPE,
+                        0,
                         *sampleRate,
                         *bufferSize,
+                        0,                  //  number of buffers, if zero then use default minimum
                         paNoFlag,
                         Process,
                         this);
 
     if (err != paNoError)
         goto error;
-    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
+    return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
-    Pa_Terminate();
+    //Pa_Terminate();
+    fStream = 0;
+    return OPEN_ERR;
+}
+*/
+long TPortAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+{
+    PaError err;
+    const PaDeviceInfo* pdi;
+    int numDevices;
+    int inDevice;
+    int outDevice;
+
+    printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n",
+           *inChan, *outChan, *bufferSize, *sampleRate);
+
+    numDevices = Pa_CountDevices();
+    if (numDevices < 0) {
+        printf("ERROR: Pa_CountDevices returned 0x%x\n", numDevices);
+        err = numDevices;
+        printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
+		fStream = 0;
+		return OPEN_ERR;
+    } else {
+        DisplayDevices();
+    }
+
+    // Compute input and output number : to be checked
+    inDevice = Pa_GetDefaultInputDeviceID();
+    pdi = Pa_GetDeviceInfo(inDevice);
+
+    if (pdi != 0) {
+        if (pdi->maxInputChannels == 0) {
+            inDevice = GetFirstValidInputDevice();
+            pdi = Pa_GetDeviceInfo(inDevice);
+        }
+        *inChan = (*inChan < pdi->maxInputChannels) ? *inChan : pdi->maxInputChannels;
+        printf("Input channel number %ld\n", *inChan);
+    }
+
+    outDevice = Pa_GetDefaultOutputDeviceID();
+    pdi = Pa_GetDeviceInfo(outDevice);
+
+    if (pdi != 0) {
+        if (pdi->maxOutputChannels == 0) {
+            outDevice = GetFirstValidOutputDevice();
+            pdi = Pa_GetDeviceInfo(outDevice);
+        }
+        *outChan = (*outChan < pdi->maxOutputChannels) ? *outChan : pdi->maxOutputChannels;
+        printf("Ouput channel number %ld\n", *outChan);
+    }
+	
+	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
+}
+
+long TPortAudioRenderer::Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+{
+    printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n", *inChan, *outChan, *bufferSize, *sampleRate);
+
+    PaError err = Pa_OpenStream(&fStream,
+                        (*inChan > 0) ? inputDevice : paNoDevice,
+                        *inChan,
+                        PA_SAMPLE_TYPE,
+                        0,
+                        (*outChan > 0) ? outputDevice : paNoDevice,
+                        *outChan,
+                        PA_SAMPLE_TYPE,
+                        0,
+                        *sampleRate,
+                        *bufferSize,
+                        0,                  //  number of buffers, if zero then use default minimum
+                        paNoFlag,
+                        Process,
+                        this);
+
+    if (err != paNoError)
+        goto error;
+    return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
+
+error:
+    printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
     fStream = 0;
     return OPEN_ERR;
 }
 
-long TPortAudioV19Renderer::Close()
+/*
+long TPortAudioRenderer::Close()
 {
     if (fStream) {
         Pa_CloseStream(fStream);
@@ -209,8 +290,16 @@ long TPortAudioV19Renderer::Close()
     }
     return NO_ERR;
 }
+*/
 
-long TPortAudioV19Renderer::Start()
+long TPortAudioRenderer::Close()
+{
+    if (fStream) 
+        Pa_CloseStream(fStream);
+     return NO_ERR;
+}
+
+long TPortAudioRenderer::Start()
 {
     PaError err = Pa_StartStream(fStream);
 
@@ -222,7 +311,7 @@ long TPortAudioV19Renderer::Start()
 	}
 }
 
-long TPortAudioV19Renderer::Stop()
+long TPortAudioRenderer::Stop()
 {
     PaError err = Pa_StopStream(fStream);
 
@@ -234,7 +323,7 @@ long TPortAudioV19Renderer::Stop()
 	}
 }
 
-void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
+void TPortAudioRenderer::GetInfo(RendererInfoPtr info)
 {
     info->fInput = fInput;
     info->fOutput = fOutput;
@@ -249,5 +338,46 @@ void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
 	info->fOutputLatencyFrame = 0;
     info->fOutputLatencyMs = 0;
 #endif
+}
+
+long TPortAudioRenderer::GetDeviceCount()
+{
+	return Pa_CountDevices();
+}
+
+void TPortAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
+{
+	const PaDeviceInfo* pdi;
+	pdi = Pa_GetDeviceInfo(deviceNum);
+	
+	info->fMaxInputChannels = pdi->maxInputChannels;
+	info->fMaxOutputChannels = pdi->maxOutputChannels;
+	strcpy(info->fName, pdi->name);
+	info->fDefaultBufferSize = 512;
+	info->fDefaultSampleRate = 0; // init value
+	
+	// Check if 44100 is OK
+	if (pdi->numSampleRates == -1) { // range supported
+		if ( pdi->sampleRates[0] <= 44100 && 44100 <= pdi->sampleRates[1]) {
+			info->fDefaultSampleRate = 44100;
+		}
+	} else {
+		for (int i = 0; i < pdi->numSampleRates; i++) {
+			if ( pdi->sampleRates[i] == 44100) {
+				info->fDefaultSampleRate = 44100;
+				break;
+			}
+		}
+	}
+}
+
+long TPortAudioRenderer::GetDefaultInputDevice()
+{
+	return Pa_GetDefaultInputDeviceID();
+}
+
+long TPortAudioRenderer::GetDefaultOutputDevice()
+{
+	return Pa_GetDefaultOutputDeviceID();
 }
 
