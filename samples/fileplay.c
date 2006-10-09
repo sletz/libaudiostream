@@ -35,7 +35,7 @@ static void DisplayDevice(AudioRendererPtr manager)
 	for (i = 0; i < GetDeviceCount(manager); i++) {
 		DeviceInfo info;
 		GetDeviceInfo(manager, i, &info);
-		
+		printf("\n--------------------------------\n");
 		printf("Device name: %s\n", info.fName);
 		printf("Device max input: %ld\n", info.fMaxInputChannels);
 		printf("Device max output: %ld\n", info.fMaxOutputChannels);
@@ -45,7 +45,6 @@ static void DisplayDevice(AudioRendererPtr manager)
 
 	printf("Device default input device: %ld\n", GetDefaultInputDevice(manager));
 	printf("Device default output device: %ld\n", GetDefaultOutputDevice(manager));
-
 }
 
 static void DisplayAllDevices()
