@@ -125,10 +125,6 @@ SOURCE=..\src\TAudioEffect.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\TAudioEngine.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\TAudioGlobals.cpp
 # End Source File
 # Begin Source File

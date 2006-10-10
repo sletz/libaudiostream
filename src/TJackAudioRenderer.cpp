@@ -73,7 +73,7 @@ TJackAudioRenderer::~TJackAudioRenderer()
 	free(fOutput_ports);
 }
 
-long TJackAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+long TJackAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	int i;
 
@@ -90,15 +90,15 @@ long TJackAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
 		printf("Warning: requested buffer size = %ld different from driver buffer size = %d \n", *bufferSize, jack_get_buffer_size(fClient));
 	}
 
-	*sampleRate = jack_get_sample_rate(fClient);
-    *bufferSize = jack_get_buffer_size(fClient);
+	sampleRate = jack_get_sample_rate(fClient);
+    bufferSize = jack_get_buffer_size(fClient);
     jack_set_process_callback(fClient, Process, this);
 
-	assert(*inChan < MAX_PORTS);
-	assert(*outChan < MAX_PORTS);
+	assert(inChan < MAX_PORTS);
+	assert(outChan < MAX_PORTS);
 	
-	fInput = *inChan;
-	fOutput = *outChan;
+	fInput = inChan;
+	fOutput = outChan;
 		
 	char buf[256];
 	
@@ -125,7 +125,7 @@ error:
     return OPEN_ERR;
 }
 
-long TJackAudioRenderer::Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* samplerate)
+long TJackAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
 {
 	return OpenDefault(inChan, outChan, bufferSize, samplerate);
 }

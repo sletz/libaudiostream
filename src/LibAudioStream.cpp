@@ -231,7 +231,7 @@ extern "C"
 	AudioManagerPtr AUDIOAPI MakeAudioRenderer(long renderer);
 	void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr renderer);
 	
-	int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+	int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 	void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer); 
 	void AUDIOAPI StartAudioRenderer(AudioManagerPtr renderer); 
 	void AUDIOAPI StopAudioRenderer(AudioManagerPtr renderer); 
@@ -645,10 +645,6 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
                                         long renderer,
                                         long thread_num)
 {
-    long tmpInChan = inChan;
-    long tmpOutChan = outChan;
-    long tmpBufferSize = buffer_size;
-    long tmpSampleRate = sample_rate;
     int res;
 	
 	if (thread_num < 1) 
@@ -669,7 +665,7 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
         goto error;
 
 	player->fRenderer->AddClient(player->fMixer);
-	res = player->fRenderer->OpenDefault(&tmpInChan, &tmpOutChan, &tmpBufferSize, &tmpSampleRate);
+	res = player->fRenderer->OpenDefault(inChan, outChan, buffer_size, sample_rate);
 
     if (res == NO_ERR)
         return player;
@@ -849,7 +845,7 @@ void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr obj)
 	delete renderer;
 }
 
-int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate)
+int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	return static_cast<TAudioRendererPtr>(renderer)->Open(inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
 }

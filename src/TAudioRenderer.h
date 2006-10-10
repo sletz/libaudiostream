@@ -100,8 +100,8 @@ class AUDIO_EXPORTS TAudioRenderer
             fClientList.remove(client);
         }
 
-        virtual long OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate) = 0;
-		virtual long Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate) = 0;
+        virtual long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate) = 0;
+		virtual long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate) = 0;
         virtual long Close() = 0;
 
         virtual long Start() = 0;

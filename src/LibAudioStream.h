@@ -531,7 +531,7 @@ extern "C"
     \param sample_rate The sampling rate.  On input, contains the wanted value, on return the really used one.
  	\return An error code.
 	*/
-	int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate);  // AJOUTER in/out device
+	int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  // AJOUTER in/out device
 	/*!
     \brief Close an audio renderer.
     \param renderer The audio renderer to be closed.

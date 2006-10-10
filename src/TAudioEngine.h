@@ -56,7 +56,7 @@ class TAudioEngine
             delete fMixer;
         }
 
-        virtual long Open(long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+        virtual long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         virtual long Close();
 
         virtual long Start()
