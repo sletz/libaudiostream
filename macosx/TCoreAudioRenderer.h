@@ -60,8 +60,8 @@ class TCoreAudioRenderer : public TAudioRenderer
         virtual ~TCoreAudioRenderer()
         {}
 
-        long OpenDefault(long* inChan, long* outChan, long* bufferSize, long* sampleRate);
-		long Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* sampleRate);
+        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
+		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
 
         long Start();

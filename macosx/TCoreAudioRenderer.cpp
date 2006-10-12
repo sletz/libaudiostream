@@ -160,7 +160,7 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, AudioDevi
 	return noErr;
 }
 
-long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSize, long* samplerate)
+long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long samplerate)
 {
 	OSStatus err = noErr;
     ComponentResult err1;
@@ -169,16 +169,16 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
 	AudioStreamBasicDescription srcFormat, dstFormat, sampleRate;
     long in_nChannels, out_nChannels;
 	
-	if (GetDefaultDevice(*inChan, *outChan, &fDeviceID) != noErr){
+	if (GetDefaultDevice(inChan, outChan, &fDeviceID) != noErr){
 		printf("Cannot open default device\n");
 		return OPEN_ERR;
 	}
 	
 	// Setting buffer size
     outSize = sizeof(UInt32);
-    err = AudioDeviceSetProperty(fDeviceID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, outSize, bufferSize);
+    err = AudioDeviceSetProperty(fDeviceID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, outSize, &bufferSize);
     if (err != noErr) {
-        printf("Cannot set buffer size %ld\n", *bufferSize);
+        printf("Cannot set buffer size %ld\n", bufferSize);
         printError(err);
         return OPEN_ERR;
     }
@@ -192,11 +192,11 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
         return OPEN_ERR;
     }
 
-    if (*samplerate != (unsigned long)sampleRate.mSampleRate) {
-        sampleRate.mSampleRate = (Float64)(*samplerate);
+    if (samplerate != (unsigned long)sampleRate.mSampleRate) {
+        sampleRate.mSampleRate = (Float64)(samplerate);
         err = AudioDeviceSetProperty(fDeviceID, NULL, 0, false, kAudioDevicePropertyStreamFormat, outSize, &sampleRate);
         if (err != noErr) {
-            printf("Cannot set sample rate = %ld\n", *samplerate);
+            printf("Cannot set sample rate = %ld\n", samplerate);
             printError(err);
             return OPEN_ERR;
         }
@@ -268,21 +268,21 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
 
     out_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
 
-    if (*outChan > out_nChannels) {
+    if (outChan > out_nChannels) {
         printf("This device hasn't required output channels\n");
         goto error;
     }
-    if (*inChan > in_nChannels) {
+    if (inChan > in_nChannels) {
         printf("This device hasn't required input channels\n");
         goto error;
     }
 
-    if (*outChan < out_nChannels) {
+    if (outChan < out_nChannels) {
         SInt32 chanArr[out_nChannels];
         for (int i = 0;	i < out_nChannels; i++) {
             chanArr[i] = -1;
         }
-        for (int i = 0; i < *outChan; i++) {
+        for (int i = 0; i < outChan; i++) {
             chanArr[i] = i;
         }
         err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, chanArr, sizeof(SInt32) * out_nChannels);
@@ -292,12 +292,12 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
         }
     }
 
-    if (*inChan < in_nChannels) {
+    if (inChan < in_nChannels) {
         SInt32 chanArr[in_nChannels];
         for (int i = 0; i < in_nChannels; i++) {
             chanArr[i] = -1;
         }
-        for (int i = 0; i < *inChan; i++) {
+        for (int i = 0; i < inChan; i++) {
             chanArr[i] = i;
         }
         AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap , kAudioUnitScope_Input, 1, chanArr, sizeof(SInt32) * in_nChannels);
@@ -323,11 +323,11 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
     }
 	PrintStreamDesc(&dstFormat);
 	
-	srcFormat.mSampleRate = *samplerate;
+	srcFormat.mSampleRate = samplerate;
     srcFormat.mFormatID = kAudioFormatLinearPCM;
 	srcFormat.mBitsPerChannel = 32;
 	srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-	srcFormat.mChannelsPerFrame = *outChan;
+	srcFormat.mChannelsPerFrame = outChan;
 	srcFormat.mFramesPerPacket = 1;
 	srcFormat.mBytesPerFrame = srcFormat.mBitsPerChannel * srcFormat.mChannelsPerFrame / 8;
     srcFormat.mBytesPerPacket = srcFormat.mBytesPerFrame * srcFormat.mFramesPerPacket;
@@ -340,11 +340,11 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
         printError(err1);
     }
 	
-    dstFormat.mSampleRate = *samplerate;
+    dstFormat.mSampleRate = samplerate;
 	dstFormat.mFormatID = kAudioFormatLinearPCM;
 	dstFormat.mBitsPerChannel = 32;
 	dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-	dstFormat.mChannelsPerFrame = *inChan;
+	dstFormat.mChannelsPerFrame = inChan;
 	dstFormat.mFramesPerPacket = 1;
 	dstFormat.mBytesPerFrame = dstFormat.mBitsPerChannel * dstFormat.mChannelsPerFrame / 8;
     dstFormat.mBytesPerPacket = dstFormat.mBytesPerFrame * dstFormat.mFramesPerPacket;
@@ -357,7 +357,7 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
         printError(err1);
     }
 
-    if (*inChan > 0 && *outChan == 0) {
+    if (inChan > 0 && outChan == 0) {
         AURenderCallbackStruct output;
         output.inputProc = Render;
         output.inputProcRefCon = this;
@@ -379,16 +379,16 @@ long TCoreAudioRenderer::OpenDefault(long* inChan, long* outChan, long* bufferSi
         }
     }
 
-    fInputData = (AudioBufferList*)malloc(sizeof(UInt32) + *inChan * sizeof(AudioBuffer));
+    fInputData = (AudioBufferList*)malloc(sizeof(UInt32) + inChan * sizeof(AudioBuffer));
     if (fInputData == 0) {
 		printf("Cannot allocate memory for input buffers\n");
         goto error;
 	}
-    fInputData->mNumberBuffers = *inChan;
+    fInputData->mNumberBuffers = inChan;
 
     // Prepare buffers
-	fInputData->mBuffers[0].mNumberChannels = *inChan;
-	fInputData->mBuffers[0].mDataByteSize = *inChan * (*bufferSize) * sizeof(float);
+	fInputData->mBuffers[0].mNumberChannels = inChan;
+	fInputData->mBuffers[0].mDataByteSize = inChan * (bufferSize) * sizeof(float);
  	
     return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, samplerate);
 
@@ -398,7 +398,7 @@ error:
     return OPEN_ERR;
 }
 
-long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long* inChan, long* outChan, long* bufferSize, long* samplerate)
+long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
 {
 	return NO_ERR;
 }
@@ -446,13 +446,19 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
 }
 
 long TCoreAudioRenderer::GetDeviceCount()
-{}
+{
+	return 1;
+}
 
 void TCoreAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {}
 
 long TCoreAudioRenderer::GetDefaultInputDevice()
-{}
+{
+	return 0;
+}
 
 long TCoreAudioRenderer::GetDefaultOutputDevice()
-{}
+{
+	return 0;
+}
