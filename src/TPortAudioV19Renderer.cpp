@@ -90,6 +90,21 @@ int TPortAudioV19Renderer::GetFirstValidOutputDevice()
     return paNoDevice;
 }
 
+TPortAudioV19Renderer::TPortAudioV19Renderer(): TAudioRenderer()
+{
+	PaError err;
+	
+    if ((err = Pa_Initialize()) != paNoError) {
+		printf("Pa_Initialize error: %s\n", Pa_GetErrorText(err));
+        throw new std::bad_alloc;
+	}
+}
+
+TPortAudioV19Renderer::~TPortAudioV19Renderer()
+{
+	Pa_Terminate();
+}
+
 long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     PaError err;
@@ -101,15 +116,13 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
     printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n",
            inChan, outChan, bufferSize, sampleRate);
 
-    err = Pa_Initialize();
-    if (err != paNoError)
-        goto error;
-
     numDevices = Pa_GetDeviceCount();
     if (numDevices < 0) {
         printf("ERROR: Pa_GetDeviceCount returned 0x%x\n", numDevices);
-        err = numDevices;
-        goto error;
+        fStream = 0;
+		err = numDevices;
+        printf("Error while opening device: device open error %s\n", Pa_GetErrorText(err));
+		return OPEN_ERR;
     } else {
         DisplayDevices();
     }
@@ -139,13 +152,7 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
         printf("Ouput channel number %ld\n", outChan);
     }
 	
-	return TPortAudioV19Renderer::Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
-
-error:
-    printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
-    Pa_Terminate();
-    fStream = 0;
-    return OPEN_ERR;
+	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
 long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
@@ -192,10 +199,8 @@ error:
 
 long TPortAudioV19Renderer::Close()
 {
-    if (fStream) {
+    if (fStream) 
         Pa_CloseStream(fStream);
-        Pa_Terminate();
-    }
     return NO_ERR;
 }
 
