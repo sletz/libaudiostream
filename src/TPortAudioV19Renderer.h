@@ -53,10 +53,8 @@ class TPortAudioV19Renderer : public TAudioRenderer
 
     public:
 
-        TPortAudioV19Renderer(): TAudioRenderer()
-        {}
-        virtual ~TPortAudioV19Renderer()
-        {}
+        TPortAudioV19Renderer();        
+		virtual ~TPortAudioV19Renderer();
 
         long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
 		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
