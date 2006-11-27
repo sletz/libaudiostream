@@ -119,12 +119,15 @@ class TAudioEffectListManager {
 			delete[] fTempBuffer;
 		}
 	
+		// TO IMPROVE : this will fail if an effect is still in switch mode...
 		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 		{
-			fNextEffectList = effect_list;
-			fCurEffectList->FadeOut();
-			fNextEffectList->FadeIn(fadeIn, fadeOut);
-	 		fSwitchEffect = true;
+			if (!fSwitchEffect) { 
+				fNextEffectList = effect_list;
+				fCurEffectList->FadeOut();
+				fNextEffectList->FadeIn(fadeIn, fadeOut);
+	 			fSwitchEffect = true;
+			}
 		}
 		
 		TAudioEffectListPtr GetEffectList() // Called in RT
