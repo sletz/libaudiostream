@@ -106,7 +106,6 @@
 				1AB674ADFE9D54B511CA2CBB,
 				4B8E185609FCD83000D586F5,
 				4B8E185809FCD83A00D586F5,
-				4BF6C37F0AE3B7100063DA73,
 			);
 			isa = PBXGroup;
 			name = AudioEngine.prprj;
@@ -2497,14 +2496,6 @@
 			path = LibAudioStream.framework;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4BF6C37F0AE3B7100063DA73 = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
-			name = "Info-LibAudioStreamPA copy.plist";
-			path = "/Volumes/Document1/Developpement/ProjectsCVS/LibAudioStreamCVS/macosx/Info-LibAudioStreamPA copy.plist";
-			refType = 0;
-			sourceTree = "<absolute>";
 		};
 		4BF6C3BE0AE3C0510063DA73 = {
 			fileEncoding = 30;
