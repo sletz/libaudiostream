@@ -866,9 +866,8 @@
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudioV19.a,
-					libportaudioV19_i386.a,
-					libsndfile.a,
 					libsndfile_i386.a,
+					libsndfile.a,
 				);
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -912,9 +911,8 @@
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudioV19.a,
-					libportaudioV19_i386.a,
-					libsndfile.a,
 					libsndfile_i386.a,
+					libsndfile.a,
 				);
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -956,9 +954,8 @@
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
 					libportaudioV19.a,
-					libportaudioV19_i386.a,
-					libsndfile.a,
 					libsndfile_i386.a,
+					libsndfile.a,
 				);
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
