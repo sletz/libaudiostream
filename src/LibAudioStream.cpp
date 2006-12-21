@@ -463,8 +463,8 @@ AudioEffectList AUDIOAPI MakeAudioEffectList()
 
 AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect)
 {
-    if (list_effect && effect)
-       TAudioEffectListPtr(list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(effect));
+   if (list_effect && effect)
+       static_cast<TAudioEffectListPtr>(list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(effect));
     return list_effect;
 }
 
