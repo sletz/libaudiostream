@@ -134,11 +134,13 @@ long TJackAudioRenderer::Close()
 {
 	int i;
 
-	for (i = 0; i < fInput; i++) {
-		jack_port_unregister(fClient, fInput_ports[i]);
-	}
-	for (i = 0; i < fOutput; i++) {
-		jack_port_unregister(fClient, fOutput_ports[i]);
+	if (fClient) {
+		for (i = 0; i < fInput; i++) {
+			jack_port_unregister(fClient, fInput_ports[i]);
+		}
+		for (i = 0; i < fOutput; i++) {
+			jack_port_unregister(fClient, fOutput_ports[i]);
+		}
 	}
 	
 	if (fClient && jack_client_close(fClient)) {
