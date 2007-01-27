@@ -362,7 +362,7 @@ extern "C"
     void CloseAudioPlayer(AudioPlayerPtr player);								   
 								   
 	/*!
-    \brief Opens the audio client, to be added to an externally allocated renderer
+    \brief Opens the audio client to be added to an externally allocated renderer.
 	\param renderer The audio renderer that will "drive" (call Audio callback) the player.
 	\return A pointer to new audio player object.
 	*/					
