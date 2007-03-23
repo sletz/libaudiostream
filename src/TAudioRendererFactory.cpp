@@ -46,7 +46,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 			case kPortAudioRenderer:
 			#ifdef __PORTAUDIO__
 				#ifdef __PORTAUDIOV19__
-					return new TPortAudioV19Renderer();
+					return new TPortAudioV19Renderer(); 
 				#else
 					return new TPortAudioRenderer();
 				#endif

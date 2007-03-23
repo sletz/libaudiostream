@@ -126,6 +126,9 @@ extern "C"
     long AUDIOAPI ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
 	void AUDIOAPI ResetSound(AudioStream sound);
 	
+	AudioStreamPtr AUDIOAPI MakeSoundPtr(AudioStream sound) ;
+	void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound);
+	
 	// Build sound (using pointer on smartptr)
 	AudioStreamPtr AUDIOAPI MakeNullSoundPtr(long lengthFrame);
     AudioStreamPtr AUDIOAPI MakeReadSoundPtr(char* name);
@@ -145,7 +148,6 @@ extern "C"
     long AUDIOAPI GetChannelsSoundPtr(AudioStreamPtr s);
     long AUDIOAPI ReadSoundPtr(AudioStreamPtr stream, float* buffer, long buffer_size, long channels);
 	void AUDIOAPI ResetSoundPtr(AudioStreamPtr sound);
-	void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound);
 	
     // Effect management (using smartptr)
     AudioEffectList AUDIOAPI MakeAudioEffectList();
@@ -334,11 +336,6 @@ long AUDIOAPI GetChannelsSound(AudioStream s)
     return (s) ? (static_cast<TAudioStreamPtr>(s))->Channels() : 0;
 }
 
-void AUDIOAPI ResetSound(AudioStream s)
-{
-	static_cast<TAudioStreamPtr>(s)->Reset();
-}
-
 long AUDIOAPI ReadSound(AudioStream s, float* buffer, long buffer_size, long channels)
 {
     if (s && buffer) {
@@ -349,6 +346,12 @@ long AUDIOAPI ReadSound(AudioStream s, float* buffer, long buffer_size, long cha
         return 0;
     }
 }
+
+void AUDIOAPI ResetSound(AudioStream s)
+{
+	static_cast<TAudioStreamPtr>(s)->Reset();
+}
+
 
 AudioStreamPtr AUDIOAPI MakeSoundPtr(AudioStream sound) 
 {

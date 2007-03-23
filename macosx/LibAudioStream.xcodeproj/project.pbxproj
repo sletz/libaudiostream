@@ -183,7 +183,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
-		0249A663FF388D9811CA2CEA /* libstdc++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libstdc++.a"; path = "/usr/lib/libstdc++.a"; sourceTree = "<absolute>"; };
 		4B0391DF0585040A006C929E /* TAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioRenderer.h; path = ../src/TAudioRenderer.h; sourceTree = SOURCE_ROOT; };
 		4B0391E00585040A006C929E /* TAudioRendererFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TAudioRendererFactory.cpp; path = ../src/TAudioRendererFactory.cpp; sourceTree = SOURCE_ROOT; };
 		4B0391E10585040A006C929E /* TAudioRendererFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioRendererFactory.h; path = ../src/TAudioRendererFactory.h; sourceTree = SOURCE_ROOT; };
@@ -315,7 +314,6 @@
 				4B170FAF0928F05100FD62F8 /* LibAudioStream.framework */,
 				D3C5192308B9CD8D00C1962D /* Accelerate.framework */,
 				D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */,
-				0249A663FF388D9811CA2CEA /* libstdc++.a */,
 				F666DED703EC03FB01D11C03 /* JavaVM.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -895,7 +893,7 @@
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
+				EXPORTED_SYMBOLS_FILE = "";
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -903,11 +901,12 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA.plist";
 				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__PORTAUDIO__",
 					"-D__PORTAUDIOV19__",
 					"-DLIBAUDIOSTREAM_EXPORTS",
+					"-fvisibility=hidden",
 				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
@@ -1032,6 +1031,7 @@
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				EXPORTED_SYMBOLS_FILE = LibAudioStream.exp;
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1039,13 +1039,14 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__JACK__",
 					"-D__PORTAUDIO__",
 					"-D__PORTAUDIOV19__",
 					"-D__COREAUDIO__",
 					"-DLIBAUDIOSTREAM_EXPORTS",
+					"-fvisibility=hidden",
 				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",

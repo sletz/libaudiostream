@@ -61,7 +61,7 @@ class LA_EXPORT la_smartable {
 		//! addReference increments the ref count and checks for refCount overflow
 		void addReference()           { refCount++; assert(refCount != 0); }
 		//! removeReference delete the object when refCount is zero		
-		virtual unsigned long LA_EXPORT removeReference();
+		virtual unsigned long removeReference();
 		
 	protected:
 		unsigned long refCount;	

@@ -23,7 +23,7 @@
 #include "la_smartpointer.h"
 #include "TThreadCmdManager.h"
 
-unsigned long LA_EXPORT la_smartable::removeReference() 
+unsigned long la_smartable::removeReference() 
 { 
 	if (--refCount == 0) {
 		delete this; 
