@@ -907,6 +907,7 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__PORTAUDIO__",
 					"-D__PORTAUDIOV19__",
+					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",
@@ -1044,6 +1045,7 @@
 					"-D__PORTAUDIO__",
 					"-D__PORTAUDIOV19__",
 					"-D__COREAUDIO__",
+					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",

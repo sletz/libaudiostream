@@ -37,7 +37,11 @@
 #  define LA_EXPORT _declspec (dllimport)
 # endif
 #elif __APPLE__
-# define LA_EXPORT __attribute__ ((visibility("default")))
+# ifdef LIBAUDIOSTREAM_EXPORTS
+#  define LA_EXPORT __attribute__ ((visibility("default")))
+# else
+#  define LA_EXPORT 
+# endif
 #else
 # define LA_EXPORT
 #endif
@@ -57,7 +61,7 @@ class LA_EXPORT la_smartable {
 		//! addReference increments the ref count and checks for refCount overflow
 		void addReference()           { refCount++; assert(refCount != 0); }
 		//! removeReference delete the object when refCount is zero		
-		virtual unsigned long removeReference();
+		virtual unsigned long LA_EXPORT removeReference();
 		
 	protected:
 		unsigned long refCount;	
