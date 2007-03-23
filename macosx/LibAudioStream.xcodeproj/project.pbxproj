@@ -872,6 +872,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -919,6 +920,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -962,6 +964,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1010,6 +1013,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1059,6 +1063,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1103,6 +1108,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
