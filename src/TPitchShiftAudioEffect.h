@@ -344,7 +344,7 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
 		
 		void GetControlParam(long param, char* label, float* min, float* max, float* init)
 		{
-			strcpy(label, "PichShift");
+			strcpy(label, "PitchShift");
 			*min = 0.5f;
 			*max = 2.0f;
 			*init = 1.0f;
