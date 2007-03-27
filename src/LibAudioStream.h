@@ -256,12 +256,17 @@ extern "C"
 	*/
 	AudioEffectPtr MakeStereoPanAudioEffectPtr(float panLeft, float rightPan);
 	/*!
+	\brief Create a pitch shift effect.
+	\param gain The pitch shift between 0.5 and 2.
+    \return A pointer to new pitch shift object.
+	*/
+    AudioEffectPtr MakePitchShiftAudioEffectPtr(float pitch);
+	/*!
 	\brief Create an effect described in the Faust DSP language.
 	\param name The name of the Faust effect shared library.
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
 	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
-
 	/*!
 	\brief Create an effect by "wrapping" an externally built effect.
 	\param effect The effect to be wrapped.

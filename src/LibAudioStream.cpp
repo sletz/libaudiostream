@@ -24,6 +24,7 @@ research@grame.fr
 #include "TAudioStreamFactory.h"
 
 #include "TVolAudioEffect.h"
+#include "TPitchShiftAudioEffect.h"
 #include "TPanAudioEffect.h"
 #include "TFaustAudioEffect.h"
 #include "TWrapperAudioEffect.h"
@@ -158,6 +159,7 @@ extern "C"
     AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
 	AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
 	AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
+	AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch);
 	AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
 	long AUDIOAPI GetControlCount(AudioEffect effect);
 	void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
@@ -172,6 +174,7 @@ extern "C"
     AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol);
 	AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan);
 	AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight);
+	AudioEffectPtr AUDIOAPI MakePitchShiftAudioEffectPtr(float pitch);
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
 	AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
 
@@ -258,7 +261,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 111;
+	return 112;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -500,6 +503,11 @@ AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight)
     return new TStereoPanAudioEffect(panLeft, panRight);
 }
 
+AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch)
+{
+    return new TPitchShiftAudioEffect(pitch);
+}
+
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 {
 	try {
@@ -580,6 +588,11 @@ AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan)
 AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight)
 {
     return new SMARTP<TAudioEffectInterface>(new TStereoPanAudioEffect(panLeft, panRight));
+}
+
+AudioEffectPtr AUDIOAPI MakePitchShiftAudioEffectPtr(float pitch)
+{
+    return new SMARTP<TAudioEffectInterface>(new TPitchShiftAudioEffect(pitch));
 }
 
 AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)

@@ -248,6 +248,12 @@ AudioEffect MakeMonoPanAudioEffect(float pan);
 */
 AudioEffect MakeStereoPanAudioEffect(float panLeft, float rightPan);
 /*!
+\brief Create a pitch shift effect.
+\param gain The pitch shift between 0.5 and 2.
+\return A pointer to new pitch shift object.
+*/
+AudioEffect MakePitchShiftAudioEffect(float pitch);
+/*!
 \brief Create an effect described in the Faust DSP language.
 \param name The name of the Faust effect shared library.
 \return A pointer to new effect object or NULL if the effect cannot be located or created.

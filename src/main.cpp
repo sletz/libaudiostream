@@ -25,10 +25,10 @@ research@grame.fr
 #include "sndfile.h"
 #include <stdio.h>
 
-#define FILENAME1 "/Users/letz/levot.wav"
-#define FILENAME2 "/Users/letz/tango.wav"
+#define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
+#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
-#define FILENAME4 "/Users/letz/levotmono.wav"
+#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
 
 #define EFFECT1 "/Users/letz/freeverb.so"
 
@@ -146,10 +146,24 @@ AudioStream test9()
     printf("Sequence of a region with a transformed region (volume effect)\n");
     printf("--------------------------------------------------------------\n\n");
     AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 600000);
-    AudioStream sound2 = MakeRegionSound(FILENAME1, 44100, 90000);
+    AudioStream sound2 = MakeRegionSound(FILENAME1, 44100, 150000);
     AudioEffectList list_effect = MakeAudioEffectList();
-    list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.25));
-    return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
+	ClearAudioEffectList(list_effect);
+	list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.1));
+	return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
+}
+
+AudioStream test9bis()
+{
+    printf("--------------------------------------------------------------\n");
+    printf("Sequence of a region with a pitched region (pitchshift effect)\n");
+    printf("--------------------------------------------------------------\n\n");
+    AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 700000);
+    AudioStream sound2 = MakeRegionSound(FILENAME1, 400000, 700000);
+    AudioEffectList list_effect = MakeAudioEffectList();
+	ClearAudioEffectList(list_effect);
+	list_effect = AddAudioEffect(list_effect, MakePitchShiftAudioEffect(0.8));
+	return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
 }
 
 AudioStream test10()
@@ -324,7 +338,7 @@ int main(int argc, char* argv[])
     printf("Type '1' to pan left\n");
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
-	
+	/*
     ExecTest(player, test0());
 	
 	ExecTest(player, test1());
@@ -335,7 +349,9 @@ int main(int argc, char* argv[])
     ExecTest(player, test6());
     ExecTest(player, test7());
     ExecTest(player, test8());
-    ExecTest(player, test9());
+	ExecTest(player, test9());
+	*/
+	ExecTest(player, test9bis());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
 
