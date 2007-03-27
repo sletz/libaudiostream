@@ -24,6 +24,7 @@ research@grame.fr
 #include "LibAudioStream++.h"
 #include "sndfile.h"
 #include <stdio.h>
+#include <errno.h>
 
 #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
@@ -119,10 +120,14 @@ AudioStream test7()
     printf("-------------------------\n");
     printf("Build a echo on a region \n");
     printf("-------------------------\n\n");
-    AudioStream sound, mix = MakeRegionSound(FILENAME2, 400000, 1000000);
-    for (int i = 0; i < 32 ; i++) {
-        sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 400000, 1000000), 0);
+    AudioStream sound, mix = MakeRegionSound(FILENAME2, 20000, 60000);
+    for (int i = 0; i < 255 ; i++) {
+        sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 20000, 60000), 0);
+		if (sound == 0)
+			printf("Error1 %i= \n", i);
         mix = MakeMixSound(sound, mix);
+		if (mix == 0)
+			printf("Error2 %i= \n", i);
     }
     return mix;
 }
@@ -214,7 +219,8 @@ void test20()
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
     printf("-----------------------------------------------------------\n\n");
-    AudioStream sound = MakeRendererSound(MakeRegionSound(FILENAME2, 400000, 500000));
+    //AudioStream sound = MakeRendererSound(MakeRegionSound(FILENAME2, 400000, 500000));
+	AudioStream sound = MakeRendererSound(MakeRegionSound(FILENAME2, 0, 1000));
     float buffer[512 * OUT_CHANNELS];
     long res;
     do {
@@ -317,11 +323,33 @@ void ExecTest(AudioPlayerPtr player, AudioStream sound)
     StopChannel(player, 1);
 }
 
+int SetMaximumFiles(long filecount)
+{
+    struct rlimit lim;
+    lim.rlim_cur = lim.rlim_max = (rlim_t)filecount;
+    return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
+}
+
+int GetMaximumFiles(long *filecount) 
+{
+    struct rlimit lim;
+    if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
+        *filecount = (long)lim.rlim_max;
+        return 0;
+    } else {
+		return errno;
+	}
+}
+
 int main(int argc, char* argv[])
 {
     printf("----------------------------\n");
     printf("LibAudioStream based Player \n");
     printf("----------------------------\n\n");
+	
+	SetMaximumFiles(1024);
+	
+	printf(" sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
 	
 	// Try to open Jack version
     AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
@@ -339,14 +367,14 @@ int main(int argc, char* argv[])
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
 	
-    ExecTest(player, test0());	
+    ExecTest(player, test0());
 	ExecTest(player, test1());
     ExecTest(player, test2());
     ExecTest(player, test3());
     ExecTest(player, test4());
     ExecTest(player, test5());
     ExecTest(player, test6());
-    ExecTest(player, test7());
+	ExecTest(player, test7());
     ExecTest(player, test8());
 	ExecTest(player, test9());
 	ExecTest(player, test9bis());

@@ -322,8 +322,8 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
 
         void Process(float** input, float** output, long framesNum, long channels)
         {
-	        fLeft.smbPitchShift(fPichSift, framesNum, 2048, 4, TAudioGlobals::fSample_Rate, input[0], output[0]);
-			fRight.smbPitchShift(fPichSift, framesNum, 2048, 4, TAudioGlobals::fSample_Rate, input[1], output[1]);
+	        fLeft.smbPitchShift(fPichSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[0], output[0]);
+			fRight.smbPitchShift(fPichSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[1], output[1]);
         }
 
         TAudioEffectInterface* Copy()
