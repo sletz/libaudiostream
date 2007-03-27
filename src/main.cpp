@@ -338,9 +338,8 @@ int main(int argc, char* argv[])
     printf("Type '1' to pan left\n");
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
-	/*
-    ExecTest(player, test0());
 	
+    ExecTest(player, test0());	
 	ExecTest(player, test1());
     ExecTest(player, test2());
     ExecTest(player, test3());
@@ -350,7 +349,6 @@ int main(int argc, char* argv[])
     ExecTest(player, test7());
     ExecTest(player, test8());
 	ExecTest(player, test9());
-	*/
 	ExecTest(player, test9bis());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
