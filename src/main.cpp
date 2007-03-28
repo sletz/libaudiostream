@@ -22,16 +22,27 @@ research@grame.fr
 
 
 #include "LibAudioStream++.h"
-#include "sndfile.h"
+#include <sndfile.h>
 #include <stdio.h>
 #include <errno.h>
+
+
+#ifdef WIN32
+
+#define FILENAME1 "D:\\acl62-trial\\Alla faglar.wav"
+#define FILENAME2 "D:\\acl62-trial\\BjornenSover.wav"
+#define FILENAME3 "D:\\acl62-trial\\BjornenSover.wav"
+#define EFFECT1 "D:\\acl62-trial\\freeverb.dll"
+
+#else
 
 #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
 #define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
+#define EFFECT1 ""
+#endif
 
-#define EFFECT1 "/Users/letz/freeverb.so"
 
 #define IN_CHANNELS 2 // stereo player
 #define OUT_CHANNELS 2 // stereo player
@@ -298,9 +309,13 @@ void TestPlay(AudioPlayerPtr player)
     }
 }
 
+/*
 void SaveSound(AudioStream sound, char* name)
 {
+<<<<<<< main.cpp
+=======
 	AudioStream writesound = MakeRendererSound(MakeWriteSound(name, sound, SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+>>>>>>> 1.26
 	printf("GetChannelsSound %ld\n", GetChannelsSound(writesound));
 	float buffer[512 * 2];
     long res;
@@ -309,6 +324,7 @@ void SaveSound(AudioStream sound, char* name)
         printf("Simulate non real-time rendering : use buffer here %ld\n", res);
     } while (res == 512);
 }
+*/
 
 void ExecTest(AudioPlayerPtr player, AudioStream sound)
 {
@@ -367,6 +383,7 @@ int main(int argc, char* argv[])
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
 	
+	
     ExecTest(player, test0());
 	ExecTest(player, test1());
     ExecTest(player, test2());
@@ -376,8 +393,13 @@ int main(int argc, char* argv[])
     ExecTest(player, test6());
 	ExecTest(player, test7());
     ExecTest(player, test8());
+<<<<<<< main.cpp
+    ExecTest(player, test9());
+	
+=======
 	ExecTest(player, test9());
 	ExecTest(player, test9bis());
+>>>>>>> 1.33
 	ExecTest(player, test10());
 	ExecTest(player, test11());
 
@@ -390,4 +412,4 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-
+//int WinMain(int argc, char * argv[]) {}
