@@ -26,21 +26,17 @@ research@grame.fr
 #include <stdio.h>
 #include <errno.h>
 
-
 #ifdef WIN32
-
-#define FILENAME1 "D:\\acl62-trial\\Alla faglar.wav"
-#define FILENAME2 "D:\\acl62-trial\\BjornenSover.wav"
-#define FILENAME3 "D:\\acl62-trial\\BjornenSover.wav"
-#define EFFECT1 "D:\\acl62-trial\\freeverb.dll"
-
+	#define FILENAME1 "D:\\acl62-trial\\Alla faglar.wav"
+	#define FILENAME2 "D:\\acl62-trial\\BjornenSover.wav"
+	#define FILENAME3 "D:\\acl62-trial\\BjornenSover.wav"
+	#define EFFECT1 "D:\\acl62-trial\\freeverb.dll"
 #else
-
-#define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
-#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
-#define FILENAME3 "/Users/letz/son1.wav"
-#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
-#define EFFECT1 ""
+	#define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
+	#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
+	#define FILENAME3 "/Users/letz/son1.wav"
+	#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
+	#define EFFECT1 ""
 #endif
 
 
@@ -393,13 +389,8 @@ int main(int argc, char* argv[])
     ExecTest(player, test6());
 	ExecTest(player, test7());
     ExecTest(player, test8());
-<<<<<<< main.cpp
     ExecTest(player, test9());
-	
-=======
-	ExecTest(player, test9());
 	ExecTest(player, test9bis());
->>>>>>> 1.33
 	ExecTest(player, test10());
 	ExecTest(player, test11());
 
