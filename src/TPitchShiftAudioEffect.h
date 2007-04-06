@@ -313,26 +313,26 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
 
     private:
 
-        float fPichSift;
+        float fPitchSift;
 		FFTShift fLeft;
 		FFTShift fRight;
 
     public:
 
-        TPitchShiftAudioEffect(float pitch): TAudioEffectInterface(), fPichSift(pitch)
+        TPitchShiftAudioEffect(float pitch): TAudioEffectInterface(), fPitchSift(pitch)
         {}
         virtual ~TPitchShiftAudioEffect()
         {}
 
         void Process(float** input, float** output, long framesNum, long channels)
         {
-	        fLeft.smbPitchShift(fPichSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[0], output[0]);
-			fRight.smbPitchShift(fPichSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[1], output[1]);
+	        fLeft.smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[0], output[0]);
+			fRight.smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[1], output[1]);
         }
 
         TAudioEffectInterface* Copy()
         {
-            return new TPitchShiftAudioEffect(fPichSift);
+            return new TPitchShiftAudioEffect(fPitchSift);
         }
         void Reset()
         {}
@@ -357,11 +357,11 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
 		void SetControlValue(long param, float f)
 		{
 			if (param == 0)
-				fPichSift = f;
+				fPitchSift = f;
 		}
 		float GetControlValue(long param)
 		{
-			return (param == 0) ? fPichSift : 0.0f;
+			return (param == 0) ? fPitchSift : 0.0f;
 		}
 };
 
