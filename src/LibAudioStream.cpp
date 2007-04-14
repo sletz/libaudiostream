@@ -45,7 +45,7 @@ research@grame.fr
 	typedef TAudioStreamPtr AudioStream;			// smart pointer type
 	typedef AudioStream* AudioStreamPtr;
 
-	typedef TAudioRenderer* AudioManagerPtr;	
+	typedef TAudioRenderer* AudioRendererPtr;	
 	typedef TAudioClient* AudioClientPtr;
 
  	typedef TAudioEffectListPtr AudioEffectList;	// smart pointer type
@@ -102,10 +102,10 @@ extern "C"
 	long AUDIOAPI LibVersion();
 	
 	// Device scanning
-	long AUDIOAPI GetDeviceCount(AudioManagerPtr renderer);
-	void AUDIOAPI GetDeviceInfo(AudioManagerPtr renderer, long deviceNum, DeviceInfo* info);
-	long AUDIOAPI GetDefaultInputDevice(AudioManagerPtr renderer);
-	long AUDIOAPI GetDefaultOutputDevice(AudioManagerPtr renderer);
+	long AUDIOAPI GetDeviceCount(AudioRendererPtr renderer);
+	void AUDIOAPI GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
+	long AUDIOAPI GetDefaultInputDevice(AudioRendererPtr renderer);
+	long AUDIOAPI GetDefaultOutputDevice(AudioRendererPtr renderer);
 
     // Build sound (using smartptr)
     AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
@@ -202,7 +202,7 @@ extern "C"
                                             long rtstream_buffer_size, 
                                             long renderer,
                                             long thread_num);
-	AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr renderer);	
+	AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioRendererPtr renderer);	
 									
     void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player);
 	void AUDIOAPI CloseAudioClient(AudioPlayerPtr player);
@@ -233,16 +233,16 @@ extern "C"
 	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
 	// Renderer
-	AudioManagerPtr AUDIOAPI MakeAudioRenderer(long renderer);
-	void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr renderer);
+	AudioRendererPtr AUDIOAPI MakeAudioRenderer(long renderer);
+	void AUDIOAPI DeleteAudioRenderer(AudioRendererPtr renderer);
 	
-	int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
-	void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer); 
-	void AUDIOAPI StartAudioRenderer(AudioManagerPtr renderer); 
-	void AUDIOAPI StopAudioRenderer(AudioManagerPtr renderer); 
+	int AUDIOAPI OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+	void AUDIOAPI CloseAudioRenderer(AudioRendererPtr renderer); 
+	void AUDIOAPI StartAudioRenderer(AudioRendererPtr renderer); 
+	void AUDIOAPI StopAudioRenderer(AudioRendererPtr renderer); 
 	
-	void AUDIOAPI AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
-	void AUDIOAPI RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client); 
+	void AUDIOAPI AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
+	void AUDIOAPI RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
 	
 	// Globals
 	void AUDIOAPI AudioGlobalsInit(long inChan, 
@@ -691,7 +691,7 @@ error:
     return 0;
 }
 
-AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioManagerPtr renderer)
+AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioRendererPtr renderer)
 {
 	AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
     if (!player)
@@ -850,43 +850,43 @@ void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr
 }
 
 // Globals
-AudioManagerPtr AUDIOAPI MakeAudioRenderer(long renderer)
+AudioRendererPtr AUDIOAPI MakeAudioRenderer(long renderer)
 {
-	return static_cast<AudioManagerPtr>(TAudioRendererFactory::MakeAudioRenderer(renderer));
+	return static_cast<AudioRendererPtr>(TAudioRendererFactory::MakeAudioRenderer(renderer));
 }
 
-void AUDIOAPI DeleteAudioRenderer(AudioManagerPtr obj)
+void AUDIOAPI DeleteAudioRenderer(AudioRendererPtr obj)
 {
 	TAudioRendererPtr renderer = static_cast<TAudioRendererPtr>(obj);
 	delete renderer;
 }
 
-int AUDIOAPI OpenAudioRenderer(AudioManagerPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+int AUDIOAPI OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	return static_cast<TAudioRendererPtr>(renderer)->Open(inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
-void AUDIOAPI CloseAudioRenderer(AudioManagerPtr renderer)
+void AUDIOAPI CloseAudioRenderer(AudioRendererPtr renderer)
 {
 	static_cast<TAudioRendererPtr>(renderer)->Close();
 }
 
-void AUDIOAPI StartAudioRenderer(AudioManagerPtr renderer)
+void AUDIOAPI StartAudioRenderer(AudioRendererPtr renderer)
 {
 	static_cast<TAudioRendererPtr>(renderer)->Start();
 }
 
-void AUDIOAPI StopAudioRenderer(AudioManagerPtr renderer)
+void AUDIOAPI StopAudioRenderer(AudioRendererPtr renderer)
 {
 	static_cast<TAudioRendererPtr>(renderer)->Stop();
 }
 
-void AUDIOAPI AddAudioClient(AudioManagerPtr renderer, AudioClientPtr client)
+void AUDIOAPI AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client)
 {
 	static_cast<TAudioRendererPtr>(renderer)->AddClient(static_cast<TAudioClientPtr>(client));
 }
 
-void AUDIOAPI RemoveAudioClient(AudioManagerPtr renderer, AudioClientPtr client)
+void AUDIOAPI RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client)
 {
 	static_cast<TAudioRendererPtr>(renderer)->RemoveClient(static_cast<TAudioClientPtr>(client));
 }
@@ -908,22 +908,22 @@ void AUDIOAPI AudioGlobalsDestroy()
 	TAudioGlobals::Destroy();
 }
 
-long AUDIOAPI GetDeviceCount(AudioManagerPtr renderer)
+long AUDIOAPI GetDeviceCount(AudioRendererPtr renderer)
 {
 	return static_cast<TAudioRendererPtr>(renderer)->GetDeviceCount();
 }
 
-void AUDIOAPI GetDeviceInfo(AudioManagerPtr renderer, long deviceNum, DeviceInfo* info)
+void AUDIOAPI GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info)
 {
 	static_cast<TAudioRendererPtr>(renderer)->GetDeviceInfo(deviceNum, info);
 }
 
-long AUDIOAPI GetDefaultInputDevice(AudioManagerPtr renderer)
+long AUDIOAPI GetDefaultInputDevice(AudioRendererPtr renderer)
 {
 	return static_cast<TAudioRendererPtr>(renderer)->GetDefaultInputDevice();
 }
 
-long AUDIOAPI GetDefaultOutputDevice(AudioManagerPtr renderer)
+long AUDIOAPI GetDefaultOutputDevice(AudioRendererPtr renderer)
 {
 	return static_cast<TAudioRendererPtr>(renderer)->GetDefaultOutputDevice();
 }
