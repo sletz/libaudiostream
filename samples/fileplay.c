@@ -50,20 +50,25 @@ static void DisplayDevice(AudioRendererPtr manager)
 static void DisplayAllDevices()
 {
 	AudioRendererPtr manager1 = MakeAudioRenderer(kJackRenderer);
+	if (manager1) {
+		printf("--------------------\n");
+		printf("Jack Device\n");
+		printf("--------------------\n");
+		DisplayDevice(manager1);
+		DeleteAudioRenderer(manager1);
+	}
+	
 	AudioRendererPtr manager2 = MakeAudioRenderer(kPortAudioRenderer);
-	printf("--------------------\n");
-	printf("Jack Device\n");
-	printf("--------------------\n");
-	DisplayDevice(manager1);
-	printf("--------------------\n");
-	printf("PortAudio Device\n");
-	printf("--------------------\n");
-	DisplayDevice(manager2);
-	DeleteAudioRenderer(manager1);
-	DeleteAudioRenderer(manager2);
+	if (manager2) {
+		printf("--------------------\n");
+		printf("PortAudio Device\n");
+		printf("--------------------\n");
+		DisplayDevice(manager2);
+		DeleteAudioRenderer(manager2);
+	}
 }
 
-static int PlayFile(char * filename, long beginFrame, long endFrame)
+static int PlayFile(char * filename, long beginFrame, long endFrame, int renderer)
 {
     ChannelInfo info;
 	AudioStreamPtr sound;
@@ -71,16 +76,9 @@ static int PlayFile(char * filename, long beginFrame, long endFrame)
 	
 	player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 
                      		SAMPLE_RATE, AUDIO_BUFFER, FILE_BUFFER, STREAM_BUFFER, 
-                     		kJackRenderer, 1);
+                     		renderer, 1);
 	if (!player) {
-		fprintf(stdout, "cannot start player with Jack API, try PortAudio...\n");
-		player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 
-                            SAMPLE_RATE, AUDIO_BUFFER, FILE_BUFFER, STREAM_BUFFER, 
-                            kPortAudioRenderer, 1);					
-	}	
-							
-	if (!player) {
-		fprintf(stdout, "cannot start player with PortAudio API, now quit...\n");
+		fprintf(stdout, "cannot start player, now quit...\n");
 		return -1;
 	}
 							
@@ -96,7 +94,7 @@ static int PlayFile(char * filename, long beginFrame, long endFrame)
 	StartChannel(player, 1);
 	
 	do {
-		GetInfoChannel (player, 1, &info);
+		GetInfoChannel(player, 1, &info);
 		#ifdef WIN32
 			Sleep(1000);
 		#else
@@ -112,13 +110,16 @@ static int PlayFile(char * filename, long beginFrame, long endFrame)
 
 int main(int argc, char *argv[]) 
 {
-	if (argc != 4) {
-		fprintf (stderr, "usage: fileplay 'file' 'start' 'end'\n");
+	int renderer = kPortAudioRenderer;
+	
+	if (argc != 5) {
+		fprintf(stderr, "usage: fileplay -p (or -j) 'file' 'start' 'end'\n");
 		return 1;
 	} else {
-		int start = atoi(argv[2]);
-		int end = atoi(argv[3]);
-		fprintf(stdout, "playing file %s from %d to %d\n", argv[1], start, end);
+		renderer = strcmp(argv[2], "-j") ? kJackRenderer : kPortAudioRenderer;
+		int start = atoi(argv[3]);
+		int end = atoi(argv[4]);
+		fprintf(stdout, "playing file %s from %d to %d\n", argv[1], start, end, renderer);
 		DisplayAllDevices();
 		PlayFile(argv[1], start * SAMPLE_RATE, end * SAMPLE_RATE);
 	}
