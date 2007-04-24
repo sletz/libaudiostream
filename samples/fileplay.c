@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 		int end = atoi(argv[4]);
 		fprintf(stdout, "playing file %s from %d to %d\n", argv[1], start, end, renderer);
 		DisplayAllDevices();
-		PlayFile(argv[1], start * SAMPLE_RATE, end * SAMPLE_RATE);
+		PlayFile(argv[1], start * SAMPLE_RATE, end * SAMPLE_RATE, renderer);
 	}
 	return 0;
 }
