@@ -10,9 +10,9 @@ OBJ = $(patsubst %.cpp, %.o, $(CPPSRC)) $(patsubst %.c, %.o, $(CSRC))
 OBJ_PORTAUDIO_V18 = $(patsubst %.cpp, %.o, $(CPPSRC_PORTAUDIO_V18)) $(patsubst %.c, %.o, $(CSRC))
 OBJ_PORTAUDIO_V19 = $(patsubst %.cpp, %.o, $(CPPSRC_PORTAUDIO_V19)) $(patsubst %.c, %.o, $(CSRC))
 
-#CXXFLAG = -Wall -I../src/atomic -D__JACK__ -D__PORTAUDIO__
-#CXXFLAGS = -Wall -I../src/atomic -D__PORTAUDIO__ -D__PORTAUDIOV19__
-CXXFLAGS = -Wall -I../src/atomic -D__PORTAUDIO__
+#CXXFLAG = -Wall -I../src/atomic -I../src/renderer -I../src -D__JACK__ -D__PORTAUDIO__
+#CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__ -D__PORTAUDIOV19__
+CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__
 
 TARGET = libaudiostream.a
 

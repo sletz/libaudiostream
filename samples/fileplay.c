@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "usage: fileplay -p (or -j) 'file' 'start' 'end'\n");
 		return 1;
 	} else {
-		renderer = strcmp(argv[2], "-j") ? kJackRenderer : kPortAudioRenderer;
+		renderer = (strcmp(argv[2], "-j") == 0) ? kJackRenderer : kPortAudioRenderer;
 		int start = atoi(argv[3]);
 		int end = atoi(argv[4]);
 		fprintf(stdout, "playing file %s from %d to %d\n", argv[1], start, end, renderer);

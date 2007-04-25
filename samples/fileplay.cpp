@@ -40,7 +40,7 @@ class FilePlayer {
 		{
 			AudioStream stream = MakeStereoSound(MakeRegionSound(file, beginFrame, endFrame));
 			if (!stream) {
-				printf("cannot ooen filename = %s, now quit...\n", file);
+				printf("cannot open filename = %s, now quit...\n", file);
 				return;
 			}
 			LoadChannel(fPlayer, stream, 1, 1.0f, 1.0f, 0.0f);
