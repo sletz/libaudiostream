@@ -1,7 +1,8 @@
 
 CPPSRC = $(wildcard ../src/[^m]*.cpp)
-CPPSRC_PORTAUDIO_V18 = $(wildcard ../src/[^m,^TPortAudioV19Renderer.cpp]*.cpp)
-CPPSRC_PORTAUDIO_V19 = $(wildcard ../src/[^m,^TPortAudioRenderer.cpp]*.cpp)
+
+CPPSRC_PORTAUDIO_V18 = $(CPPSRC) ../src/renderer/TPortAudioRenderer.cpp
+CPPSRC_PORTAUDIO_V19 = $(CPPSRC) ../src/renderer/TPortAudioV19Renderer.cpp
 
 CSRC = $(wildcard ../src/atomic/*ifo.c)
 
@@ -20,10 +21,10 @@ $(TARGET) : $(OBJ)
 	ar -ru $(TARGET) $(OBJ) 
 	ranlib  $(TARGET)
 
-dynamic_v18 : $(OBJ_PORTAUDIO_V18)
+dynamic_portaudio_v18 : $(OBJ_PORTAUDIO_V18)
 	g++ $(OBJ_PORTAUDIO_V18) -lportaudio -ljack -lsndfile -lstdc++ -shared -fPIC -o libaudiostream.so
 
-dynamic_v19 : $(OBJ_PORTAUDIO_V19)
+dynamic_portaudio_v19 : $(OBJ_PORTAUDIO_V19)
 	g++ $(OBJ_PORTAUDIO_V19) -lportaudio -ljack -lsndfile -lstdc++ -shared -fPIC -o libaudiostream.so
 
 test :
