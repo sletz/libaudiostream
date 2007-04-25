@@ -104,7 +104,7 @@ static int PlayFile(char * filename, long beginFrame, long endFrame, int rendere
 				
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
-    DeleteSoundPtr (sound);
+    DeleteSoundPtr(sound);
 	return 0;
 }
 
