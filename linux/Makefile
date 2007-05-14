@@ -16,9 +16,9 @@ CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__
 
 TARGET = libaudiostream.a
 
-$(TARGET) : $(OBJ)
+$(TARGET) : $(OBJ_PORTAUDIO_V18)
 	
-	ar -ru $(TARGET) $(OBJ) 
+	ar -ru $(TARGET) $(OBJ_PORTAUDIO_V18) 
 	ranlib  $(TARGET)
 
 dynamic_portaudio_v18 : $(OBJ_PORTAUDIO_V18)
