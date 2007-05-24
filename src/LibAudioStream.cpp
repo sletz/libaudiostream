@@ -261,7 +261,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 112;
+	return 113;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)

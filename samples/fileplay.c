@@ -116,10 +116,10 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "usage: fileplay -p (or -j) 'file' 'start' 'end'\n");
 		return 1;
 	} else {
-		renderer = (strcmp(argv[2], "-j") == 0) ? kJackRenderer : kPortAudioRenderer;
+		renderer = (strcmp(argv[1], "-j") == 0) ? kJackRenderer : kPortAudioRenderer;
 		int start = atoi(argv[3]);
 		int end = atoi(argv[4]);
-		fprintf(stdout, "playing file %s from %d to %d\n", argv[1], start, end, renderer);
+		fprintf(stdout, "playing file %s from %d to %d\n", argv[2], start, end, renderer);
 		DisplayAllDevices();
 		PlayFile(argv[2], start * SAMPLE_RATE, end * SAMPLE_RATE, renderer);
 	}

@@ -37,7 +37,7 @@ research@grame.fr
 
 #include <dlfcn.h>
 #define HANDLE void* 
-#define LoadFaustModule(name) dlopen((name), RTLD_LAZY);
+#define LoadFaustModule(name) dlopen((name), RTLD_NOW | RTLD_LOCAL);
 #define UnloadFaustModule(handle) dlclose((handle));
 #define GetFaustProc(handle, name) dlsym((handle), (name));
 
