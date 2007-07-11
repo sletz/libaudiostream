@@ -22,6 +22,7 @@ research@grame.fr
 
 #include "TSeqAudioStream.h"
 #include "TFadeAudioStream.h"
+#include "TNullAudioStream.h"
 #include "TAudioGlobals.h"
 
 TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade): TBinaryAudioStream(s1, s2, s1)
@@ -66,18 +67,22 @@ long TSeqAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long fra
 }
 
 /*
- CutBegin (Seq (s1, s2), n) ==> Seq (CutBegin (s1, n) s2) if n < Length(s1)
- CutBegin (Seq (s1, s2), n) ==> CutBegin(s2, n - Length(s1)) if n >= Length(s1)
+ CutBegin(Seq(s1, s2), n) ==> NullStream if n >= Length(Seq(s1, s2))
+ CutBegin(Seq(s1, s2), n) ==> Seq(CutBegin (s1, n) s2) if n < Length(s1)
+ CutBegin(Seq(s1, s2), n) ==> CutBegin(s2, n - Length(s1)) if n >= Length(s1)
 */
 
 TAudioStreamPtr TSeqAudioStream::CutBegin(long frames)
 {
-    long length = fStream1->Length();
+    long length1 = fStream1->Length();
+	long length2 = fStream2->Length();
 
-    if (frames < length) {
+	if (frames < length1) {						// in first stream
         return new TSeqAudioStream(fStream1->CutBegin(frames), fStream2->Copy(), fCrossFade);
+    } else if (frames < length1 + length2) {	// in second stream
+        return fStream2->CutBegin(frames - length1);
     } else {
-        return fStream2->CutBegin(frames - length);
+		return new TNullAudioStream(0);
     }
 }
 

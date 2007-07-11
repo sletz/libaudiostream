@@ -57,7 +57,7 @@ class TNullAudioStream : public TAudioStream
 
         TAudioStreamPtr CutBegin(long frames)
         {
-            return new TNullAudioStream (fFramesNum - frames);
+            return new TNullAudioStream(UTools::Max(0,fFramesNum - frames));
         }
         long Length()
         {
