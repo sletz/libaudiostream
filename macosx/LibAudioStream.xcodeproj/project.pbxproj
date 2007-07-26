@@ -174,11 +174,12 @@
 /* Begin PBXBuildRule section */
 		4BEA61E5095806CD001F733A /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.gcc;
+			compilerSpec = com.apple.compilers.gcc.4_0;
 			fileType = sourcecode.c;
 			isEditable = 1;
 			outputFiles = (
 			);
+			script = "llvm-gcc";
 		};
 /* End PBXBuildRule section */
 
@@ -220,7 +221,7 @@
 		4BCC1A8007F1AA7E003E6784 /* lflifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lflifo.h; path = ../src/atomic/lflifo.h; sourceTree = SOURCE_ROOT; };
 		4BEA61E6095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEA623C095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BF92831088E3B16006A013D /* TPanAudioEffect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TPanAudioEffect.h; path = ../src/TPanAudioEffect.h; sourceTree = SOURCE_ROOT; };
 		4BFC6E7E08729C6F0012D079 /* TThreadUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TThreadUtils.h; path = ../src/TThreadUtils.h; sourceTree = SOURCE_ROOT; };
 		4BFC6E8108729C830012D079 /* TBinaryAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TBinaryAudioStream.h; path = ../src/TBinaryAudioStream.h; sourceTree = SOURCE_ROOT; };

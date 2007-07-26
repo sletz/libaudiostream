@@ -1,5 +1,5 @@
 /*
-Copyright © Grame 2002
+Copyright © Grame 2002-2007
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -27,10 +27,8 @@ research@grame.fr
 //	Utilities functions
 //
 
-
 #ifndef __UTools__
 #define __UTools__
-
 
 //--------------
 // Class UTools
@@ -42,15 +40,15 @@ research@grame.fr
 class UTools
 {
 
-    public :
+    public:
 
         static void SendVal(long val);
-        static void MidiPrintText ( char * s);
-        inline static long Min (long a, long b)
+        static void MidiPrintText(char * s);
+        inline static long Min(long a, long b)
         {
             return (a < b) ? a : b;
         }
-        inline static long Max (long a, long b)
+        inline static long Max(long a, long b)
         {
             return (a >= b) ? a : b;
         }
