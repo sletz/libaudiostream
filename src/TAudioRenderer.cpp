@@ -49,8 +49,14 @@ void TAudioRenderer::Run(float* inputBuffer, float* outputBuffer, long frames)
     TSharedBuffers::SetOutBuffer(outputBuffer);
 
 	// Client callback are supposed to *mix* their result in outputBuffer 
-    for (list<TAudioClientPtr>::iterator iter = fClientList.begin(); iter != fClientList.end(); iter++) {
-        TAudioClientPtr client = *iter;
-        client->AudioCallback(inputBuffer, outputBuffer, frames);
-    }
+	list<TRTAudioClient>::iterator iter = fClientList.begin();
+	while (iter != fClientList.end()) {
+		TAudioClientPtr client = (*iter).fRTClient;
+		if (client) {
+            client->AudioCallback(inputBuffer, outputBuffer, frames);
+			iter++;
+		} else {  // Client was removed
+			iter = fClientList.erase(iter);
+		}
+	}
 }

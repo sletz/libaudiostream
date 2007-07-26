@@ -65,6 +65,30 @@ typedef struct DeviceInfo {
 } DeviceInfo;
 
 //----------------------
+// Class TRTAudioClient
+//----------------------
+/*!
+\brief For RT safe add/remove of clients.
+*/
+
+struct TRTAudioClient : public TAudioClient
+{
+
+	TAudioClient* fRTClient;
+
+	TRTAudioClient(TAudioClient* client):fRTClient(client)
+	{}
+	virtual ~TRTAudioClient()
+	{}
+
+	virtual bool AudioCallback(float* inputBuffer, float* outputBuffer, long frames)
+	{
+		return true;
+	}
+
+};
+
+//----------------------
 // Class TAudioRenderer
 //----------------------
 /*!
@@ -76,7 +100,7 @@ class AUDIO_EXPORTS TAudioRenderer
 
     protected:
 
-        list<TAudioClientPtr> fClientList;
+        list<TRTAudioClient> fClientList;
         long fSampleRate;
         long fInput;
         long fOutput;
@@ -93,12 +117,16 @@ class AUDIO_EXPORTS TAudioRenderer
 
         void AddClient(TAudioClientPtr client)
         {
-            fClientList.push_back(client);
+            fClientList.push_back(TRTAudioClient(client));
         }
+
         void RemoveClient(TAudioClientPtr client)
         {
-            fClientList.remove(client);
-        }
+			for (list<TRTAudioClient>::iterator iter = fClientList.begin(); iter != fClientList.end(); iter++) {
+				if ((*iter).fRTClient == client) 
+					(*iter).fRTClient = 0; // Mark client to be removed
+			}
+	   }
 
         virtual long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate) = 0;
 		virtual long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate) = 0;
