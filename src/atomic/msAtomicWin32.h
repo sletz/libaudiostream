@@ -1,6 +1,6 @@
 /*
 
-  Copyright © Grame 1999-2005
+  Copyright © Grame 1999-2007
 
   This library is free software; you can redistribute it and modify it under 
   the terms of the GNU Library General Public License as published by the 
