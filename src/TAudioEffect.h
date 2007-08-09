@@ -38,7 +38,7 @@ class TAudioEffectList;
 
 typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
-// Using smartable1 cause crah when desallocating the object: desactivated for now
+// Using smartable1 cause crash when desallocating the object: desactivated for now
 // class TAudioEffectList : public list<TAudioEffectInterfacePtr>,  public la_smartable1
 
 /*!
@@ -125,7 +125,7 @@ class TAudioEffectListManager {
 				fCurEffectList->FadeOut();
 				fNextEffectList->FadeIn(fadeIn, fadeOut);
 	 			fSwitchEffect = true;
-			} else if (fadeIn == -1 && fadeOut == -1) {  // Used tyo indicate immediate switch
+			} else if (fadeIn == -1 && fadeOut == -1) {  // Used to indicate immediate switch
 				effect_list->FadeIn(100, 100);
 				fCurEffectList = effect_list;
 			}
