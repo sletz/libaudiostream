@@ -63,7 +63,7 @@ class TAudioEffectList : public list<TAudioEffectInterfacePtr>,  public la_smart
     public:
 		enum {kIdle = 0, kFadeIn, kPlaying, kFadeOut};
 
-        TAudioEffectList()
+        TAudioEffectList():fFadeInFrames(0),fFadeOutFrames(0)
         {
 			int i;
 			for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
@@ -88,8 +88,6 @@ class TAudioEffectList : public list<TAudioEffectInterfacePtr>,  public la_smart
 		}
 };
 
-//typedef TAudioEffect * TAudioEffectPtr;
-
 //-------------------------------
 // Class TAudioEffectListManager
 //-------------------------------
@@ -102,14 +100,14 @@ class TAudioEffectListManager {
 
 	  private: 
 	  
-		float*	fTempBuffer; 	// Used for crossfade
+		float*	fTempBuffer; 					// Used for crossfade
 		TAudioEffectListPtr	fCurEffectList;		// Current Effect list
 		TAudioEffectListPtr	fNextEffectList;	// Next Effect list
 		bool fSwitchEffect;
-		
+	
 	public:
 	
-		TAudioEffectListManager():fCurEffectList(new TAudioEffectList()), fNextEffectList(0),fSwitchEffect(false)
+		TAudioEffectListManager():fCurEffectList(new TAudioEffectList()),fNextEffectList(0),fSwitchEffect(false)
 		{
 			fTempBuffer = new float[TAudioGlobals::fBuffer_Size * TAudioGlobals::fOutput]; // A revoir
 		}
@@ -118,7 +116,7 @@ class TAudioEffectListManager {
 		{
 			delete[] fTempBuffer;
 		}
-	
+
 		// TO IMPROVE : this will fail if an effect is still in switch mode...
 		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 		{
@@ -127,9 +125,12 @@ class TAudioEffectListManager {
 				fCurEffectList->FadeOut();
 				fNextEffectList->FadeIn(fadeIn, fadeOut);
 	 			fSwitchEffect = true;
+			} else if (fadeIn == -1 && fadeOut == -1) {  // Used tyo indicate immediate switch
+				effect_list->FadeIn(100, 100);
+				fCurEffectList = effect_list;
 			}
 		}
-		
+	
 		TAudioEffectListPtr GetEffectList() // Called in RT
 		{
 			return fCurEffectList;
