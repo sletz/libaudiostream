@@ -42,13 +42,6 @@ research@grame.fr
 // External API
 /*--------------------------------------------------------------------------*/
 
-/*
-TAudioStreamPtr TAudioStreamFactory::MakeGCSound(TAudioStreamPtr sound)
-{
-	return new TGCAudioStream(sound);
-}
-*/
-
 TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
 {
     return new TNullAudioStream(length);
@@ -144,11 +137,4 @@ TAudioStreamPtr TAudioStreamFactory::MakeDTRenderer(TAudioStreamPtr s)
 {
     return (s) ? new TDTRendererAudioStream(s) : 0;
 }
-
-/*
-TAudioStreamPtr TAudioStreamFactory::MakeConvertSound(TAudioStreamPtr s, long converter, double ratio)
-{
-    return new TConvertAudioStream(s, converter, ratio);
-}
-*/
 
