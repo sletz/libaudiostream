@@ -261,7 +261,7 @@ extern "C"
 
 long LibVersion()
 {
-	return 115;
+	return 116;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -400,7 +400,12 @@ AudioStreamPtr AUDIOAPI MakeLoopSoundPtr(AudioStreamPtr sound, long n)
 
 AudioStreamPtr AUDIOAPI MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, long endFrame)
 {
-    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeCutSound(static_cast<TAudioStreamPtr>(*sound), beginFrame, endFrame)) : 0;
+	if (sound) {
+		TAudioStreamPtr cut = TAudioStreamFactory::MakeCutSound(static_cast<TAudioStreamPtr>(*sound), beginFrame, endFrame);
+		return (cut) ?  MakeSoundPtr(cut) : 0;
+	} else {
+		 return 0;
+	}  
 }
 
 AudioStreamPtr AUDIOAPI MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade)

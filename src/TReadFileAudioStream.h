@@ -55,7 +55,7 @@ class TReadFileAudioStream : public TFileAudioStream
 		virtual TAudioStreamPtr CutBegin(long frames);
         virtual long Length()
         {
-            return fFramesNum;
+   			return fFramesNum - fBeginFrame;
         }
         virtual TAudioStreamPtr Copy()
         {

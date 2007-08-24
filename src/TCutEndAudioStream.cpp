@@ -26,6 +26,7 @@ research@grame.fr
 
 TCutEndAudioStream::TCutEndAudioStream(TAudioStreamPtr stream, long end) : TDecoratedAudioStream(stream)
 {
+	assert(end >= 0);
     fFramesNum = end;
     fCurFrame = 0;
 }

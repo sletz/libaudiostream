@@ -62,8 +62,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
 	if (beginFrame >= 0 && beginFrame <= endFrame) {
         try {
             TAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
-            endFrame = UTools::Min(sound->Length(), endFrame);
-            return new TCutEndAudioStream(sound, endFrame - beginFrame);
+           return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         } catch (int n) {
             printf("MakeRegionSound exception %d \n", n);
             return 0;
@@ -91,16 +90,16 @@ TAudioStreamPtr TAudioStreamFactory::MakeFadeSound(TAudioStreamPtr sound, long f
 TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long beginFrame, long endFrame)
 {
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
-        TAudioStreamPtr begin = sound->CutBegin(beginFrame);
-        if (begin) {
-            return new TCutEndAudioStream(begin, UTools::Min(sound->Length(), endFrame) - beginFrame);
-        } else {
-            return 0;
+		if (beginFrame > sound->Length()) {
+			return 0;
+		} else {
+			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
+			assert(begin);
+            return new TCutEndAudioStream(begin, UTools::Min(endFrame - beginFrame, begin->Length()));
         }
     } else {
         return 0;
     }
-	return 0;
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeSeqSound(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade)
