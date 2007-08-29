@@ -26,6 +26,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "TAudioConstants.h"
 #include "Envelope.h"
+#include "TMutex.h"
 #include <list>
 
 using namespace std;
@@ -104,6 +105,7 @@ class TAudioEffectListManager {
 		TAudioEffectListPtr	fCurEffectList;		// Current Effect list
 		TAudioEffectListPtr	fNextEffectList;	// Next Effect list
 		bool fSwitchEffect;
+		TMutex fMutex;
 	
 	public:
 	
@@ -120,6 +122,8 @@ class TAudioEffectListManager {
 		// TO IMPROVE : this will fail if an effect is still in switch mode...
 		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 		{
+			fMutex.Lock();
+			
 			if (!fSwitchEffect) { 
 				fNextEffectList = effect_list;
 				fCurEffectList->FadeOut();
@@ -129,6 +133,8 @@ class TAudioEffectListManager {
 				effect_list->FadeIn(100, 100);
 				fCurEffectList = effect_list;
 			}
+			
+			fMutex.Unlock();
 		}
 	
 		TAudioEffectListPtr GetEffectList() // Called in RT

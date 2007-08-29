@@ -140,18 +140,23 @@ TAudioEffectListPtr TAudioEffectList::Copy()
 
 void TAudioEffectListManager::Process(float* buffer, long framesNum, long channels)
 {
-	if (fSwitchEffect) {
-		if (fCurEffectList->GetStatus() == TAudioEffectList::kIdle) { // End of fCurEffectList FadeOut
-			fCurEffectList = fNextEffectList;
-			fSwitchEffect = false;
-		} else { // CrossFade both effects
-			memcpy(fTempBuffer, buffer, sizeof(float) * framesNum * channels);
+	if (fMutex.TryLock() == 0) {
+	
+		if (fSwitchEffect) {
+			if (fCurEffectList->GetStatus() == TAudioEffectList::kIdle) { // End of fCurEffectList FadeOut
+				fCurEffectList = fNextEffectList;
+				fSwitchEffect = false;
+			} else { // CrossFade both effects
+				memcpy(fTempBuffer, buffer, sizeof(float) * framesNum * channels);
+				fCurEffectList->Process(buffer, framesNum, channels);
+				fNextEffectList->Process(fTempBuffer, framesNum, channels);
+				UAudioTools::MixFrameToFrameBlk1(buffer, fTempBuffer, framesNum, channels);
+			}
+		} else {
 			fCurEffectList->Process(buffer, framesNum, channels);
-			fNextEffectList->Process(fTempBuffer, framesNum, channels);
-			UAudioTools::MixFrameToFrameBlk1(buffer, fTempBuffer, framesNum, channels);
 		}
-	} else {
-		fCurEffectList->Process(buffer, framesNum, channels);
+		
+		fMutex.Unlock();
 	}
 }
 
