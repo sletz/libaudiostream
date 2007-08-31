@@ -80,7 +80,10 @@ extern "C"
 {
 #endif
 
-
+/*!
+\brief Gives the library version number.
+\return the library version number as a 3 digits long value.
+*/
 long LibVersion();
 
 /*!
@@ -173,7 +176,7 @@ AudioStream MakeInputSound();
 \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
 \return A pointer to new stream object.
 */
-AudioStream MakeRendererSound(AudioStream s);
+AudioStream MakeRendererSound(AudioStream sound);
 /*!
 \brief Get the stream length in frames.
 \param sound The stream.
@@ -260,6 +263,13 @@ AudioEffect MakePitchShiftAudioEffect(float pitch);
 */
 AudioEffect MakeFaustAudioEffect(const char* name);
 /*!
+\brief Create an effect by "wrapping" an externally built effect.
+\param effect The effect to be wrapped.
+\return A pointer to new effect object or NULL if the effect cannot be located or created.
+*/
+AudioEffect MakeWrapperAudioEffectPAudioEffectInterface effect);
+
+/*!
 \brief Return the number of effect controls.
 \param effect The effect pointer.
 \return The number of effect controls.
@@ -284,7 +294,43 @@ void SetControlValue(AudioEffect effect, long control, float value);
 \return The effect control current value.
 */
 float GetControlValue(AudioEffect effect, long control);
-
+/*!
+\brief Set the effect running state.
+\param effect The effect to be used.
+\param state The running state.
+*/
+void SetStateEffectP(AudioEffect effect, long state);	
+/*!
+\brief Get the effect running state.
+\param effect The effect to be used.
+\return state The running state.
+*/
+long GetStateEffect(AudioEffect effect);
+/*!
+\brief Reset the effect to intial state.
+\param effect The effect to be resetted.
+*/
+void ResetEffect(AudioEffect effect);
+/*!
+\brief Process an audio buffer with the effect.
+\param effect The effect to be used.
+\param input The input audio buffer.
+\param output The output audio buffer.
+\param framesNum The number of frame of input/output buffers.
+\param channels The number of channels of input/output buffers.
+*/
+void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels);
+/*!
+\brief Delete the effect list.
+\param list_effect The effect list pointer.
+*/
+void DeleteEffectList(AudioEffectList list_effect);	
+/*!
+\brief Delete the effect.
+\param effect The effect pointer.
+*/
+void DeleteEffect(AudioEffect effect);
+	
 // Open/Close
 /*!
 \brief Open the audio player.
@@ -433,6 +479,110 @@ void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
 \param fadeOut The fadeout length in frames to be used when stopping the effect chain.
 */
 void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
+
+// Devices scanning
+/*!
+\brief Scan and return the number of available devices on the machine.
+\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+\return The number of available devices.
+*/
+long GetDeviceCount(AudioRendererPtr renderer);
+/*!
+\brief Fill DeviceInfo structure for a given device.
+\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+\param deviceNum The device index between 0 and GetDeviceCount.	
+\param info The device info structure to be filled.
+*/
+void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
+/*!
+\brief Get the default input device index.
+\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+\return The default input device index.
+*/
+long GetDefaultInputDevice(AudioRendererPtr renderer);
+/*!
+\brief Get the default output device index.
+\param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
+\return The default output device index.
+*/
+long GetDefaultOutputDevice(AudioRendererPtr renderer);
+
+// Renderer
+/*!
+\brief Create a new audio renderer.
+\param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+\return A pointer to new audio renderer object.
+*/
+AudioRendererPtr MakeAudioRenderer(long renderer);
+/*!
+\brief Delete an audio renderer.
+\param renderer The renderer to be deleted.
+*/
+void DeleteAudioRenderer(AudioRendererPtr renderer);
+/*!
+\brief Open the audio renderer.
+\param renderer The audio used.
+\param inChan The number of input channels. <B>Only stereo players are currently supported </b>. On input, contains the wanted value, on return the really used one.
+\param outChan The number of output channels.  On input, contains the wanted value, on return the really used one.
+\param buffer_size The audio player internal buffer size.  On input, contains the wanted value, on return the really used one.
+\param sample_rate The sampling rate.  On input, contains the wanted value, on return the really used one.
+\return An error code.
+*/
+int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  // AJOUTER in/out device
+/*!
+\brief Close an audio renderer.
+\param renderer The audio renderer to be closed.
+*/
+void CloseAudioRenderer(AudioRendererPtr renderer); 
+
+/*!
+\brief Start an audio renderer.
+\param renderer The audio renderer to be started.
+*/	
+void StartAudioRenderer(AudioRendererPtr renderer); 
+/*!
+\brief Stop an audio renderer.
+\param renderer The audio renderer to be stoped.
+*/
+void StopAudioRenderer(AudioRendererPtr renderer); 
+
+/*!
+\brief Add an audio client to the renderer internal client list.
+\param renderer The audio renderer to be used.
+\param client The audio client to be added.
+*/
+void AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
+/*!
+\brief Remove an audio client from the renderer internal client list.
+\param renderer The audio renderer to be used.
+\param client The audio client to be removed.
+*/
+void RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
+
+/*!
+\brief Init the global audio context. There is <B> unique </B> to be accesed by all components that need it.
+\param inChan The number of input channels. <B>Only stereo players are currently supported </b>
+\param outChan The number of output channels.
+\param channels The number of stream channels.
+\param sample_rate The sampling rate.
+\param buffer_size The audio player internal buffer size.
+\param stream_buffer_size The file reader/writer buffer size (used for double buffering).
+\param rtstream_buffer_size The input stream buffer size.
+\param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
+*/
+void AudioGlobalsInit(long inChan, 
+					long outChan, 
+					long channels, 
+					long sample_rate,
+					long buffer_size, 
+					long stream_buffer_size, 
+					long rtstream_buffer_size,
+					long thread_num);
+/*!
+\brief Destroy the global audio context.
+*/
+void AudioGlobalsDestroy();
+
 
 #ifdef __cplusplus
 }
