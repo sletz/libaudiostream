@@ -50,6 +50,18 @@ typedef struct ChannelInfo {
 }
 ChannelInfo;
 
+/*!
+\brief Audio device info.
+*/
+typedef struct DeviceInfo* DeviceInfoPtr;
+typedef struct DeviceInfo {
+	char fName[64];      
+	long fMaxInputChannels;
+	long fMaxOutputChannels; 
+	long fDefaultBufferSize; 
+	double fDefaultSampleRate;
+} DeviceInfo;
+
 class TAudioStream : public la_smartable {
 	virtual ~TAudioStream() {}
 };
@@ -67,11 +79,13 @@ typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Opaque pointers
 typedef void* AudioPlayerPtr;
-typedef void* AudioManagerPtr;
+typedef void* AudioRendererPtr;
+typedef void* AudioClientPtr;
 
 typedef TAudioStreamPtr AudioStream;
 typedef TAudioEffectListPtr AudioEffectList;
-typedef TAudioEffectInterfacePtr AudioEffect;	
+typedef TAudioEffectInterfacePtr AudioEffect;
+typedef TAudioEffectInterfacePtr AudioEffectInterface;		
 
 typedef void (*StopCallback)(void* context);
 
@@ -267,7 +281,7 @@ AudioEffect MakeFaustAudioEffect(const char* name);
 \param effect The effect to be wrapped.
 \return A pointer to new effect object or NULL if the effect cannot be located or created.
 */
-AudioEffect MakeWrapperAudioEffectPAudioEffectInterface effect);
+AudioEffect MakeWrapperAudioEffec(AudioEffectInterface effect);
 
 /*!
 \brief Return the number of effect controls.
@@ -357,7 +371,7 @@ AudioPlayerPtr OpenAudioPlayer(long inChan,
 /*!
 \brief Open the audio client, to be added to an externally allocated audio manager.
 */					
-AudioPlayerPtr OpenAudioClient(AudioManagerPtr manager);	
+AudioPlayerPtr OpenAudioClient(AudioRendererPtr manager);	
 
 /*!
 \brief Close the audio player.

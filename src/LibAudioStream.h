@@ -177,7 +177,7 @@ extern "C"
     \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeRendererSoundPtr(AudioStreamPtr s);
+    AudioStreamPtr MakeRendererSoundPtr(AudioStreamPtr sound);
     /*!
     \brief Get the stream length in frames.
     \param sound The stream.
