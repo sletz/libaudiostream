@@ -57,43 +57,6 @@ research@grame.fr
 	
 	typedef void (*StopCallback)(void* context);
 	
-	/*
-	// Build sound (using smartptr)
-    AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
-    AudioStream AUDIOAPI MakeReadSound(char* name);
-    AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
-	AudioStream AUDIOAPI MakeStereoSound(AudioStream sound);
-    AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
-    AudioStream AUDIOAPI MakeLoopSound(AudioStream sound, long n);
-    AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
-    AudioStream AUDIOAPI MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
-    AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2);
-    AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
-    AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format);
-    AudioStream AUDIOAPI MakeInputSound();
-    AudioStream AUDIOAPI MakeRendererSound(AudioStream s);
-
-    long AUDIOAPI GetLengthSound(AudioStream s);
-    long AUDIOAPI GetChannelsSound(AudioStream s);
-    long AUDIOAPI ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
-	void AUDIOAPI ResetSound(AudioStream sound);
-	
-		
-    // Effect management (using smartptr)
-    AudioEffectList AUDIOAPI MakeAudioEffectList();
-    AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-    AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-
-    AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
-	AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
-	AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
-	AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
-	long AUDIOAPI GetControlCount(AudioEffect effect);
-	void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
-	void AUDIOAPI SetControlValue(AudioEffect effect, long param, float f);
-	float AUDIOAPI GetControlValue(AudioEffect effect, long param);
-	*/
-
 #ifdef __cplusplus
 extern "C"
 {
