@@ -334,16 +334,6 @@ void ResetEffect(AudioEffect effect);
 \param channels The number of channels of input/output buffers.
 */
 void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels);
-/*!
-\brief Delete the effect list.
-\param list_effect The effect list pointer.
-*/
-void DeleteEffectList(AudioEffectList list_effect);	
-/*!
-\brief Delete the effect.
-\param effect The effect pointer.
-*/
-void DeleteEffect(AudioEffect effect);
 	
 // Open/Close
 /*!
