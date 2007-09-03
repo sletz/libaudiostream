@@ -271,7 +271,7 @@ AudioEffect MakeFaustAudioEffect(const char* name);
 \param effect The effect to be wrapped.
 \return A pointer to new effect object or NULL if the effect cannot be located or created.
 */
-AudioEffect MakeWrapperAudioEffec(AudioEffectInterface effect);
+AudioEffect MakeWrapperAudioEffect(AudioEffectInterface effect);
 
 /*!
 \brief Return the number of effect controls.
