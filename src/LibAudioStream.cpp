@@ -218,11 +218,17 @@ AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
 AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
 AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch);
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
+
 long AUDIOAPI GetControlCount(AudioEffect effect);
 void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
 void AUDIOAPI SetControlValue(AudioEffect effect, long param, float f);
 float AUDIOAPI GetControlValue(AudioEffect effect, long param);
-	
+
+void AUDIOAPI SetStateEffect(AudioEffect effect, long state);
+long AUDIOAPI GetStateEffect(AudioEffect effect);
+void AUDIOAPI ResetEffect(AudioEffect effect);
+
+void AUDIOAPI ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 
 long LibVersion()
 {
@@ -506,6 +512,26 @@ void AUDIOAPI SetControlValue(AudioEffect effect, long control, float f)
 float AUDIOAPI GetControlValue(AudioEffect effect, long control)
 {
 	return static_cast<TAudioEffectInterfacePtr>(effect)->GetControlValue(control);
+}
+
+void AUDIOAPI SetStateEffect(AudioEffect effect, long state)
+{
+	static_cast<TAudioEffectInterfacePtr>(effect)->SetState(bool(state));
+}
+
+long AUDIOAPI GetStateEffect(AudioEffect effect)
+{
+	return static_cast<TAudioEffectInterfacePtr>(effect)->GetState();
+}
+
+void AUDIOAPI ResetEffect(AudioEffect effect)
+{
+	static_cast<TAudioEffectInterfacePtr>(effect)->Reset();
+}
+
+void AUDIOAPI ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels)
+{
+	static_cast<TAudioEffectInterfacePtr>(effect)->Process(input, output, framesNum, channels);
 }
 
 // Effect management with pointer

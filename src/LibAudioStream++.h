@@ -303,7 +303,7 @@ float GetControlValue(AudioEffect effect, long control);
 \param effect The effect to be used.
 \param state The running state.
 */
-void SetStateEffectP(AudioEffect effect, long state);	
+void SetStateEffect(AudioEffect effect, long state);	
 /*!
 \brief Get the effect running state.
 \param effect The effect to be used.
