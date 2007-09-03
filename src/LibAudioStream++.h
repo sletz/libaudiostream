@@ -68,12 +68,14 @@ class TAudioStream : public la_smartable {
 typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 
 class TAudioEffectInterface : public la_smartable {
-	virtual ~TAudioEffectInterface() {}
+	public:
+		virtual ~TAudioEffectInterface() {}
 };
 typedef LA_SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
 
 class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_smartable {
-	virtual ~TAudioEffectList() {}
+	public:
+		virtual ~TAudioEffectList() {}
 };
 typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
