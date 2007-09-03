@@ -89,16 +89,6 @@ typedef TAudioEffectInterfacePtr AudioEffectInterface;
 
 typedef void (*StopCallback)(void* context);
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-/*!
-\brief Gives the library version number.
-\return the library version number as a 3 digits long value.
-*/
-long LibVersion();
 
 /*!
 \brief Create a stream that will produce "silence".
@@ -334,6 +324,17 @@ void ResetEffect(AudioEffect effect);
 \param channels The number of channels of input/output buffers.
 */
 void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels);
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+/*!
+\brief Gives the library version number.
+\return the library version number as a 3 digits long value.
+*/
+long LibVersion();
 	
 // Open/Close
 /*!
