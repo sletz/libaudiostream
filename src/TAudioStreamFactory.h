@@ -24,8 +24,8 @@ research@grame.fr
 #define __TAudioStreamFactory__
 
 #include "AudioExports.h"
-#include  "TAudioStream.h"
-#include  "TAudioEffect.h"
+#include "TAudioStream.h"
+#include "TAudioEffect.h"
 #include <string>
 
 using namespace std;
