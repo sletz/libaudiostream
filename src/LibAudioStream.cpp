@@ -323,7 +323,7 @@ void AUDIOAPI ResetSound(AudioStream s)
 
 AudioStreamPtr AUDIOAPI MakeSoundPtr(AudioStream sound) 
 {
-	return new SMARTP<TAudioStream>(sound);
+	return new LA_SMARTP<TAudioStream>(sound);
 }
 
 void AUDIOAPI DeleteSoundPtr(AudioStreamPtr sound) 
@@ -521,7 +521,7 @@ void AUDIOAPI DeleteEffectPtr(AudioEffectPtr effect)
 
 AudioEffectListPtr AUDIOAPI MakeAudioEffectListPtr()
 {
-    return new SMARTP<TAudioEffectList>(new TAudioEffectList());
+    return new LA_SMARTP<TAudioEffectList>(new TAudioEffectList());
 }
 
 AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
@@ -547,28 +547,28 @@ AudioEffectListPtr AUDIOAPI ClearAudioEffectListPtr(AudioEffectListPtr list_effe
 
 AudioEffectPtr AUDIOAPI MakeVolAudioEffectPtr(float vol)
 {
-    return new SMARTP<TAudioEffectInterface>(new TVolAudioEffect(vol));
+    return new LA_SMARTP<TAudioEffectInterface>(new TVolAudioEffect(vol));
 }
 
 AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan)
 {
-    return new SMARTP<TAudioEffectInterface>(new TMonoPanAudioEffect(pan));
+    return new LA_SMARTP<TAudioEffectInterface>(new TMonoPanAudioEffect(pan));
 }
 
 AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight)
 {
-    return new SMARTP<TAudioEffectInterface>(new TStereoPanAudioEffect(panLeft, panRight));
+    return new LA_SMARTP<TAudioEffectInterface>(new TStereoPanAudioEffect(panLeft, panRight));
 }
 
 AudioEffectPtr AUDIOAPI MakePitchShiftAudioEffectPtr(float pitch)
 {
-    return new SMARTP<TAudioEffectInterface>(new TPitchShiftAudioEffect(pitch));
+    return new LA_SMARTP<TAudioEffectInterface>(new TPitchShiftAudioEffect(pitch));
 }
 
 AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 {
 	try {
-		return new SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+		return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
 	} catch (int n) {
 		printf("MakeFaustAudioEffect exception %d \n", n);
 		return 0;
@@ -577,7 +577,7 @@ AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 
 AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect)
 {
-    return new SMARTP<TAudioEffectInterface>(new TWrapperAudioEffect(static_cast<TAudioEffectInterface*>(effect)));
+    return new LA_SMARTP<TAudioEffectInterface>(new TWrapperAudioEffect(static_cast<TAudioEffectInterface*>(effect)));
 }
 
 long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect) 

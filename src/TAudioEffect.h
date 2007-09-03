@@ -37,7 +37,7 @@ using namespace std;
 
 class TAudioEffectList;
 
-typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
+typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Using smartable1 cause crash when desallocating the object: desactivated for now
 // class TAudioEffectList : public list<TAudioEffectInterfacePtr>,  public la_smartable1

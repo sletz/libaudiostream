@@ -80,7 +80,7 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable
 
 };
 
-typedef SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
+typedef LA_SMARTP<TAudioEffectInterface>  TAudioEffectInterfacePtr;
 
 
 #endif

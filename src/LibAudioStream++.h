@@ -65,17 +65,17 @@ typedef struct DeviceInfo {
 class TAudioStream : public la_smartable {
 	virtual ~TAudioStream() {}
 };
-typedef SMARTP<TAudioStream> TAudioStreamPtr;
+typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 
 class TAudioEffectInterface : public la_smartable {
 	virtual ~TAudioEffectInterface() {}
 };
-typedef SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
+typedef LA_SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
 
 class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_smartable {
 	virtual ~TAudioEffectList() {}
 };
-typedef SMARTP<TAudioEffectList> TAudioEffectListPtr;
+typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Opaque pointers
 typedef void* AudioPlayerPtr;

@@ -1,5 +1,5 @@
 /*
-  Copyright © Grame 2003-2007
+  Copyright (C) 2003  Grame
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,8 +20,8 @@
 
 */
 
-#ifndef __smartpointer__
-#define __smartpointer__
+#ifndef __la_smartpointer__
+#define __la_smartpointer__
 
 #include <cassert>
 #include <stdio.h>
@@ -98,26 +98,26 @@ class la_smartable1 : public la_smartable {
 	objects that implements the \e addReference and \e removeReference
 	methods in a consistent way).
 */
-template<class T> class SMARTP {
+template<class T> class LA_SMARTP {
 	private:
 		//! the actual pointer to the class
 		T* fSmartPtr;
 
 	public:
 		//! an empty constructor - points to null
-		SMARTP()	: fSmartPtr(0) {}
+		LA_SMARTP()	: fSmartPtr(0) {}
 		//! build a smart pointer from a class pointer
-		SMARTP(T* rawptr) : fSmartPtr(rawptr)              {
+		LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)              {
 			if (fSmartPtr) fSmartPtr->addReference(); 
 		}
 		//! build a smart pointer from an convertible class reference
 		template<class T2> 
-		SMARTP(const SMARTP<T2>& ptr) : fSmartPtr((T*)ptr) { if (fSmartPtr) fSmartPtr->addReference(); }
+		LA_SMARTP(const LA_SMARTP<T2>& ptr) : fSmartPtr((T*)ptr) { if (fSmartPtr) fSmartPtr->addReference(); }
 		//! build a smart pointer from another smart pointer reference
-		SMARTP(const SMARTP& ptr) : fSmartPtr((T*)ptr)     { if (fSmartPtr) fSmartPtr->addReference(); }
+		LA_SMARTP(const LA_SMARTP& ptr) : fSmartPtr((T*)ptr)     { if (fSmartPtr) fSmartPtr->addReference(); }
 
 		//! the smart pointer destructor: simply removes one reference count
-		~SMARTP()  { if (fSmartPtr) fSmartPtr->removeReference(); }
+		~LA_SMARTP()  { if (fSmartPtr) fSmartPtr->removeReference(); }
 		
 		//! cast operator to retrieve the actual class pointer
 		operator T*() const  { return fSmartPtr;	}
@@ -138,10 +138,10 @@ template<class T> class SMARTP {
 
 		//! operator = that moves the actual class pointer
 		template <class T2>
-		SMARTP& operator=(T2 p1_)	{ *this=(T*)p1_; return *this; }
+		LA_SMARTP& operator=(T2 p1_)	{ *this=(T*)p1_; return *this; }
 
 		//! operator = that moves the actual class pointer
-		SMARTP& operator=(T* p_)	{
+		LA_SMARTP& operator=(T* p_)	{
 			// check first that pointers differ
 			if (fSmartPtr != p_) {
 				// increments the ref count of the new pointer if not null
@@ -154,11 +154,11 @@ template<class T> class SMARTP {
 			return *this;
 		}
 		//! operator = to support inherited class reference
-		SMARTP& operator=(const SMARTP<T>& p_)                { return operator=((T *) p_); }
+		LA_SMARTP& operator=(const LA_SMARTP<T>& p_)                { return operator=((T *) p_); }
 		//! dynamic cast support
-		template<class T2> SMARTP& cast(T2* p_)               { return operator=(dynamic_cast<T*>(p_)); }
+		template<class T2> LA_SMARTP& cast(T2* p_)               { return operator=(dynamic_cast<T*>(p_)); }
 		//! dynamic cast support
-		template<class T2> SMARTP& cast(const SMARTP<T2>& p_) { return operator=(dynamic_cast<T*>(p_)); }
+		template<class T2> LA_SMARTP& cast(const LA_SMARTP<T2>& p_) { return operator=(dynamic_cast<T*>(p_)); }
 };
 
 #endif

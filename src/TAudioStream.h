@@ -34,7 +34,7 @@ research@grame.fr
 
 class TAudioStream;
 
-typedef SMARTP<TAudioStream>  TAudioStreamPtr;
+typedef LA_SMARTP<TAudioStream>  TAudioStreamPtr;
 
 /*!
 \brief The base class for all streams.
