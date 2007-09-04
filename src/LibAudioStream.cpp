@@ -152,12 +152,14 @@ extern "C"
     // Params
     void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol);
     void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight);
-	void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut);
+	void AUDIOAPI SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
     void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
     void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol);
-	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
+	void AUDIOAPI SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
 	// Renderer
 	AudioRendererPtr AUDIOAPI MakeAudioRenderer(long renderer);
@@ -820,7 +822,13 @@ void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, flo
         player->fMixer->SetPan(chan, panLeft, panRight);
 }
 
-void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut)
+{
+    if (player && player->fMixer)
+        player->fMixer->SetEffectList(chan, effect_list, fadeIn, fadeOut);
+}
+
+void AUDIOAPI SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
     if (player && player->fMixer)
         player->fMixer->SetEffectList(chan, *effect_list, fadeIn, fadeOut);
@@ -839,7 +847,13 @@ void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panR
         player->fMixer->SetPan(panLeft, panRight);
 }
 
-void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut)
+{
+    if (player && player->fMixer)
+        player->fMixer->SetEffectList(effect_list, fadeIn, fadeOut);
+}
+
+void AUDIOAPI SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
     if (player && player->fMixer)
         player->fMixer->SetEffectList(*effect_list, fadeIn, fadeOut);

@@ -63,7 +63,8 @@ typedef struct DeviceInfo {
 } DeviceInfo;
 
 class TAudioStream : public la_smartable {
-	virtual ~TAudioStream() {}
+	public:
+		virtual ~TAudioStream() {}
 };
 typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 

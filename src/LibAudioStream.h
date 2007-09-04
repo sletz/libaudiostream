@@ -464,7 +464,7 @@ extern "C"
 	\param fadeIn The fadein length in frames.
     \param fadeOut The fadeout length in frames.
 	*/
-	void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	void SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 
     // Master
     /*!
@@ -486,7 +486,7 @@ extern "C"
 	\param fadeIn The fadein length in frames.
     \param fadeOut The fadeout length in frames.
 	*/
-	void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	void SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
 	
 	// Devices scanning
 	/*!

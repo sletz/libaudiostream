@@ -412,7 +412,7 @@
 
 ;................................................................................: SetEffectListChannel
 (defmacro SetEffectListChannel (player chan effect_list fadein fadeout)
-  `(ccl::ppc-ff-call (get-fun-addr "SetEffectListChannel" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "SetEffectListChannelPtr" *libaudiostream*) 
                      :address ,player
                      :signed-fullword, chan
                      :address, effect_list
@@ -439,7 +439,7 @@
 
 ;................................................................................: SetEffectAudioPlayer
 (defmacro SetEffectListAudioPlayer (player effect_list fadein fadeout)
-  `(ccl::ppc-ff-call (get-fun-addr "SetEffectListAudioPlayer" *libaudiostream*) 
+  `(ccl::ppc-ff-call (get-fun-addr "SetEffectListAudioPlayerPtr" *libaudiostream*) 
                      :address ,player
                      :address, effect_list
                      :signed-fullword, fadein
