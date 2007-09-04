@@ -279,26 +279,26 @@ extern "C"
     \param effect The effect pointer.
     \return The number of effect controls.
     */
-	long GetControlCountPtr(AudioEffectPtr effect);
+	long GetControlCountEffectPtr(AudioEffectPtr effect);
 	/*!
     \brief Return a description on the effect control: control name, min, max and default values
     \param effect The effect pointer.
     */
-	void GetControlParamPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
+	void GetControlParamEffectPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init);
 	/*!
     \brief Set the effect control value.
     \param effect The effect pointer.
 	\param control The control number between 0 and GetControlCountPtr.
 	\param value The new value as a float.
     */
-	void SetControlValuePtr(AudioEffectPtr effect, long control, float value);	
+	void SetControlValueEffectPtr(AudioEffectPtr effect, long control, float value);	
 	/*!
     \brief Get the effect control current value.
     \param effect The effect pointer.
 	\param control The control number between 0 and GetControlCountPtr.
 	\return The effect control current value.
 	*/
-	float GetControlValuePtr(AudioEffectPtr effect, long control);	
+	float GetControlValueEffectPtr(AudioEffectPtr effect, long control);	
 	/*!
     \brief Set the effect running state.
 	\param effect The effect to be used.

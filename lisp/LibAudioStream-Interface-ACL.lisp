@@ -453,14 +453,14 @@
 
 ;---------------------------------------------------------------------------: GetControlCount
 (def-foreign-call 
-    (GetControlCount "GetControlCountPtr")
+    (GetControlCountEffect "GetControlCountEffectPtr")
     ((effect :foreign-address))
   :returning :long)
 
 ;---------------------------------------------------------------------------: GetControlParam
 ;;; a tester...
 (def-foreign-call 
-    (GetControlParamPtr "GetControlParamPtr")
+    (GetControlParamEffectPtr "GetControlParamEffectPtr")
     ((effect :foreign-address)
      (control :long)
      (name :foreign-address)
@@ -469,12 +469,12 @@
      (init :foreign-address))
   :returning :void)
 
-(defun GetControlParam (effect control)
+(defun GetControlParamEffect (effect control)
   (let ((name (ff::make-foreign-pointer :size 64))
         (min (ff::make-foreign-pointer :size 4))
         (max (ff::make-foreign-pointer :size 4))
         (init (ff::make-foreign-pointer :size 4)))
-    (GetControlParamPtr effect control name min max init)
+    (GetControlParamEffectPtr effect control name min max init)
     (values (excl::native-to-string (ff::foreign-pointer-address name))
             (sys::memref-int  (ff::foreign-pointer-address min) 0 0 :single-float)
             (sys::memref-int  (ff::foreign-pointer-address max) 0 0 :single-float)
@@ -483,7 +483,7 @@
 
 ;---------------------------------------------------------------------------: SetControlValue
 (def-foreign-call 
-    (SetControlValue "SetControlValuePtr")
+    (SetControlValueEffect "SetControlValueEffectPtr")
     ((effect :foreign-address)
      (control :long)
      (value :float))
@@ -491,7 +491,7 @@
 
 ;---------------------------------------------------------------------------: GetControlValue
 (def-foreign-call 
-    (GetControlValue "GetControlValuePtr")
+    (GetControlValueEffect "GetControlValueEffectPtr")
     ((effect :foreign-address)
      (control :long))
   :returning :float)

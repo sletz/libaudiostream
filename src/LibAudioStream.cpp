@@ -105,10 +105,10 @@ extern "C"
 	AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
 	AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
 
-	long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect);
-	void AUDIOAPI GetControlParamPtr(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
-	void AUDIOAPI SetControlValuePtr(AudioEffectPtr effect, long param, float f);
-	float AUDIOAPI GetControlValuePtr(AudioEffectPtr effect, long param);
+	long AUDIOAPI GetControlCountEffectPtr(AudioEffectPtr effect);
+	void AUDIOAPI GetControlParamEffectPtr(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
+	void AUDIOAPI SetControlValueEffectPtr(AudioEffectPtr effect, long param, float f);
+	float AUDIOAPI GetControlValueEffectPtr(AudioEffectPtr effect, long param);
 	
 	void AUDIOAPI SetStateEffectPtr(AudioEffectPtr effect, long state);
 	long AUDIOAPI GetStateEffectPtr(AudioEffectPtr effect);
@@ -221,10 +221,10 @@ AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
 AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch);
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
 
-long AUDIOAPI GetControlCount(AudioEffect effect);
-void AUDIOAPI GetControlParam(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
-void AUDIOAPI SetControlValue(AudioEffect effect, long param, float f);
-float AUDIOAPI GetControlValue(AudioEffect effect, long param);
+long AUDIOAPI GetControlCountEffect(AudioEffect effect);
+void AUDIOAPI GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
+void AUDIOAPI SetControlValueEffect(AudioEffect effect, long param, float f);
+float AUDIOAPI GetControlValueEffect(AudioEffect effect, long param);
 
 void AUDIOAPI SetStateEffect(AudioEffect effect, long state);
 long AUDIOAPI GetStateEffect(AudioEffect effect);
@@ -327,7 +327,6 @@ void AUDIOAPI ResetSound(AudioStream s)
 {
 	static_cast<TAudioStreamPtr>(s)->Reset();
 }
-
 
 AudioStreamPtr AUDIOAPI MakeSoundPtr(AudioStream sound) 
 {
@@ -496,22 +495,22 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 	}
 }
 
-long AUDIOAPI GetControlCount(AudioEffect effect) 
+long AUDIOAPI GetControlCountEffect(AudioEffect effect) 
 {
 	return static_cast<TAudioEffectInterfacePtr>(effect)->GetControlCount();
 }
 
-void AUDIOAPI GetControlParam(AudioEffect effect, long control, char* label, float* min, float* max, float* init)
+void AUDIOAPI GetControlParamEffect(AudioEffect effect, long control, char* label, float* min, float* max, float* init)
 {
 	static_cast<TAudioEffectInterfacePtr>(effect)->GetControlParam(control, label, min, max, init);
 }
 
-void AUDIOAPI SetControlValue(AudioEffect effect, long control, float f)
+void AUDIOAPI SetControlValueEffect(AudioEffect effect, long control, float f)
 {
 	static_cast<TAudioEffectInterfacePtr>(effect)->SetControlValue(control, f);
 }
 
-float AUDIOAPI GetControlValue(AudioEffect effect, long control)
+float AUDIOAPI GetControlValueEffect(AudioEffect effect, long control)
 {
 	return static_cast<TAudioEffectInterfacePtr>(effect)->GetControlValue(control);
 }
@@ -608,22 +607,22 @@ AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect
     return new LA_SMARTP<TAudioEffectInterface>(new TWrapperAudioEffect(static_cast<TAudioEffectInterface*>(effect)));
 }
 
-long AUDIOAPI GetControlCountPtr(AudioEffectPtr effect) 
+long AUDIOAPI GetControlCountEffectPtr(AudioEffectPtr effect) 
 {
 	return static_cast<TAudioEffectInterfacePtr>(*effect)->GetControlCount();
 }
 
-void AUDIOAPI GetControlParamPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init)
+void AUDIOAPI GetControlParamEffectPtr(AudioEffectPtr effect, long control, char* label, float* min, float* max, float* init)
 {
 	static_cast<TAudioEffectInterfacePtr>(*effect)->GetControlParam(control, label, min, max, init);
 }
 
-void AUDIOAPI SetControlValuePtr(AudioEffectPtr effect, long control, float f)
+void AUDIOAPI SetControlValueEffectPtr(AudioEffectPtr effect, long control, float f)
 {
 	static_cast<TAudioEffectInterfacePtr>(*effect)->SetControlValue(control, f);
 }
 
-float AUDIOAPI GetControlValuePtr(AudioEffectPtr effect, long control)
+float AUDIOAPI GetControlValueEffectPtr(AudioEffectPtr effect, long control)
 {
 	return static_cast<TAudioEffectInterfacePtr>(*effect)->GetControlValue(control);
 }

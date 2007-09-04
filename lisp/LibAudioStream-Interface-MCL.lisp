@@ -507,14 +507,14 @@
        (terminate-when-unreachable effect #'(lambda(effect) (print effect) (DeleteEffect effect)))
        effect)))
 
-(defmacro GetControlCount (effect)
- `(ccl::ppc-ff-call (get-fun-addr "GetControlCountPtr" *libaudiostream*) 
+(defmacro GetControlCountEffect (effect)
+ `(ccl::ppc-ff-call (get-fun-addr "GetControlCountEffectPtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword))
 
-(defmacro GetControlParam (effect control)
+(defmacro GetControlParamEffect (effect control)
   `(%stack-block ((name 64) (min 4) (max 4) (init 4))
-     (ccl::ppc-ff-call (get-fun-addr "GetControlParamPtr" *libaudiostream*) 
+     (ccl::ppc-ff-call (get-fun-addr "GetControlParamEffectPtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword ,control
                         :address name
@@ -524,15 +524,15 @@
                         :void)
      (values (%get-cstring name) (%get-single-float min) (%get-single-float max) (%get-single-float init))))
 
-(defmacro SetControlValue (effect control value)
- `(ccl::ppc-ff-call (get-fun-addr "SetControlValuePtr" *libaudiostream*) 
+(defmacro SetControlValueEffect (effect control value)
+ `(ccl::ppc-ff-call (get-fun-addr "SetControlValueEffectPtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword ,control
                         :double-float ,value
                         :void))
 
-(defmacro GetControlValue (effect control)
- `(ccl::ppc-ff-call (get-fun-addr "GetControlValuePtr" *libaudiostream*) 
+(defmacro GetControlValueEffect (effect control)
+ `(ccl::ppc-ff-call (get-fun-addr "GetControlValueEffectPtr" *libaudiostream*) 
                         :address ,effect
                         :signed-fullword ,control
                         ::double-float))
