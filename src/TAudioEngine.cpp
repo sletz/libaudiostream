@@ -21,7 +21,6 @@ research@grame.fr
 
 #include "TAudioEngine.h"
 
-
 long TAudioEngine::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     return fRenderer->OpenDefault(inChan, outChan, bufferSize, sampleRate);

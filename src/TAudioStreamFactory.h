@@ -79,8 +79,6 @@ class AUDIO_EXPORTS TAudioStreamFactory
         static TAudioStreamPtr MakeWriteSound(string name, TAudioStreamPtr s, long format);
         static TAudioStreamPtr MakeRTRenderer(TAudioStreamPtr s);
         static TAudioStreamPtr MakeDTRenderer(TAudioStreamPtr s);
-        //static TAudioStreamPtr MakeConvertSound(TAudioStreamPtr s, long converter, double ratio);
-        //static TAudioStreamPtr MakeGCSound(TAudioStreamPtr sound);
 };
 
 typedef TAudioStreamFactory * TAudioStreamFactoryPtr;

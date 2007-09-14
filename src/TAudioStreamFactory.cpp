@@ -62,7 +62,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
 	if (beginFrame >= 0 && beginFrame <= endFrame) {
         try {
             TAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
-           return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
+			return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         } catch (int n) {
             printf("MakeRegionSound exception %d \n", n);
             return 0;
