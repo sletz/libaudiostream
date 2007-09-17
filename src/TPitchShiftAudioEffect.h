@@ -314,20 +314,26 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
     private:
 
         float fPitchSift;
-		FFTShift fLeft;
-		FFTShift fRight;
+		FFTShift* fLeft;
+		FFTShift* fRight;
 
     public:
 
         TPitchShiftAudioEffect(float pitch): TAudioEffectInterface(), fPitchSift(pitch)
-        {}
+        {
+			fLeft = new FFTShift();
+			fRight = new FFTShift();
+		}
         virtual ~TPitchShiftAudioEffect()
-        {}
+        {
+			delete fLeft;
+			delete fRight;
+		}
 
         void Process(float** input, float** output, long framesNum, long channels)
         {
-	        fLeft.smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[0], output[0]);
-			fRight.smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[1], output[1]);
+			fLeft->smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[0], output[0]);
+			fRight->smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[1], output[1]);
         }
 
         TAudioEffectInterface* Copy()

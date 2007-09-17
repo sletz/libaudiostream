@@ -30,7 +30,7 @@ research@grame.fr
 #include <windows.h>
 #define HANDLE HINSTANCE 
 #define LoadFaustModule(name) LoadLibrary((name));
-#define UnloadFaustModule(handle) FreeLibrary((handle));
+#define UnloadFaustModule(handle) FreeLibrary((handle));  
 #define GetFaustProc(handle, name) GetProcAddress((handle), (name));
 
 #else
