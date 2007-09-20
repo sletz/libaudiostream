@@ -113,8 +113,7 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
     int inDevice;
     int outDevice;
 
-    printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n",
-           inChan, outChan, bufferSize, sampleRate);
+	printf("Opening default device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n", inChan, outChan, bufferSize, sampleRate);
 
     numDevices = Pa_GetDeviceCount();
     if (numDevices < 0) {
@@ -157,7 +156,8 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
 
 long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
-    printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n", inChan, outChan, bufferSize, sampleRate);
+    printf("Opening device : inputDevice: %ld outputDevice: %ld inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n", 
+		inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
 	
 	PaStreamParameters inputParameters;
     PaStreamParameters outputParameters;
