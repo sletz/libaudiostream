@@ -29,10 +29,8 @@
 
 void Convert2UTF8(const char* name, char* res, int len) 
 {
-	strcpy(res, name);
 	CFURLRef urlref = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8*)name, strlen(name), kCFStringEncodingMacRoman, NULL);
 	CFIndex ret = CFURLGetFileSystemRepresentation(urlref, true, (UInt8*)res, len);
-	printf("CFIndex ret %ld %s\n", ret, res);
 }
 
 #else
