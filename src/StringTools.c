@@ -39,7 +39,8 @@ void Convert2UTF8(const char* name, char* res, int len)
 
 void Convert2UTF8(const char* name, char* res, int len) 
 {
-	strncpy(res, name, len);
+	//strncpy(res, name, len);
+	strcpy(res, name);
 }
 
 #endif
