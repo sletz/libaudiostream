@@ -21,6 +21,7 @@
 */
 
 #include "StringTools.h"
+#include <stdio.h>
 
 void Convert2UTF8(const char* name, char* res) 
 {
