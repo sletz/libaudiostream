@@ -25,13 +25,19 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 #include "UTools.h"
+#include "StringTools.h"
 #include <stdio.h>
+#include <assert.h>
 
 TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
     SF_INFO info;
 	memset(&info, 0, sizeof(info));
-    fFile = sf_open(fName.c_str(), SFM_READ, &info);
+	char utf8name[512];
+	
+	assert(fName.size() < 512);
+	Convert2UTF8(fName.c_str(), utf8name);
+	fFile = sf_open(utf8name, SFM_READ, &info);
 	
     // Check file
     if (!fFile)

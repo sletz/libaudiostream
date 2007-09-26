@@ -24,8 +24,10 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 #include "UTools.h"
+#include "StringTools.h"
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioBuffer<short>* buffer, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
@@ -65,8 +67,12 @@ void TWriteFileAudioStream::Open()
 		info.samplerate = TAudioGlobals::fSample_Rate;
 		info.channels = fChannels;
 		info.format = fFormat;
-		fFile = sf_open(fName.c_str(), SFM_WRITE, &info);
-
+		char utf8name[512];
+	
+		assert(fName.size() < 512);
+		Convert2UTF8(fName.c_str(), utf8name);
+		fFile = sf_open(utf8name, SFM_WRITE, &info);
+	
 		// Check file
 		if (!fFile)
 			throw - 1;
