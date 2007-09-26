@@ -33,10 +33,10 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 {
     SF_INFO info;
 	memset(&info, 0, sizeof(info));
-	char utf8name[512];
+	char utf8name[512] = {0};
 	
 	assert(fName.size() < 512);
-	Convert2UTF8(fName.c_str(), utf8name);
+	Convert2UTF8(fName.c_str(), utf8name, 512);
 	fFile = sf_open(utf8name, SFM_READ, &info);
 	
     // Check file

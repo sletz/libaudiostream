@@ -18,15 +18,15 @@
 		4B8E185709FCD83000D586F5 /* Info-LibAudioStreamPA.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8E185609FCD83000D586F5 /* Info-LibAudioStreamPA.plist */; };
 		4B8E185909FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */; };
 		4B8E50E50CAA86670070FDA9 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8E50E30CAA86670070FDA9 /* StringTools.h */; };
-		4B8E50E60CAA86670070FDA9 /* StringTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8E50E40CAA86670070FDA9 /* StringTools.m */; };
 		4B8E50E70CAA86670070FDA9 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8E50E30CAA86670070FDA9 /* StringTools.h */; };
-		4B8E50E80CAA86670070FDA9 /* StringTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B8E50E40CAA86670070FDA9 /* StringTools.m */; };
 		4B8E51790CAA86E70070FDA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
 		4B8E517A0CAA86E70070FDA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
 		4BB3FEDB0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
 		4BB3FEDC0B39BAD400CA1607 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; };
 		4BB3FEDD0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
 		4BB3FEDE0B39BAD400CA1607 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; };
+		4BC9AC250CAAA81800E8A035 /* StringTools.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC9AC240CAAA81800E8A035 /* StringTools.c */; };
+		4BC9AC260CAAA81800E8A035 /* StringTools.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC9AC240CAAA81800E8A035 /* StringTools.c */; };
 		4BEA6194095806CD001F733A /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BEA6195095806CD001F733A /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 		4BEA6196095806CD001F733A /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
@@ -213,7 +213,6 @@
 		4B8E185609FCD83000D586F5 /* Info-LibAudioStreamPA.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-LibAudioStreamPA.plist"; sourceTree = SOURCE_ROOT; };
 		4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-LibAudioStreamPA_CA_Jack.plist"; sourceTree = SOURCE_ROOT; };
 		4B8E50E30CAA86670070FDA9 /* StringTools.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = StringTools.h; path = ../src/StringTools.h; sourceTree = SOURCE_ROOT; };
-		4B8E50E40CAA86670070FDA9 /* StringTools.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = StringTools.m; path = ../src/StringTools.m; sourceTree = SOURCE_ROOT; };
 		4B8E51780CAA86E70070FDA9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4BA0DEDE087FE455003B1CB3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = SOURCE_ROOT; };
 		4BA3E1780459506A00053105 /* TRendererAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TRendererAudioStream.h; path = ../src/TRendererAudioStream.h; sourceTree = SOURCE_ROOT; };
@@ -225,6 +224,7 @@
 		4BC6136207F4990300ACC53C /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../src/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136407F4990B00ACC53C /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../src/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136907F499E200ACC53C /* TAudioStreamFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioStreamFactory.h; path = ../src/TAudioStreamFactory.h; sourceTree = SOURCE_ROOT; };
+		4BC9AC240CAAA81800E8A035 /* StringTools.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = StringTools.c; path = ../src/StringTools.c; sourceTree = SOURCE_ROOT; };
 		4BCC1A8007F1AA7E003E6784 /* lflifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lflifo.h; path = ../src/atomic/lflifo.h; sourceTree = SOURCE_ROOT; };
 		4BEA61E6095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEA623C095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -400,8 +400,8 @@
 		F5C1FF5A0328B73A01053105 /* Stream */ = {
 			isa = PBXGroup;
 			children = (
+				4BC9AC240CAAA81800E8A035 /* StringTools.c */,
 				4B8E50E30CAA86670070FDA9 /* StringTools.h */,
-				4B8E50E40CAA86670070FDA9 /* StringTools.m */,
 				4BFC6E8408729C970012D079 /* TCmdHandler.h */,
 				4BFC6E7E08729C6F0012D079 /* TThreadUtils.h */,
 				F5C1D5FC0330CD3801053105 /* TAudioStream.h */,
@@ -802,7 +802,7 @@
 				4BEA61DE095806CD001F733A /* LibAudioStream.cpp in Sources */,
 				4BB3FEDB0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */,
 				4B63B0540BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */,
-				4B8E50E60CAA86670070FDA9 /* StringTools.m in Sources */,
+				4BC9AC250CAAA81800E8A035 /* StringTools.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,7 +839,7 @@
 				4B63B0560BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */,
 				4B63B05A0BDF791A00CD9753 /* TJackAudioRenderer.cpp in Sources */,
 				4BEFE9810C59C93E00F8AE0C /* TCoreAudioRenderer.cpp in Sources */,
-				4B8E50E80CAA86670070FDA9 /* StringTools.m in Sources */,
+				4BC9AC260CAAA81800E8A035 /* StringTools.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

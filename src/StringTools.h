@@ -28,7 +28,7 @@ extern "C"
 {
 #endif
 
-void Convert2UTF8(const char* name, char* res);
+void Convert2UTF8(const char* name, char* res, int len);
 
 #ifdef __cplusplus
 }

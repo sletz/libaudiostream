@@ -67,10 +67,10 @@ void TWriteFileAudioStream::Open()
 		info.samplerate = TAudioGlobals::fSample_Rate;
 		info.channels = fChannels;
 		info.format = fFormat;
-		char utf8name[512];
+		char utf8name[512] = {0};
 	
 		assert(fName.size() < 512);
-		Convert2UTF8(fName.c_str(), utf8name);
+		Convert2UTF8(fName.c_str(), utf8name, 512);
 		fFile = sf_open(utf8name, SFM_WRITE, &info);
 	
 		// Check file
