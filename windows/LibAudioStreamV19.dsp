@@ -116,6 +116,10 @@ SOURCE=..\src\Object.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\StringTools.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\TAudioChannel.cpp
 # End Source File
 # Begin Source File
