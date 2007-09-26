@@ -24,5 +24,5 @@
 
 void Convert2UTF8(const char* name, char* res) 
 {
-	return name;
+	strcpy(res, name);
 }
