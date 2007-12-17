@@ -30,6 +30,8 @@ research@grame.fr
 #include "TReadFileAudioStream.h"
 #include "TInputAudioStream.h"
 #include "TTransformAudioStream.h"
+//#include "TRubberBandAudioStream.h"
+#include "TSoundTouchAudioStream.h"
 #include "TWriteFileAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TChannelizerAudioStream.h"
@@ -120,6 +122,18 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)
 {
     return (s1 && effect) ? new TTransformAudioStream(s1, effect, fadeIn, fadeOut) : 0;
+}
+
+/*
+TAudioStreamPtr TAudioStreamFactory::MakeRubberBandSound(TAudioStreamPtr s1,  double* pitch_shift, double* time_strech)
+{
+    return (s1) ? new TRubberBandAudioStream(s1, pitch_shift, time_strech) : 0;
+}
+*/
+
+TAudioStreamPtr TAudioStreamFactory::MakeSoundTouchSound(TAudioStreamPtr s1,  double* pitch_shift, double* time_strech)
+{
+    return (s1) ? new TSoundTouchAudioStream(s1, pitch_shift, time_strech) : 0;
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeWriteSound(string name, TAudioStreamPtr s, long format)

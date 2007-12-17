@@ -40,8 +40,8 @@ research@grame.fr
 #endif
 
 
-#define IN_CHANNELS 2 // stereo player
-#define OUT_CHANNELS 2 // stereo player
+#define IN_CHANNELS 2	// stereo player
+#define OUT_CHANNELS 2	// stereo player
 #define CHANNELS 8
 
 AudioEffect faust_effect = 0;
@@ -50,6 +50,9 @@ static void TestCallback(void* context)
 {
 	printf("Channel stopped\n");
 }
+
+double pitch_shift = 1.0;
+double time_strech = 1.0;
 
 AudioStream test0()
 {
@@ -188,11 +191,11 @@ AudioStream test10()
 	AudioEffectList list_effect = MakeAudioEffectList();
     faust_effect = MakeFaustAudioEffect(EFFECT1);
     
-	printf("Faust effect: param num %ld\n", GetControlCount(faust_effect));
-	for (int i = 0; i < GetControlCount(faust_effect); i++) {
+	printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
+	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
 		float min, max, init;
 		char label[32];
-		GetControlParam(faust_effect, i, label, &min, &max, &init); 
+		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
 		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
 	}
 	
@@ -209,16 +212,38 @@ AudioStream test11()
     AudioEffectList list_effect = MakeAudioEffectList();
 	faust_effect = MakeFaustAudioEffect(EFFECT1);
 	
-    printf("Faust effect: param num %ld\n", GetControlCount(faust_effect));
-	for (int i = 0; i < GetControlCount(faust_effect); i++) {
+    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
+	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
 		float min, max, init;
 		char label[32];
-		GetControlParam(faust_effect, i, label, &min, &max, &init); 
+		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
 		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
 	}
 	
 	list_effect = AddAudioEffect(list_effect, faust_effect);
     return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+}
+
+AudioStream test12()
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("RubberBand library												   \n");
+    printf("-------------------------------------------------------------------\n\n");
+	
+	AudioStream s1;
+    s1 = MakeReadSound(FILENAME1);
+	return MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech);
+}
+
+AudioStream test13()
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("RubberBand library (2)												   \n");
+    printf("-------------------------------------------------------------------\n\n");
+	
+	AudioStream s1 = MakeRegionSound(FILENAME1, 200000, 500000);
+    AudioStream s2 = MakeRegionSound(FILENAME2, 200000, 700000);
+    return MakeSeqSound(MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech), MakePitchSchiftTimeStretchSound(s2, &pitch_shift, &time_strech), 88200);
 }
 
 void test20()
@@ -277,14 +302,33 @@ void TestPlay(AudioPlayerPtr player)
 
             case '+':
                 vol += 0.05f;
-                SetVolAudioPlayer(player, vol);
+                //SetVolAudioPlayer(player, vol);
+				time_strech += 0.1;
+				printf("time_strech %f\n", time_strech);
                 break;
 
             case '-':
                 vol -= 0.05f;
-                SetVolAudioPlayer(player, vol);
+                //SetVolAudioPlayer(player, vol);
+				time_strech -= 0.1;
+				printf("time_strech %f\n", time_strech);
+                break;
+				
+			case '1':
+                vol += 0.05f;
+                //SetVolAudioPlayer(player, vol);
+				pitch_shift += 0.1;
+				printf("pitch_shift %f\n", pitch_shift);
                 break;
 
+            case '2':
+                vol -= 0.05f;
+                //SetVolAudioPlayer(player, vol);
+				pitch_shift -= 0.1;
+				printf("pitch_shift %f\n", pitch_shift);
+                break;
+
+	/*
             case '1':
                 panLeft += 0.05f;
 				panRight -= 0.05f;
@@ -296,10 +340,10 @@ void TestPlay(AudioPlayerPtr player)
 				panRight -= 0.05f;
                 SetPanAudioPlayer(player, panLeft, panRight);
                 break;
-				
+					*/
 			 case 'c': // To be used only when faust effects are running....
-				SetControlValue(faust_effect, 1, 0.95f);
-				SetControlValue(faust_effect, 2, 0.9f);
+				SetControlValueEffect(faust_effect, 1, 0.95f);
+				SetControlValueEffect(faust_effect, 2, 0.9f);
 	            break;
         }
     }
@@ -364,10 +408,10 @@ int main(int argc, char* argv[])
 	printf(" sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
 	
 	// Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kJackRenderer, 1);
+    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
     // Is failure opens PortAudio version
     if (!player)
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 4, 131072 * 4, kPortAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
     StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");
@@ -379,7 +423,7 @@ int main(int argc, char* argv[])
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
 	
-	
+	/*
     ExecTest(player, test0());
 	ExecTest(player, test1());
     ExecTest(player, test2());
@@ -393,6 +437,9 @@ int main(int argc, char* argv[])
 	ExecTest(player, test9bis());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
+	*/
+	ExecTest(player, test12());
+	ExecTest(player, test13());
 
 	test20();
 	test21();

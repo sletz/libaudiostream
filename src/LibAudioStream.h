@@ -160,6 +160,14 @@ extern "C"
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+	/*!
+    \brief To pitchshift or timestretch a stream.
+    \param sound The stream to be transformed.
+    \param pitch_shift The address of a double value to be used as pitch_shift.
+    \param time_strech The address of a double value to be used as time_strech.
+    \return A pointer to new stream object.
+    */
+    AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     /*!
     \brief Create a stream writer.
     \param name The sound file pathname.
