@@ -21,6 +21,7 @@ research@grame.fr
 
 #include "TAudioGlobals.h"
 #include "TSoundTouchAudioStream.h"
+#include "Utools.h"
 
 TSoundTouchAudioStream::TSoundTouchAudioStream(TAudioStreamPtr stream, double* pitch_shift, double* time_strech)
 {
@@ -69,7 +70,7 @@ long TSoundTouchAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, l
 		
 	// Frames still available in the effect
 	if ((available = fSoundTouch->numSamples()) > 0) {
-		produced = fSoundTouch->receiveSamples(buffer->GetFrame(framePos), std::min(available, int(framesNum)));
+		produced = fSoundTouch->receiveSamples(buffer->GetFrame(framePos), UTools::Min(available, int(framesNum)));
 		printf("TSoundTouchAudioStream old available %d\n", available);
 		
 		// Move index
@@ -93,7 +94,7 @@ long TSoundTouchAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, l
 			// Process buffer
 			fSoundTouch->putSamples(fBuffer->GetFrame(0), read);
 			available = fSoundTouch->numSamples();
-			produced = fSoundTouch->receiveSamples(buffer->GetFrame(framePos), std::min(available, int(framesNum - written)));
+			produced = fSoundTouch->receiveSamples(buffer->GetFrame(framePos), UTools::Min(available, int(framesNum - written)));
 			printf("TSoundTouchAudioStream available = %d \n", available);
 	
 			// Move index

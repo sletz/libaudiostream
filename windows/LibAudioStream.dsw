@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "LibAudioStream"=.\LibAudioStream.dsp - Package Owner=<4>
+Project: "LibAudioStream"=".\LibAudioStream.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fileplay"=.\fileplay.dsp - Package Owner=<4>
+Project: "LibAudioStreamJack"=".\LibAudioStreamJack.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -27,7 +27,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fileplaycpp"=.\fileplaycpp.dsp - Package Owner=<4>
+Project: "LibAudioStreamV19"=".\LibAudioStreamV19.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -39,7 +39,31 @@ Package=<4>
 
 ###############################################################################
 
-Project: "testPlayer"=.\testPlayer.dsp - Package Owner=<4>
+Project: "fileplay"=".\fileplay.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fileplaycpp"=".\fileplaycpp.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "testPlayer"=".\testPlayer.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

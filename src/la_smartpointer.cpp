@@ -23,12 +23,11 @@
 #include "la_smartpointer.h"
 #include "TThreadCmdManager.h"
 
-unsigned long la_smartable::removeReference() 
+void la_smartable::removeReference() 
 { 
 	if (--refCount == 0) {
 		delete this; 
 	}
-	return refCount;
 }
 
 void la_smartable1::removeReferenceAux(la_smartable1* obj, long u1, long u2, long u3)
@@ -36,12 +35,11 @@ void la_smartable1::removeReferenceAux(la_smartable1* obj, long u1, long u2, lon
 	delete obj;
 }
 
-unsigned long la_smartable1::removeReference() 
+void la_smartable1::removeReference() 
 { 
 	if (--refCount == 0 && fManager) {
 		fManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
 	}
-	return refCount;
 }
 
 void la_smartable1::Init()

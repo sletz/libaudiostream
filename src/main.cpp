@@ -27,8 +27,9 @@ research@grame.fr
 #include <errno.h>
 
 #ifdef WIN32
-	#define FILENAME1 "D:\\acl62-trial\\Alla faglar.wav"
-	#define FILENAME2 "D:\\acl62-trial\\BjornenSover.wav"
+	//#define FILENAME1 "C:\\Documents and Settings\\letz\\Mes documents\\Ma Musique\\s1.wav"
+	#define FILENAME1 "C:\\Documents and Settings\\letz\\Mes documents\\Ma Musique\\יייי.wav"
+	#define FILENAME2 "C:\\Documents and Settings\\letz\\Mes documents\\Ma Musique\\s2.wav"
 	#define FILENAME3 "D:\\acl62-trial\\BjornenSover.wav"
 	#define EFFECT1 "D:\\acl62-trial\\freeverb.dll"
 #else
@@ -60,8 +61,8 @@ AudioStream test0()
     printf("Build a region \n");
     printf("-------------- \n\n");
     AudioStream s1;
-	s1 = MakeRegionSound(FILENAME1, 200000, 500000);
-	//s1 = MakeStereoSound(MakeRegionSound(FILENAME4, 200000, 500000));
+	//s1 = MakeRegionSound(FILENAME1, 200000, 500000);
+	s1 = MakeStereoSound(MakeRegionSound(FILENAME1, 200000, 500000));
     return s1;
 }
 
@@ -379,6 +380,8 @@ void ExecTest(AudioPlayerPtr player, AudioStream sound)
     StopChannel(player, 1);
 }
 
+#ifndef WIN32
+
 int SetMaximumFiles(long filecount)
 {
     struct rlimit lim;
@@ -397,15 +400,20 @@ int GetMaximumFiles(long *filecount)
 	}
 }
 
+#endif
+
 int main(int argc, char* argv[])
 {
     printf("----------------------------\n");
     printf("LibAudioStream based Player \n");
     printf("----------------------------\n\n");
-	
-	SetMaximumFiles(1024);
-	
+
+	int res = LibVersion();
+
+#ifndef WIN32
+	SetMaximumFiles(1024);	
 	printf(" sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
+#endif
 	
 	// Try to open Jack version
     AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
@@ -425,6 +433,14 @@ int main(int argc, char* argv[])
 	
 	/*
     ExecTest(player, test0());
+	ExecTest(player, test0());
+	ExecTest(player, test0());
+	ExecTest(player, test0());
+	ExecTest(player, test0());
+	ExecTest(player, test0());
+	ExecTest(player, test0());
+
+
 	ExecTest(player, test1());
     ExecTest(player, test2());
     ExecTest(player, test3());
