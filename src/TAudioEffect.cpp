@@ -57,7 +57,7 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 		float** input = fTemp1;
 		float** tmp_output = fTemp2;
 		float** output = fTemp2;
-		int i,j;
+		int i;
 		
 		// Fades
 		switch (fStatus) {
@@ -80,11 +80,7 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 		}
 		
 		// Deinterleave...
-		for (i = 0; i < framesNum; i++) {
-			for (j = 0; j < channels; j++) {
-				input[j][i] = buffer[i * channels + j];
-			}
-		}
+		UAudioTools::Deinterleave(input, buffer, framesNum, channels);
 		
 		// Process effects
 		for (list<TAudioEffectInterfacePtr>::iterator iter = begin(); iter != end(); iter++) {
@@ -98,11 +94,7 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 		}
 		
 		// Interleave...
-		for (i = 0; i < framesNum; i++) {
-			for (j = 0; j < channels; j++) {
-				buffer[i * channels + j] = output[j][i]; 
-			}
-		}
+		UAudioTools::Interleave(buffer, output, framesNum, channels);
 	}
 }
 

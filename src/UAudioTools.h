@@ -248,6 +248,26 @@ class UAudioTools
                 out [i*2 + 1] = sample;
             }
         }
+		
+		static inline void Interleave(float* dst, float** src,long nbsamples, long channels)
+        {
+			int i, j;
+			for (i = 0; i < nbsamples; i++) {
+				for (j = 0; j < channels; j++) {
+					dst[i * channels + j] = src[j][i]; 
+				}
+			}
+        }
+		
+		static inline void Deinterleave(float** dst, float* src,long nbsamples, long channels)
+        {
+			int i, j;
+			for (i = 0; i < nbsamples; i++) {
+				for (j = 0; j < channels; j++) {
+					dst[j][i] = src[i * channels + j];
+				}
+			}
+        }
 
         static inline float ClipFloat (float sample)
         {
@@ -294,14 +314,16 @@ class UAudioTools
                 }
             } else {
 			
+			/*
 			for (long i = 0; i < framesNum * channelsOut; i += 4) {
 				out[i] += float(in[i]) * fGain;
 				out[i + 1] += float(in[i + 1]) * fGain;
 				out[i + 2] += float(in[i + 2]) * fGain;
 				out[i + 3] += float(in[i + 3]) * fGain;
 			}
+			*/
 		
-			/* Works only on Tiger... removed for now
+			// Works only on Tiger... removed for now
 			#ifdef __APPLE__
 				float buffer[framesNum * channelsOut];
 				vDSP_vflt16(in, 1, buffer, 1, framesNum * channelsOut);
@@ -314,7 +336,7 @@ class UAudioTools
                     out[i + 3] += float(in[i + 3]) * fGain;
                 }
 			#endif
-			*/
+			
 			}
         }
 	  		

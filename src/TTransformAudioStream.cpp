@@ -42,7 +42,7 @@ TAudioStreamPtr TTransformAudioStream::CutBegin(long frames)
 long TTransformAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
 {
 	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
-    int res = fStream->Read(fBuffer, framesNum, framePos, channels);
+    long res = fStream->Read(fBuffer, framesNum, framePos, channels);
     fEffectList->Process(fBuffer->GetFrame(framePos), framesNum, channels);
 	UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos), fBuffer->GetFrame(framePos), framesNum, channels);
     return res;
