@@ -22,7 +22,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,../src/atomic,../src/,../src/renderer"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBAUDIOSTREAM_EXPORTS;__PORTAUDIO__;__PORTAUDIOV19__"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBAUDIOSTREAM_EXPORTS;__PORTAUDIO__;__PORTAUDIOV19__;SOUND_TOUCH"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"

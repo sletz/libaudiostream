@@ -133,7 +133,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeRubberBandSound(TAudioStreamPtr s1,  do
 
 TAudioStreamPtr TAudioStreamFactory::MakeSoundTouchSound(TAudioStreamPtr s1,  double* pitch_shift, double* time_strech)
 {
+	/*
     return (s1) ? new TSoundTouchAudioStream(s1, pitch_shift, time_strech) : 0;
+    */
+	return 0;
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeWriteSound(string name, TAudioStreamPtr s, long format)
