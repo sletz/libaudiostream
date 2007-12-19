@@ -22,6 +22,7 @@
 
 #include "StringTools.h"
 #include <stdio.h>
+#include <string.h>
 
 #ifdef __APPLE__
 
