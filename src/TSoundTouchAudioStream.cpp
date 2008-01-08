@@ -21,7 +21,7 @@ research@grame.fr
 
 #include "TAudioGlobals.h"
 #include "TSoundTouchAudioStream.h"
-#include "Utools.h"
+#include "UTools.h"
 
 TSoundTouchAudioStream::TSoundTouchAudioStream(TAudioStreamPtr stream, double* pitch_shift, double* time_strech)
 {

@@ -353,10 +353,7 @@ void TestPlay(AudioPlayerPtr player)
 /*
 void SaveSound(AudioStream sound, char* name)
 {
-<<<<<<< main.cpp
-=======
 	AudioStream writesound = MakeRendererSound(MakeWriteSound(name, sound, SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
->>>>>>> 1.26
 	printf("GetChannelsSound %ld\n", GetChannelsSound(writesound));
 	float buffer[512 * 2];
     long res;
