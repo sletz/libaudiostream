@@ -21,8 +21,6 @@
 		4B8E50E70CAA86670070FDA9 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8E50E30CAA86670070FDA9 /* StringTools.h */; };
 		4B8E51790CAA86E70070FDA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
 		4B8E517A0CAA86E70070FDA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
-		4B98A5BE0D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
-		4B98A5BF0D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B98A5C00D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
 		4B98A5C10D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B98A5C50D168B4300A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
@@ -266,6 +264,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
+		4B9E2DEA0DAA2FF000F5F690 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.gcc.4_0;
+			fileType = sourcecode.asm;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
 		4BCB2B670D12ACE500AB3F6D /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.gcc.4_0;
@@ -766,7 +772,6 @@
 				4BB3FEDC0B39BAD400CA1607 /* la_smartpointer.h in Headers */,
 				4B63B0550BDF790600CD9753 /* TPortAudioV19Renderer.h in Headers */,
 				4B8E50E50CAA86670070FDA9 /* StringTools.h in Headers */,
-				4B98A5BF0D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -889,6 +894,7 @@
 				4BEA61E3095806CD001F733A /* Rez */,
 			);
 			buildRules = (
+				4B9E2DEA0DAA2FF000F5F690 /* PBXBuildRule */,
 				4BEA61E5095806CD001F733A /* PBXBuildRule */,
 			);
 			dependencies = (
@@ -1101,7 +1107,6 @@
 				4BB3FEDB0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */,
 				4B63B0540BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */,
 				4BC9AC250CAAA81800E8A035 /* StringTools.c in Sources */,
-				4B98A5BE0D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1546,13 +1551,14 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = ../src/renderer;
-				INFOPLIST_FILE = "/Volumes/Document1/Developpement/ProjectsCVS/LibAudioStreamCVS/macosx/Info-LibAudioStreamPA.plist";
+				INFOPLIST_FILE = "Info-LibAudioStreamPA.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__PORTAUDIO__",
 					"-D__PORTAUDIOV19__",
+					"-DSOUND_TOUCH",
 				);
 				OTHER_LDFLAGS = (
 					"-flat_namespace",

@@ -31,7 +31,9 @@ research@grame.fr
 #include "TInputAudioStream.h"
 #include "TTransformAudioStream.h"
 //#include "TRubberBandAudioStream.h"
+#ifdef SOUND_TOUCH
 #include "TSoundTouchAudioStream.h"
+#endif
 #include "TWriteFileAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TChannelizerAudioStream.h"
@@ -131,13 +133,12 @@ TAudioStreamPtr TAudioStreamFactory::MakeRubberBandSound(TAudioStreamPtr s1,  do
 }
 */
 
+#ifdef SOUND_TOUCH
 TAudioStreamPtr TAudioStreamFactory::MakeSoundTouchSound(TAudioStreamPtr s1,  double* pitch_shift, double* time_strech)
 {
-	/*
     return (s1) ? new TSoundTouchAudioStream(s1, pitch_shift, time_strech) : 0;
-    */
-	return 0;
 }
+#endif
 
 TAudioStreamPtr TAudioStreamFactory::MakeWriteSound(string name, TAudioStreamPtr s, long format)
 {

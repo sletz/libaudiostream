@@ -77,7 +77,9 @@ class AUDIO_EXPORTS TAudioStreamFactory
         static TAudioStreamPtr MakeMixSound(TAudioStreamPtr s1, TAudioStreamPtr s2);
         static TAudioStreamPtr MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut);
 		//static TAudioStreamPtr MakeRubberBandSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech);
+    #ifdef SOUND_TOUCH
 		static TAudioStreamPtr MakeSoundTouchSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech);
+    #endif
         static TAudioStreamPtr MakeWriteSound(string name, TAudioStreamPtr s, long format);
         static TAudioStreamPtr MakeRTRenderer(TAudioStreamPtr s);
         static TAudioStreamPtr MakeDTRenderer(TAudioStreamPtr s);
