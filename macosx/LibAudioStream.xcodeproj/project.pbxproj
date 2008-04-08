@@ -30,8 +30,6 @@
 		4BB3FEDE0B39BAD400CA1607 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; };
 		4BC9AC250CAAA81800E8A035 /* StringTools.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC9AC240CAAA81800E8A035 /* StringTools.c */; };
 		4BC9AC260CAAA81800E8A035 /* StringTools.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC9AC240CAAA81800E8A035 /* StringTools.c */; };
-		4BCB2B0B0D12ACCF00AB3F6D /* rubberband.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCB2B0A0D12ACCF00AB3F6D /* rubberband.framework */; };
-		4BCB2B0C0D12ACCF00AB3F6D /* rubberband.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCB2B0A0D12ACCF00AB3F6D /* rubberband.framework */; };
 		4BCB2B100D12ACE500AB3F6D /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BCB2B110D12ACE500AB3F6D /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 		4BCB2B120D12ACE500AB3F6D /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
@@ -112,7 +110,6 @@
 		4BCB2B620D12ACE500AB3F6D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192308B9CD8D00C1962D /* Accelerate.framework */; };
 		4BCB2B630D12ACE500AB3F6D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4BCB2B640D12ACE500AB3F6D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
-		4BCB2B650D12ACE500AB3F6D /* rubberband.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCB2B0A0D12ACCF00AB3F6D /* rubberband.framework */; };
 		4BCB2BDF0D12B71300AB3F6D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0DEDE087FE455003B1CB3 /* main.cpp */; };
 		4BEA6194095806CD001F733A /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BEA6195095806CD001F733A /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
@@ -329,7 +326,6 @@
 		4BC6136407F4990B00ACC53C /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../src/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136907F499E200ACC53C /* TAudioStreamFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioStreamFactory.h; path = ../src/TAudioStreamFactory.h; sourceTree = SOURCE_ROOT; };
 		4BC9AC240CAAA81800E8A035 /* StringTools.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = StringTools.c; path = ../src/StringTools.c; sourceTree = SOURCE_ROOT; };
-		4BCB2B0A0D12ACCF00AB3F6D /* rubberband.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = rubberband.framework; path = ../../../../../../Library/Frameworks/rubberband.framework; sourceTree = SOURCE_ROOT; };
 		4BCB2B6C0D12ACE500AB3F6D /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCB2BE60D12B71300AB3F6D /* testPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCC1A8007F1AA7E003E6784 /* lflifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lflifo.h; path = ../src/atomic/lflifo.h; sourceTree = SOURCE_ROOT; };
@@ -401,7 +397,6 @@
 				4BCB2B620D12ACE500AB3F6D /* Accelerate.framework in Frameworks */,
 				4BCB2B630D12ACE500AB3F6D /* AudioToolbox.framework in Frameworks */,
 				4BCB2B640D12ACE500AB3F6D /* Foundation.framework in Frameworks */,
-				4BCB2B650D12ACE500AB3F6D /* rubberband.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,7 +414,6 @@
 				4BEA61E1095806CD001F733A /* Accelerate.framework in Frameworks */,
 				4BEA61E2095806CD001F733A /* AudioToolbox.framework in Frameworks */,
 				4B8E51790CAA86E70070FDA9 /* Foundation.framework in Frameworks */,
-				4BCB2B0B0D12ACCF00AB3F6D /* rubberband.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +426,6 @@
 				4B7BD8D9097D0ED00029D6DC /* AudioUnit.framework in Frameworks */,
 				4B7BD8DD097D0EF30029D6DC /* CoreAudio.framework in Frameworks */,
 				4B8E517A0CAA86E70070FDA9 /* Foundation.framework in Frameworks */,
-				4BCB2B0C0D12ACCF00AB3F6D /* rubberband.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +442,6 @@
 		0249A662FF388D9811CA2CEA /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4BCB2B0A0D12ACCF00AB3F6D /* rubberband.framework */,
 				D3C5192308B9CD8D00C1962D /* Accelerate.framework */,
 				D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */,
 				F666DED703EC03FB01D11C03 /* JavaVM.framework */,
@@ -1178,6 +1170,7 @@
 				HEADER_SEARCH_PATHS = ../src/renderer;
 				INFOPLIST_FILE = "Info-LibAudioStreamPA.plist";
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_CPLUSPLUSFLAGS = (
