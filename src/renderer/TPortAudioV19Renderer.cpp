@@ -150,7 +150,13 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
         outChan = (outChan < pdi->maxOutputChannels) ? outChan : pdi->maxOutputChannels;
         printf("Ouput channel number %ld\n", outChan);
     }
-	
+    
+    // Otherwise Pa_OpenStream will fail... 
+    if (inChan == 0)
+        inDevice = paNoDevice;
+    if (outChan == 0)
+        outDevice = paNoDevice;
+ 	
 	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
