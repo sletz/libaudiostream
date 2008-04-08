@@ -133,7 +133,6 @@ typedef TAudioEffectInterfacePtr AudioEffectInterface;
 
 typedef void (*StopCallback)(void* context);
 
-
 /*!
 \brief Create a stream that will produce "silence".
 \param lengthFrame The number of null frame to be produced.
@@ -578,14 +577,16 @@ AudioRendererPtr MakeAudioRenderer(long renderer);
 void DeleteAudioRenderer(AudioRendererPtr renderer);
 /*!
 \brief Open the audio renderer.
-\param renderer The audio used.
+\param renderer The audio renderer used.
+\param inputDevice The audio input device index.
+\param outputDevice The audio output device index.
 \param inChan The number of input channels. <B>Only stereo players are currently supported </b>. On input, contains the wanted value, on return the really used one.
 \param outChan The number of output channels.  On input, contains the wanted value, on return the really used one.
-\param buffer_size The audio player internal buffer size.  On input, contains the wanted value, on return the really used one.
-\param sample_rate The sampling rate.  On input, contains the wanted value, on return the really used one.
+\param bufferSize The audio player internal buffer size.  On input, contains the wanted value, on return the really used one.
+\param sampleRate The sampling rate. On input, contains the wanted value, on return the really used one.
 \return An error code.
 */
-int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  // AJOUTER in/out device
+int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  
 /*!
 \brief Close an audio renderer.
 \param renderer The audio renderer to be closed.
