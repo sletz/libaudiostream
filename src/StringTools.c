@@ -31,7 +31,7 @@
 void Convert2UTF8(const char* name, char* res, int len) 
 {
 	CFURLRef urlref = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8*)name, strlen(name), kCFStringEncodingMacRoman, NULL);
-	CFIndex ret = CFURLGetFileSystemRepresentation(urlref, true, (UInt8*)res, len);
+	CFURLGetFileSystemRepresentation(urlref, true, (UInt8*)res, len);
 }
 
 #else
