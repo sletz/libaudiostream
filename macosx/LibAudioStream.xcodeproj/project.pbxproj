@@ -331,7 +331,7 @@
 		4BCC1A8007F1AA7E003E6784 /* lflifo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lflifo.h; path = ../src/atomic/lflifo.h; sourceTree = SOURCE_ROOT; };
 		4BEA61E6095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEA623C095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TCoreAudioRenderer.cpp; path = ../src/renderer/TCoreAudioRenderer.cpp; sourceTree = SOURCE_ROOT; };
 		4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TCoreAudioRenderer.h; path = ../src/renderer/TCoreAudioRenderer.h; sourceTree = SOURCE_ROOT; };
 		4BF92831088E3B16006A013D /* TPanAudioEffect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TPanAudioEffect.h; path = ../src/TPanAudioEffect.h; sourceTree = SOURCE_ROOT; };
