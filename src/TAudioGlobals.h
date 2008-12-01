@@ -54,6 +54,9 @@ class AUDIO_EXPORTS TAudioGlobals
         static long fDiskError;                 // Counter of disk streaming errors
 		static long fFileMax;
 
+		static long fInputLatency;				// Suggested input latency (when used with portAudio)
+		static long fOutputLatency;				// Suggested output latency (when used with portAudio)
+
         TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
         virtual ~TAudioGlobals();

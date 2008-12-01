@@ -345,9 +345,17 @@ extern "C"
 	void DeleteEffectPtr(AudioEffectPtr effect);
 
     // Open/Close
+	/*!
+    \brief Set global input/output audio latencies. This calls has to be done <B>before </B> OpenAudioPlayer 
+	 and will take effect only when PortAudio is used.
+    \param inputLatency The wanted input latency in millisecond.
+    \param outputLatency The wanted output latency in millisecond.
+    */
+	void SetAudioLatencies(long inputLatency, long outputLatency);
+
     /*!
     \brief Open the audio player.
-    \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
+    \param inChan The number of input channels. <B>Only stereo players are currently supported </B>
     \param outChan The number of output channels.
     \param channels The number of stream channels.
     \param sample_rate The sampling rate.

@@ -389,6 +389,14 @@ long LibVersion();
 	
 // Open/Close
 /*!
+\brief Set global input/output audio latencies. This calls has to be done <B>before </B> OpenAudioPlayer 
+and will take effect only when PortAudio is used.
+\param inputLatency The wanted input latency in millisecond.
+\param outputLatency The wanted output latency in millisecond.
+*/
+void SetAudioLatencies(long inputLatency, long outputLatency);
+
+/*!
 \brief Open the audio player.
 \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
 \param outChan The number of output channels.

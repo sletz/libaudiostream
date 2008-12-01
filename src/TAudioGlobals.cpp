@@ -56,6 +56,9 @@ long TAudioGlobals::fSample_Rate = 0;
 long TAudioGlobals::fDiskError = 0;
 long TAudioGlobals::fFileMax = 0;
 
+long TAudioGlobals::fInputLatency = -1;
+long TAudioGlobals::fOutputLatency = -1;
+
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 

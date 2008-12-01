@@ -54,6 +54,10 @@ void TPortAudioV19Renderer::DisplayDevices()
         printf("Max Inputs   = %d", pdi->maxInputChannels);
         printf(", Max Outputs = %d\n", pdi->maxOutputChannels);
 		printf("Sample rate = %f\n", pdi->defaultSampleRate);
+		printf("defaultLowInputLatency = %f\n", pdi->defaultLowInputLatency);
+		printf("defaultHighInputLatency = %f\n", pdi->defaultHighInputLatency);
+		printf("defaultLowOutputLatency = %f\n", pdi->defaultLowOutputLatency); 
+		printf("defaultHighOutputLatency = %f\n", pdi->defaultHighOutputLatency);
         printf("\n");
     }
 }
@@ -172,15 +176,19 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
     inputParameters.channelCount = inChan;
     inputParameters.sampleFormat = paFloat32;		// 32 bit floating point output
     inputParameters.suggestedLatency = (inputDevice != paNoDevice)		// TODO: check how to setup this on ASIO
-                                       ? Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency
+                                       ? ((TAudioGlobals::fInputLatency > 0) 
+										? (float(TAudioGlobals::fInputLatency) / 1000.f)
+										:Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency)
                                        : 0;
-    inputParameters.hostApiSpecificStreamInfo = NULL;
+	 inputParameters.hostApiSpecificStreamInfo = NULL;
 
     outputParameters.device = outputDevice;
     outputParameters.channelCount = outChan;
     outputParameters.sampleFormat = paFloat32;		// 32 bit floating point output
     outputParameters.suggestedLatency = (outputDevice != paNoDevice)	// TODO: check how to setup this on ASIO
-                                        ? Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency
+                                        ? ((TAudioGlobals::fOutputLatency > 0) 
+										 ? (float(TAudioGlobals::fOutputLatency) / 1000.f)
+										 :Pa_GetDeviceInfo(inputParameters.device)->defaultLowOutputLatency)
                                         : 0;
     outputParameters.hostApiSpecificStreamInfo = NULL;
 

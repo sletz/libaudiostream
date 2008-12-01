@@ -121,6 +121,7 @@ extern "C"
 	void AUDIOAPI DeleteEffectPtr(AudioEffectPtr effect);
 
 	  // Open/Close
+	void AUDIOAPI SetAudioLatencies(long inputLatency, long outputLatency);
     AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 
                                             long outChan, 
                                             long channels, 
@@ -236,7 +237,7 @@ void AUDIOAPI ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 long LibVersion()
 {
-	return 120;
+	return 121;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -669,6 +670,13 @@ void AUDIOAPI ProcessEffectPtr(AudioEffectPtr effect, float** input, float** out
 }
 
 // Open/Close
+
+void AUDIOAPI SetAudioLatencies(long inputLatency, long outputLatency)
+{
+	TAudioGlobals::fInputLatency = inputLatency;
+	TAudioGlobals::fOutputLatency = outputLatency;
+}
+
 AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan, 
                                         long outChan, 
                                         long channels, 
