@@ -76,8 +76,8 @@ TJackAudioRenderer::~TJackAudioRenderer()
 long TJackAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	int i;
-
-    if ((fClient = jack_client_new("AudioPlayer")) == 0) {
+ 
+    if ((fClient = jack_client_open("AudioPlayer", JackNullOption, NULL)) == 0) {
         printf("Jack server not running?\n");
         goto error;
     }
@@ -144,7 +144,7 @@ long TJackAudioRenderer::Close()
 	}
 	
 	if (fClient && jack_client_close(fClient)) {
-        printf ("Cannot close client");
+        printf("Cannot close client");
         return CLOSE_ERR;
     }
 	

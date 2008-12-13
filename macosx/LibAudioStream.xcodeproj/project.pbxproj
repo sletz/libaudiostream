@@ -1309,7 +1309,10 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
-				HEADER_SEARCH_PATHS = ../src/renderer;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					../src/renderer,
+				);
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
