@@ -44,7 +44,7 @@ BEGIN
     BEGIN
         BLOCK "040c04b0"
         BEGIN
-            VALUE "Comments", "build with libsndfile 1.0.11, portaudio 19 and soundtouch 1.31\0"
+            VALUE "Comments", "build with libsndfile 1.0.20, portaudio 19 and soundtouch 1.31\0"
             VALUE "CompanyName", "Grame\0"
             VALUE "FileDescription", "LibAudioStream\0"
             VALUE "FileVersion", "1, 2, 2, 0\0"
