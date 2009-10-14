@@ -237,7 +237,7 @@ void AUDIOAPI ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 long LibVersion()
 {
-	return 122;
+	return 123;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)

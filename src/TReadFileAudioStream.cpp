@@ -64,6 +64,12 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     TAudioBuffer<short>::Copy(fCopyBuffer, 0, fBuffer, 0, TAudioGlobals::fStream_Buffer_Size);
 
     fReady = true;
+    
+    // Needed because we later on use sf_readf_short, would be remove is sf_readf_float is used instead.
+    if (info.format & SF_FORMAT_FLOAT) {
+        int arg = SF_TRUE;
+        sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
+    }
 }
 
 TReadFileAudioStream::~TReadFileAudioStream()

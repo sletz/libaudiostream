@@ -79,6 +79,12 @@ void TWriteFileAudioStream::Open()
 			
 		sf_seek(fFile, 0, SEEK_SET);
 		fReady = true;
+        
+        // Needed because we later on use sf_writef_short, would be remove is sf_writef_float is used instead.
+        if (info.format & SF_FORMAT_FLOAT) {
+            int arg = SF_TRUE;
+            sf_command(fFile, SFC_SET_SCALE_INT_FLOAT_WRITE, &arg, sizeof(arg));
+        }
 	}
 }
 
