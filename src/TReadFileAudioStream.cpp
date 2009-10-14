@@ -52,6 +52,12 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     fChannels = long(info.channels);
     fBeginFrame = beginFrame;
 
+	// Needed because we later on use sf_readf_short, would be remove is sf_readf_float is used instead.
+    if (info.format & SF_FORMAT_FLOAT) {
+        int arg = SF_TRUE;
+        sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
+    }
+
     if (info.samplerate != TAudioGlobals::fSample_Rate)
         printf("Warning : file sample rate different from engine sample rate! %i\n", info.samplerate);
 
@@ -64,12 +70,6 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     TAudioBuffer<short>::Copy(fCopyBuffer, 0, fBuffer, 0, TAudioGlobals::fStream_Buffer_Size);
 
     fReady = true;
-    
-    // Needed because we later on use sf_readf_short, would be remove is sf_readf_float is used instead.
-    if (info.format & SF_FORMAT_FLOAT) {
-        int arg = SF_TRUE;
-        sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
-    }
 }
 
 TReadFileAudioStream::~TReadFileAudioStream()
