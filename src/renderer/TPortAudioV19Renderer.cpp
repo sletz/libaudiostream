@@ -180,7 +180,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
 										? (float(TAudioGlobals::fInputLatency) / 1000.f)
 										:Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency)
                                        : 0;
-	 inputParameters.hostApiSpecificStreamInfo = NULL;
+	inputParameters.hostApiSpecificStreamInfo = NULL;
 
     outputParameters.device = outputDevice;
     outputParameters.channelCount = outChan;
@@ -188,7 +188,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
     outputParameters.suggestedLatency = (outputDevice != paNoDevice)	// TODO: check how to setup this on ASIO
                                         ? ((TAudioGlobals::fOutputLatency > 0) 
 										 ? (float(TAudioGlobals::fOutputLatency) / 1000.f)
-										 :Pa_GetDeviceInfo(inputParameters.device)->defaultLowOutputLatency)
+										 :Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency)
                                         : 0;
     outputParameters.hostApiSpecificStreamInfo = NULL;
 
