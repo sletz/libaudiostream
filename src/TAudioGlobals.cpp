@@ -62,22 +62,26 @@ long TAudioGlobals::fOutputLatency = -1;
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 
+#ifdef WIN32
 static int SetMaximumFiles(long filecount)
 {
-#ifdef WIN32
-	return 0;
+    return 0;
+}
+static int GetMaximumFiles(long *filecount) 
+{
+    return 0;
+}
+
 #else
+static int SetMaximumFiles(long filecount)
+{
     struct rlimit lim;
     lim.rlim_cur = lim.rlim_max = (rlim_t)filecount;
     return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
-#endif
 }
 
 static int GetMaximumFiles(long *filecount) 
 {
-#ifdef WIN32
-	return 0;
-#else
     struct rlimit lim;
     if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
         *filecount = (long)lim.rlim_max;
@@ -85,8 +89,8 @@ static int GetMaximumFiles(long *filecount)
     } else {
 		return errno;
 	}
-#endif
 }
+#endif
 
 void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_rate,
                          long buffer_size, long stream_buffer_size, long rtstream_buffer_size, long thread_num)
