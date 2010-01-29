@@ -414,9 +414,13 @@ int main(int argc, char* argv[])
 	
 	// Try to open Jack version
     AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
-    // Is failure opens PortAudio version
+    // If failure opens PortAudio version
     if (!player)
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
+    // If failure opens CoreAudio version
+    if (!player)
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 48000, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
+    
     StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");
@@ -428,7 +432,7 @@ int main(int argc, char* argv[])
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
 	
-	/*
+	
     ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
@@ -450,7 +454,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test9bis());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
-	*/
+	
 	ExecTest(player, test12());
 	ExecTest(player, test13());
 

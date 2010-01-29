@@ -43,8 +43,10 @@ class TCoreAudioRenderer : public TAudioRenderer
 		AudioBufferList* fInputData;
 		AudioDeviceID fDeviceID;
 		AudioUnit fAUHAL;
+        bool fState;
 		
 		OSStatus GetDefaultDevice(int inChan, int outChan, AudioDeviceID* id);
+        int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
 
 		static	OSStatus Render(void *inRefCon,
                                AudioUnitRenderActionFlags *ioActionFlags,
@@ -52,10 +54,16 @@ class TCoreAudioRenderer : public TAudioRenderer
                                UInt32 inBusNumber,
                                UInt32 inNumberFrames,
                                AudioBufferList *ioData);
+    
+        static OSStatus SRNotificationCallback(AudioDeviceID inDevice,
+                                            UInt32 inChannel,
+                                            Boolean isInput,
+                                            AudioDevicePropertyID inPropertyID,
+                                            void* inClientData);
 
     public:
 
-        TCoreAudioRenderer(): TAudioRenderer()
+        TCoreAudioRenderer(): TAudioRenderer(), fState(false)
         {}
         virtual ~TCoreAudioRenderer()
         {}

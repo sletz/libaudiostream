@@ -25,6 +25,16 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
+#define WAIT_COUNTER 60
+
+typedef	UInt8	CAAudioHardwareDeviceSectionID;
+
+#define	kAudioDeviceSectionInput	((CAAudioHardwareDeviceSectionID)0x01)
+#define	kAudioDeviceSectionOutput	((CAAudioHardwareDeviceSectionID)0x00)
+#define	kAudioDeviceSectionGlobal	((CAAudioHardwareDeviceSectionID)0x00)
+#define	kAudioDeviceSectionWildcard	((CAAudioHardwareDeviceSectionID)0xFF)
+
+
 #define DEBUG 1
 
 // TODO : use jackdmp code...
@@ -160,15 +170,121 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, AudioDevi
 	return noErr;
 }
 
+OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
+                                                     UInt32 inChannel,
+                                                     Boolean	isInput,
+                                                     AudioDevicePropertyID inPropertyID,
+                                                     void* inClientData)
+{
+    TCoreAudioRenderer* driver = (TCoreAudioRenderer*)inClientData;
+    
+    switch (inPropertyID) {
+            
+        case kAudioDevicePropertyNominalSampleRate: {
+            printf("JackCoreAudioDriver::SRNotificationCallback kAudioDevicePropertyNominalSampleRate\n");
+            driver->fState = true;
+            // Check new sample rate
+            Float64 sampleRate;
+            UInt32 outSize =  sizeof(Float64);
+            OSStatus err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &sampleRate);
+            if (err != noErr) {
+                printf("Cannot get current sample rate\n");
+                printError(err);
+            } else {
+                printf("SRNotificationCallback : checked sample rate = %f\n", sampleRate);
+            }
+            break;
+        }
+    }
+    
+    return noErr;
+}
+
+int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long samplerate)
+{
+    OSStatus err = noErr;
+    UInt32 outSize;
+    Float64 sampleRate;
+    
+    // Get sample rate
+    outSize =  sizeof(Float64);
+    err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &sampleRate);
+    if (err != noErr) {
+        printf("Cannot get current sample rate\n");
+        printError(err);
+        return -1;
+    } else {
+        printf("Current sample rate = %f\n", sampleRate);
+    }
+    
+    // If needed, set new sample rate
+    if (samplerate != (long)sampleRate) {
+        sampleRate = (Float64)samplerate;
+        
+        // To get SR change notification
+        err = AudioDeviceAddPropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback, this);
+        if (err != noErr) {
+            printf("Error calling AudioDeviceAddPropertyListener with kAudioDevicePropertyNominalSampleRate\n");
+            printError(err);
+            return -1;
+        }
+        err = AudioDeviceSetProperty(inDevice, NULL, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, outSize, &sampleRate);
+        if (err != noErr) {
+            printf("Cannot set sample rate = %ld\n", samplerate);
+            printError(err);
+            return -1;
+        }
+        
+        // Waiting for SR change notification
+        int count = 0;
+        while (!fState && count++ < WAIT_COUNTER) {
+            usleep(100000);
+            printf("Wait count = %d\n", count);
+        }
+        
+        // Check new sample rate
+        outSize =  sizeof(Float64);
+        err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &sampleRate);
+        if (err != noErr) {
+            printf("Cannot get current sample rate\n");
+            printError(err);
+        } else {
+            printf("Checked sample rate = %f\n", sampleRate);
+        }
+        
+        // Remove SR change notification
+        AudioDeviceRemovePropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback);
+    }
+    
+    return 0;
+}
+
+
 long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long samplerate)
 {
 	OSStatus err = noErr;
     ComponentResult err1;
     UInt32 outSize;
 	Boolean isWritable;
-	AudioStreamBasicDescription srcFormat, dstFormat, sampleRate;
+	AudioStreamBasicDescription srcFormat, dstFormat;
     long in_nChannels, out_nChannels;
-	
+    
+    SInt32 major;
+    SInt32 minor;
+    Gestalt(gestaltSystemVersionMajor, &major);
+    Gestalt(gestaltSystemVersionMinor, &minor);
+    
+    // Starting with 10.6 systems, the HAL notification thread is created internally
+    if (major == 10 && minor >= 6) {
+        CFRunLoopRef theRunLoop = NULL;
+        AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyRunLoop, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+        OSStatus osErr = AudioObjectSetPropertyData (kAudioObjectSystemObject, &theAddress, 0, NULL, sizeof(CFRunLoopRef), &theRunLoop);
+        if (osErr != noErr) {
+            printf("JackCoreAudioDriver::Open kAudioHardwarePropertyRunLoop error\n");
+            printError(osErr);
+        }
+    }
+ 	
 	if (GetDefaultDevice(inChan, outChan, &fDeviceID) != noErr){
 		printf("Cannot open default device\n");
 		return OPEN_ERR;
@@ -183,25 +299,9 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         return OPEN_ERR;
     }
 
-    // Setting sample rate
-    outSize = sizeof(AudioStreamBasicDescription);
-    err = AudioDeviceGetProperty(fDeviceID, 0, false, kAudioDevicePropertyStreamFormat, &outSize, &sampleRate);
-    if (err != noErr) {
-        printf("Cannot get current sample rate\n");
-        printError(err);
-        return OPEN_ERR;
-    }
-
-    if (samplerate != (unsigned long)sampleRate.mSampleRate) {
-        sampleRate.mSampleRate = (Float64)(samplerate);
-        err = AudioDeviceSetProperty(fDeviceID, NULL, 0, false, kAudioDevicePropertyStreamFormat, outSize, &sampleRate);
-        if (err != noErr) {
-            printf("Cannot set sample rate = %ld\n", samplerate);
-            printError(err);
-            return OPEN_ERR;
-        }
-    }
-
+    if (SetupSampleRateAux(fDeviceID, samplerate) < 0)
+       return OPEN_ERR;
+  
     // AUHAL
     ComponentDescription cd = {kAudioUnitType_Output, kAudioUnitSubType_HALOutput, kAudioUnitManufacturer_Apple, 0, 0};
     Component HALOutput = FindNextComponent(NULL, &cd);
@@ -213,43 +313,66 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         goto error;
 	}
 
-    err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &fDeviceID, sizeof(AudioDeviceID));
-    if (err1 != noErr) {
-        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_CurrentDevice\n");
-        printError(err1);
-        goto error;
-    }
-
     err1 = AudioUnitInitialize(fAUHAL);
     if (err1 != noErr) {
 		printf("Cannot initialize AUHAL unit");
 		printError(err1);
         goto error;
 	}
+    
+    if (inChan > 0) {
+        outSize = 1;
+        printf("Setup AUHAL input on\n");
+    } else {
+        outSize = 0;
+        printf("Setup AUHAL input off\n");
+    }
+    
+    err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, 1, &outSize, sizeof(outSize));
+    if (err1 != noErr) {
+        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input\n");
+        printError(err1);
+        goto error;
+    }
 
-    outSize = 1;
+    if (outChan > 0) {
+        outSize = 1;
+        printf("Setup AUHAL output on\n");
+    } else {
+        outSize = 0;
+        printf("Setup AUHAL output off\n");
+    }
+    
     err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &outSize, sizeof(outSize));
     if (err1 != noErr) {
         printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output\n");
         printError(err1);
         goto error;
     }
-
+    
+    err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &fDeviceID, sizeof(AudioDeviceID));
+    if (err1 != noErr) {
+        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_CurrentDevice\n");
+        printError(err1);
+        goto error;
+    }
+  
     if (inChan > 0) {
-        outSize = 1;
-        err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, 1, &outSize, sizeof(outSize));
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 1, (UInt32*)&bufferSize, sizeof(UInt32));
         if (err1 != noErr) {
-            printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input\n");
+            printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_MaximumFramesPerSlice\n");
             printError(err1);
             goto error;
         }
     }
-
-    err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, (UInt32*)bufferSize, sizeof(UInt32));
-    if (err1 != noErr) {
-        printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_MaximumFramesPerSlice\n");
-        printError(err1);
-        goto error;
+    
+    if (outChan > 0) {
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, (UInt32*)&bufferSize, sizeof(UInt32));
+        if (err1 != noErr) {
+            printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_MaximumFramesPerSlice\n");
+            printError(err1);
+            goto error;
+        }
     }
 
     err1 = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Input, 1, &outSize, &isWritable);
@@ -307,61 +430,73 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         }
     }
 	
-	outSize = sizeof(AudioStreamBasicDescription);
-	err1 = AudioUnitGetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &srcFormat, &outSize);
-    if (err1 != noErr) {
-        printf("Error calling AudioUnitGetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Input\n");
-        printError(err1);
+    
+    // Setup stream converters
+    if (inChan > 0) {
+        
+        outSize = sizeof(AudioStreamBasicDescription);
+        err1 = AudioUnitGetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &srcFormat, &outSize);
+        if (err1 != noErr) {
+            printf("Error calling AudioUnitGetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Output\n");
+            printError(err1);
+            goto error;
+        }
+        PrintStreamDesc(&srcFormat);
+        
+        printf("Setup AUHAL input stream converter SR = %ld\n", samplerate);
+        srcFormat.mSampleRate = samplerate;
+        srcFormat.mFormatID = kAudioFormatLinearPCM;
+        srcFormat.mBitsPerChannel = 32;
+        srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+        srcFormat.mChannelsPerFrame = outChan;
+        srcFormat.mFramesPerPacket = 1;
+        srcFormat.mBytesPerFrame = srcFormat.mBitsPerChannel * srcFormat.mChannelsPerFrame / 8;
+        srcFormat.mBytesPerPacket = srcFormat.mBytesPerFrame * srcFormat.mFramesPerPacket;
+        PrintStreamDesc(&srcFormat);
+       
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &srcFormat, sizeof(AudioStreamBasicDescription));
+        if (err1 != noErr) {
+            printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Output\n");
+            printError(err1);
+            goto error;
+        }
     }
-	PrintStreamDesc(&srcFormat);
-	
-	outSize = sizeof(AudioStreamBasicDescription);
-	err1 = AudioUnitGetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &dstFormat, &outSize);
-    if (err1 != noErr) {
-        printf("Error calling AudioUnitGetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Output\n");
-        printError(err1);
-    }
-	PrintStreamDesc(&dstFormat);
-	
-	srcFormat.mSampleRate = samplerate;
-    srcFormat.mFormatID = kAudioFormatLinearPCM;
-	srcFormat.mBitsPerChannel = 32;
-	srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-	srcFormat.mChannelsPerFrame = outChan;
-	srcFormat.mFramesPerPacket = 1;
-	srcFormat.mBytesPerFrame = srcFormat.mBitsPerChannel * srcFormat.mChannelsPerFrame / 8;
-    srcFormat.mBytesPerPacket = srcFormat.mBytesPerFrame * srcFormat.mFramesPerPacket;
-		
-	PrintStreamDesc(&srcFormat);
-
-    err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &srcFormat, sizeof(AudioStreamBasicDescription));
-    if (err1 != noErr) {
-        printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Input\n");
-        printError(err1);
-    }
-	
-    dstFormat.mSampleRate = samplerate;
-	dstFormat.mFormatID = kAudioFormatLinearPCM;
-	dstFormat.mBitsPerChannel = 32;
-	dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-	dstFormat.mChannelsPerFrame = inChan;
-	dstFormat.mFramesPerPacket = 1;
-	dstFormat.mBytesPerFrame = dstFormat.mBitsPerChannel * dstFormat.mChannelsPerFrame / 8;
-    dstFormat.mBytesPerPacket = dstFormat.mBytesPerFrame * dstFormat.mFramesPerPacket;
-	
-	PrintStreamDesc(&dstFormat);
-
-    err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &dstFormat, sizeof(AudioStreamBasicDescription));
-    if (err1 != noErr) {
-        printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Output\n");
-        printError(err1);
-    }
-
+    
+    if (outChan > 0) {
+        
+        outSize = sizeof(AudioStreamBasicDescription);
+        err1 = AudioUnitGetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &dstFormat, &outSize);
+        if (err1 != noErr) {
+            printf("Error calling AudioUnitGetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Input\n");
+            printError(err1);
+            goto error;
+        }
+        PrintStreamDesc(&dstFormat);
+        
+        printf("Setup AUHAL output stream converter SR = %ld", samplerate);
+        dstFormat.mSampleRate = samplerate;
+        dstFormat.mFormatID = kAudioFormatLinearPCM;
+        dstFormat.mBitsPerChannel = 32;
+        dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+        dstFormat.mChannelsPerFrame = inChan;
+        dstFormat.mFramesPerPacket = 1;
+        dstFormat.mBytesPerFrame = dstFormat.mBitsPerChannel * dstFormat.mChannelsPerFrame / 8;
+        dstFormat.mBytesPerPacket = dstFormat.mBytesPerFrame * dstFormat.mFramesPerPacket;
+        PrintStreamDesc(&dstFormat);
+        
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &dstFormat, sizeof(AudioStreamBasicDescription));
+        if (err1 != noErr) {
+            printf("Error calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Input\n");
+            printError(err1);
+            goto error;
+        }
+    }     
+ 
     if (inChan > 0 && outChan == 0) {
         AURenderCallbackStruct output;
         output.inputProc = Render;
         output.inputProcRefCon = this;
-        err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Output, 1, &output, sizeof(output));
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_SetInputCallback, kAudioUnitScope_Global, 0, &output, sizeof(output));
         if (err1 != noErr) {
             printf("Error calling  AudioUnitSetProperty - kAudioUnitProperty_SetRenderCallback 1\n");
             printError(err1);
