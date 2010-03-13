@@ -448,7 +448,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         srcFormat.mFormatID = kAudioFormatLinearPCM;
         srcFormat.mBitsPerChannel = 32;
         srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-        srcFormat.mChannelsPerFrame = outChan;
+        srcFormat.mChannelsPerFrame = inChan;
         srcFormat.mFramesPerPacket = 1;
         srcFormat.mBytesPerFrame = srcFormat.mBitsPerChannel * srcFormat.mChannelsPerFrame / 8;
         srcFormat.mBytesPerPacket = srcFormat.mBytesPerFrame * srcFormat.mFramesPerPacket;
@@ -478,7 +478,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         dstFormat.mFormatID = kAudioFormatLinearPCM;
         dstFormat.mBitsPerChannel = 32;
         dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-        dstFormat.mChannelsPerFrame = inChan;
+        dstFormat.mChannelsPerFrame = outChan;
         dstFormat.mFramesPerPacket = 1;
         dstFormat.mBytesPerFrame = dstFormat.mBitsPerChannel * dstFormat.mChannelsPerFrame / 8;
         dstFormat.mBytesPerPacket = dstFormat.mBytesPerFrame * dstFormat.mFramesPerPacket;
