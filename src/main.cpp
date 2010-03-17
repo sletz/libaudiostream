@@ -409,7 +409,7 @@ int main(int argc, char* argv[])
 
 #ifndef WIN32
 	SetMaximumFiles(1024);	
-	printf(" sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
+	printf("sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
 #endif
 	
 	// Try to open Jack version

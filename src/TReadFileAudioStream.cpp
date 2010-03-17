@@ -59,12 +59,12 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     }
 
     if (info.samplerate != TAudioGlobals::fSample_Rate)
-        printf("Warning : file sample rate different from engine sample rate! %i\n", info.samplerate);
+        printf("Warning : file sample rate different from engine sample rate! %i %i\n", TAudioGlobals::fSample_Rate, info.samplerate);
 
     // Dynamic allocation
     fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
     fCopyBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
-
+  
     // Read first buffer directly
     TBufferedAudioStream::ReadBuffer(fBuffer, TAudioGlobals::fStream_Buffer_Size, 0);
     TAudioBuffer<short>::Copy(fCopyBuffer, 0, fBuffer, 0, TAudioGlobals::fStream_Buffer_Size);

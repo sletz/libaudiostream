@@ -176,6 +176,7 @@ class TThreadCmdManager : public TCmdManager
 
 	    lifo fFreeCmd;      // Commands free list
         fifo fRunningCmd;   // Running commands
+        bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
 		std::vector<pthread_t> fThreadList; // Execution thread

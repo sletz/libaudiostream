@@ -31,14 +31,13 @@ void* TThreadCmdManager::CmdHandler(void* arg)
 {
     TThreadCmdManager* manager = (TThreadCmdManager*) arg;
 
-    while (true) {
-		manager->RunAux();
-        pthread_mutex_lock(&manager->fLock);
-        while (fifosize(&manager->fRunningCmd) == 0)
-            pthread_cond_wait(&manager->fCond, &manager->fLock);
-        pthread_mutex_unlock(&manager->fLock);
+    pthread_mutex_lock(&manager->fLock);
+    while (manager->fRunning) {
+        manager->RunAux();
+        pthread_cond_wait(&manager->fCond, &manager->fLock);
     }
-
+    pthread_mutex_unlock(&manager->fLock);
+    
     pthread_exit(0);
     return 0;
 }
@@ -49,7 +48,7 @@ DWORD WINAPI TThreadCmdManager::CmdHandler(void* arg)
 {
     TThreadCmdManager* manager = (TThreadCmdManager*) arg;
 
-    while (true) {
+    while (manager->fRunning) {
         manager->RunAux();
 		WaitForSingleObject(manager->fCond, INFINITE);
     }
@@ -73,6 +72,8 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
 {   
     TCmd* cmd;
 	int i;
+    
+    fRunning = true;
 
     // Init variables
     lfinit(&fFreeCmd);
@@ -114,17 +115,26 @@ TThreadCmdManager::~TThreadCmdManager()
     TCmd* cmd;
     TCmd* next;
     
+    // Stop the threads...
+    fRunning = false;
+    
+#if defined(__APPLE__) || defined(linux)      
+    pthread_mutex_lock(&fLock);
+    pthread_cond_broadcast(&fCond);
+    pthread_mutex_unlock(&fLock);
+#elif WIN32
+    fifoput(&fRunningCmd, (fifocell*)cmd);
+    SetEvent(fCond);
+#endif
+    
     // Wait for thread exit
     for (unsigned int i = 0; i < fThreadList.size(); i++) {
-	#if defined(__APPLE__)
-        mach_port_t machThread = pthread_mach_thread_np(fThreadList[i]);
-        thread_terminate(machThread); 
+	#if defined(__APPLE__) || defined(linux)
+        pthread_cancel(fThreadList[i]);
+        pthread_join(fThreadList[i], NULL); 
     #elif WIN32
 		TerminateThread(fThreadList[i],0);
 		//WaitForSingleObject(fThreadList[i], INFINITE);
-	#elif defined(linux)
-		pthread_cancel(fThreadList[i]);
-        pthread_join(fThreadList[i], NULL); 
     #endif
     }  
 
@@ -173,8 +183,8 @@ void TThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long arg3, 
 	#if defined(__APPLE__) || defined(linux)      
         pthread_mutex_lock(&fLock);
         fifoput(&fRunningCmd, (fifocell*)cmd);
-        pthread_mutex_unlock(&fLock);
         pthread_cond_signal(&fCond);
+        pthread_mutex_unlock(&fLock);
 	#elif WIN32
 		fifoput(&fRunningCmd, (fifocell*)cmd);
 		SetEvent(fCond);
