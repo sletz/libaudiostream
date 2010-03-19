@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2002-2007
+Copyright ï¿½ Grame 2002-2007
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -59,7 +59,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     }
 
     if (info.samplerate != TAudioGlobals::fSample_Rate)
-        printf("Warning : file sample rate different from engine sample rate! %i %i\n", TAudioGlobals::fSample_Rate, info.samplerate);
+        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr =%d\n", TAudioGlobals::fSample_Rate, info.samplerate);
 
     // Dynamic allocation
     fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
