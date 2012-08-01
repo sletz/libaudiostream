@@ -67,8 +67,8 @@ TJackAudioRenderer::TJackAudioRenderer(): TAudioRenderer()
 
 TJackAudioRenderer::~TJackAudioRenderer()
 {
-    delete[]fInputBuffer;
-    delete[]fOutputBuffer;
+    delete[] fInputBuffer;
+    delete[] fOutputBuffer;
 	free(fInput_ports);
 	free(fOutput_ports);
 }
@@ -168,7 +168,7 @@ long TJackAudioRenderer::Start()
 				printf("Cannot connect input ports\n");
 			}
 		}
-        free(ports);
+        jack_free(ports);
     }
 
     if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
@@ -179,7 +179,7 @@ long TJackAudioRenderer::Start()
 				printf("Cannot connect output ports\n");
 			}
 		}
-		free(ports);
+		jack_free(ports);
     }
 
     return NO_ERR;
@@ -239,7 +239,7 @@ void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
     } else {
 		for (i = 0; ports[i]; i++) {}
 		info->fMaxInputChannels = i;
-        free(ports);
+        jack_free(ports);
     }
 	
 	if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
@@ -247,7 +247,7 @@ void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
     } else {
 		for (i = 0; ports[i]; i++) {}
 		info->fMaxOutputChannels = i;
-        free(ports);
+        jack_free(ports);
     }
 	
 	strcpy(info->fName, "Jack duplex");

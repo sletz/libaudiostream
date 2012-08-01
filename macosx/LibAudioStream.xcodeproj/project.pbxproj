@@ -1117,7 +1117,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 4B95A74A0A39EF5C00916AF3 /* Build configuration list for PBXProject "LibAudioStream" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* AudioEngine.prprj */;
 			projectDirPath = "";
 			projectRoot = ..;
@@ -1672,6 +1679,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_VERSION = 4.0;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					../src/renderer,
