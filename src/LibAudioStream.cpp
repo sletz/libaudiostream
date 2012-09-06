@@ -513,8 +513,13 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 	try {
 		return new TModuleFaustAudioEffect(name);
 	} catch (int n) {
-		printf("MakeFaustAudioEffect exception %d \n", n);
-		return 0;
+		printf("TModuleFaustAudioEffect exception %d \n", n);
+		try {
+            return new TCodeFaustAudioEffect(name);
+        } catch (int n) {
+            printf("TCodeFaustAudioEffect exception %d \n", n);
+            return 0;
+        }
 	}
 }
 

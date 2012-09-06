@@ -123,8 +123,9 @@ class AUDIO_EXPORTS TAudioRenderer
         void RemoveClient(TAudioClientPtr client)
         {
 			for (list<TRTAudioClient>::iterator iter = fClientList.begin(); iter != fClientList.end(); iter++) {
-				if ((*iter).fRTClient == client) 
+				if ((*iter).fRTClient == client) {
 					(*iter).fRTClient = 0; // Mark client to be removed
+                }
 			}
 	   }
 
