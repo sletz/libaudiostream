@@ -24,7 +24,7 @@ research@grame.fr
 
 #include "faust/audio/dsp.h"
 #include "faust/gui/UI.h"
-#include "faust/audio/llvm-dsp.h"
+#include "faust/llvm-dsp.h"
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
