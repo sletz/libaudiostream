@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	} else {
 		FilePlayer player;
 		int start = atoi(argv[2]);
-		int end   = atoi(argv[3]);
+		int end = atoi(argv[3]);
 		cout << "playing file " << argv[1] << " from " << start << " to " << end << endl;	
 		player.Play(argv[1], start * 44100, end * 44100);
 		while (player.Status());

@@ -336,7 +336,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 		llvm_dsp* fDsp;
         llvm_dsp_factory* fFactory;
         string fCode;
-			
+		
     public:
 
         TCodeFaustAudioEffect(const string& code): TFaustAudioEffectBase()
@@ -345,12 +345,12 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             fCode = code;
             
             // Try DSP code...
-            fFactory = createDSPFactory(0, NULL, "", "", "in", code, "", error_msg, 3);
+            fFactory = createDSPFactory(0, NULL, "", "", "in", code, "i386-apple-darwin10.6.0", error_msg, 3);
             if (!fFactory) {
                 printf("createDSPFactory error %s\n", error_msg);
                 throw -1;
             }  else {
-                goto instance;
+                goto make_instance;
             }
             
             // Try bitcode code string...
@@ -359,7 +359,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 printf("readDSPFactoryFromBitcode error \n");
                 throw -2;
             }  else {
-                goto instance;
+                goto make_instance;
             }
      
             // Try bitcode code file...
@@ -368,7 +368,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 printf("readDSPFactoryFromBitcodeFile error \n");
                 throw -3;
             }  else {
-                goto instance;
+                goto make_instance;
             }
        
             // Try IR code string...
@@ -377,7 +377,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 printf("readDSPFactoryFromIR error \n");
                 throw -4;
             }  else {
-                goto instance;
+                goto make_instance;
             }
       
             // Try IR code file...
@@ -387,7 +387,9 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 throw -5;
             } 
                         
-        instance:
+        make_instance:
+        
+            assert(fFactory);
         
 			fDsp = createDSPInstance(fFactory);
             if (!fDsp) {

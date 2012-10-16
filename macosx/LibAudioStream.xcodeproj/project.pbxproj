@@ -1387,7 +1387,8 @@
 		4B00606F1112ED0300B6A836 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1498,8 +1499,8 @@
 					"-lLLVMSupport",
 					"-lfaust",
 					libSoundTouch.a,
-					"-flat_namespace",
 					libsndfile.a,
+					"-flat_namespace",
 					libsndfile_i386.a,
 				);
 				OTHER_LIBTOOL_FLAGS = "";
@@ -1507,7 +1508,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -2130,7 +2131,8 @@
 		4BCB2BE30D12B71300AB3F6D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;

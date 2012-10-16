@@ -39,8 +39,9 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 	fFile = sf_open(utf8name, SFM_READ, &info);
 	
     // Check file
-    if (!fFile)
+    if (!fFile) {
         throw - 1;
+    }
 
     if (sf_seek(fFile, beginFrame, SEEK_SET) < 0) {
         sf_close(fFile);
@@ -57,8 +58,9 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
         sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
     }
 
-    if (info.samplerate != TAudioGlobals::fSample_Rate)
-        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr =%d\n", TAudioGlobals::fSample_Rate, info.samplerate);
+    if (info.samplerate != TAudioGlobals::fSample_Rate) {
+        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSample_Rate, info.samplerate);
+    }
 
     // Dynamic allocation
     fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
@@ -107,8 +109,9 @@ void TReadFileAudioStream::Reset()
 
     if (copySize < TAudioGlobals::fStream_Buffer_Size) {
         TAudioBuffer<short>::Copy(fBuffer, 0, fCopyBuffer, 0, copySize);
-        if (fManager == 0)
+        if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
+        }
         assert(fManager);
         fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStream_Buffer_Size - copySize, copySize, 0, 0);
     } else {

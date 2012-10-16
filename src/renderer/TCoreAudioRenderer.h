@@ -27,6 +27,7 @@ research@grame.fr
 #include <AudioToolbox/AudioConverter.h>
 #include <CoreAudio/CoreAudio.h>
 #include <AudioUnit/AudioUnit.h>
+#include <CoreServices/CoreServices.h>
 
 //--------------------------
 // Class TCoreAudioRenderer

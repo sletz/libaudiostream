@@ -390,7 +390,7 @@ AudioStreamPtr AUDIOAPI MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, l
 		TAudioStreamPtr cut = TAudioStreamFactory::MakeCutSound(static_cast<TAudioStreamPtr>(*sound), beginFrame, endFrame);
 		return (cut) ?  MakeSoundPtr(cut) : 0;
 	} else {
-		 return 0;
+        return 0;
 	}  
 }
 
@@ -469,22 +469,25 @@ AudioEffectList AUDIOAPI MakeAudioEffectList()
 
 AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect)
 {
-   if (list_effect && effect)
+   if (list_effect && effect) {
        static_cast<TAudioEffectListPtr>(list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(effect));
+    }
     return list_effect;
 }
 
 AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect)
 {
-    if (list_effect && effect)
+    if (list_effect && effect) {
         static_cast<TAudioEffectListPtr>(list_effect)->remove(static_cast<TAudioEffectInterfacePtr>(effect));
+    }
     return list_effect;
 }
 
 AudioEffectList AUDIOAPI ClearAudioEffectList(AudioEffectList list_effect)
 {
-	if (list_effect)
+	if (list_effect) {
         static_cast<TAudioEffectListPtr>(list_effect)->clear();
+    }
     return list_effect;
 }
 
@@ -581,22 +584,25 @@ AudioEffectListPtr AUDIOAPI MakeAudioEffectListPtr()
 
 AudioEffectListPtr AUDIOAPI AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
-    if (list_effect && effect)
+    if (list_effect && effect) {
         static_cast<TAudioEffectListPtr>(*list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(*effect));
+    }
     return list_effect;
 }
 
 AudioEffectListPtr AUDIOAPI RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
 {
-    if (list_effect && effect)
+    if (list_effect && effect) {
         static_cast<TAudioEffectListPtr>(*list_effect)->remove(static_cast<TAudioEffectInterfacePtr>(*effect));
+    }
     return list_effect;
 }
 
 AudioEffectListPtr AUDIOAPI ClearAudioEffectListPtr(AudioEffectListPtr list_effect)
 {
-	if (list_effect)
+	if (list_effect) {
         static_cast<TAudioEffectListPtr>(*list_effect)->clear();
+    }
     return list_effect;
 }
 
@@ -695,28 +701,33 @@ AudioPlayerPtr AUDIOAPI OpenAudioPlayer(long inChan,
 {
     int res;
 	
-	if (thread_num < 1) 
+	if (thread_num < 1) {
 		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");
+    }
 
     TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);
 
     AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
-    if (!player)
+    if (!player) {
         goto error;
+    }
 
 	player->fRenderer = TAudioRendererFactory::MakeAudioRenderer(renderer); 
-    if (!player->fRenderer)
+    if (!player->fRenderer) {
         goto error;
+    }
 
 	player->fMixer = new TAudioMixer;
-    if (!player->fMixer)
+    if (!player->fMixer) {
         goto error;
+    }
 
 	player->fRenderer->AddClient(player->fMixer);
 	res = player->fRenderer->OpenDefault(inChan, outChan, buffer_size, sample_rate);
 
-    if (res == NO_ERR)
+    if (res == NO_ERR) {
         return player;
+    }
 
 error:
     CloseAudioPlayer(player);
@@ -726,14 +737,16 @@ error:
 AudioPlayerPtr AUDIOAPI OpenAudioClient(AudioRendererPtr renderer)
 {
 	AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
-    if (!player)
+    if (!player) {
         goto error;
+    }
 		
 	player->fRenderer = renderer;
 		
 	player->fMixer = new TAudioMixer;
-    if (!player->fMixer)
+    if (!player->fMixer) {
         goto error;
+    }
 
 	player->fRenderer->AddClient(player->fMixer);		
 	return player;
@@ -745,8 +758,9 @@ error:
 
 void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 {
-    if (!player)
+    if (!player) {
         return;
+    }
 
 	if (player->fMixer) {    
 		player->fRenderer->RemoveClient(player->fMixer);
@@ -764,8 +778,9 @@ void AUDIOAPI CloseAudioPlayer(AudioPlayerPtr player)
 
 void AUDIOAPI CloseAudioClient(AudioPlayerPtr player)
 {
-    if (!player)
+    if (!player) {
         return;
+    }
 
 	if (player->fMixer) {
 		player->fRenderer->RemoveClient(player->fMixer);
@@ -780,16 +795,18 @@ long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, f
 {
     if (player && player->fMixer && sound) {
         return player->fMixer->Load(static_cast<TAudioStreamPtr>(sound), chan, vol, panLeft, panRight);
-    } else
+    } else {
         return LOAD_ERR;
+    }
 }
 
 long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight)
 {
     if (player && player->fMixer && sound) {
         return player->fMixer->Load(static_cast<TAudioStreamPtr>(*sound), chan, vol, panLeft, panRight);
-    } else
+    } else {
         return LOAD_ERR;
+    }
 }
 
 void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info)
@@ -809,32 +826,37 @@ void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player,long chan, StopCallba
 // Transport
 void AUDIOAPI StartChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->Start(chan);
+    }
 }
 
 void AUDIOAPI ContChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->Play(chan);
+    }
 }
 
 void AUDIOAPI StopChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->Stop(chan);
+    }
 }
 
 void AUDIOAPI AbortChannel(AudioPlayerPtr player, long chan)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->Abort(chan);
+    }
 }
 
 void AUDIOAPI StartAudioPlayer(AudioPlayerPtr player)
 {
-    if (player && player->fMixer && player->fRenderer)
+    if (player && player->fMixer && player->fRenderer) {
         player->fRenderer->Start();
+    }
 }
 
 void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player)
@@ -846,33 +868,38 @@ void AUDIOAPI StopAudioPlayer(AudioPlayerPtr player)
 // Params
 void AUDIOAPI SetVolChannel(AudioPlayerPtr player, long chan, float vol)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetVol(chan, vol);
+    }
 }
 
 void AUDIOAPI SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetPan(chan, panLeft, panRight);
+    }
 }
 
 void AUDIOAPI SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetEffectList(chan, effect_list, fadeIn, fadeOut);
+    }
 }
 
 void AUDIOAPI SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetEffectList(chan, *effect_list, fadeIn, fadeOut);
+    }
 }
 
 // Master
 void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetVol(vol);
+    }
 }
 
 void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight)
@@ -883,14 +910,16 @@ void AUDIOAPI SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panR
 
 void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetEffectList(effect_list, fadeIn, fadeOut);
+    }
 }
 
 void AUDIOAPI SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
-    if (player && player->fMixer)
+    if (player && player->fMixer) {
         player->fMixer->SetEffectList(*effect_list, fadeIn, fadeOut);
+    }
 }
 
 // Globals
