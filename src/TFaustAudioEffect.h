@@ -339,52 +339,60 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 		
     public:
 
-        TCodeFaustAudioEffect(const string& code): TFaustAudioEffectBase()
+        TCodeFaustAudioEffect(const string& code):TFaustAudioEffectBase()
         {
             char error_msg[256];
             fCode = code;
             
+            // Try filename...
+            int argc = 1;
+            const char* argv[argc];
+            argv[0] = code.c_str();
+       
+            fFactory = createDSPFactory(argc, argv, "", "", "", "", "i386-apple-darwin10.6.0", error_msg, 3);
+            if (fFactory) {
+                goto make_instance;
+            }  else {
+                printf("createDSPFactory error from DSP file %s", error_msg);
+            }
+   
             // Try DSP code...
             fFactory = createDSPFactory(0, NULL, "", "", "in", code, "i386-apple-darwin10.6.0", error_msg, 3);
-            if (!fFactory) {
-                printf("createDSPFactory error %s\n", error_msg);
-                throw -1;
-            }  else {
+            if (fFactory) {
                 goto make_instance;
+            }  else {
+                printf("createDSPFactory error from DSP code %s", error_msg);
             }
             
             // Try bitcode code string...
             fFactory = readDSPFactoryFromBitcode(code, "", 3);
-            if (!fFactory) {
-                printf("readDSPFactoryFromBitcode error \n");
-                throw -2;
-            }  else {
+            if (fFactory) {
                 goto make_instance;
+            }  else {
+                printf("readDSPFactoryFromBitcode error \n");
             }
      
             // Try bitcode code file...
             fFactory = readDSPFactoryFromBitcodeFile(code, "", 3);
-            if (!fFactory) {
-                printf("readDSPFactoryFromBitcodeFile error \n");
-                throw -3;
-            }  else {
+            if (fFactory) {
                 goto make_instance;
+            }  else {
+                printf("readDSPFactoryFromBitcodeFile error \n");
             }
        
             // Try IR code string...
             fFactory = readDSPFactoryFromIR(code, "", 3);
-            if (!fFactory) {
-                printf("readDSPFactoryFromIR error \n");
-                throw -4;
-            }  else {
+            if (fFactory) {
                 goto make_instance;
+            }  else {
+                printf("readDSPFactoryFromIR error \n");
             }
       
             // Try IR code file...
             fFactory = readDSPFactoryFromIRFile(code, "", 3);
             if (!fFactory) {
                 printf("readDSPFactoryFromIRFile error \n");
-                throw -5;
+                throw -1;
             } 
                         
         make_instance:
@@ -394,14 +402,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 			fDsp = createDSPInstance(fFactory);
             if (!fDsp) {
                 deleteDSPFactory(fFactory);
-                throw -6;
+                throw -2;
             }
             
             fDsp->init(TAudioGlobals::fSample_Rate);
 			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
                 deleteDSPInstance(fDsp);
                 deleteDSPFactory(fFactory);
-				throw -7;
+				throw -3;
 			}
             
 			fDsp->buildUserInterface(this);

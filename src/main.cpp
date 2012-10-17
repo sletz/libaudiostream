@@ -38,7 +38,8 @@ research@grame.fr
 	#define FILENAME3 "/Users/letz/son1.wav"
 	#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
 	#define EFFECT1 ""
-    #define LLVM_EFFECT1 "process = component(\"effect.lib\").zita_rev1;"
+    //#define LLVM_EFFECT1 "process = component(\"effect.lib\").zita_rev1;"
+    #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
     //#define LLVM_EFFECT1 "process = _,_;"
 #endif
 
@@ -225,8 +226,9 @@ AudioStream test10bis()
 		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
 	}
     
-    SetControlValueEffect(faust_effect, 9, -1.0);
-    SetControlValueEffect(faust_effect, 10, 40.0);
+    SetControlValueEffect(faust_effect, 0, 1.0);
+    SetControlValueEffect(faust_effect, 1, 1.0);
+    SetControlValueEffect(faust_effect, 2, 1.0);
     
     printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
     for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
