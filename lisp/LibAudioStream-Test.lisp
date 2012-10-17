@@ -1,15 +1,23 @@
 
+(in-package :au)
+(libaudiostream-framework)
+
 
 ;;;=======================
 ;;; SoundFiles
 ;;;=======================
 
-(defparameter soundfile1 "D:\\acl62-trial\\Alla faglar.wav")
-(defparameter soundfile2 "D:\\acl62-trial\\BjornenSover.wav")
+;;(defparameter soundfile1 "D:\\acl62-trial\\Alla faglar.wav")
+;;(defparameter soundfile2 "D:\\acl62-trial\\BjornenSover.wav")
 
-;(defparameter soundfile1 "Users/letz/levot.wav")
-;(defparameter soundfile2 "Users/letz/tango.wav")
-;(defparameter effect1 "/Volumes/Document1/Developpement/ProjectsCVS/FaustCVS/FaustCVS/faust/examples/moduledir/freeverb.so")
+(defparameter soundfile1 "/Users/letz/Music/Sounds/levot.wav")
+(defparameter soundfile2 "/Users/letz/Music/Sounds/tango.wav")
+;;(defparameter effect1 "/Volumes/Document1/Developpement/ProjectsCVS/FaustCVS/FaustCVS/faust/examples/moduledir/freeverb.so")
+(defparameter effect1 "/Documents/faust-sf/examples/freeverb.dsp")
+(defparameter effect1 "/Documents/faust-sf/examples/freeverb.bc")
+(defparameter effect1 "process = _,_;")
+
+(defparameter effect1 "process = component(\"effect.lib\").zita_rev1;")
 
 ;;;=======================
 ;;; Multi-channel Player
@@ -30,6 +38,7 @@
 ;; WARNING !! when using Jack, the Sample rate and Buffer size values much match the values currently used with Jack server
  
 (setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kJackRenderer 1))
+(setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kCoreAudioRenderer 1))
 
 
 ;; Start Audio engine execution
@@ -111,8 +120,8 @@
 (GetControlParam freeverb1 2)
 
 (defun print-params (effect)
-  (dotimes (i (GetControlCount effect))
-    (multiple-value-bind (name min max init) (GetControlParam effect i)
+  (dotimes (i (GetControlCountEffect effect))
+    (multiple-value-bind (name min max init) (GetControlParamEffect effect i)
       (print (list name min max init)))))
 
 (print-params freeverb1)

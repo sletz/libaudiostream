@@ -348,7 +348,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             int argc = 1;
             const char* argv[argc];
             argv[0] = code.c_str();
-       
+         
             fFactory = createDSPFactory(argc, argv, "", "", "", "", "i386-apple-darwin10.6.0", error_msg, 3);
             if (fFactory) {
                 goto make_instance;

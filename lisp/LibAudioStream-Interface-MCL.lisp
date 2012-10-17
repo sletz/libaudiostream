@@ -113,6 +113,7 @@
 
 (defparameter kPortAudioRenderer 0)
 (defparameter kJackRenderer 1)
+(defparameter kCoreAudioRenderer 2)
 
 (defparameter no_err 0)
 (defparameter open_err -1)

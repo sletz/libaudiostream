@@ -632,7 +632,12 @@ AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 		return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
 	} catch (int n) {
 		printf("MakeFaustAudioEffect exception %d \n", n);
-		return 0;
+		try {
+            return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name));
+        } catch (int n) {
+            printf("TCodeFaustAudioEffect exception %d \n", n);
+            return 0;
+        }
 	}
 }
 

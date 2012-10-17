@@ -482,7 +482,7 @@ int main(int argc, char* argv[])
     }
     // If failure opens CoreAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 48000, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
     }
     
     StartAudioPlayer(player);
