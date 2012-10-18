@@ -47,7 +47,7 @@ class AUDIO_EXPORTS TAudioGlobals
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
         static long fChannels;                  // Number of sound channels
-        static long fSample_Rate;               // Sampling Rate
+        static long fSampleRate;               // Sampling Rate
         static long fBuffer_Size;               // I/O Buffer size
         static long fStream_Buffer_Size;        // Stream Buffer size
         static long fRTStream_Buffer_Size;      // Real-Time Stream Buffer size

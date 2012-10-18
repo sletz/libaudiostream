@@ -166,7 +166,7 @@ typedef void (* compute) (dsp* self, int len, FAUSTFLOAT** inputs, FAUSTFLOAT** 
 typedef void (* conclude) (dsp* self);
 
 /*!
-\brief Faust effect.
+\brief Faust effect interface.
 */
 
 class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
@@ -249,7 +249,6 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 
 typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
 
-
 /*!
 \brief Faust effect.
 */
@@ -289,7 +288,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			fCompute = (compute)GetFaustProc(fHandle, "compute");
 			fConclude = (conclude)GetFaustProc(fHandle, "conclude");
 			fDsp = fNew();
-			fInit(fDsp, TAudioGlobals::fSample_Rate);
+			fInit(fDsp, TAudioGlobals::fSampleRate);
 			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
 				fDelete(fDsp);
 				UnloadFaustModule(fHandle);
@@ -316,7 +315,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
         }
         void Reset()
         {
-			fInit(fDsp, TAudioGlobals::fSample_Rate);
+			fInit(fDsp, TAudioGlobals::fSampleRate);
 		}
         long Channels()
         {
@@ -326,7 +325,6 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 };
 
 typedef TModuleFaustAudioEffect * TModuleFaustAudioEffectPtr;
-
 
 class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 {
@@ -405,7 +403,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 throw -2;
             }
             
-            fDsp->init(TAudioGlobals::fSample_Rate);
+            fDsp->init(TAudioGlobals::fSampleRate);
 			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
                 deleteDSPInstance(fDsp);
                 deleteDSPFactory(fFactory);
@@ -430,7 +428,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         }
         void Reset()
         {
-			fDsp->init(TAudioGlobals::fSample_Rate);
+			fDsp->init(TAudioGlobals::fSampleRate);
 		}
         long Channels()
         {

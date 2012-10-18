@@ -64,7 +64,7 @@ void TWriteFileAudioStream::Open()
 {
 	if (fFile == 0) {
 		SF_INFO info;
-		info.samplerate = TAudioGlobals::fSample_Rate;
+		info.samplerate = TAudioGlobals::fSampleRate;
 		info.channels = fChannels;
 		info.format = fFormat;
 		char utf8name[512] = {0};

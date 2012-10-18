@@ -30,7 +30,10 @@ research@grame.fr
 #include "TReadFileAudioStream.h"
 #include "TInputAudioStream.h"
 #include "TTransformAudioStream.h"
+#include "TEventAudioStream.h"
+
 //#include "TRubberBandAudioStream.h"
+
 #ifdef SOUND_TOUCH
 #include "TSoundTouchAudioStream.h"
 #endif

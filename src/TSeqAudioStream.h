@@ -36,7 +36,7 @@ research@grame.fr
 class TSeqAudioStream : public TBinaryAudioStream
 {
 
-    private:
+    protected:
 
         long fCurFrame;
         long fFramesNum;

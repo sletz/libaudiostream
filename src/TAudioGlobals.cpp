@@ -52,7 +52,7 @@ long TAudioGlobals::fBuffer_Size = 0;
 long TAudioGlobals::fStream_Buffer_Size = 0;
 long TAudioGlobals::fRTStream_Buffer_Size = 0;
 
-long TAudioGlobals::fSample_Rate = 0;
+long TAudioGlobals::fSampleRate = 0;
 long TAudioGlobals::fDiskError = 0;
 long TAudioGlobals::fFileMax = 0;
 
@@ -67,7 +67,7 @@ static int SetMaximumFiles(long filecount)
 {
     return 0;
 }
-static int GetMaximumFiles(long *filecount) 
+static int GetMaximumFiles(long* filecount) 
 {
     return 0;
 }
@@ -80,7 +80,7 @@ static int SetMaximumFiles(long filecount)
     return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
 }
 
-static int GetMaximumFiles(long *filecount) 
+static int GetMaximumFiles(long* filecount) 
 {
     struct rlimit lim;
     if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
@@ -130,7 +130,7 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     fBuffer_Size = buffer_size;
     fStream_Buffer_Size = stream_buffer_size;
     fRTStream_Buffer_Size = rtstream_buffer_size;
-    fSample_Rate = sample_rate;
+    fSampleRate = sample_rate;
     fDiskError = 0;
 }
 

@@ -58,8 +58,8 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
         sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
     }
 
-    if (info.samplerate != TAudioGlobals::fSample_Rate) {
-        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSample_Rate, info.samplerate);
+    if (info.samplerate != TAudioGlobals::fSampleRate) {
+        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, info.samplerate);
     }
 
     // Dynamic allocation

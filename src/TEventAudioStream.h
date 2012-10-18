@@ -1,5 +1,6 @@
 /*
-Copyright © Grame 2002
+
+Copyright (C) Grame 2002-2012
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -22,7 +23,6 @@ grame@rd.grame.fr
 #ifndef __TEventAudioStream__
 #define __TEventAudioStream__
 
-#include "UTools.h"
 #include "TSeqAudioStream.h"
 #include <list>
 
@@ -56,7 +56,7 @@ typedef TEventHandler * TEventHandlerPtr;
 // Class TEventSeqAudioStream
 //----------------------------
 /*!
-\brief  A TEventSeqAudioStream plays two streams in sequence, and switch to the second stream if an event is received.
+\brief A TEventSeqAudioStream plays two streams in sequence, and switch to the second stream if an event is received.
 */
 
 class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
@@ -64,32 +64,69 @@ class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 
     public:
 
-        TEventSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long num): TSeqAudioStream(s1, s2), TEventHandler(num)
+        TEventSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2,  long crossFade, long num): TSeqAudioStream(s1, s2, crossFade), TEventHandler(num)
         {}
         virtual ~TEventSeqAudioStream()
         {}
 
         TAudioStreamPtr Copy()
         {
-            return new TEventSeqAudioStream(fStream1->Copy(), fStream2->Copy(), fNum);
+            return new TEventSeqAudioStream(fStream1->Copy(), fStream2->Copy(), fCrossFade, fNum);
         }
 
         bool HandleEvent(long num)
         {
-            if ((fNum == num) && (fStream == fStream1))
+            if ((fNum == num) && (fStream == fStream1)) {
                 fStream = fStream2;
+            }
             return (fNum == num);
         }
 };
 
 typedef TEventSeqAudioStream * TEventSeqAudioStreamPtr;
 
+//-------------------------
+// Class TEventHandlerList
+//-------------------------
+/*!
+\brief A STL list which contains the TEventHandler nodes of a stream expression.
+*/
+
+class TEventHandlerList : public list<TEventHandlerPtr>
+{
+
+    private:
+
+        // Build a list of TCmdHandler leaves
+        void MakeList(TAudioStreamPtr stream)
+        {
+            if (TBinaryAudioStreamPtr binary = dynamic_cast<TBinaryAudioStreamPtr>(stream.getPointer())) {
+                MakeList(binary->GetBranch1());
+                MakeList(binary->GetBranch2());
+            } else if (TUnaryAudioStreamPtr unary = dynamic_cast<TUnaryAudioStreamPtr>(stream.getPointer())) {
+                MakeList(unary->GetBranch1());
+            } else if (TEventHandlerPtr handler = dynamic_cast<TEventHandlerPtr>(stream.getPointer())) {
+                push_front(handler);
+            }
+        }
+
+    public:
+
+        TEventHandlerList(TAudioStreamPtr stream)
+        {
+            MakeList(stream);
+        }
+        virtual ~TEventHandlerList()
+        {}
+};
+
+typedef TEventHandlerList * TEventHandlerListPtr;
 
 //-------------------------
 // Class TEventAudioStream
 //-------------------------
 /*!
-\brief  A TEventAudioStream gives the received event to all TEventHandler objects in the decorated stream.
+\brief A TEventAudioStream gives the received event to all TEventHandler objects in the decorated stream.
 */
 
 class TEventAudioStream : public TDecoratedAudioStream, public TEventHandler
@@ -114,53 +151,17 @@ class TEventAudioStream : public TDecoratedAudioStream, public TEventHandler
 
         bool HandleEvent(long num)
         {
+            bool res = false;
             // Iterate through list
             for (list<TEventHandlerPtr>::iterator iter = fHandlerList.begin(); iter != fHandlerList.end(); iter++) {
                 TEventHandlerPtr handler = *iter;
-                handler->HandleEvent(num);
+                res |= handler->HandleEvent(num);
             }
+            return res;
         }
 
 };
 
 typedef TEventAudioStream * TEventAudioStreamPtr;
-
-//-------------------------
-// Class TEventHandlerList
-//-------------------------
-/*!
-\brief A STL list which contains the TEventHandler nodes of a stream tree.
-*/
-
-class TEventHandlerList : public list<TEventHandlerPtr>
-{
-
-    private:
-
-        // Build a list of TCmdHandler leaves
-        void MakeList(TAudioStreamPtr stream)
-        {
-            if (TBinaryAudioStreamPtr binary = dynamic_cast<TBinaryAudioStreamPtr>(stream)) {
-                MakeList(binary->getBranch1());
-                MakeList(binary->getBranch2());
-            } else if (TUnaryAudioStreamPtr unary = dynamic_cast<TUnaryAudioStreamPtr>(stream)) {
-                MakeList(unary->getBranch1());
-            } else if (TEventHandlerPtr handler = dynamic_cast<TEventHandlerPtr>(stream)) {
-                push_front(handler);
-            }
-        }
-
-    public:
-
-        TEventHandlerList(TAudioStreamPtr stream)
-        {
-            MakeList(stream);
-        }
-        virtual ~TEventHandlerList()
-        {}
-}
-;
-
-typedef TEventHandlerList * TEventHandlerListPtr;
 
 #endif

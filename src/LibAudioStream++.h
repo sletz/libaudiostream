@@ -47,8 +47,7 @@ typedef struct ChannelInfo {
 	float fPanRight;
 	long fLeftOut;
 	long fRightOut;
-}
-ChannelInfo;
+} ChannelInfo;
 
 /*!
 \brief Audio device info.
@@ -63,9 +62,13 @@ typedef struct DeviceInfo {
 } DeviceInfo;
 
 class TAudioStream : public la_smartable {
+
 	public:
+    
 		virtual ~TAudioStream() {}
+        
 };
+
 typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 
 class TAudioEffectInterface : public la_smartable
@@ -116,9 +119,13 @@ class TAudioEffectInterface : public la_smartable
 typedef LA_SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
 
 class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_smartable {
+
 	public:
+    
 		virtual ~TAudioEffectList() {}
+        
 };
+
 typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Opaque pointers

@@ -1,5 +1,6 @@
 /*
-Copyright © Grame 2002
+
+Copyright (C) Grame 2002-2012
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -122,7 +123,7 @@ class FFTShift
 			if (gRover == false) gRover = inFifoLatency;
 
 			/* main processing loop */
-			for (i = 0; i < numSampsToProcess; i++){
+			for (i = 0; i < numSampsToProcess; i++) {
 
 				/* As long as we have not yet collected enough data just read in */
 				gInFIFO[gRover] = indata[i];
@@ -332,8 +333,8 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
 
         void Process(float** input, float** output, long framesNum, long channels)
         {
-			fLeft->smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[0], output[0]);
-			fRight->smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSample_Rate, input[1], output[1]);
+			fLeft->smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSampleRate, input[0], output[0]);
+			fRight->smbPitchShift(fPitchSift, framesNum, 2048, 8, TAudioGlobals::fSampleRate, input[1], output[1]);
         }
 
         TAudioEffectInterface* Copy()
@@ -362,8 +363,9 @@ class TPitchShiftAudioEffect : public TAudioEffectInterface
 		
 		void SetControlValue(long param, float f)
 		{
-			if (param == 0)
+			if (param == 0) {
 				fPitchSift = f;
+            }
 		}
 		float GetControlValue(long param)
 		{

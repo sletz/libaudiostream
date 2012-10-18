@@ -135,6 +135,13 @@ template<class T> class LA_SMARTP {
 			assert (fSmartPtr != 0);
 			return fSmartPtr;
 		}
+        
+        //! operator -> overloading to access the actual class pointer
+		T* getPointer() const	{ 
+			// checks for null dereference
+			assert (fSmartPtr != 0);
+			return fSmartPtr;
+		}
 
 		//! operator = that moves the actual class pointer
 		template <class T2>
