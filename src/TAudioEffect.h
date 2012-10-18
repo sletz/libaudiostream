@@ -41,13 +41,13 @@ class TAudioEffectList;
 typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 // Using smartable1 cause crash when desallocating the object: desactivated for now
-// class TAudioEffectList : public list<TAudioEffectInterfacePtr>,  public la_smartable1
+// class TAudioEffectList : public list<TAudioEffectInterfacePtr>, public la_smartable1
 
 /*!
 \brief  Effect list management for subclasses of TAudioEffectInterface.
 */
 
-class TAudioEffectList : public list<TAudioEffectInterfacePtr>,  public la_smartable
+class TAudioEffectList : public list<TAudioEffectInterfacePtr>, public la_smartable
 {
 
 	private:
