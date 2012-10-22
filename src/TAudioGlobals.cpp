@@ -48,9 +48,9 @@ long TAudioGlobals::fInput = 0;
 long TAudioGlobals::fOutput = 0;
 long TAudioGlobals::fChannels = 0;
 
-long TAudioGlobals::fBuffer_Size = 0;
-long TAudioGlobals::fStream_Buffer_Size = 0;
-long TAudioGlobals::fRTStream_Buffer_Size = 0;
+long TAudioGlobals::fBufferSize = 0;
+long TAudioGlobals::fStreamBufferSize = 0;
+long TAudioGlobals::fRTStreamBufferSize = 0;
 
 long TAudioGlobals::fSampleRate = 0;
 long TAudioGlobals::fDiskError = 0;
@@ -127,9 +127,9 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     fInput = inChan;
     fOutput = outChan;
     fChannels = channels;
-    fBuffer_Size = buffer_size;
-    fStream_Buffer_Size = stream_buffer_size;
-    fRTStream_Buffer_Size = rtstream_buffer_size;
+    fBufferSize = buffer_size;
+    fStreamBufferSize = stream_buffer_size;
+    fRTStreamBufferSize = rtstream_buffer_size;
     fSampleRate = sample_rate;
     fDiskError = 0;
 }

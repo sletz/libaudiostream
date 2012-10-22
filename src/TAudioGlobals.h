@@ -43,19 +43,19 @@ class AUDIO_EXPORTS TAudioGlobals
 
     public:
 
-        static SHORT_BUFFER fInBuffer; 	// Shared buffer for Real-Time stream
+        static SHORT_BUFFER fInBuffer;          // Shared buffer for Real-Time stream
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
         static long fChannels;                  // Number of sound channels
-        static long fSampleRate;               // Sampling Rate
-        static long fBuffer_Size;               // I/O Buffer size
-        static long fStream_Buffer_Size;        // Stream Buffer size
-        static long fRTStream_Buffer_Size;      // Real-Time Stream Buffer size
+        static long fSampleRate;                // Sampling Rate
+        static long fBufferSize;                // I/O Buffer size
+        static long fStreamBufferSize;          // Stream Buffer size
+        static long fRTStreamBufferSize;        // Real-Time Stream Buffer size
         static long fDiskError;                 // Counter of disk streaming errors
 		static long fFileMax;
 
-		static long fInputLatency;				// Suggested input latency (when used with portAudio)
-		static long fOutputLatency;				// Suggested output latency (when used with portAudio)
+		static long fInputLatency;				// Suggested input latency (when used with PortAudio)
+		static long fOutputLatency;				// Suggested output latency (when used with PortAudio)
 
         TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);

@@ -39,7 +39,7 @@ TAudioMixer::TAudioMixer ()
     SetVol(DEFAULT_VOL);
     SetPan(DEFAULT_PAN_LEFT, DEFAULT_PAN_RIGHT);
 
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
     fSoundChannelTable = new TAudioChannelPtr[TAudioGlobals::fChannels];
 
     for (int j = 0; j < TAudioGlobals::fChannels; j++) {
@@ -59,13 +59,13 @@ TAudioMixer::~TAudioMixer()
 bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long frames)
 {
     // Init buffer
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 	
     // Mix all SoundChannels
 	list<TAudioChannelPtr>::iterator iter = fSoundChannelSeq.begin();
 	while (iter != fSoundChannelSeq.end()) {
 		TAudioChannelPtr channel = *iter;
-		if (!channel->Mix(fMixBuffer, TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput)) { // End of channel
+		if (!channel->Mix(fMixBuffer, TAudioGlobals::fBufferSize, TAudioGlobals::fOutput)) { // End of channel
             channel->SetState(false); // Important : used to mark the insertion state
             iter = fSoundChannelSeq.erase(iter);
 		} else {
@@ -74,12 +74,12 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 	}
 	
 	// Master Effects
-	fEffectList.Process(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+	fEffectList.Process(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 	
     // Master Pan and Vol
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
 									fMixBuffer->GetFrame(0),
-									TAudioGlobals::fBuffer_Size,
+									TAudioGlobals::fBufferSize,
 									TAudioGlobals::fOutput, fLLVol, fLRVol, fRLVol, fRRVol);
     return true;
 }

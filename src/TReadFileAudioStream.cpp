@@ -63,12 +63,12 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     }
 
     // Dynamic allocation
-    fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
-    fCopyBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStream_Buffer_Size, fChannels);
+    fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fCopyBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
   
     // Read first buffer directly
-    TBufferedAudioStream::ReadBuffer(fBuffer, TAudioGlobals::fStream_Buffer_Size, 0);
-    TAudioBuffer<short>::Copy(fCopyBuffer, 0, fBuffer, 0, TAudioGlobals::fStream_Buffer_Size);
+    TBufferedAudioStream::ReadBuffer(fBuffer, TAudioGlobals::fStreamBufferSize, 0);
+    TAudioBuffer<short>::Copy(fCopyBuffer, 0, fBuffer, 0, TAudioGlobals::fStreamBufferSize);
 
     fReady = true;
 }
@@ -102,20 +102,20 @@ void TReadFileAudioStream::ReadEndBuffer(long framesNum, long framePos)
 
 void TReadFileAudioStream::Reset()
 {
-    sf_seek(fFile, fBeginFrame + TAudioGlobals::fStream_Buffer_Size, SEEK_SET);
+    sf_seek(fFile, fBeginFrame + TAudioGlobals::fStreamBufferSize, SEEK_SET);
 
     // Use only the beginning of the copy buffer, copy the end in the low-priority thread
-    int copySize = TAudioGlobals::fBuffer_Size * 4;
+    int copySize = TAudioGlobals::fBufferSize * 4;
 
-    if (copySize < TAudioGlobals::fStream_Buffer_Size) {
+    if (copySize < TAudioGlobals::fStreamBufferSize) {
         TAudioBuffer<short>::Copy(fBuffer, 0, fCopyBuffer, 0, copySize);
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
         assert(fManager);
-        fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStream_Buffer_Size - copySize, copySize, 0, 0);
+        fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
     } else {
-        TAudioBuffer<short>::Copy(fBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStream_Buffer_Size);
+        TAudioBuffer<short>::Copy(fBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStreamBufferSize);
     }
 
     TBufferedAudioStream::Reset();

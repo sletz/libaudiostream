@@ -41,13 +41,13 @@ TAudioChannel::TAudioChannel()
     SetPan(DEFAULT_PAN_LEFT, DEFAULT_PAN_RIGHT);
 	fLeftOut = 0;
     fRightOut = 1;
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 }
 
 TAudioChannel::~TAudioChannel()
 {
-    fRendererStream.ClearStream(); // to avoid desallocation by destructor
-    fFadeStream.ClearStream(); // to avoid desallocation by destructor
+    fRendererStream.ClearStream();  // to avoid desallocation by destructor
+    fFadeStream.ClearStream();      // to avoid desallocation by destructor
     delete fMixBuffer;
 }
 
@@ -121,7 +121,7 @@ void TAudioChannel::GetInfo(ChannelInfo* info)
 bool TAudioChannel::Mix(FLOAT_BUFFER dst, long framesNum, long channels)
 {
     // Init buffer
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 	long res = fFadeStream.Read(fMixBuffer, framesNum, 0, channels);
 
 	// Effects
@@ -134,8 +134,9 @@ bool TAudioChannel::Mix(FLOAT_BUFFER dst, long framesNum, long channels)
 		UAudioTools::MixFrameToFrameBlk(dst->GetFrame(0), fMixBuffer->GetFrame(0), framesNum, channels, fLLVol, fLRVol, fRLVol, fRRVol);
 	}
 	
-	if (res < framesNum) 	
+	if (res < framesNum) { 	
 		fStopCallback.Execute();
+    }
 	
     // Stops when the stream is empty
     return (res == framesNum);

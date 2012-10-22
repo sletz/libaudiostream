@@ -30,8 +30,8 @@ TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long cr
     // A FINIR : aligner le crossFade sur des multiples de la taille des buffers
 
     if (crossFade > 0) {
-        fStream1 = new TFadeAudioStream(s1, TAudioGlobals::fBuffer_Size, crossFade);
-        fStream2 = new TFadeAudioStream(s2, crossFade, TAudioGlobals::fBuffer_Size);
+        fStream1 = new TFadeAudioStream(s1, TAudioGlobals::fBufferSize, crossFade);
+        fStream2 = new TFadeAudioStream(s2, crossFade, TAudioGlobals::fBufferSize);
     } else {
         fStream1 = s1;
         fStream2 = s2;

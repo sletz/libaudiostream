@@ -59,8 +59,8 @@ int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 TJackAudioRenderer::TJackAudioRenderer(): TAudioRenderer()
 {
 	fInput = fOutput = MAX_PORTS;
-    fInputBuffer = new float[TAudioGlobals::fBuffer_Size * TAudioGlobals::fInput];
-    fOutputBuffer = new float[TAudioGlobals::fBuffer_Size * TAudioGlobals::fOutput];
+    fInputBuffer = new float[TAudioGlobals::fBufferSize * TAudioGlobals::fInput];
+    fOutputBuffer = new float[TAudioGlobals::fBufferSize * TAudioGlobals::fOutput];
 	fInput_ports = (jack_port_t**)calloc(fInput, sizeof(jack_port_t*));
 	fOutput_ports = (jack_port_t**)calloc(fOutput, sizeof(jack_port_t*));
 }

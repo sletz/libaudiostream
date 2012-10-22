@@ -32,7 +32,7 @@ TFadeAudioStream::TFadeAudioStream(): TDecoratedAudioStream(0)
     fFadeOutFrames = 0;
     fCurFrame = 0;
     fFramesNum = 0;
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 }
 
 TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut): TDecoratedAudioStream(stream)
@@ -42,7 +42,7 @@ TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fad
     fFadeOutFrames = fadeOut;
     fCurFrame = 0;
 	fFramesNum = UTools::Max(0, fStream->Length() - fFadeOutFrames); // Number of frames - FadeOut 
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
     Init(0.0f, float(fadeIn), 1.0f, float(fadeOut));
 }
 

@@ -32,7 +32,7 @@ TSoundTouchAudioStream::TSoundTouchAudioStream(TAudioStreamPtr stream, double* p
 	fTimeStretchVal = *time_strech;
 	
 	fSoundTouch = new soundtouch::SoundTouch();
-	fBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStream_Buffer_Size, TAudioGlobals::fOutput);
+	fBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
 	
 	fSoundTouch->setSampleRate(TAudioGlobals::fSampleRate);
     fSoundTouch->setChannels(TAudioGlobals::fOutput);
@@ -87,8 +87,8 @@ long TSoundTouchAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 		// Compute remaining needed frames
 		do {
 			// Read input
-			UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
-			read = fStream->Read(fBuffer, TAudioGlobals::fBuffer_Size, 0, channels);
+			UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+			read = fStream->Read(fBuffer, TAudioGlobals::fBufferSize, 0, channels);
 			//printf("TSoundTouchAudioStream read = %ld \n", read);
 			
 			// Process buffer

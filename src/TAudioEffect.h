@@ -69,10 +69,10 @@ class TAudioEffectList : public list<TAudioEffectInterfacePtr>, public la_smarta
         {
 			int i;
 			for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
-				fTemp1[i] = (float*)calloc(TAudioGlobals::fBuffer_Size, sizeof(float));
+				fTemp1[i] = (float*)calloc(TAudioGlobals::fBufferSize, sizeof(float));
 			}
 			for (i = 0; i < MAX_PLUG_CHANNELS; i++) {
-				fTemp2[i] = (float*)calloc(TAudioGlobals::fBuffer_Size, sizeof(float));
+				fTemp2[i] = (float*)calloc(TAudioGlobals::fBufferSize, sizeof(float));
 			}
 			fStatus = kIdle;
 		}
@@ -102,7 +102,7 @@ class TAudioEffectListManager {
 
 	  private: 
 	  
-		float*	fTempBuffer; 					// Used for crossfade
+		float* fTempBuffer; 					// Used for crossfade
 		TAudioEffectListPtr	fCurEffectList;		// Current Effect list
 		TAudioEffectListPtr	fNextEffectList;	// Next Effect list
 		bool fSwitchEffect;
@@ -112,7 +112,7 @@ class TAudioEffectListManager {
 	
 		TAudioEffectListManager():fCurEffectList(new TAudioEffectList()),fNextEffectList(0),fSwitchEffect(false)
 		{
-			fTempBuffer = new float[TAudioGlobals::fBuffer_Size * TAudioGlobals::fOutput]; // A revoir
+			fTempBuffer = new float[TAudioGlobals::fBufferSize * TAudioGlobals::fOutput]; // A revoir
 		}
 		
 		virtual ~TAudioEffectListManager()
