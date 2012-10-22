@@ -80,7 +80,7 @@ class TBufferedAudioStream : public TAudioStream
 
     protected:
 
-        TAudioBuffer<short>* fBuffer;
+        SHORT_BUFFER fBuffer;
 
         long fChannels;		// Number of channels
         long fCurFrame;		// Position inside a buffer
@@ -89,20 +89,20 @@ class TBufferedAudioStream : public TAudioStream
      
         bool fReady;		// For disk access error detection
 
-        virtual long Write(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+        virtual long Write(SHORT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        virtual long Read(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+        virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
 
-        virtual void ReadBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos);
-        virtual void WriteBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos);
+        virtual void ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
+        virtual void WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
 
-        long HandleBuffer(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels, bool read_or_write);
-        void Init(TAudioBuffer<short>* buffer);
+        long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read_or_write);
+        void Init(SHORT_BUFFER buffer);
 
     public:
 
@@ -110,8 +110,8 @@ class TBufferedAudioStream : public TAudioStream
         virtual ~TBufferedAudioStream()
         {}
 
-        virtual long Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
-        virtual long Read( TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        virtual long Read( FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
 
         virtual void Reset();
 		

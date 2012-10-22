@@ -43,7 +43,7 @@ class TAudioMixer : public TAudioClient
 		TAudioEffectListManager	fEffectList;		// Master effect list
 		list<TAudioChannelPtr>	fSoundChannelSeq;	// List of running sound channels
         TAudioChannelPtr*		fSoundChannelTable;	// Table of sound channels
-        TAudioBuffer<float>*	fMixBuffer;			// Buffer for mixing
+        FLOAT_BUFFER	fMixBuffer;			// Buffer for mixing
 		float fVol;
 		float fPanLeft;		// Pan for left signal
 		float fPanRight;	// Pan for right signal

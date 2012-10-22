@@ -24,7 +24,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include <assert.h>
 
-long TMixAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TMixAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     if (fStream) { // One of the 2 stream is finished
         return fStream->Read(buffer, framesNum, framePos, channels);

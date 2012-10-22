@@ -124,5 +124,6 @@ class TSharedAudioBuffer : public TAudioBuffer<T>
 };
 
 typedef TAudioBuffer<float>* FLOAT_BUFFER;
+typedef TAudioBuffer<short>* SHORT_BUFFER;
 
 #endif

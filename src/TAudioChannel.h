@@ -144,7 +144,7 @@ class TAudioChannel
         TChannelFadeAudioStream fFadeStream; 		// Fade stream
         TRTRendererAudioStream	fRendererStream;	// Renderer stream (set a real-time command manager for file stream)
         TAudioStreamPtr			fStream;			// Audio stream
-        TAudioBuffer<float>*	fMixBuffer; 		// Used for mixing
+        FLOAT_BUFFER	fMixBuffer; 		// Used for mixing
 		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
 		TAudioEffectListManager	fEffectList;
 
@@ -170,7 +170,7 @@ class TAudioChannel
 	    void Reset();
 
         // Mixing
-        bool Mix(TAudioBuffer<float>* out, long framesNum, long channels);
+        bool Mix(FLOAT_BUFFER out, long framesNum, long channels);
 		
 		// To know if the channel is inserted in the active channel list
         void SetState(bool state)

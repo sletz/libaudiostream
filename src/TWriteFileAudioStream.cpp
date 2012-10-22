@@ -29,7 +29,7 @@ research@grame.fr
 #include <string.h>
 #include <assert.h>
 
-TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioBuffer<short>* buffer, TAudioStreamPtr stream, long format)
+TWriteFileAudioStream::TWriteFileAudioStream(string name, SHORT_BUFFER buffer, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
     fChannels = stream->Channels();
@@ -97,7 +97,7 @@ void TWriteFileAudioStream::Close()
     }
 }
 
-long TWriteFileAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     long res = fStream->Read(buffer, framesNum, framePos, channels);
     TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
@@ -119,7 +119,7 @@ void TWriteFileAudioStream::Reset()
 }
 
 // Called by TCmdManager
-long TWriteFileAudioStream::Write(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+long TWriteFileAudioStream::Write(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fBuffer);
     assert(fFile);

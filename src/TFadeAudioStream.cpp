@@ -46,7 +46,7 @@ TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fad
     Init(0.0f, float(fadeIn), 1.0f, float(fadeOut));
 }
 
-long TFadeAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     switch (fStatus) {
         case kIdle:
@@ -66,7 +66,7 @@ long TFadeAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long fr
     }
 }
 
-long TFadeAudioStream::ReadAux(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     long res = fStream->Read(buffer, framesNum, framePos, channels);
     fCurFrame += res;
@@ -81,7 +81,7 @@ long TFadeAudioStream::ReadAux(TAudioBuffer<float>* buffer, long framesNum, long
 
 // To do : start FadeOut while doing FadeIn
 
-long TFadeAudioStream::FadeIn(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), framesNum, channels);
     long res = fStream->Read(fMixBuffer, framesNum, framePos, channels);
@@ -104,7 +104,7 @@ long TFadeAudioStream::FadeIn(TAudioBuffer<float>* buffer, long framesNum, long 
     return res;
 }
 
-long TFadeAudioStream::FadeOut(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), framesNum, channels);
     long res = fStream->Read(fMixBuffer, framesNum, framePos, channels);

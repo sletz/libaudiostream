@@ -28,13 +28,13 @@ research@grame.fr
 #include <string.h>
 
 // Callback called by command manager
-void TFileAudioStream::ReadBufferAux(TFileAudioStreamPtr obj, TAudioBuffer<short>* buffer, long framesNum, long framePos)
+void TFileAudioStream::ReadBufferAux(TFileAudioStreamPtr obj, SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     obj->TBufferedAudioStream::ReadBuffer(buffer, framesNum, framePos);
 }
 
 // Handle the disk read function with the command manager: either direct or low-priority thread based
-void TFileAudioStream::ReadBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+void TFileAudioStream::ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     fReady = false;
     if (fManager == 0)
@@ -44,13 +44,13 @@ void TFileAudioStream::ReadBuffer(TAudioBuffer<short>* buffer, long framesNum, l
 }
 
 // Callback called by command manager
-void TFileAudioStream::WriteBufferAux(TFileAudioStreamPtr obj, TAudioBuffer<short>* buffer, long framesNum, long framePos)
+void TFileAudioStream::WriteBufferAux(TFileAudioStreamPtr obj, SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     obj->TBufferedAudioStream::WriteBuffer(buffer, framesNum, framePos);
 }
 
 // Handle the disk write function with the command manager: either direct or low-priority thread based
-void TFileAudioStream::WriteBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+void TFileAudioStream::WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     fReady = false;
     if (fManager == 0)

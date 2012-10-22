@@ -52,7 +52,7 @@ TAudioStreamPtr TSoundTouchAudioStream::CutBegin(long frames)
     return new TSoundTouchAudioStream(fStream->CutBegin(frames), fPitchShift, fTimeStretch);
 }
 
-long TSoundTouchAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TSoundTouchAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
 	long read, produced, written = 0;
 	int available;

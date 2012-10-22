@@ -122,7 +122,7 @@ void TReadFileAudioStream::Reset()
 }
 
 // Called by TCmdManager
-long TReadFileAudioStream::Read(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+long TReadFileAudioStream::Read(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fBuffer);
     assert(fFile);

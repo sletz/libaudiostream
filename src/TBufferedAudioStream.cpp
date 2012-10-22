@@ -31,20 +31,20 @@ TBufferedAudioStream::TBufferedAudioStream(): TAudioStream()
     Init(0);
 }
 
-void TBufferedAudioStream::Init(TAudioBuffer<short>* buffer)
+void TBufferedAudioStream::Init(SHORT_BUFFER buffer)
 {
     fBuffer = buffer;
     fFramesNum = fCurFrame = fChannels = fTotalFrames = 0;
     fReady = false;
 }
 
-void TBufferedAudioStream::ReadBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+void TBufferedAudioStream::ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     Read(buffer, framesNum, framePos);
     fReady = true;
 }
 
-void TBufferedAudioStream::WriteBuffer(TAudioBuffer<short>* buffer, long framesNum, long framePos)
+void TBufferedAudioStream::WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     Write(buffer, framesNum, framePos);
     fReady = true;
@@ -60,7 +60,7 @@ static bool EndSecond (int curframe, int framesNum, int buffersize)
     return ((curframe / buffersize) == 1) && (((curframe + framesNum) / buffersize) == 2);
 }
 
-long TBufferedAudioStream::HandleBuffer(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels, bool read)
+long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read)
 {
     assert(fBuffer);
 
@@ -133,12 +133,12 @@ long TBufferedAudioStream::HandleBuffer(TAudioBuffer<float>* buffer, long frames
     return framesNum;
 }
 
-long TBufferedAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TBufferedAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     return HandleBuffer(buffer, framesNum, framePos, channels, true);
 }
 
-long TBufferedAudioStream::Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TBufferedAudioStream::Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
     return HandleBuffer(buffer, framesNum, framePos, channels, false);
 }

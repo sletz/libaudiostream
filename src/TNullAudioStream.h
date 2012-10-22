@@ -49,7 +49,7 @@ class TNullAudioStream : public TAudioStream
         virtual ~TNullAudioStream()
         {}
 
-        long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
         {
             framesNum = UTools::Min(framesNum, fFramesNum - fCurFrame);
             fCurFrame += framesNum;

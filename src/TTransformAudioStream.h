@@ -41,7 +41,7 @@ class TTransformAudioStream : public TDecoratedAudioStream
         TAudioEffectListPtr fEffectList;  	// Effect list
 		long fFadeIn;	// FadeIn time
         long fFadeOut;	// FadeOut time
-		TAudioBuffer<float>* fBuffer;
+		FLOAT_BUFFER fBuffer;
 
     public:
 
@@ -51,11 +51,11 @@ class TTransformAudioStream : public TDecoratedAudioStream
     		delete fBuffer;
         }
 
-        virtual long Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
         {
             return 0;
         }
-        long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
 
         void Reset();
         TAudioStreamPtr CutBegin(long frames);    // Length in frames

@@ -42,7 +42,7 @@ TCmdManagerPtr la_smartable1::fManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
 long TAudioGlobals::fClientCount = 0;
-TAudioBuffer<short>* TAudioGlobals::fInBuffer = 0;
+SHORT_BUFFER TAudioGlobals::fInBuffer = 0;
 
 long TAudioGlobals::fInput = 0;
 long TAudioGlobals::fOutput = 0;

@@ -42,18 +42,18 @@ class TSoundTouchAudioStream : public TDecoratedAudioStream
 		double fPitchShiftVal;
 		double fTimeStretchVal;
 		soundtouch::SoundTouch* fSoundTouch;
-		TAudioBuffer<float>* fBuffer;
+		FLOAT_BUFFER fBuffer;
 	
     public:
 
         TSoundTouchAudioStream(TAudioStreamPtr stream, double* pitch_shift, double* time_strech);
         virtual ~TSoundTouchAudioStream();
    
-        virtual long Write(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
         {
             return 0;
         }
-        long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
 
         void Reset();
         TAudioStreamPtr CutBegin(long frames);    // Length in frames

@@ -48,7 +48,7 @@ class TSeqAudioStream : public TBinaryAudioStream
         virtual ~TSeqAudioStream()
         {}
 
-        long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
 
         void Reset();
         TAudioStreamPtr CutBegin(long frames);

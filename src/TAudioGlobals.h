@@ -43,7 +43,7 @@ class AUDIO_EXPORTS TAudioGlobals
 
     public:
 
-        static TAudioBuffer<short>* fInBuffer; 	// Shared buffer for Real-Time stream
+        static SHORT_BUFFER fInBuffer; 	// Shared buffer for Real-Time stream
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
         static long fChannels;                  // Number of sound channels

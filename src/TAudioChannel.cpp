@@ -7,7 +7,7 @@ the terms of the GNU Library General Public License as published by the
 Free Software Foundation version 2 of the License, or any later version.
 
 This library is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITYTAudioBuffer<float>*
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
 for more details.
 
@@ -118,7 +118,7 @@ void TAudioChannel::GetInfo(ChannelInfo* info)
 // Internal API
 /*--------------------------------------------------------------------------*/
 
-bool TAudioChannel::Mix(TAudioBuffer<float>* dst, long framesNum, long channels)
+bool TAudioChannel::Mix(FLOAT_BUFFER dst, long framesNum, long channels)
 {
     // Init buffer
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);

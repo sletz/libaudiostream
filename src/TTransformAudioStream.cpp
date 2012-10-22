@@ -40,7 +40,7 @@ TAudioStreamPtr TTransformAudioStream::CutBegin(long frames)
     return new TTransformAudioStream(fStream->CutBegin(frames), fEffectList->Copy(), fFadeIn, fFadeOut);
 }
 
-long TTransformAudioStream::Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels)
+long TTransformAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
 	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBuffer_Size, TAudioGlobals::fOutput);
     long res = fStream->Read(fBuffer, framesNum, framePos, channels);

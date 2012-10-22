@@ -47,7 +47,7 @@ class TBinaryAudioStream : public TDecoratedAudioStream
         virtual ~TBinaryAudioStream()
         {}
 	
-        virtual long Read(TAudioBuffer<float>* buffer, long framesNum, long framePos, long channels) = 0;
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels) = 0;
 
         virtual void Reset()
         {
