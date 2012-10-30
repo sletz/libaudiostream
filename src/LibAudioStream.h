@@ -362,7 +362,7 @@ extern "C"
     \param buffer_size The audio player internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
     \param rtstream_buffer_size The input stream buffer size.
-    \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+    \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer, kJackRenderer or kCoreAudioRenderer.
     \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
     \return A pointer to new audio player object.
     */
@@ -534,7 +534,7 @@ extern "C"
 	// Renderer
 	/*!
     \brief Create a new audio renderer.
-    \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+    \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer, kJackRenderer or kCoreAudioRenderer.
 	\return A pointer to new audio renderer object.
 	*/
 	AudioRendererPtr MakeAudioRenderer(long renderer);

@@ -67,16 +67,18 @@ void TAudioEffectList::Process(float* buffer, long framesNum, long channels)
 				for (i = 0 ; i < framesNum; i++) {
 					UAudioTools::MultFrame(&buffer[i * channels], fFadeIn.tick(), channels); // To improve...
 				}
-				if (fFadeIn.lastOut() >= 1.0f) 
+				if (fFadeIn.lastOut() >= 1.0f) {
 					fStatus = kPlaying;
+                }
 				break;
 			
 			case kFadeOut: 
 				for (i = 0 ; i < framesNum; i++) {
 					UAudioTools::MultFrame(&buffer[i * channels], fFadeOut.tick(), channels); // To improve...
 				}
-				if (fFadeOut.lastOut() <= 0.0f) 
+				if (fFadeOut.lastOut() <= 0.0f) {
 					fStatus = kIdle;
+                }
 				break;
 		}
 		

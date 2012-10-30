@@ -65,7 +65,7 @@ class TCoreAudioRenderer : public TAudioRenderer
                                                 AudioDevicePropertyID inPropertyID,
                                                 void* inClientData);
                                             
-         OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
+        OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
                                             
         OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
         OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);

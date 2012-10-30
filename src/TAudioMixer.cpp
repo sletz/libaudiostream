@@ -138,36 +138,41 @@ void TAudioMixer::Play(long chan)
 void TAudioMixer::Stop(long chan)
 {
     TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SoundOff(true);
+    }
 }
 
 void TAudioMixer::Abort(long chan)
 {
     TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SoundOff(false);
+    }
 }
 
 void TAudioMixer::SetVol(long chan, float vol)
 {
     TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SetVol(vol);
+    }
 }
 
 void TAudioMixer::SetPan(long chan, float panLeft, float panRight)
 {
     TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SetPan(panLeft, panRight);
+    }
 }
 
 void TAudioMixer::SetStopCallback(long chan, StopCallback callback, void* context)
 {
 	TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SetStopCallback(callback, context);
+    }
 }
 
 StopCallback TAudioMixer::GetStopCallback(long chan)
@@ -179,8 +184,9 @@ StopCallback TAudioMixer::GetStopCallback(long chan)
 void TAudioMixer::GetInfo(long chan, ChannelInfo* info)
 {
     TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->GetInfo(info);
+    }
 }
 
 void TAudioMixer::Reset()
@@ -196,8 +202,9 @@ void TAudioMixer::Reset()
 void TAudioMixer::SetEffectList(long chan, TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
 {
 	TAudioChannelPtr channel;
-    if (IsValid(chan) && (channel = fSoundChannelTable[chan]))
+    if (IsValid(chan) && (channel = fSoundChannelTable[chan])) {
         channel->SetEffectList(effect_list, fadeIn, fadeOut);
+    }
 }
 
 TAudioEffectListPtr TAudioMixer::GetEffectList(long chan)

@@ -74,8 +74,9 @@ void TWriteFileAudioStream::Open()
 		fFile = sf_open(utf8name, SFM_WRITE, &info);
 	
 		// Check file
-		if (!fFile)
+		if (!fFile) {
 			throw - 1;
+        }
 
 		   // Needed because we later on use sf_writef_short, would be remove is sf_writef_float is used instead.
         if (info.format & SF_FORMAT_FLOAT) {

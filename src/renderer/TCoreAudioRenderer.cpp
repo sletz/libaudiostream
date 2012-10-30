@@ -37,8 +37,6 @@ typedef	UInt8	CAAudioHardwareDeviceSectionID;
 
 #define DEBUG 1
 
-// TODO : use jackdmp code...
-
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
     printf("- - - - - - - - - - - - - - - - - - - -\n");

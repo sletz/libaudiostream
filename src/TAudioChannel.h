@@ -144,7 +144,7 @@ class TAudioChannel
         TChannelFadeAudioStream fFadeStream; 		// Fade stream
         TRTRendererAudioStream	fRendererStream;	// Renderer stream (set a real-time command manager for file stream)
         TAudioStreamPtr			fStream;			// Audio stream
-        FLOAT_BUFFER	fMixBuffer; 		// Used for mixing
+        FLOAT_BUFFER            fMixBuffer; 		// Used for mixing
 		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
 		TAudioEffectListManager	fEffectList;
 
