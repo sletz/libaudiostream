@@ -33,7 +33,8 @@ research@grame.fr
 	#define FILENAME3 "D:\\acl62-trial\\BjornenSover.wav"
 	#define EFFECT1 "D:\\acl62-trial\\freeverb.dll"
 #else
-	#define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
+	//#define FILENAME1 "/Users/letz/Music/Sounds/levot-882.wav"
+    #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 	#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 	#define FILENAME3 "/Users/letz/son1.wav"
 	#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
@@ -65,7 +66,7 @@ AudioStream test0()
     printf("-------------- \n\n");
     AudioStream s1;
 	//s1 = MakeRegionSound(FILENAME1, 200000, 500000);
-	s1 = MakeStereoSound(MakeRegionSound(FILENAME1, 200000, 500000));
+	s1 = MakeStereoSound(MakeRegionSound(FILENAME1, 200000, 600000));
     return s1;
 }
 
@@ -468,6 +469,9 @@ int main(int argc, char* argv[])
     printf("----------------------------\n\n");
 
 	int res = LibVersion();
+    
+    int samplerate = 96000;
+    //int samplerate = 44100;
 
 #ifndef WIN32
 	SetMaximumFiles(1024);	
@@ -475,14 +479,14 @@ int main(int argc, char* argv[])
 #endif
 	
 	// Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
+    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
     // If failure opens PortAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
     }
     // If failure opens CoreAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, 44100, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
     }
     
     StartAudioPlayer(player);
@@ -520,7 +524,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test11());
     */
     
-    ExecTest(player, test10bis());
+    //ExecTest(player, test10bis());
 	
 	//ExecTest(player, test12());
 	//ExecTest(player, test13());
@@ -529,6 +533,8 @@ int main(int argc, char* argv[])
 	test20();
 	test21();
     */
+    
+    ExecTest(player, test0());
 	
     StopAudioPlayer(player);
     CloseAudioPlayer(player);

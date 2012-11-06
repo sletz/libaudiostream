@@ -63,8 +63,9 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable
 
         void ProcessAux(float** input, float** output, long framesNum, long channels)
         {
-            if (fState)
+            if (fState) {
                 Process(input, output, framesNum, channels);
+            }
         }
 
         // Pure virtual : to be implemented by sub-classes

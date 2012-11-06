@@ -24,6 +24,7 @@ research@grame.fr
 #include "UTools.h"
 
 TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ratio, unsigned int quality)
+    :TDecoratedAudioStream(stream)
 {
     switch (quality) {
        case 0:
@@ -46,17 +47,23 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
             printf("Out of range resample quality\n");
             break;
     }
+    
     int error;
 	fResampler = src_new(quality, stream->Channels(), &error);
     fRatio = ratio;
     if (error != 0) {
         throw - 1;
     }
+     
+    fReadPos = 0;
+    fReadFrames = 0;    
+    fBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
 }
 
 TSampleRateAudioStream::~TSampleRateAudioStream()
 {
 	src_delete(fResampler);
+    delete fBuffer;
 }
 
 TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
@@ -66,22 +73,46 @@ TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
 
 long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {
-    /*
+    int written = 0;
     SRC_DATA src_data;
-    src_data.data_in = (jack_default_audio_sample_t*)ring_buffer_data[j].buf;
-    src_data.data_out = &buffer[written_frames];
-    src_data.input_frames = ring_buffer_data[j].len / sizeof(jack_default_audio_sample_t);
-    src_data.output_frames = frames_to_write;
-    src_data.end_of_input = 0;
-    src_data.src_ratio = fRatio;
-
-	return written;
-    */
-    return 0;
+    bool end = false;
+    
+    while (written < framesNum && !end) {
+    
+        if (fReadFrames == 0) {
+            // Read input
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            fReadFrames = fStream->Read(fBuffer, TAudioGlobals::fBufferSize, 0, channels);
+            fReadPos = 0;
+            end = fReadFrames < TAudioGlobals::fBufferSize;
+        }
+        
+        src_data.data_in = fBuffer->GetFrame(fReadPos);
+        src_data.data_out = buffer->GetFrame(framePos);
+        src_data.input_frames = fReadFrames;
+        src_data.output_frames = int(framesNum - written);
+        src_data.end_of_input = end;
+        src_data.src_ratio = fRatio;
+        
+        int res = src_process(fResampler, &src_data);
+        if (res != 0) {
+            printf("TSampleRateAudioStream::Read ratio = %f err = %s", fRatio, src_strerror(res));
+            return written;
+        }
+        
+        written += src_data.output_frames_gen;
+        framePos += src_data.output_frames_gen;
+        
+        fReadPos += src_data.input_frames_used;
+        fReadFrames -= src_data.input_frames_used; 
+    }
+      
+    return written;
 }
 
 void TSampleRateAudioStream::Reset()
 {
+    TDecoratedAudioStream::Reset();
     src_reset(fResampler);
 }
 

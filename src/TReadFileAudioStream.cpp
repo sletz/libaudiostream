@@ -30,13 +30,12 @@ research@grame.fr
 
 TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
-    SF_INFO info;
-	memset(&info, 0, sizeof(info));
+  	memset(&fInfo, 0, sizeof(fInfo));
 	char utf8name[512] = {0};
 	
 	assert(fName.size() < 512);
 	Convert2UTF8(fName.c_str(), utf8name, 512);
-	fFile = sf_open(utf8name, SFM_READ, &info);
+	fFile = sf_open(utf8name, SFM_READ, &fInfo);
 	
     // Check file
     if (!fFile) {
@@ -48,18 +47,18 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
         throw - 2;
     }
 
-    fFramesNum = long(info.frames);
-    fChannels = long(info.channels);
+    fFramesNum = long(fInfo.frames);
+    fChannels = long(fInfo.channels);
     fBeginFrame = beginFrame;
 
 	// Needed because we later on use sf_readf_short, would be remove is sf_readf_float is used instead.
-    if (info.format & SF_FORMAT_FLOAT) {
+    if (fInfo.format & SF_FORMAT_FLOAT) {
         int arg = SF_TRUE;
         sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
     }
 
-    if (info.samplerate != TAudioGlobals::fSampleRate) {
-        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, info.samplerate);
+    if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
+        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);
     }
 
     // Dynamic allocation

@@ -40,6 +40,7 @@ class TReadFileAudioStream : public TFileAudioStream
 
         SHORT_BUFFER fCopyBuffer;
         long fBeginFrame;
+        SF_INFO fInfo;
 
         virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos);
         static void ReadEndBufferAux(TReadFileAudioStream* obj, long framesNum, long framePos);
@@ -62,6 +63,8 @@ class TReadFileAudioStream : public TFileAudioStream
         {
             return new TReadFileAudioStream(fName, fBeginFrame);
         }
+        
+        int SampleRate() { return fInfo.samplerate; }
 };
 
 typedef TReadFileAudioStream * TReadFileAudioStreamPtr;

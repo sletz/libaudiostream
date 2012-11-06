@@ -37,8 +37,12 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
 
     private:
 
-		 SRC_STATE* fResampler;
-         double fRatio;
+        FLOAT_BUFFER fBuffer;
+        SRC_STATE* fResampler;
+        double fRatio;
+   
+        int fReadPos;
+        int fReadFrames;
 	
     public:
 
@@ -55,6 +59,12 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
         TAudioStreamPtr CutBegin(long frames);    // Length in frames
     
         TAudioStreamPtr Copy();
+        
+        long Length()
+        {
+            return fStream->Length() * fRatio;
+        }
+        
 };
 
 typedef TSampleRateAudioStream * TSampleRateAudioStreamPtr;

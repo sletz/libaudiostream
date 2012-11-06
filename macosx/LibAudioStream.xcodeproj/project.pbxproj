@@ -108,6 +108,14 @@
 		4B98A5C00D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
 		4B98A5C10D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B98A5C50D168B4300A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
+		4B9A47CE1648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
+		4B9A47CF1648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
+		4B9A47D01648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
+		4B9A47D11648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
+		4B9A47D21648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
+		4B9A47D31648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
+		4B9A47D41648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
+		4B9A47D51648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
 		4BB3FEDB0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
 		4BB3FEDC0B39BAD400CA1607 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BB3FEDD0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
@@ -400,6 +408,8 @@
 		4B8E51780CAA86E70070FDA9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TSoundTouchAudioStream.cpp; path = ../src/TSoundTouchAudioStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSoundTouchAudioStream.h; path = ../src/TSoundTouchAudioStream.h; sourceTree = SOURCE_ROOT; };
+		4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TSampleRateAudioStream.cpp; path = ../src/TSampleRateAudioStream.cpp; sourceTree = SOURCE_ROOT; };
+		4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSampleRateAudioStream.h; path = ../src/TSampleRateAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4BA0DEDE087FE455003B1CB3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = SOURCE_ROOT; };
 		4BA3E1780459506A00053105 /* TRendererAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TRendererAudioStream.h; path = ../src/TRendererAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4BAC748E08CD8D6E00F6E555 /* TChannelizerAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TChannelizerAudioStream.h; path = ../src/TChannelizerAudioStream.h; sourceTree = SOURCE_ROOT; };
@@ -640,6 +650,8 @@
 				F5C1D6120330CD5501053105 /* TMixAudioStream.cpp */,
 				F5C1D6130330CD5501053105 /* TMixAudioStream.h */,
 				F5C1D61E0330CD7501053105 /* TNullAudioStream.h */,
+				4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */,
+				4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */,
 				F5C1D6210330CD8701053105 /* TSeqAudioStream.cpp */,
 				F5C1D6220330CD8701053105 /* TSeqAudioStream.h */,
 				F5C5B1FE033220AA01053105 /* TFileAudioStream.cpp */,
@@ -801,6 +813,7 @@
 				4B0060421112ED0300B6A836 /* TCoreAudioRenderer.h in Headers */,
 				4B0060431112ED0300B6A836 /* StringTools.h in Headers */,
 				4B0060441112ED0300B6A836 /* TSoundTouchAudioStream.h in Headers */,
+				4B9A47CF1648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -856,6 +869,7 @@
 				4BCB2B3D0D12ACE500AB3F6D /* la_smartpointer.h in Headers */,
 				4BCB2B3E0D12ACE500AB3F6D /* TPortAudioV19Renderer.h in Headers */,
 				4BCB2B3F0D12ACE500AB3F6D /* StringTools.h in Headers */,
+				4B9A47D51648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,6 +932,7 @@
 				4BB3FEDC0B39BAD400CA1607 /* la_smartpointer.h in Headers */,
 				4B63B0550BDF790600CD9753 /* TPortAudioV19Renderer.h in Headers */,
 				4B8E50E50CAA86670070FDA9 /* StringTools.h in Headers */,
+				4B9A47D31648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -976,6 +991,7 @@
 				4BEFE9820C59C93E00F8AE0C /* TCoreAudioRenderer.h in Headers */,
 				4B8E50E70CAA86670070FDA9 /* StringTools.h in Headers */,
 				4B98A5C10D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */,
+				4B9A47D11648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1253,6 +1269,7 @@
 				4B0060641112ED0300B6A836 /* TCoreAudioRenderer.cpp in Sources */,
 				4B0060651112ED0300B6A836 /* StringTools.c in Sources */,
 				4B0060661112ED0300B6A836 /* TSoundTouchAudioStream.cpp in Sources */,
+				4B9A47CE1648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1289,6 +1306,7 @@
 				4BCB2B5E0D12ACE500AB3F6D /* TPortAudioV19Renderer.cpp in Sources */,
 				4BCB2B5F0D12ACE500AB3F6D /* StringTools.c in Sources */,
 				4B98A5C50D168B4300A93365 /* TSoundTouchAudioStream.cpp in Sources */,
+				4B9A47D41648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1332,6 +1350,7 @@
 				4BB3FEDB0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */,
 				4B63B0540BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */,
 				4BC9AC250CAAA81800E8A035 /* StringTools.c in Sources */,
+				4B9A47D21648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1370,6 +1389,7 @@
 				4BEFE9810C59C93E00F8AE0C /* TCoreAudioRenderer.cpp in Sources */,
 				4BC9AC260CAAA81800E8A035 /* StringTools.c in Sources */,
 				4B98A5C00D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */,
+				4B9A47D01648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1400,6 +1420,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
 					/usr/local/include,
 					../src/renderer,
 				);
@@ -1415,6 +1436,7 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
+					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",
 					"-lLLVMLinker",
@@ -1523,7 +1545,8 @@
 		4B0060701112ED0300B6A836 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1533,6 +1556,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
 					/usr/local/include,
 					../src/renderer,
 				);
@@ -1548,6 +1572,7 @@
 					"-fvisibility=hidden",
 				);
 				OTHER_LDFLAGS = (
+					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",
 					"-lLLVMLinker",
@@ -1642,7 +1667,7 @@
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
 				PRODUCT_NAME = LibAudioStream;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",

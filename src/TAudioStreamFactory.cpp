@@ -40,6 +40,7 @@ research@grame.fr
 #include "TWriteFileAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TChannelizerAudioStream.h"
+#include "TSampleRateAudioStream.h"
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 #include <assert.h>
@@ -57,7 +58,12 @@ TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
 TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 {
     try {
-        return new TReadFileAudioStream(name, 0);
+        TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, 0);
+        if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
+            return new TSampleRateAudioStream(sound, double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
+        } else {
+            return sound;
+        }
     } catch (int n) {
         printf("MakeReadSound exception %d \n", n);
         return 0;
@@ -68,8 +74,12 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
 {
 	if (beginFrame >= 0 && beginFrame <= endFrame) {
         try {
-            TAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
-			return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
+            TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
+	        if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
+                return new TSampleRateAudioStream(new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length())), double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
+            } else {
+                return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
+            }
         } catch (int n) {
             printf("MakeRegionSound exception %d \n", n);
             return 0;
