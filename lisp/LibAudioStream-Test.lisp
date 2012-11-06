@@ -38,7 +38,9 @@
 ;; WARNING !! when using Jack, the Sample rate and Buffer size values much match the values currently used with Jack server
  
 (setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kJackRenderer 1))
-(setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kPortAudioRenderer 1))
+(setq player (OpenAudioPlayer 0 2 32 96000 512 65536 65536 kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 0 2 32 48000 512 65536 65536 kCoreAudioRenderer 1))
 
 
 ;; Start Audio engine execution
@@ -50,6 +52,7 @@
 ;;=============================
 
 (setq s1 (MakeReadSound soundfile1))
+(setq s1 (MakeRegionSound soundfile1 400000 450000) )
 
 (GetLengthSound s1)
 (GetChannelsSound s1)

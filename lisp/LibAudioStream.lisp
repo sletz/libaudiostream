@@ -18,7 +18,7 @@
 
 (push :libaudiostream *features*)
 
-(defvar *liblibaudio* 
+(defvar *libaudiostream-pathname* 
   #+win32
   "/WINDOWS/system32/LibAudioStream.dll"
   #+(or darwin macos macosx) 
@@ -30,11 +30,18 @@
 
 (defun libaudiostream-framework ()
   (or *libaudiostream*
-     (setq *libaudiostream*
-           (if (probe-file *liblibaudio*)
-               (progn (cffi:load-foreign-library *liblibaudio*)
-                 (hcl::add-special-free-action 'audio-cleanup) 
-                 t)))))
+      (setq *libaudiostream*
+            (if (probe-file *libaudiostream-pathname*)
+                (progn 
+                  (print (concatenate 'string "Loading LibAudioStream library: " (namestring *libaudiostream-pathname*))) 
+                  (fli:register-module "LibAudioStream" 
+                                       :real-name (namestring *libaudiostream-pathname*)
+                                       :connection-style :immediate)
+                 ;(cffi:load-foreign-library *libaudiostream-pathname*)
+                  (hcl::add-special-free-action 'audio-cleanup) 
+                  t)))))
+
+; (hcl::remove-special-free-action 'audio-cleanup)
 
 ;;;  (libaudiostream-framework)
 
@@ -105,15 +112,17 @@
 (defmethod las-null-ptr-p ((obj las-effectlist))
   (cffi:null-pointer-p (las-effectlist-ptr obj)))
 
-(defvar *ptr-counter* 0)
+(defparameter *ptr-counter* 0)
 
 (defun register-rsrc (obj)
+  ;(print (list "new" obj))
   (incf *ptr-counter*)
   (when (> *ptr-counter* 100) (sys::gc-all))
   (hcl::flag-special-free-action obj))
 
 (defmethod audio-cleanup ((obj las-sound))
   (decf *ptr-counter*)
+  ;(print (list "clean" obj))
   (DeleteSound obj))
 
 (defmethod audio-cleanup ((obj las-effect))
