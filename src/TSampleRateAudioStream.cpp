@@ -48,7 +48,7 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
             break;
     }
     
-    int error;
+    int error;    
 	fResampler = src_new(quality, stream->Channels(), &error);
     fRatio = ratio;
     if (error != 0) {

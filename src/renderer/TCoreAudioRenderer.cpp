@@ -124,8 +124,13 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
                                      AudioBufferList *ioData)
 {
     TCoreAudioRendererPtr renderer = (TCoreAudioRendererPtr)inRefCon;
+    
+    // Signal waiting start function...
+    renderer->fState = true;
+    
     AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
 	memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
+    
  	renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
 	return 0;
 }
@@ -1087,13 +1092,26 @@ long TCoreAudioRenderer::Close()
 
 long TCoreAudioRenderer::Start()
 {
-	OSStatus err = AudioOutputUnitStart(fAUHAL);
-  
-    if (err != noErr) {
+  if (AudioOutputUnitStart(fAUHAL) != noErr) {
         printf("Error while opening device : device open error \n");
         return OPEN_ERR;
     } else {
-        return NO_ERR;
+    
+        // Waiting for Render callback to be called (= driver has started)
+        fState = false;
+        int count = 0;
+        
+        while (!fState && count++ < WAIT_COUNTER) {
+            usleep(100000);
+            printf("TCoreAudioRenderer::Start : wait count = %d\n", count);
+        }
+
+        if (count < WAIT_COUNTER) {
+            printf("CoreAudio driver is running...\n");
+            return NO_ERR;
+        } else {
+             return OPEN_ERR;
+        }
 	}
 }
 

@@ -55,15 +55,18 @@ class TChannelizerAudioStream : public TDecoratedAudioStream
 
 		// The used UAudioTools::Short2FloatMix already does a limited form of "channels mapping", thus Read does not need to be redefined
         
+        /*
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
         {
             printf("TChannelizerAudioStream::Read fStream->Channels() = %d channels = %d \n", fStream->Channels(), channels);
             return TDecoratedAudioStream::Read(buffer, framesNum, framePos, channels);
         }
+        */
         
-        /*
+        
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
         {
+            /*
             long res = fStream->Read(fBuffer, framesNum, framePos, fStream->Channels());
             float* src = fBuffer->GetFrame(0);
             float* dst = buffer->GetFrame(framePos);
@@ -76,9 +79,11 @@ class TChannelizerAudioStream : public TDecoratedAudioStream
                     dst[i * channels + j] = sample;
                 }
             }
+            */
+            
+            long res = fStream->Read(buffer, framesNum, framePos, channels);
             return res;
         }
-        */
      	
 		long Channels()
         {
