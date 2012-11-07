@@ -11,6 +11,10 @@
 ;;(defparameter soundfile2 "D:\\acl62-trial\\BjornenSover.wav")
 
 (defparameter soundfile1 "/Users/letz/Music/Sounds/levot.wav")
+
+(defparameter soundfile1 "/Users/letz/Music/Sounds/guit1.wav")
+
+
 (defparameter soundfile2 "/Users/letz/Music/Sounds/tango.wav")
 ;;(defparameter effect1 "/Volumes/Document1/Developpement/ProjectsCVS/FaustCVS/FaustCVS/faust/examples/moduledir/freeverb.so")
 (defparameter effect1 "/Documents/faust-sf/examples/freeverb.dsp")
@@ -39,9 +43,18 @@
  
 (setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kJackRenderer 1))
 (setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kPortAudioRenderer 1))
-(setq player (OpenAudioPlayer 0 2 32 96000 512 65536 65536 kCoreAudioRenderer 1))
-(setq player (OpenAudioPlayer 0 2 32 48000 512 65536 65536 kCoreAudioRenderer 1))
 
+(setq player (OpenAudioPlayer 0 2 32 44100 512 65536 65536 kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 2 2 32 44100 512 65536 65536 kCoreAudioRenderer 1))
+
+(setq player (OpenAudioPlayer 0 2 32 96000 512 65536 65536 kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 2 0 32 96000 512 65536 65536 kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 2 2 32 96000 512 65536 65536 kCoreAudioRenderer 1))
+
+(setq player (OpenAudioPlayer 0 2 32 48000 512 65536 65536 kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 2 2 32 48000 512 65536 65536 kCoreAudioRenderer 1))
+
+(CloseAudioPlayer player)
 
 ;; Start Audio engine execution
 ;;==============================
@@ -52,6 +65,8 @@
 ;;=============================
 
 (setq s1 (MakeReadSound soundfile1))
+(setq s1 (MakeStereoSound (MakeReadSound soundfile1)))
+
 (setq s1 (MakeRegionSound soundfile1 400000 450000) )
 
 (GetLengthSound s1)

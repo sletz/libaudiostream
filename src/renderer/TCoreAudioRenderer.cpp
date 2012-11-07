@@ -125,8 +125,8 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
 {
     TCoreAudioRendererPtr renderer = (TCoreAudioRendererPtr)inRefCon;
     AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
-	memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a  *mix*
-	renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
+	memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
+ 	renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
 	return 0;
 }
 
@@ -610,7 +610,7 @@ OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
     switch (inPropertyID) {
             
         case kAudioDevicePropertyNominalSampleRate: {
-            printf("JackCoreAudioDriver::SRNotificationCallback kAudioDevicePropertyNominalSampleRate\n");
+            printf("TCoreAudioRenderer::SRNotificationCallback kAudioDevicePropertyNominalSampleRate\n");
             driver->fState = true;
             // Check new sample rate
             Float64 sampleRate;
@@ -629,27 +629,129 @@ OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
     return noErr;
 }
 
-int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long samplerate)
+OSStatus TCoreAudioRenderer::BSNotificationCallback(AudioDeviceID inDevice,
+                                                     UInt32 inChannel,
+                                                     Boolean isInput,
+                                                     AudioDevicePropertyID inPropertyID,
+                                                     void* inClientData)
+{
+    TCoreAudioRenderer* driver = (TCoreAudioRenderer*)inClientData;
+
+    switch (inPropertyID) {
+
+        case kAudioDevicePropertyBufferFrameSize: {
+            printf("TCoreAudioRenderer::BSNotificationCallback kAudioDevicePropertyBufferFrameSize\n");
+            // Check new buffer size
+            UInt32 tmp_buffer_size;
+            UInt32 outSize = sizeof(UInt32);
+            OSStatus err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyBufferFrameSize, &outSize, &tmp_buffer_size);
+            if (err != noErr) {
+                printf("Cannot get current buffer size");
+                printError(err);
+            } else {
+                printf("TCoreAudioRenderer::BSNotificationCallback : checked buffer size = %d\n", tmp_buffer_size);
+            }
+            driver->fState = true;
+            break;
+        }
+    }
+
+    return noErr;
+}
+
+int TCoreAudioRenderer::SetupBufferSize(long buffer_size)
+{
+    // Setting buffer size
+    OSStatus err = noErr;
+    UInt32 tmp_buffer_size = buffer_size;
+    UInt32 outSize = sizeof(UInt32);
+
+    err = AudioDeviceGetProperty(fDeviceID, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyBufferFrameSize, &outSize, &tmp_buffer_size);
+    if (err != noErr) {
+        printf("Cannot get buffer size %ld\n", buffer_size);
+        printError(err);
+        return -1;
+    } else {
+        printf("TCoreAudioRenderer::SetupBufferSize : current buffer size = %ld\n", tmp_buffer_size);
+    }
+
+    // If needed, set new buffer size
+    if (buffer_size != tmp_buffer_size) {
+        tmp_buffer_size = buffer_size;
+
+        // To get BS change notification
+        err = AudioDeviceAddPropertyListener(fDeviceID, 0, true, kAudioDevicePropertyBufferFrameSize, BSNotificationCallback, this);
+        if (err != noErr) {
+            printf("Error calling AudioDeviceAddPropertyListener with kAudioDevicePropertyBufferFrameSize\n");
+            printError(err);
+            return -1;
+        }
+
+        // Waiting for BS change notification
+        int count = 0;
+        fState = false;
+
+        err = AudioDeviceSetProperty(fDeviceID, NULL, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyBufferFrameSize, outSize, &tmp_buffer_size);
+        if (err != noErr) {
+            printf("SetupBufferSize : cannot set buffer size = %ld\n", tmp_buffer_size);
+            printError(err);
+            goto error;
+        }
+
+        while (!fState && count++ < WAIT_NOTIFICATION_COUNTER) {
+            usleep(100000);
+            printf("TCoreAudioRenderer::SetupBufferSize : wait count = %d\n", count);
+        }
+
+        if (count >= WAIT_NOTIFICATION_COUNTER) {
+            printf("Did not get buffer size notification...\n");
+            goto error;
+        }
+
+        // Check new buffer size
+        outSize = sizeof(UInt32);
+        err = AudioDeviceGetProperty(fDeviceID, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyBufferFrameSize, &outSize, &tmp_buffer_size);
+        if (err != noErr) {
+            printf("Cannot get current buffer size\n");
+            printError(err);
+        } else {
+            printf("TCoreAudioRenderer::SetupBufferSize : checked buffer size = %ld\n", tmp_buffer_size);
+        }
+
+        // Remove BS change notification
+        AudioDeviceRemovePropertyListener(fDeviceID, 0, true, kAudioDevicePropertyBufferFrameSize, BSNotificationCallback);
+    }
+
+    return 0;
+
+error:
+
+    // Remove BS change notification
+    AudioDeviceRemovePropertyListener(fDeviceID, 0, true, kAudioDevicePropertyBufferFrameSize, BSNotificationCallback);
+    return -1;
+}
+
+int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long sample_rate)
 {
     OSStatus err = noErr;
     UInt32 outSize;
-    Float64 sampleRate;
-    
+    Float64 tmp_sample_rate;
+
     // Get sample rate
     outSize =  sizeof(Float64);
-    err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &sampleRate);
+    err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &tmp_sample_rate);
     if (err != noErr) {
         printf("Cannot get current sample rate\n");
         printError(err);
         return -1;
     } else {
-        printf("Current sample rate = %f\n", sampleRate);
+        printf("TCoreAudioRenderer::SetupSampleRateAux : current sample rate = %f\n", tmp_sample_rate);
     }
-    
+
     // If needed, set new sample rate
-    if (samplerate != (long)sampleRate) {
-        sampleRate = (Float64)samplerate;
-        
+    if (sample_rate != (long)tmp_sample_rate) {
+        tmp_sample_rate = (Float64)sample_rate;
+
         // To get SR change notification
         err = AudioDeviceAddPropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback, this);
         if (err != noErr) {
@@ -657,37 +759,50 @@ int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long samplera
             printError(err);
             return -1;
         }
-        err = AudioDeviceSetProperty(inDevice, NULL, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, outSize, &sampleRate);
-        if (err != noErr) {
-            printf("Cannot set sample rate = %ld\n", samplerate);
-            printError(err);
-            return -1;
-        }
-        
+
         // Waiting for SR change notification
         int count = 0;
-        while (!fState && count++ < WAIT_COUNTER) {
-            usleep(100000);
-            printf("Wait count = %d\n", count);
+        fState = false;
+
+        err = AudioDeviceSetProperty(inDevice, NULL, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, outSize, &tmp_sample_rate);
+        if (err != noErr) {
+            printf("Cannot set sample rate = %ld\n", sample_rate);
+            printError(err);
+            goto error;
         }
-        
+
+        while (!fState && count++ < WAIT_NOTIFICATION_COUNTER) {
+            usleep(100000);
+            printf("TCoreAudioRenderer::SetupSampleRateAux : wait count = %d\n", count);
+        }
+
+        if (count >= WAIT_NOTIFICATION_COUNTER) {
+            printf("Did not get sample rate notification...\n");
+            goto error;
+        }
+
         // Check new sample rate
-        outSize =  sizeof(Float64);
-        err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &sampleRate);
+        outSize = sizeof(Float64);
+        err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &tmp_sample_rate);
         if (err != noErr) {
             printf("Cannot get current sample rate\n");
             printError(err);
         } else {
-            printf("Checked sample rate = %f\n", sampleRate);
+            printf("TCoreAudioRenderer::SetupSampleRateAux : checked sample rate = %f\n", tmp_sample_rate);
         }
-        
+
         // Remove SR change notification
         AudioDeviceRemovePropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback);
     }
-    
-    return 0;
-}
 
+    return 0;
+
+error:
+
+    // Remove SR change notification
+    AudioDeviceRemovePropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback);
+    return -1;
+}
 
 long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long samplerate)
 {
@@ -709,7 +824,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyRunLoop, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
         OSStatus osErr = AudioObjectSetPropertyData (kAudioObjectSystemObject, &theAddress, 0, NULL, sizeof(CFRunLoopRef), &theRunLoop);
         if (osErr != noErr) {
-            printf("JackCoreAudioDriver::Open kAudioHardwarePropertyRunLoop error\n");
+            printf("TCoreAudioRenderer::Open kAudioHardwarePropertyRunLoop error\n");
             printError(osErr);
         }
     }
@@ -719,17 +834,12 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
 		return OPEN_ERR;
 	}
 	
-	// Setting buffer size
-    outSize = sizeof(UInt32);
-    err = AudioDeviceSetProperty(fDeviceID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, outSize, &bufferSize);
-    if (err != noErr) {
-        printf("Cannot set buffer size %ld\n", bufferSize);
-        printError(err);
+    if (SetupBufferSize(bufferSize) < 0) {
         return OPEN_ERR;
     }
-
+ 
     if (SetupSampleRateAux(fDeviceID, samplerate) < 0) {
-       return OPEN_ERR;
+        return OPEN_ERR;
     }
   
     // AUHAL
@@ -807,7 +917,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
 
     err1 = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Input, 1, &outSize, &isWritable);
     if (err1 != noErr) {
-        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap-INFO 1\n");
+        printf("Error calling AudioUnitGetPropertyInfo - kAudioOutputUnitProperty_ChannelMap-INFO 1\n");
         printError(err1);
     }
 
@@ -815,7 +925,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
 
     err1 = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, &outSize, &isWritable);
     if (err1 != noErr) {
-        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap-INFO 0\n");
+        printf("Error calling AudioUnitGetPropertyInfo - kAudioOutputUnitProperty_ChannelMap-INFO 0\n");
         printError(err1);
     }
 
@@ -830,7 +940,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         goto error;
     }
 
-    if (outChan < out_nChannels) {
+    if (outChan > 0  && outChan <= out_nChannels) {
         SInt32 chanArr[out_nChannels];
         for (int i = 0;	i < out_nChannels; i++) {
             chanArr[i] = -1;
@@ -845,7 +955,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         }
     }
 
-    if (inChan < in_nChannels) {
+    if (inChan > 0 && inChan <= in_nChannels) {
         SInt32 chanArr[in_nChannels];
         for (int i = 0; i < in_nChannels; i++) {
             chanArr[i] = -1;
@@ -853,14 +963,13 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         for (int i = 0; i < inChan; i++) {
             chanArr[i] = i;
         }
-        AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap , kAudioUnitScope_Input, 1, chanArr, sizeof(SInt32) * in_nChannels);
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Input, 1, chanArr, sizeof(SInt32) * in_nChannels);
         if (err1 != noErr) {
             printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap 1\n");
             printError(err1);
         }
     }
-	
-    
+  
     // Setup stream converters
     if (inChan > 0) {
         
@@ -949,11 +1058,11 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
 		printf("Cannot allocate memory for input buffers\n");
         goto error;
 	}
-    fInputData->mNumberBuffers = inChan;
+    fInputData->mNumberBuffers = 1;
 
     // Prepare buffers
 	fInputData->mBuffers[0].mNumberChannels = inChan;
-	fInputData->mBuffers[0].mDataByteSize = inChan * (bufferSize) * sizeof(float);
+	fInputData->mBuffers[0].mDataByteSize = inChan * bufferSize * sizeof(float);
  	
     return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, samplerate);
 

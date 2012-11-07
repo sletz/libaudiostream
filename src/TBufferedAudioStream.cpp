@@ -69,8 +69,9 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
 
     if (EndFirst(fCurFrame, framesNum, fBuffer->GetSize() / 2)) { // End of first buffer
 
-        if (!fReady) 
+        if (!fReady) {
             TAudioGlobals::fDiskError++;
+        }
 	
         assert((fCurFrame + framesNum) <= fBuffer->GetSize());
 

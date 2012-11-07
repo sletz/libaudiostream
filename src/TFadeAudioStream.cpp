@@ -79,7 +79,7 @@ long TFadeAudioStream::ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePo
     return res;
 }
 
-// To do : start FadeOut while doing FadeIn
+// TODO : start FadeOut while doing FadeIn
 
 long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
 {

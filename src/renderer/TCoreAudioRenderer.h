@@ -38,6 +38,9 @@ research@grame.fr
 \brief Use the CoreAudio API to access sound drivers.
 */
 
+#define WAIT_COUNTER 60
+#define WAIT_NOTIFICATION_COUNTER 30
+
 class TCoreAudioRenderer : public TAudioRenderer
 {
 
@@ -51,6 +54,7 @@ class TCoreAudioRenderer : public TAudioRenderer
 		
 		OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
         int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
+        int SetupBufferSize(long buffer_size);
 
 		static OSStatus Render(void *inRefCon,
                                AudioUnitRenderActionFlags *ioActionFlags,
@@ -64,7 +68,13 @@ class TCoreAudioRenderer : public TAudioRenderer
                                                 Boolean isInput,
                                                 AudioDevicePropertyID inPropertyID,
                                                 void* inClientData);
-                                            
+                                                
+        static OSStatus BSNotificationCallback(AudioDeviceID inDevice,
+                                                UInt32 inChannel,
+                                                Boolean	isInput,
+                                                AudioDevicePropertyID inPropertyID,
+                                                void* inClientData);
+                                       
         OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
                                             
         OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);

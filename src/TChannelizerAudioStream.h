@@ -38,17 +38,47 @@ class TChannelizerAudioStream : public TDecoratedAudioStream
     private:
 
         long fChannels;
+        FLOAT_BUFFER fBuffer;
 
     public:
 	
 		// To be improved with a matrix based "in channels" to "out channels" description 
         TChannelizerAudioStream(TAudioStreamPtr stream, long output):TDecoratedAudioStream(stream),fChannels(output)
-		{}
+		{
+            fBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fStream->Channels());
+        }
 		
         virtual ~TChannelizerAudioStream()
-        {}
+        {
+            delete fBuffer;
+        }
 
 		// The used UAudioTools::Short2FloatMix already does a limited form of "channels mapping", thus Read does not need to be redefined
+        
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        {
+            printf("TChannelizerAudioStream::Read fStream->Channels() = %d channels = %d \n", fStream->Channels(), channels);
+            return TDecoratedAudioStream::Read(buffer, framesNum, framePos, channels);
+        }
+        
+        /*
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        {
+            long res = fStream->Read(fBuffer, framesNum, framePos, fStream->Channels());
+            float* src = fBuffer->GetFrame(0);
+            float* dst = buffer->GetFrame(framePos);
+            printf("TChannelizerAudioStream::Read fStream->Channels() = %d channels = %d \n", fStream->Channels(), channels);
+            printf("TChannelizerAudioStream::Read res = %d channels = %d \n", res, channels);
+            
+            for (int i = 0 ; i < framesNum; i++) {
+                float sample = src[i];
+                for (int j = 0 ; j < channels; j++) { 
+                    dst[i * channels + j] = sample;
+                }
+            }
+            return res;
+        }
+        */
      	
 		long Channels()
         {
