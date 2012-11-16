@@ -37,8 +37,9 @@ void TFileAudioStream::ReadBufferAux(TFileAudioStreamPtr obj, SHORT_BUFFER buffe
 void TFileAudioStream::ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     fReady = false;
-    if (fManager == 0)
+    if (fManager == 0) {
         printf("Error : stream rendered without command manager\n");
+    }
     assert(fManager);
     fManager->ExecCmd((CmdPtr)ReadBufferAux, (long)this, (long)buffer, framesNum, framePos, 0);
 }
@@ -53,8 +54,9 @@ void TFileAudioStream::WriteBufferAux(TFileAudioStreamPtr obj, SHORT_BUFFER buff
 void TFileAudioStream::WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
     fReady = false;
-    if (fManager == 0)
+    if (fManager == 0) {
         printf("Error : stream rendered without command manager\n");
+    }
     assert(fManager);
     fManager->ExecCmd((CmdPtr)WriteBufferAux, (long)this, (long)buffer, framesNum, framePos, 0);
 }

@@ -65,6 +65,9 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
             return fStream->Length() * fRatio;
         }
         
+        void SetRatio(double ratio) { fRatio = ratio; }
+        double GetRatio() { return fRatio; }
+        
 };
 
 typedef TSampleRateAudioStream * TSampleRateAudioStreamPtr;

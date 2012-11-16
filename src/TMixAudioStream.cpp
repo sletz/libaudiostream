@@ -36,8 +36,9 @@ long TMixAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, l
             return fStream2->Read(buffer, framesNum, framePos, channels);
         } else {
             long res2 = fStream2->Read(buffer, framesNum, framePos, channels);
-            if (res2 < framesNum)
+            if (res2 < framesNum) {
                 fStream = fStream1; // Stream2 is finished, fStream variable is used as the remaining stream
+            }
             return res1;
         }
     }

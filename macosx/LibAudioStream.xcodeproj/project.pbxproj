@@ -91,6 +91,7 @@
 		4B00606A1112ED0300B6A836 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8D8097D0ED00029D6DC /* AudioUnit.framework */; };
 		4B00606B1112ED0300B6A836 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8DC097D0EF30029D6DC /* CoreAudio.framework */; };
 		4B00606C1112ED0300B6A836 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
+		4B16AD2A165548EB00FBB3EA /* TSeqAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D6220330CD8701053105 /* TSeqAudioStream.h */; };
 		4B63B0540BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0520BDF790600CD9753 /* TPortAudioV19Renderer.cpp */; };
 		4B63B0550BDF790600CD9753 /* TPortAudioV19Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0530BDF790600CD9753 /* TPortAudioV19Renderer.h */; };
 		4B63B0560BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0520BDF790600CD9753 /* TPortAudioV19Renderer.cpp */; };
@@ -814,6 +815,7 @@
 				4B0060431112ED0300B6A836 /* StringTools.h in Headers */,
 				4B0060441112ED0300B6A836 /* TSoundTouchAudioStream.h in Headers */,
 				4B9A47CF1648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
+				4B16AD2A165548EB00FBB3EA /* TSeqAudioStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
