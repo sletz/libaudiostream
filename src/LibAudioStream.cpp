@@ -298,12 +298,14 @@ AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectList list_eff
 
 AudioStream AUDIOAPI MakePitchSchiftTimeStretchSound(AudioStream s1, double* pitch_shift, double* time_strech)
 {
-	//return TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
+	return TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
+    /*
 #ifdef SOUND_TOUCH
 	return TAudioStreamFactory::MakeSoundTouchSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
 #else
     return 0;
 #endif
+    */
 }
 
 AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format)

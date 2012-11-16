@@ -295,9 +295,7 @@ AudioStream test12()
     
 	AudioStream s1 = MakeReadSound(FILENAME1);
 	return MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech);
-    
-    //return MakeReadSound(FILENAME1);
-}
+ }
 
 AudioStream test13()
 {
@@ -470,7 +468,7 @@ int main(int argc, char* argv[])
 
 	int res = LibVersion();
     
-    //int samplerate = 96000;
+    ///int samplerate = 96000;
     int samplerate = 44100;
 
 #ifndef WIN32
@@ -527,7 +525,7 @@ int main(int argc, char* argv[])
     //ExecTest(player, test10bis());
 	
 	ExecTest(player, test12());
-	//ExecTest(player, test13());
+	ExecTest(player, test13());
 
     /*
 	test20();
