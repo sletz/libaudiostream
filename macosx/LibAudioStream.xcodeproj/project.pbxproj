@@ -1433,6 +1433,7 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
+					"-DSOUND_TOUCH",
 					"-D__COREAUDIO__",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
@@ -1569,9 +1570,10 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
+					"-DSOUND_TOUCH",
 					"-D__COREAUDIO__",
-					"-DLIBAUDIOSTREAM_EXPORTS",
 					"-fvisibility=hidden",
+					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
 					/opt/local/lib/libsamplerate.a,

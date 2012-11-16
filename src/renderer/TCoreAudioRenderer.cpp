@@ -128,10 +128,16 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
     // Signal waiting start function...
     renderer->fState = true;
     
-    AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
-	memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
-    
- 	renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
+    if (renderer->GetInputs() > 0) {
+        AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
+    }
+    if (ioData && ioData->mBuffers[0].mData) {
+        memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
+        renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
+    } else {
+        printf("TCoreAudioRenderer::Render error...\n");
+    }
+ 	
 	return 0;
 }
 
@@ -615,7 +621,7 @@ OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
     switch (inPropertyID) {
             
         case kAudioDevicePropertyNominalSampleRate: {
-            printf("TCoreAudioRenderer::SRNotificationCallback kAudioDevicePropertyNominalSampleRate\n");
+            //printf("TCoreAudioRenderer::SRNotificationCallback kAudioDevicePropertyNominalSampleRate\n");
             driver->fState = true;
             // Check new sample rate
             Float64 sampleRate;
@@ -625,7 +631,7 @@ OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
                 printf("Cannot get current sample rate\n");
                 printError(err);
             } else {
-                printf("SRNotificationCallback : checked sample rate = %f\n", sampleRate);
+                //printf("SRNotificationCallback : checked sample rate = %f\n", sampleRate);
             }
             break;
         }
@@ -645,7 +651,7 @@ OSStatus TCoreAudioRenderer::BSNotificationCallback(AudioDeviceID inDevice,
     switch (inPropertyID) {
 
         case kAudioDevicePropertyBufferFrameSize: {
-            printf("TCoreAudioRenderer::BSNotificationCallback kAudioDevicePropertyBufferFrameSize\n");
+            //printf("TCoreAudioRenderer::BSNotificationCallback kAudioDevicePropertyBufferFrameSize\n");
             // Check new buffer size
             UInt32 tmp_buffer_size;
             UInt32 outSize = sizeof(UInt32);
@@ -654,7 +660,7 @@ OSStatus TCoreAudioRenderer::BSNotificationCallback(AudioDeviceID inDevice,
                 printf("Cannot get current buffer size");
                 printError(err);
             } else {
-                printf("TCoreAudioRenderer::BSNotificationCallback : checked buffer size = %d\n", tmp_buffer_size);
+                //printf("TCoreAudioRenderer::BSNotificationCallback : checked buffer size = %d\n", tmp_buffer_size);
             }
             driver->fState = true;
             break;
@@ -677,7 +683,7 @@ int TCoreAudioRenderer::SetupBufferSize(long buffer_size)
         printError(err);
         return -1;
     } else {
-        printf("TCoreAudioRenderer::SetupBufferSize : current buffer size = %ld\n", tmp_buffer_size);
+        //printf("TCoreAudioRenderer::SetupBufferSize : current buffer size = %ld\n", tmp_buffer_size);
     }
 
     // If needed, set new buffer size
@@ -720,7 +726,7 @@ int TCoreAudioRenderer::SetupBufferSize(long buffer_size)
             printf("Cannot get current buffer size\n");
             printError(err);
         } else {
-            printf("TCoreAudioRenderer::SetupBufferSize : checked buffer size = %ld\n", tmp_buffer_size);
+            //printf("TCoreAudioRenderer::SetupBufferSize : checked buffer size = %ld\n", tmp_buffer_size);
         }
 
         // Remove BS change notification
@@ -750,7 +756,7 @@ int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long sample_r
         printError(err);
         return -1;
     } else {
-        printf("TCoreAudioRenderer::SetupSampleRateAux : current sample rate = %f\n", tmp_sample_rate);
+        //printf("TCoreAudioRenderer::SetupSampleRateAux : current sample rate = %f\n", tmp_sample_rate);
     }
 
     // If needed, set new sample rate
@@ -793,7 +799,7 @@ int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long sample_r
             printf("Cannot get current sample rate\n");
             printError(err);
         } else {
-            printf("TCoreAudioRenderer::SetupSampleRateAux : checked sample rate = %f\n", tmp_sample_rate);
+            //printf("TCoreAudioRenderer::SetupSampleRateAux : checked sample rate = %f\n", tmp_sample_rate);
         }
 
         // Remove SR change notification

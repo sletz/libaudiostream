@@ -113,6 +113,8 @@ void TSoundTouchAudioStream::Reset()
 {
     fStream->Reset();
     fSoundTouch->clear();
+    fSoundTouch->setTempo(fTimeStretchVal);
+    fSoundTouch->setPitch(fPitchShiftVal);
 }
 
 TAudioStreamPtr TSoundTouchAudioStream::Copy()

@@ -142,6 +142,9 @@ class AUDIO_EXPORTS TAudioRenderer
 		virtual void GetDeviceInfo(long deviceNum, DeviceInfoPtr info) = 0;
 		virtual long GetDefaultInputDevice() = 0;
 		virtual long GetDefaultOutputDevice() = 0;
+        
+        long GetInputs() { return fInput; }
+        long GetOutputs() { return fOutput; }
 
         long ConvertSample2Ms(long sample)
         {

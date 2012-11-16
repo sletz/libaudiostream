@@ -287,16 +287,16 @@ AudioStream test11bis()
     return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
 }
 
-
 AudioStream test12()
 {
     printf("-------------------------------------------------------------------\n");
     printf("RubberBand library												   \n");
     printf("-------------------------------------------------------------------\n\n");
-	
-	AudioStream s1;
-    s1 = MakeReadSound(FILENAME1);
+    
+	AudioStream s1 = MakeReadSound(FILENAME1);
 	return MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech);
+    
+    //return MakeReadSound(FILENAME1);
 }
 
 AudioStream test13()
@@ -392,7 +392,7 @@ void TestPlay(AudioPlayerPtr player)
 				printf("pitch_shift %f\n", pitch_shift);
                 break;
 
-	/*
+            /*
             case '1':
                 panLeft += 0.05f;
 				panRight -= 0.05f;
@@ -404,7 +404,7 @@ void TestPlay(AudioPlayerPtr player)
 				panRight -= 0.05f;
                 SetPanAudioPlayer(player, panLeft, panRight);
                 break;
-					*/
+            */
 			 case 'c': // To be used only when faust effects are running....
 				SetControlValueEffect(faust_effect, 1, 0.95f);
 				SetControlValueEffect(faust_effect, 2, 0.9f);
@@ -470,8 +470,8 @@ int main(int argc, char* argv[])
 
 	int res = LibVersion();
     
-    int samplerate = 96000;
-    //int samplerate = 44100;
+    //int samplerate = 96000;
+    int samplerate = 44100;
 
 #ifndef WIN32
 	SetMaximumFiles(1024);	
@@ -526,7 +526,7 @@ int main(int argc, char* argv[])
     
     //ExecTest(player, test10bis());
 	
-	//ExecTest(player, test12());
+	ExecTest(player, test12());
 	//ExecTest(player, test13());
 
     /*
@@ -534,7 +534,7 @@ int main(int argc, char* argv[])
 	test21();
     */
     
-    ExecTest(player, test0());
+    //ExecTest(player, test0());
 	
     StopAudioPlayer(player);
     CloseAudioPlayer(player);
