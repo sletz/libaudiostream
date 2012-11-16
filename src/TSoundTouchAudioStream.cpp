@@ -57,8 +57,6 @@ long TSoundTouchAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 	long read, produced, written = 0;
 	int available;
 	
-	//printf("TSoundTouchAudioStream PROCESS --------------\n");
-	
 	if (fTimeStretchVal != *fTimeStretch) {
 		fTimeStretchVal = *fTimeStretch;
 		fSoundTouch->setTempo(fTimeStretchVal);
@@ -71,7 +69,6 @@ long TSoundTouchAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 	// Frames still available in the effect
 	if ((available = fSoundTouch->numSamples()) > 0) {
 		produced = fSoundTouch->receiveSamples(buffer->GetFrame(framePos), UTools::Min(available, int(framesNum)));
-		//printf("TSoundTouchAudioStream old available %d\n", available);
 		
 		// Move index
 		framePos += produced;
@@ -80,32 +77,27 @@ long TSoundTouchAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 	
 	// End case
 	if (written == framesNum) {
-		//printf("TSoundTouchAudioStream FINISH produced = %ld\n", produced);
+		// End
 	} else {
 	
-		//printf("TSoundTouchAudioStream LOOP --------------\n");
 		// Compute remaining needed frames
 		do {
 			// Read input
 			UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 			read = fStream->Read(fBuffer, TAudioGlobals::fBufferSize, 0, channels);
-			//printf("TSoundTouchAudioStream read = %ld \n", read);
 			
 			// Process buffer
 			fSoundTouch->putSamples(fBuffer->GetFrame(0), read);
 			available = fSoundTouch->numSamples();
 			produced = fSoundTouch->receiveSamples(buffer->GetFrame(framePos), UTools::Min(available, int(framesNum - written)));
-			//printf("TSoundTouchAudioStream available = %d \n", available);
 	
 			// Move index
 			framePos += produced;
 			written += produced;
-			//printf("TSoundTouchAudioStream written = %ld \n", written);
 			
 		} while (written < framesNum);
 	}
 	
-	//printf("TSoundTouchAudioStream RES written = %ld \n", written);
 	return written;
 }
 

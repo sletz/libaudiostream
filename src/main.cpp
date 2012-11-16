@@ -304,7 +304,7 @@ AudioStream test13()
     printf("-------------------------------------------------------------------\n\n");
 	
 	AudioStream s1 = MakeRegionSound(FILENAME1, 200000, 500000);
-    AudioStream s2 = MakeRegionSound(FILENAME2, 200000, 700000);
+    AudioStream s2 = MakeRegionSound(FILENAME2, 200000, 1700000);
     return MakeSeqSound(MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech), MakePitchSchiftTimeStretchSound(s2, &pitch_shift, &time_strech), 88200);
 }
 
