@@ -420,11 +420,14 @@ AudioStreamPtr AUDIOAPI MakeTransformSoundPtr(AudioStreamPtr s, AudioEffectListP
 
 AudioStreamPtr AUDIOAPI MakePitchSchiftTimeStretchSoundPtr(AudioStream s, double* pitch_shift, double* time_strech)
 {
+    return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s), pitch_shift, time_strech)) : 0;
+    /*
 #ifdef SOUND_TOUCH
 	return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeSoundTouchSound(static_cast<TAudioStreamPtr>(s), pitch_shift, time_strech)) : 0;
 #else
     return 0;
 #endif
+    */
 }
 
 AudioStreamPtr AUDIOAPI MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format)
