@@ -46,8 +46,8 @@ typedef struct RendererInfo {
     long fBufferSize;			// I/O Buffer size
     long fCurFrame;				// Currrent sample
     long fCurMs;				// Current millisecond
-    long fOutputLatencyFrame;	// Ouput latency in frames
-    long fOutputLatencyMs;		// Ouput latency in millisecond
+    long fOutputLatencyFrame;	// Output latency in frames
+    long fOutputLatencyMs;		// Output latency in millisecond
     long fInputLatencyFrame;	// Input latency in frames
     long fInputLatencyMs;		// Input latency in millisecond
 } RendererInfo;

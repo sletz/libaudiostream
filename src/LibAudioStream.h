@@ -87,6 +87,11 @@ extern "C"
     */
 	long LibVersion();
 	
+    /**
+     * @defgroup SoundFunctions Sound creation and manipulation functions
+     * @{
+     */
+ 
 	/*!
     \brief Create a stream that will produce "silence".
     \param lengthFrame The number of null frame to be produced.
@@ -217,6 +222,13 @@ extern "C"
     \param sound The stream to be reseted.
     */
 	void ResetSoundPtr(AudioStreamPtr sound);
+    
+    /*@}*/
+    
+    /**
+     * @defgroup EffectsFunctions Effects creation and manipulation functions
+     * @{
+     */
 
     // Effect management
     /*!
@@ -281,7 +293,6 @@ extern "C"
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
 	AudioEffectPtr MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
-
 	/*!
     \brief Return the number of effect controls.
     \param effect The effect pointer.
@@ -343,6 +354,13 @@ extern "C"
 	\param effect The effect pointer.
 	*/
 	void DeleteEffectPtr(AudioEffectPtr effect);
+    
+    /*@}*/
+    
+    /**
+     * @defgroup PlayerFunctions Player creation and manipulation functions
+     * @{
+     */
 
     // Open/Close
 	/*!
@@ -380,20 +398,48 @@ extern "C"
     \brief Close the audio player.
     \param player The audio player to be closed.
     */
-    void CloseAudioPlayer(AudioPlayerPtr player);								   
-								   
+    void CloseAudioPlayer(AudioPlayerPtr player);	
+    
+    // Transport
+    /*!
+    \brief Start the audio player.
+    \param player The audio player.
+    */
+    void StartAudioPlayer(AudioPlayerPtr player);
+    /*!
+    \brief Stop the audio player.
+    \param player The audio player.
+    */
+    void StopAudioPlayer(AudioPlayerPtr player);
+  
+    // Master
+    /*!
+    \brief Set the audio player volume [0...1]
+    \param player The audio player.
+    \param vol The new volume value.
+    */
+    void SetVolAudioPlayer(AudioPlayerPtr player, float vol);
+    /*!
+    \brief Set the audio player panning [0...1]
+    \param player The audio player.
+    \param pan The new panning value.
+    */
+    void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
 	/*!
-    \brief Opens the audio client to be added to an externally allocated renderer.
-	\param renderer The audio renderer that will "drive" (call Audio callback) the player.
-	\return A pointer to new audio player object.
-	*/					
-	AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer);	
-	 							   						   
- 	/*!
-    \brief Close an audio client that was previously added to an externally allocated audio renderer using OpenAudioClient.
-    \param player The audio client to be closed and be "detached" from the renderer.
-    */					
-	void CloseAudioClient(AudioPlayerPtr player);
+    \brief Set the master audio effect list.
+    \param player The audio player.
+    \param effect_list A list of audio effects.
+	\param fadeIn The fadein length in frames.
+    \param fadeOut The fadeout length in frames.
+	*/
+	void SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+        
+    /*@}*/
+    
+    /**
+     * @defgroup ChannelFunctions Sound channel creation and manipulation functions
+     * @{
+     */
 	
     /*!
     \brief Load a sound in a channel.
@@ -420,23 +466,11 @@ extern "C"
 	\param context A pointer to data to be given to the callback.
     */
 	void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
-	
-    // Transport
-    /*!
-    \brief Start the audio player.
-    \param player The audio player.
-    */
-    void StartAudioPlayer(AudioPlayerPtr player);
-    /*!
-    \brief Stop the audio player.
-    \param player The audio player.
-    */
-    void StopAudioPlayer(AudioPlayerPtr player);
     /*!
     \brief Start a sound channel from the beginning.
     \param player The audio player.
     \param chan The audio channel number to be used.
-    */
+    */	
     void StartChannel(AudioPlayerPtr player, long chan);
     /*!
     \brief Play a sound channel from the current location.
@@ -456,7 +490,7 @@ extern "C"
     \param chan The audio channel number to be used.
     */
 	void AbortChannel(AudioPlayerPtr player, long chan);
-
+    
     // Params
     /*!
     \brief Set the channel volume [0...1]
@@ -481,29 +515,27 @@ extern "C"
     \param fadeOut The fadeout length in frames.
 	*/
 	void SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-
-    // Master
-    /*!
-    \brief Set the audio player volume [0...1]
-    \param player The audio player.
-    \param vol The new volume value.
-    */
-    void SetVolAudioPlayer(AudioPlayerPtr player, float vol);
-    /*!
-    \brief Set the audio player panning [0...1]
-    \param player The audio player.
-    \param pan The new panning value.
-    */
-    void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
+    
+    /*@}*/
+    
+     /**
+     * @defgroup RendererFunctions Low-level renderer and client creation and manipulation fonctions
+     * @{
+     */
+    								   
 	/*!
-    \brief Set the master audio effect list.
-    \param player The audio player.
-    \param effect_list A list of audio effects.
-	\param fadeIn The fadein length in frames.
-    \param fadeOut The fadeout length in frames.
-	*/
-	void SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-	
+    \brief Opens the audio client to be added to an externally allocated renderer.
+	\param renderer The audio renderer that will "drive" (call Audio callback) the player.
+	\return A pointer to new audio player object.
+	*/					
+	AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer);	
+	 							   						   
+ 	/*!
+    \brief Close an audio client that was previously added to an externally allocated audio renderer using OpenAudioClient.
+    \param player The audio client to be closed and be "detached" from the renderer.
+    */					
+	void CloseAudioClient(AudioPlayerPtr player);
+
 	// Devices scanning
 	/*!
 	\brief Scan and return the number of available devices on the machine.
@@ -608,6 +640,8 @@ extern "C"
     \brief Destroy the global audio context.
   	*/
 	void AudioGlobalsDestroy();
+    
+    /*@}*/
 
 /*! @} */
 

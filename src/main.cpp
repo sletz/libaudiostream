@@ -46,6 +46,7 @@ research@grame.fr
 
 
 #define IN_CHANNELS 2	// stereo player
+//#define IN_CHANNELS 0	// stereo player
 #define OUT_CHANNELS 2	// stereo player
 #define CHANNELS 8
 
@@ -522,7 +523,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test11());
     */
     
-    //ExecTest(player, test10bis());
+    ExecTest(player, test10bis());
 	
 	ExecTest(player, test12());
 	ExecTest(player, test13());

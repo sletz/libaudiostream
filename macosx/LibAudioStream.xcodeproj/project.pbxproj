@@ -1585,6 +1585,7 @@
 				);
 				INFOPLIST_FILE = "Info-LibAudioStreamPA_CA_Jack.plist";
 				LIBRARY_SEARCH_PATHS = (
+					.,
 					"/opt/local/libexec/llvm-3.1/lib",
 					/usr/local/lib/faust,
 				);
@@ -1596,7 +1597,7 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					"-lrubberband",
+					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",

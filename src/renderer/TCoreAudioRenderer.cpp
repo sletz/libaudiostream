@@ -27,13 +27,12 @@ research@grame.fr
 
 #define WAIT_COUNTER 60
 
-typedef	UInt8	CAAudioHardwareDeviceSectionID;
+typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define	kAudioDeviceSectionInput	((CAAudioHardwareDeviceSectionID)0x01)
 #define	kAudioDeviceSectionOutput	((CAAudioHardwareDeviceSectionID)0x00)
 #define	kAudioDeviceSectionGlobal	((CAAudioHardwareDeviceSectionID)0x00)
 #define	kAudioDeviceSectionWildcard	((CAAudioHardwareDeviceSectionID)0xFF)
-
 
 #define DEBUG 1
 
@@ -131,13 +130,9 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
     if (renderer->GetInputs() > 0) {
         AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
     }
-    if (ioData && ioData->mBuffers[0].mData) {
-        memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
-        renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
-    } else {
-        printf("TCoreAudioRenderer::Render error...\n");
-    }
- 	
+  
+    memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
+    renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
 	return 0;
 }
 
@@ -590,21 +585,18 @@ OSStatus TCoreAudioRenderer::DestroyAggregateDevice()
     UInt32 outDataSize;
 
     if (fPluginID > 0)   {
-
         osErr = AudioObjectGetPropertyDataSize(fPluginID, &pluginAOPA, 0, NULL, &outDataSize);
         if (osErr != noErr) {
             printf("TCoreAudioRenderer::DestroyAggregateDevice : AudioObjectGetPropertyDataSize error\n");
             printError(osErr);
             return osErr;
         }
-
         osErr = AudioObjectGetPropertyData(fPluginID, &pluginAOPA, 0, NULL, &outDataSize, &fDeviceID);
         if (osErr != noErr) {
             printf("TCoreAudioRenderer::DestroyAggregateDevice : AudioObjectGetPropertyData error\n");
             printError(osErr);
             return osErr;
         }
-
     }
 
     return noErr;
@@ -1074,6 +1066,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
     // Prepare buffers
 	fInputData->mBuffers[0].mNumberChannels = inChan;
 	fInputData->mBuffers[0].mDataByteSize = inChan * bufferSize * sizeof(float);
+    fInputData->mBuffers[0].mData = malloc(inChan * bufferSize * sizeof(float));
  	
     return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, samplerate);
 
@@ -1089,7 +1082,8 @@ long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, 
 }
 
 long TCoreAudioRenderer::Close()
-{
+{   
+    free(fInputData->mBuffers[0].mData);
 	free(fInputData);
 	AudioUnitUninitialize(fAUHAL);
     CloseComponent(fAUHAL);
@@ -1116,7 +1110,7 @@ long TCoreAudioRenderer::Start()
             printf("CoreAudio driver is running...\n");
             return NO_ERR;
         } else {
-             return OPEN_ERR;
+            return OPEN_ERR;
         }
 	}
 }

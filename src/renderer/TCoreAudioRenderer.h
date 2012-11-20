@@ -24,7 +24,6 @@ research@grame.fr
 #define __TCoreAudioRenderer__
 
 #include <vector>
-
 #include "TAudioRenderer.h"
 #include <AudioToolbox/AudioConverter.h>
 #include <CoreAudio/CoreAudio.h>
