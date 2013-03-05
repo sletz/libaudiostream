@@ -137,7 +137,7 @@ AudioStream test7()
     printf("Build a echo on a region \n");
     printf("-------------------------\n\n");
     AudioStream sound, mix = MakeRegionSound(FILENAME2, 20000, 60000);
-    for (int i = 0; i < 255 ; i++) {
+    for (int i = 0; i < 10 ; i++) {
         sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 20000, 60000), 0);
 		if (sound == 0)
 			printf("Error1 %i= \n", i);
@@ -498,8 +498,8 @@ int main(int argc, char* argv[])
     printf("Type '1' to pan left\n");
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
-/*	
 	
+	/*
     ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
@@ -507,8 +507,10 @@ int main(int argc, char* argv[])
 	ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
+    */
 
-
+    ExecTest(player, test0());
+    ExecTest(player, test1());
 	ExecTest(player, test1());
     ExecTest(player, test2());
     ExecTest(player, test3());
@@ -521,7 +523,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test9bis());
 	ExecTest(player, test10());
 	ExecTest(player, test11());
-    */
+    
     
     ExecTest(player, test10bis());
 	

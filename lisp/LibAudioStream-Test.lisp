@@ -1,5 +1,6 @@
 
 (in-package :au)
+;;(in-package :las)
 (libaudiostream-framework)
 
 
@@ -78,6 +79,11 @@
 (GetChannelsSound s2)
 
 (setq s3 (MakeLoopSound (MakeRegionSound soundfile1 400000 450000) 50))
+
+(setq s4 (MakeMixSound (MakeRegionSound soundfile2 200000 550000) (MakeLoopSound (MakeRegionSound soundfile1 400000 450000) 10)))
+
+(setq s4 (MakeRegionSound soundfile2 200000 550000))
+(setq s4 (MakeMixSound (MakeRegionSound soundfile1 100000 450000) (MakeRegionSound soundfile2 200000 550000)))
 
 (GetLengthSound s3)
 (GetChannelsSound s3)

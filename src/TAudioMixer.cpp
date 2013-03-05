@@ -50,8 +50,9 @@ TAudioMixer::TAudioMixer ()
 
 TAudioMixer::~TAudioMixer()
 {
-    for (int j = 0; j < TAudioGlobals::fChannels; j++)
+    for (int j = 0; j < TAudioGlobals::fChannels; j++) {
         delete fSoundChannelTable[j];
+    }
     delete[] fSoundChannelTable;
     delete fMixBuffer;
 }

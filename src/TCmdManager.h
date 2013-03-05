@@ -81,7 +81,7 @@ class TCmdManager
 
 typedef TCmdManager * TCmdManagerPtr;
 
-//Utilisation
+// Utilisation
 /*
 TCmdManager::Open();
 TCmdManager::ExecCmd(&TFileAudioStream::Read, this, buffer, length, 0);

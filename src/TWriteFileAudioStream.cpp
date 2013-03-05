@@ -87,7 +87,7 @@ void TWriteFileAudioStream::Open()
 			
 		sf_seek(fFile, 0, SEEK_SET);
 		fReady = true;
-     }
+    }
 }
 
 void TWriteFileAudioStream::Close()

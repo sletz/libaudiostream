@@ -101,7 +101,9 @@ void TReadFileAudioStream::ReadEndBuffer(long framesNum, long framePos)
 
 void TReadFileAudioStream::Reset()
 {
-    sf_seek(fFile, fBeginFrame + TAudioGlobals::fStreamBufferSize, SEEK_SET);
+    if (sf_seek(fFile, fBeginFrame + TAudioGlobals::fStreamBufferSize, SEEK_SET) < 0) {
+        printf("TReadFileAudioStream::Reset : sf_seek error = %s\n", sf_strerror(fFile));
+    }
 
     // Use only the beginning of the copy buffer, copy the end in the low-priority thread
     int copySize = TAudioGlobals::fBufferSize * 4;

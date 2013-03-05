@@ -49,13 +49,13 @@ class TSharedBuffers
             return fOutBuffer;
         }
 
-        static void SetInBuffer(float* in)
+        static void SetInBuffer(float* input)
         {
-            fInBuffer = in;
+            fInBuffer = input;
         }
-        static void SetOutBuffer(float* out)
+        static void SetOutBuffer(float* output)
         {
-            fOutBuffer = out;
+            fOutBuffer = output;
         }
 };
 

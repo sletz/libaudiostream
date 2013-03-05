@@ -89,8 +89,9 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
     // Preallocate commands
     for (i = 0; i < MAXCOMMAND; i++) {
         cmd = (TCmd*)malloc(sizeof(TCmd));
-        if (cmd)
+        if (cmd) {
             lfpush(&fFreeCmd, (lifocell*)cmd);
+        }
     }
 	fifoinit(&fRunningCmd);
 
