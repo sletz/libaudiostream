@@ -44,12 +44,12 @@ typedef struct RendererInfo {
     long fOutput;   			// Number of output channels
     long fSampleRate; 			// Sampling Rate
     long fBufferSize;			// I/O Buffer size
-    long fCurFrame;				// Currrent sample
-    long fCurMs;				// Current millisecond
+    uint64_t fCurFrame;			// Currrent sample
+    uint64_t fCurUsec;			// Current microsecond
     long fOutputLatencyFrame;	// Output latency in frames
-    long fOutputLatencyMs;		// Output latency in millisecond
+    long fOutputLatencyUsec;	// Output latency in microsecond
     long fInputLatencyFrame;	// Input latency in frames
-    long fInputLatencyMs;		// Input latency in millisecond
+    long fInputLatencyUsec;		// Input latency in microsecond
 } RendererInfo;
 
 typedef struct DeviceInfo* DeviceInfoPtr;
@@ -146,14 +146,24 @@ class AUDIO_EXPORTS TAudioRenderer
         long GetInputs() { return fInput; }
         long GetOutputs() { return fOutput; }
 
-        long ConvertSample2Ms(long sample)
+        uint64_t ConvertSample2Ms(uint64_t sample)
         {
-            return long((float(sample) * 1000.0f) / fSampleRate);
+            return uint64_t((double(sample) * 1000.0) / fSampleRate);
         }
-        long ConvertMs2Sample(long ms)
+        uint64_t ConvertMs2Sample(uint64_t ms)
         {
-            return long((float(ms) * fSampleRate) / 1000.0f);
+            return uint64_t((double(ms) * double(fSampleRate)) / 1000.0);
         }
+        
+        uint64_t ConvertSample2Usec(uint64_t sample)
+        {
+            return uint64_t((double(sample) * 1000000.0) / fSampleRate);
+        }
+        uint64_t ConvertUsec2Sample(uint64_t usec)
+        {
+            return uint64_t((double(usec) * double(fSampleRate)) / 1000000.0);
+        }
+
 };
 
 typedef TAudioRenderer * TAudioRendererPtr;

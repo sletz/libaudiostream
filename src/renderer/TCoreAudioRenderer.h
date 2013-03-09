@@ -34,7 +34,7 @@ research@grame.fr
 // Class TCoreAudioRenderer
 //--------------------------
 /*!
-\brief Use the CoreAudio API to access sound drivers.
+\brief Use the CoreAudio API to access sound devices.
 */
 
 #define WAIT_COUNTER 60
@@ -50,10 +50,19 @@ class TCoreAudioRenderer : public TAudioRenderer
 		AudioUnit fAUHAL;
         AudioObjectID fPluginID;    // Used for aggregate device
         bool fState;
+        AudioTimeStamp fCallbackTime;
+        
+        static double fTimeRatio;
 		
 		OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
         int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
         int SetupBufferSize(long buffer_size);
+        
+        int Render(AudioUnitRenderActionFlags *ioActionFlags,
+                 const AudioTimeStamp *inTimeStamp,
+                 UInt32 inBusNumber,
+                 UInt32 inNumberFrames,
+                 AudioBufferList *ioData);
 
 		static OSStatus Render(void *inRefCon,
                                AudioUnitRenderActionFlags *ioActionFlags,
@@ -79,6 +88,9 @@ class TCoreAudioRenderer : public TAudioRenderer
         OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
         OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
         OSStatus DestroyAggregateDevice();
+        
+        static void InitTime();
+        static double GetMicroSeconds();
 
     public:
 

@@ -39,7 +39,7 @@ research@grame.fr
 // Class TJackAudioRenderer
 //--------------------------
 /*!
-\brief Use the <A HREF=http://jackit.sourceforge.net> Jack API </A> to access sound drivers.
+\brief Use the <A HREF=http://jackit.sourceforge.net> Jack API </A> to access sound devices.
 */
 
 class TJackAudioRenderer : public TAudioRenderer

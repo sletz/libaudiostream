@@ -249,13 +249,13 @@ void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
     info->fCurFrame = long(Pa_GetStreamTime(fStream));
-    info->fCurMs = ConvertSample2Ms(info->fCurFrame);
+    info->fCurUsec = ConvertSample2Usec(info->fCurFrame);
 #if defined(WIN32) && defined(IMUTUS)
     info->fOutputLatencyFrame = Pa_GetOutputLatency(fStream);
-    info->fOutputLatencyMs = ConvertSample2Ms(info->fOutputLatencyFrame);
+    info->fOutputLatencyUsec = ConvertSample2Usec(info->fOutputLatencyFrame);
 #else
 	info->fOutputLatencyFrame = 0;
-    info->fOutputLatencyMs = 0;
+    info->fOutputLatencyUsec = 0;
 #endif
 }
 
