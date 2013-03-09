@@ -149,7 +149,6 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
                                      UInt32 inNumberFrames,
                                      AudioBufferList *ioData)
 {
-    
     // Signal waiting start function...
     fState = true;
     

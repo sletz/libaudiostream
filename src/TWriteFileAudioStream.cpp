@@ -78,12 +78,11 @@ void TWriteFileAudioStream::Open()
 			throw - 1;
         }
 
-		   // Needed because we later on use sf_writef_short, would be remove is sf_writef_float is used instead.
+        // Needed because we later on use sf_writef_short, would be remove is sf_writef_float is used instead.
         if (info.format & SF_FORMAT_FLOAT) {
             int arg = SF_TRUE;
             sf_command(fFile, SFC_SET_SCALE_INT_FLOAT_WRITE, &arg, sizeof(arg));
         }
-
 			
 		sf_seek(fFile, 0, SEEK_SET);
 		fReady = true;
@@ -103,8 +102,9 @@ long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long frame
     long res = fStream->Read(buffer, framesNum, framePos, channels);
     TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
 	if (res < framesNum) {
-		 if (fManager == 0)
+		 if (fManager == 0) {
 			printf("Error : stream rendered without command manager\n");
+        }
 		assert(fManager);
 		fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
 	}

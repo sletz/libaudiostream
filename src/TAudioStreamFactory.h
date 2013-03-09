@@ -33,14 +33,14 @@ using namespace std;
 /*
 Stream Temps Réel :
  
-TR = TBufferedAudioStream ( sharedBuffer...) avec sharedBuffer accessible globalement pour tous les streams TR
+TR = TBufferedAudioStream (sharedBuffer...) avec sharedBuffer accessible globalement pour tous les streams TR
  
 Clonage du stream TR :
     
         - si lecture dans le passé à plus de RTSTREAM_BUFFER_SIZE : stream File (avec pb d'initialisation à résoudre)
         - si lecture dans le passé à moins de RTSTREAM_BUFFER_SIZE : TBufferedAudioStream (sharedBuffer, framePos)
         avec framePos la position de lecture dans le passé
-        - si lecture dans le passé de FrameNum :  Seq (NullStream (FrameNum), BufferedAudioStream (sharedBuffer, 0)) 
+        - si lecture dans le passé de FrameNum : Seq (NullStream (FrameNum), BufferedAudioStream (sharedBuffer, 0)) 
         (a revoir : pb de la longueur??)
  
 pb des gestion de l'ordre du Read : le Read du stream TR d'origine doit se faire AVANT les Read de tous les streams Clone
