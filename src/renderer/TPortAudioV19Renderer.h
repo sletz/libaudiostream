@@ -30,7 +30,7 @@ research@grame.fr
 // Class TPortAudioV19Renderer
 //-----------------------------
 /*!
-\brief Use the <A HREF=http://www.portaudio.com> PortAudio V19 API </A>  to access sound drivers.
+\brief Use the <A HREF=http://www.portaudio.com> PortAudio V19 API </A> to access sound devices.
 */
 
 class TPortAudioV19Renderer : public TAudioRenderer

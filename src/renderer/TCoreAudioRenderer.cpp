@@ -24,6 +24,7 @@ research@grame.fr
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
 #include "UTools.h"
+#include <mach/mach_time.h>
 
 #define WAIT_COUNTER 60
 
@@ -35,6 +36,20 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 #define	kAudioDeviceSectionWildcard	((CAAudioHardwareDeviceSectionID)0xFF)
 
 #define DEBUG 1
+
+double TCoreAudioRenderer::fTimeRatio = 0;
+
+void TCoreAudioRenderer::InitTime()
+{
+	mach_timebase_info_data_t info;
+	mach_timebase_info(&info);
+	fTimeRatio = ((float)info.numer / info.denom) / 1000;
+}
+
+double TCoreAudioRenderer::GetMicroSeconds()
+{
+    return double(mach_absolute_time()) * fTimeRatio;
+}
 
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
@@ -123,16 +138,28 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
                                      AudioBufferList *ioData)
 {
     TCoreAudioRendererPtr renderer = (TCoreAudioRendererPtr)inRefCon;
+    return renderer->Render(ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
+}
+
+int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
+                                     const AudioTimeStamp *inTimeStamp,
+                                     UInt32 inBusNumber,
+                                     UInt32 inNumberFrames,
+                                     AudioBufferList *ioData)
+{
     
     // Signal waiting start function...
-    renderer->fState = true;
+    fState = true;
     
-    if (renderer->GetInputs() > 0) {
-        AudioUnitRender(renderer->fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, renderer->fInputData);
+    if (GetInputs() > 0) {
+        AudioUnitRender(fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, fInputData);
     }
+    
+    // Keep time
+    fCallbackTime = *inTimeStamp;
   
     memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
-    renderer->Run((float*)renderer->fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
+    Run((float*)fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
 	return 0;
 }
 
@@ -1129,12 +1156,14 @@ long TCoreAudioRenderer::Stop()
 
 void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
 {
+    // TODO : fCallbackTime access in not atomic...
     info->fInput = fInput;
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    //info->fCurFrame = long(Pa_StreamTime(fStream)); // To finish
-    info->fCurMs = ConvertSample2Ms(info->fCurFrame);
+    uint64_t cur_time = mach_absolute_time();
+    info->fCurFrame = fCallbackTime.mSampleTime + ConvertUsec2Sample((double(cur_time - fCallbackTime.mHostTime) * fTimeRatio));
+    info->fCurUsec = uint64_t(double(cur_time) * fTimeRatio);
 }
 
 long TCoreAudioRenderer::GetDeviceCount()

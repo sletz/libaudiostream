@@ -206,16 +206,17 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
     info->fCurFrame = jack_frame_time(fClient);
-    info->fCurMs = ConvertSample2Ms(info->fCurFrame);
+    info->fCurUsec = jack_get_time(fClient);
 }
 
 long TJackAudioRenderer::GetDeviceCount()
 {
-	if ((fClient = jack_client_new("DummyAudioPlayer")) == 0) {
+    jack_client_t* client;
+	if ((client = jack_client_open("Dummy", JackNullOption, NULL)) == 0) {
         printf("Jack server not running?\n");
   		return 0;
     } else {
-		jack_client_close(fClient);
+		jack_client_close(client);
 		return 1;
 	}
 }
@@ -223,18 +224,19 @@ long TJackAudioRenderer::GetDeviceCount()
 void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
 	const char** ports = NULL;
-	int i;
+    jack_client_t* client;
+    int i;
 	
-    if ((fClient = jack_client_new("DummyAudioPlayer")) == 0) {
+    if ((client = jack_client_open("Dummy", JackNullOption, NULL)) == 0) {
         printf("Jack server not running?\n");
         info->fMaxInputChannels = 0;
 		info->fMaxOutputChannels = 0;
-		info->fDefaultSampleRate = 0;	
+		info->fDefaultSampleRate = 0.0;	
 		info->fDefaultBufferSize = 0;
 		return;
     }
 	
-    if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) == NULL) {
+    if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) == NULL) {
         printf("Cannot find any physical capture ports\n");
     } else {
 		for (i = 0; ports[i]; i++) {}
@@ -242,7 +244,7 @@ void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
         jack_free(ports);
     }
 	
-	if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
+	if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
         printf("Cannot find any physical playback ports\n");
     } else {
 		for (i = 0; ports[i]; i++) {}
@@ -251,18 +253,18 @@ void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
     }
 	
 	strcpy(info->fName, "Jack duplex");
-	info->fDefaultSampleRate = double(jack_get_sample_rate(fClient));	
-	info->fDefaultBufferSize = jack_get_buffer_size(fClient);
+	info->fDefaultSampleRate = double(jack_get_sample_rate(client));	
+	info->fDefaultBufferSize = jack_get_buffer_size(client);
 	
-	jack_client_close(fClient);
+	jack_client_close(client);
 }
 
 long TJackAudioRenderer::GetDefaultInputDevice()
 {
-	return 0; // Only 1 device avaiable...
+	return 0; // Only 1 device available...
 }
 
 long TJackAudioRenderer::GetDefaultOutputDevice()
 {
-	return 0; // Only 1 device avaiable...
+	return 0; // Only 1 device available...
 }
