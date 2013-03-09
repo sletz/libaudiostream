@@ -36,7 +36,6 @@ TTransformAudioStream::TTransformAudioStream(TAudioStreamPtr stream, TAudioEffec
 
 TAudioStreamPtr TTransformAudioStream::CutBegin(long frames)
 {
-    // A REVOIR
     return new TTransformAudioStream(fStream->CutBegin(frames), fEffectList->Copy(), fFadeIn, fFadeOut);
 }
 
