@@ -37,13 +37,15 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define DEBUG 1
 
-double TCoreAudioRenderer::fTimeRatio = 0;
+double TCoreAudioRenderer::fTimeRatio = 0.0;
 
 void TCoreAudioRenderer::InitTime()
 {
-	mach_timebase_info_data_t info;
-	mach_timebase_info(&info);
-	fTimeRatio = ((float)info.numer / info.denom) / 1000;
+    if (fTimeRatio == 0.0) {
+        mach_timebase_info_data_t info;
+        mach_timebase_info(&info);
+        fTimeRatio = ((float)info.numer / info.denom) / 1000;
+    }
 }
 
 double TCoreAudioRenderer::GetMicroSeconds()

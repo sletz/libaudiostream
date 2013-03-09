@@ -61,6 +61,23 @@ typedef struct DeviceInfo {
 	double fDefaultSampleRate;
 } DeviceInfo;
 
+/*!
+\brief Renderer state.
+*/
+typedef struct RendererInfo* RendererInfoPtr;
+typedef struct RendererInfo {
+    long fInput;   				// Number of input channels
+    long fOutput;   			// Number of output channels
+    long fSampleRate; 			// Sampling Rate
+    long fBufferSize;			// I/O Buffer size
+    uint64_t fCurFrame;			// Currrent sample
+    uint64_t fCurUsec;			// Current microsecond
+    long fOutputLatencyFrame;	// Output latency in frames
+    long fOutputLatencyUsec;	// Output latency in microsecond
+    long fInputLatencyFrame;	// Input latency in frames
+    long fInputLatencyUsec;		// Input latency in microsecond
+} RendererInfo;
+    
 class TAudioStream : public la_smartable {
 
 	public:
@@ -459,7 +476,8 @@ long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol,
 \param chan The audio channel number to be used.
 \param info The channel info structure to be filled.
 */
-void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
+void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
 /*!
 \brief Set a callback to be called when the channel stops.
 \param player The audio player.
@@ -552,6 +570,13 @@ void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
 */
 void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
 
+/*!
+\brief Get the audio player internal renderer.
+\param player The audio player.
+\return The internal audio renderer.
+*/
+AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player);
+
 // Devices scanning
 /*!
 \brief Scan and return the number of available devices on the machine.
@@ -616,10 +641,17 @@ void CloseAudioRenderer(AudioRendererPtr renderer);
 void StartAudioRenderer(AudioRendererPtr renderer); 
 /*!
 \brief Stop an audio renderer.
-\param renderer The audio renderer to be stoped.
+\param renderer The audio renderer to be stopped.
 */
 void StopAudioRenderer(AudioRendererPtr renderer); 
 
+/*!
+\brief Get audio renderer infos.
+\param renderer The audio renderer.
+\param info The audio renderer info to be filled.
+*/
+void GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info); 
+    
 /*!
 \brief Add an audio client to the renderer internal client list.
 \param renderer The audio renderer to be used.
@@ -634,7 +666,7 @@ void AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client);
 void RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
 
 /*!
-\brief Init the global audio context. There is <B> unique </B> to be accesed by all components that need it.
+\brief Init the global audio context. There is <B> unique </B> to be accessed by all components that need it.
 \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
 \param outChan The number of output channels.
 \param channels The number of stream channels.

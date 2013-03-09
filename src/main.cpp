@@ -346,6 +346,8 @@ void TestPlay(AudioPlayerPtr player)
     float panLeft = 1.0f;
 	float panRight = 1.0f;
     char c;
+    
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
 	
     while ((c = getchar()) && (c != 'n')) {
 
@@ -390,6 +392,13 @@ void TestPlay(AudioPlayerPtr player)
 				pitch_shift -= 0.1;
 				printf("pitch_shift %f\n", pitch_shift);
                 break;
+                
+            case 'w':
+                RendererInfo info;
+                GetAudioRendererInfo(renderer, &info);
+                printf("info.fCurFrame %lld\n", info.fCurFrame);
+                printf("info.fCurUsec %lld\n", info.fCurUsec);
+				break;
 
             /*
             case '1':

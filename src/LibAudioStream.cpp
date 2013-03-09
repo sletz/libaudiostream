@@ -140,7 +140,9 @@ extern "C"
     // Load a sound in a channel
     long AUDIOAPI LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight);
 	long AUDIOAPI LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight);
-    void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+    void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
+    void AUDIOAPI GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+    void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
 	void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
 
     // Transport
@@ -163,6 +165,7 @@ extern "C"
     void AUDIOAPI SetVolAudioPlayer(AudioPlayerPtr player, float vol);
 	void AUDIOAPI SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
 	void AUDIOAPI SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+    AudioRendererPtr AUDIOAPI GetAudioPlayerRenderer(AudioPlayerPtr player);
 	
 	// Renderer
 	AudioRendererPtr AUDIOAPI MakeAudioRenderer(long renderer);
@@ -171,7 +174,8 @@ extern "C"
 	int AUDIOAPI OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 	void AUDIOAPI CloseAudioRenderer(AudioRendererPtr renderer); 
 	void AUDIOAPI StartAudioRenderer(AudioRendererPtr renderer); 
-	void AUDIOAPI StopAudioRenderer(AudioRendererPtr renderer); 
+    void AUDIOAPI StartAudioRenderer(AudioRendererPtr renderer); 
+    void AUDIOAPI GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info); 
 	
 	void AUDIOAPI AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
 	void AUDIOAPI RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
@@ -190,7 +194,6 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-
 
 // Build sound (using smartptr)
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
@@ -238,7 +241,7 @@ void AUDIOAPI ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 long LibVersion()
 {
-	return 125;
+	return 126;
 }
 
 AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
@@ -826,6 +829,13 @@ void AUDIOAPI GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info
     }
 }
 
+void AUDIOAPI GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfo* info)
+{
+    if (player && player->fMixer && info) {
+        player->fMixer->GetInfo(chan, info);
+    }
+}
+
 void AUDIOAPI SetStopCallbackChannel(AudioPlayerPtr player,long chan, StopCallback callback, void* context)
 {
     if (player && player->fMixer) {
@@ -932,6 +942,11 @@ void AUDIOAPI SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectList
     }
 }
 
+AudioRendererPtr AUDIOAPI GetAudioPlayerRenderer(AudioPlayerPtr player)
+{
+    return (player) ? player->fRenderer : NULL;
+}
+
 // Globals
 AudioRendererPtr AUDIOAPI MakeAudioRenderer(long renderer)
 {
@@ -962,6 +977,11 @@ void AUDIOAPI StartAudioRenderer(AudioRendererPtr renderer)
 void AUDIOAPI StopAudioRenderer(AudioRendererPtr renderer)
 {
 	static_cast<TAudioRendererPtr>(renderer)->Stop();
+}
+
+void AUDIOAPI GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info)
+{
+    static_cast<TAudioRendererPtr>(renderer)->GetInfo(static_cast<RendererInfoPtr>(info));
 }
 
 void AUDIOAPI AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client)

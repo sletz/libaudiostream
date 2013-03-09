@@ -43,7 +43,7 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
 
     protected:
 
-        string	fName;
+        string fName;
         SNDFILE* fFile;
 
         static void ReadBufferAux(TFileAudioStream* obj, SHORT_BUFFER buffer, long framesNum, long framePos);
