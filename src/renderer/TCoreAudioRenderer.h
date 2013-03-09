@@ -95,7 +95,9 @@ class TCoreAudioRenderer : public TAudioRenderer
     public:
 
         TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),fAUHAL(0),fPluginID(0),fState(false)
-        {}
+        {
+            InitTime();
+        }
         virtual ~TCoreAudioRenderer()
         {}
 
