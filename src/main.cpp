@@ -126,7 +126,7 @@ AudioStream test5()
 AudioStream test6()
 {
     printf("---------------------------------------------------------\n");
-    printf("Build a input/output through and record the ouput stream\n");
+    printf("Build a input/output through and record the output stream\n");
     printf("---------------------------------------------------------\n\n");
     return MakeWriteSound("input.aif", MakeInputSound(), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
 }
@@ -139,11 +139,13 @@ AudioStream test7()
     AudioStream sound, mix = MakeRegionSound(FILENAME2, 20000, 60000);
     for (int i = 0; i < 10 ; i++) {
         sound = MakeSeqSound(MakeNullSound(i * 4410), MakeRegionSound(FILENAME2, 20000, 60000), 0);
-		if (sound == 0)
+		if (sound == 0) {
 			printf("Error1 %i= \n", i);
+        }
         mix = MakeMixSound(sound, mix);
-		if (mix == 0)
+		if (mix == 0) {
 			printf("Error2 %i= \n", i);
+        }
     }
     return mix;
 }
@@ -530,12 +532,11 @@ int main(int argc, char* argv[])
     ExecTest(player, test8());
     ExecTest(player, test9());
 	ExecTest(player, test9bis());
-	ExecTest(player, test10());
-	ExecTest(player, test11());
-    
-    
+	//ExecTest(player, test10());
     ExecTest(player, test10bis());
-	
+	//ExecTest(player, test11());
+    ExecTest(player, test11bis());
+    	
 	ExecTest(player, test12());
 	ExecTest(player, test13());
 

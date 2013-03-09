@@ -42,6 +42,7 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
     private:
 
         long fFormat;
+        
 		void Open();
 		void Close();
 		void Flush();
@@ -55,7 +56,6 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
     public:
 
         TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format);
-        TWriteFileAudioStream(string name, SHORT_BUFFER buffer, TAudioStreamPtr stream, long format);
         virtual ~TWriteFileAudioStream();
 
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);

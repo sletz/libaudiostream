@@ -80,7 +80,7 @@ class TBufferedAudioStream : public TAudioStream
 
     protected:
 
-        SHORT_BUFFER fBuffer;
+        SHORT_BUFFER fMemoryBuffer;
 
         long fChannels;		// Number of channels
         long fCurFrame;		// Position inside a buffer
@@ -102,7 +102,7 @@ class TBufferedAudioStream : public TAudioStream
         virtual void WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
 
         long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read_or_write);
-        void Init(SHORT_BUFFER buffer);
+        //void Init(SHORT_BUFFER buffer);
 
     public:
 

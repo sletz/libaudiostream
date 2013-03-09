@@ -29,23 +29,11 @@ research@grame.fr
 #include <string.h>
 #include <assert.h>
 
-TWriteFileAudioStream::TWriteFileAudioStream(string name, SHORT_BUFFER buffer, TAudioStreamPtr stream, long format)
-        : TFileAudioStream(name)
-{
-    fChannels = stream->Channels();
-    fBuffer = buffer;
-    fStream = stream;
-    fFormat = format;
-	fFramesNum = fStream->Length();
-	fFile = 0;
-    Open();
-}
-
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
     fChannels = stream->Channels();
-    fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fMemoryBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
     fStream = stream;
     fFormat = format;
     fFramesNum = fStream->Length();
@@ -57,7 +45,7 @@ TWriteFileAudioStream::~TWriteFileAudioStream()
 {
 	Flush();
     Close();	
-    delete fBuffer;  // faux a revoir (si buffer partagŽ)
+    delete fMemoryBuffer;  // faux a revoir (si buffer partagŽ)
 }
 
 void TWriteFileAudioStream::Open()
@@ -102,8 +90,8 @@ long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long frame
     long res = fStream->Read(buffer, framesNum, framePos, channels);
     TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
 	if (res < framesNum) {
-		 if (fManager == 0) {
-			printf("Error : stream rendered without command manager\n");
+        if (fManager == 0) {
+            printf("Error : stream rendered without command manager\n");
         }
 		assert(fManager);
 		fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
@@ -122,7 +110,6 @@ void TWriteFileAudioStream::Reset()
 // Called by TCmdManager
 long TWriteFileAudioStream::Write(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
-    assert(fBuffer);
     assert(fFile);
     return long(sf_writef_short(fFile, buffer->GetFrame(framePos), framesNum));  // In frames
 }
@@ -131,10 +118,10 @@ void TWriteFileAudioStream::Flush()
 {
 	if (fFile) {
 		// Flush the current buffer
-		if (fCurFrame < fBuffer->GetSize() / 2) {
-			TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame, 0);  // direct write 
+		if (fCurFrame < fMemoryBuffer->GetSize() / 2) {
+			TBufferedAudioStream::WriteBuffer(fMemoryBuffer, fCurFrame, 0);  // direct write 
 		} else {
-			TBufferedAudioStream::WriteBuffer(fBuffer, fCurFrame - fBuffer->GetSize() / 2, fBuffer->GetSize() / 2);  // direct write 
+			TBufferedAudioStream::WriteBuffer(fMemoryBuffer, fCurFrame - fMemoryBuffer->GetSize() / 2, fMemoryBuffer->GetSize() / 2);  // direct write 
 		}
 
 		// Start a new buffer
