@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -95,8 +95,8 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
             TAudioGlobals::fDiskError++;
         }
 
-        long frames1 = fMemoryBuffer->GetSize() - fCurFrame; // Number of frames to be read at the end of the buffer
-        long frames2 = framesNum - frames1;            // Number of frames to be read at the beginning of the "next" buffer
+        long frames1 = fMemoryBuffer->GetSize() - fCurFrame;    // Number of frames to be read or written at the end of the buffer
+        long frames2 = framesNum - frames1;                     // Number of frames to be read or written at the beginning of the "next" buffer
 
         assert((fCurFrame + frames1) <= fMemoryBuffer->GetSize());
 
@@ -109,7 +109,7 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
         }
 
         fCurFrame = frames2;
-        fTotalFrames += fMemoryBuffer->GetSize(); // A new file buffer has be read
+        fTotalFrames += fMemoryBuffer->GetSize(); // A new file buffer has be read or written
 
         if (read) {
             ReadBuffer(fMemoryBuffer, fMemoryBuffer->GetSize() / 2, fMemoryBuffer->GetSize() / 2);

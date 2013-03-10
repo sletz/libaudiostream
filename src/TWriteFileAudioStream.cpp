@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -66,7 +66,7 @@ void TWriteFileAudioStream::Open()
 			throw - 1;
         }
 
-        // Needed because we later on use sf_writef_short, would be remove is sf_writef_float is used instead.
+        // Needed because we later on use sf_writef_short, should be removed is sf_writef_float is used instead.
         if (info.format & SF_FORMAT_FLOAT) {
             int arg = SF_TRUE;
             sf_command(fFile, SFC_SET_SCALE_INT_FLOAT_WRITE, &arg, sizeof(arg));

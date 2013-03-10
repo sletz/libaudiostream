@@ -1,5 +1,5 @@
 /*
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -31,7 +31,7 @@ typedef unsigned char Boolean;
 #define SAMPLE_SIZE  	2 // sample size in Byte
 
 #define kBufferNum  	10
-#define MAX_CHANNELS  	64 //
+#define MAX_CHANNELS  	64 
 
 
 #define MAX_PLUG_CHANNELS 4

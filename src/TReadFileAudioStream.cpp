@@ -1,5 +1,5 @@
 /*
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -51,7 +51,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     fChannels = long(fInfo.channels);
     fBeginFrame = beginFrame;
 
-	// Needed because we later on use sf_readf_short, would be remove is sf_readf_float is used instead.
+	// Needed because we later on use sf_readf_short, should be removed is sf_readf_float is used instead.
     if (fInfo.format & SF_FORMAT_FLOAT) {
         int arg = SF_TRUE;
         sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
