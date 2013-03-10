@@ -39,7 +39,7 @@ class TReadFileAudioStream : public TFileAudioStream
     private:
 
         FLOAT_BUFFER fCopyBuffer;
-        long fBeginFrame;
+        long fBeginFrame;  // First frame to be read in the file
         SF_INFO fInfo;
 
         virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
@@ -50,7 +50,6 @@ class TReadFileAudioStream : public TFileAudioStream
         TReadFileAudioStream(string name, long beginFrame);
         virtual ~TReadFileAudioStream();
 
-        // Ajouter constructor avec buffer pour partager le stream
         void ReadEndBuffer(long framesNum, long framePos);
 
         virtual void Reset();

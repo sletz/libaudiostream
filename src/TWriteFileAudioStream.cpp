@@ -74,7 +74,8 @@ void TWriteFileAudioStream::Open()
 void TWriteFileAudioStream::Close()
 {
   	if (fFile) {
-        sf_close(fFile);
+		sf_close(fFile);
+        printf("TWriteFileAudioStream::Close OK\n");
         fFile = 0;
     }
 }

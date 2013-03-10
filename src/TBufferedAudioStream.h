@@ -116,10 +116,12 @@ class TBufferedAudioStream : public TAudioStream
 		
 		virtual TAudioStreamPtr CutBegin(long frames)
         {
+            assert(false);
             return 0;
         }
         virtual long Length()
         {
+            assert(false);
             return 0;
         }
         virtual long Channels()

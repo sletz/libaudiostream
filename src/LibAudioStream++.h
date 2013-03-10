@@ -248,10 +248,18 @@ AudioStream MakePitchSchiftTimeStretchSound(AudioStream sound, double* pitch_shi
 */
 AudioStream MakeWriteSound(char* name, AudioStream sound, long format);
 /*!
-\brief Create an inputstream.
+\brief Create an input stream.
 \return A pointer to new stream object.
 */
 AudioStream MakeInputSound();
+
+/*!
+\brief Create an buffered input stream.
+\param framesNum The total number of frames.
+\return A pointer to new stream object.
+*/
+AudioStream MakeBufferedInputSound(long framesNum);
+    
 /*!
 \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
 \return A pointer to new stream object.

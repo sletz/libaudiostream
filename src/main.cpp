@@ -50,6 +50,8 @@ research@grame.fr
 #define OUT_CHANNELS 2	// stereo player
 #define CHANNELS 8
 
+#define SAMPLE_RATE 44100
+
 AudioEffect faust_effect = 0;
 
 static void TestCallback(void* context)
@@ -123,6 +125,22 @@ AudioStream test5()
     return MakeInputSound();
 }
 
+AudioStream test5bis()
+{
+    printf("-----------------------------------------------\n");
+    printf("Build a buffereded input/output through stream \n");
+    printf("-----------------------------------------------\n\n");
+    return MakeBufferedInputSound(10 * SAMPLE_RATE);
+}
+
+AudioStream test5ter()
+{
+    printf("----------------------------------------------------------------\n");
+    printf("Build seq of a buffered input/output through stream and a region\n");
+    printf("----------------------------------------------------------------\n\n");
+    return MakeSeqSound(MakeBufferedInputSound(10 * SAMPLE_RATE), MakeRegionSound(FILENAME1, 200000, 500000), 88200);
+}
+
 AudioStream test6()
 {
     printf("---------------------------------------------------------\n");
@@ -190,6 +208,17 @@ AudioStream test9bis()
 	return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
 }
 
+void printfControls(AudioEffect faust_effect)
+{
+    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
+	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
+		float min, max, init;
+		char label[32];
+		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
+		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
+	}
+}
+
 AudioStream test10()
 {
     printf("-------------------------------------------------------------------\n");
@@ -200,14 +229,8 @@ AudioStream test10()
 	AudioEffectList list_effect = MakeAudioEffectList();
     faust_effect = MakeFaustAudioEffect(EFFECT1);
     
-	printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
-	}
-	
+    printfControls(faust_effect);
+   	
 	list_effect = AddAudioEffect(list_effect, faust_effect);
 	list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.5));
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
@@ -223,31 +246,18 @@ AudioStream test10bis()
     AudioEffectList list_effect = MakeAudioEffectList();
     faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
     
-	printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
-    
+	printfControls(faust_effect);
+        
     SetControlValueEffect(faust_effect, 0, 1.0);
     SetControlValueEffect(faust_effect, 1, 1.0);
     SetControlValueEffect(faust_effect, 2, 1.0);
     
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
+    printfControls(faust_effect);
 	
 	list_effect = AddAudioEffect(list_effect, faust_effect);
 	//list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.99));
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
 }
-
 
 AudioStream test11()
 {
@@ -257,25 +267,13 @@ AudioStream test11()
     AudioEffectList list_effect = MakeAudioEffectList();
 	faust_effect = MakeFaustAudioEffect(EFFECT1);
 	
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
+    printfControls(faust_effect);
     
     SetControlValueEffect(faust_effect, 0, 1.0);
     SetControlValueEffect(faust_effect, 1, 1.0);
     SetControlValueEffect(faust_effect, 2, 1.0);
     
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
+    printfControls(faust_effect);
 	
 	list_effect = AddAudioEffect(list_effect, faust_effect);
     return MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
@@ -289,44 +287,54 @@ AudioStream test11bis()
     AudioEffectList list_effect = MakeAudioEffectList();
 	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
 	
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
+    printfControls(faust_effect);
     
     SetControlValueEffect(faust_effect, 0, 0.9);
     SetControlValueEffect(faust_effect, 1, 0.9);
     SetControlValueEffect(faust_effect, 2, 0.9);
     
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
+    printfControls(faust_effect);
   
 	list_effect = AddAudioEffect(list_effect, faust_effect);
     return MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 }
 
+AudioStream test11ter()
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("Input stream + Faust LLVM freeverb effect                               \n");
+    printf("-------------------------------------------------------------------\n\n");
+    AudioEffectList list_effect = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	
+    printfControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printfControls(faust_effect);
+  
+	list_effect = AddAudioEffect(list_effect, faust_effect);
+    return MakeMixSound(
+        MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16), 
+        MakeSeqSound(MakeNullSound(3 * 44100), MakeReadSound("reverb_input.wav"), 100));
+}
+
 AudioStream test12()
 {
     printf("-------------------------------------------------------------------\n");
-    printf("RubberBand library												   \n");
+    printf("RubberBand library (1)											   \n");
     printf("-------------------------------------------------------------------\n\n");
     
 	AudioStream s1 = MakeReadSound(FILENAME1);
 	return MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech);
- }
+}
 
 AudioStream test13()
 {
     printf("-------------------------------------------------------------------\n");
-    printf("RubberBand library (2)												   \n");
+    printf("RubberBand library (2)											   \n");
     printf("-------------------------------------------------------------------\n\n");
 	
 	AudioStream s1 = MakeRegionSound(FILENAME1, 200000, 500000);
@@ -473,28 +481,6 @@ void ExecTest(AudioPlayerPtr player, AudioStream sound)
     StopChannel(player, 1);
 }
 
-#ifndef WIN32
-
-int SetMaximumFiles(long filecount)
-{
-    struct rlimit lim;
-    lim.rlim_cur = lim.rlim_max = (rlim_t)filecount;
-    return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
-}
-
-int GetMaximumFiles(long *filecount) 
-{
-    struct rlimit lim;
-    if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
-        *filecount = (long)lim.rlim_max;
-        return 0;
-    } else {
-		return errno;
-	}
-}
-
-#endif
-
 int main(int argc, char* argv[])
 {
     printf("----------------------------\n");
@@ -503,23 +489,15 @@ int main(int argc, char* argv[])
 
 	int res = LibVersion();
     
-    ///int samplerate = 96000;
-    int samplerate = 44100;
-
-#ifndef WIN32
-	SetMaximumFiles(1024);	
-	printf("sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
-#endif
-	
 	// Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
+    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
     // If failure opens PortAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
     }
     // If failure opens CoreAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
     }
     
     if (!player) {
@@ -537,6 +515,9 @@ int main(int argc, char* argv[])
     printf("Type '1' to pan left\n");
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
+    
+    ExecTest(player, test5bis());
+    ExecTest(player, test5ter());
 	
 	/*
     ExecTest(player, test0());
@@ -548,6 +529,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test0());
     */
 
+    /*
     ExecTest(player, test0());
     ExecTest(player, test1());
 	ExecTest(player, test1());
@@ -564,6 +546,9 @@ int main(int argc, char* argv[])
     ExecTest(player, test10bis());
 	//ExecTest(player, test11());
     ExecTest(player, test11bis());
+    */
+    
+    ExecTest(player, test11ter());
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());

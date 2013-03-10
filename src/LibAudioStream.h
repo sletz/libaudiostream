@@ -199,10 +199,17 @@ extern "C"
     */
     AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr sound, long format);
     /*!
-    \brief Create an inputstream.
+    \brief Create an input stream.
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeInputSoundPtr();
+    
+    /*!
+    \brief Create an buffered input stream.
+    \return A pointer to new stream object.
+    */
+    AudioStreamPtr MakeBufferedInputSoundPtr();
+    
     /*!
     \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
     \return A pointer to new stream object.

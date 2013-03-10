@@ -87,6 +87,7 @@ extern "C"
 	AudioStreamPtr AUDIOAPI MakeRubberBandSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AudioStreamPtr AUDIOAPI MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
     AudioStreamPtr AUDIOAPI MakeInputSoundPtr();
+    AudioStreamPtr AUDIOAPI MakeBufferedInputSoundPtr(long framesNum);
     AudioStreamPtr AUDIOAPI MakeRendererSoundPtr(AudioStreamPtr s);
 
     long AUDIOAPI GetLengthSoundPtr(AudioStreamPtr s);
@@ -208,6 +209,7 @@ AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectList effec
 AudioStream AUDIOAPI MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
 AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format);
 AudioStream AUDIOAPI MakeInputSound();
+AudioStream AUDIOAPI MakeBufferedInputSound(long framesNum);
 AudioStream AUDIOAPI MakeRendererSound(AudioStream s);
 
 long AUDIOAPI GetLengthSound(AudioStream s);
@@ -291,6 +293,11 @@ AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2)
 AudioStream AUDIOAPI MakeInputSound()
 {
     return TAudioStreamFactory::MakeInputSound();
+}
+
+AudioStream AUDIOAPI MakeBufferedInputSound(long framesNum)
+{
+    return TAudioStreamFactory::MakeBufferedInputSound(framesNum);
 }
 
 AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
@@ -411,6 +418,11 @@ AudioStreamPtr AUDIOAPI MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2)
 AudioStreamPtr AUDIOAPI MakeInputSoundPtr()
 {
     return MakeSoundPtr(TAudioStreamFactory::MakeInputSound());
+}
+
+AudioStreamPtr AUDIOAPI MakeBufferedInputSoundPtr(long framesNum)
+{
+    return MakeSoundPtr(TAudioStreamFactory::MakeBufferedInputSound(framesNum));
 }
 
 AudioStreamPtr AUDIOAPI MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)

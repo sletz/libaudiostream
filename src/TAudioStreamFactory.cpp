@@ -29,6 +29,7 @@ research@grame.fr
 #include "TNullAudioStream.h"
 #include "TReadFileAudioStream.h"
 #include "TInputAudioStream.h"
+#include "TBufferedInputAudioStream.h"
 #include "TTransformAudioStream.h"
 #include "TEventAudioStream.h"
 #include "TRubberBandAudioStream.h"
@@ -134,6 +135,11 @@ TAudioStreamPtr TAudioStreamFactory::MakeMixSound(TAudioStreamPtr s1, TAudioStre
 TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
 {
     return new TInputAudioStream();
+}
+
+TAudioStreamPtr TAudioStreamFactory::MakeBufferedInputSound(long framesNum)
+{
+    return new TBufferedInputAudioStream(framesNum);
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)
