@@ -33,7 +33,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream
         : TFileAudioStream(name)
 {
     fChannels = stream->Channels();
-    fMemoryBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fMemoryBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
     fStream = stream;
     fFormat = format;
     fFramesNum = fStream->Length();
@@ -65,12 +65,6 @@ void TWriteFileAudioStream::Open()
 		if (!fFile) {
 			throw - 1;
         }
-
-        // Needed because we later on use sf_writef_short, should be removed is sf_writef_float is used instead.
-        if (info.format & SF_FORMAT_FLOAT) {
-            int arg = SF_TRUE;
-            sf_command(fFile, SFC_SET_SCALE_INT_FLOAT_WRITE, &arg, sizeof(arg));
-        }
 			
 		sf_seek(fFile, 0, SEEK_SET);
 		fReady = true;
@@ -101,17 +95,16 @@ long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long frame
 
 void TWriteFileAudioStream::Reset()
 {
-    // A AMELIORER (rŽutiliser les fichiers disque??)
 	Open();
     fStream->Reset();
     TBufferedAudioStream::Reset();
 }
 
 // Called by TCmdManager
-long TWriteFileAudioStream::Write(SHORT_BUFFER buffer, long framesNum, long framePos)
+long TWriteFileAudioStream::Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    return long(sf_writef_short(fFile, buffer->GetFrame(framePos), framesNum));  // In frames
+    return long(sf_writef_float(fFile, buffer->GetFrame(framePos), framesNum));  // In frames
 }
 
 void TWriteFileAudioStream::Flush()

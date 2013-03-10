@@ -51,7 +51,7 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
 
     protected:
 
-        long Write(SHORT_BUFFER buffer, long framesNum, long framePos);
+        long Write(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
     public:
 

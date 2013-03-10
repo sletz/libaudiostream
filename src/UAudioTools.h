@@ -389,10 +389,10 @@ class UAudioTools
                 }
             } else {
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
-                    out[i] = (short)(ClipFloat(in[i]) * fGain);
-                    out[i + 1] = (short)(ClipFloat(in[i + 1]) * fGain);
-                    out[i + 2] = (short)(ClipFloat(in[i + 2]) * fGain);
-                    out[i + 3] = (short)(ClipFloat(in[i + 3]) * fGain);
+                    out[i] += in[i];
+                    out[i + 1] += in[i + 1];
+                    out[i + 2] += in[i + 2];
+                    out[i + 3] += in[i + 3];
                 }
             }
         }

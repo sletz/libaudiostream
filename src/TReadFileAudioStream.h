@@ -38,11 +38,11 @@ class TReadFileAudioStream : public TFileAudioStream
 
     private:
 
-        SHORT_BUFFER fCopyBuffer;
+        FLOAT_BUFFER fCopyBuffer;
         long fBeginFrame;
         SF_INFO fInfo;
 
-        virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos);
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
         static void ReadEndBufferAux(TReadFileAudioStream* obj, long framesNum, long framePos);
 
     public:

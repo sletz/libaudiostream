@@ -80,7 +80,7 @@ class TBufferedAudioStream : public TAudioStream
 
     protected:
 
-        SHORT_BUFFER fMemoryBuffer;
+        FLOAT_BUFFER fMemoryBuffer;
 
         long fChannels;		// Number of channels
         long fCurFrame;		// Position inside a buffer
@@ -89,17 +89,17 @@ class TBufferedAudioStream : public TAudioStream
      
         volatile bool fReady; // For disk access error detection
 
-        virtual long Write(SHORT_BUFFER buffer, long framesNum, long framePos)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
 
-        virtual void ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
-        virtual void WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
+        virtual void ReadBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        virtual void WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read_or_write);
   

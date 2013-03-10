@@ -1111,8 +1111,10 @@ long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, 
 
 long TCoreAudioRenderer::Close()
 {   
-    free(fInputData->mBuffers[0].mData);
-	free(fInputData);
+    if (fInputData) {
+        free(fInputData->mBuffers[0].mData);
+        free(fInputData);
+    }
 	AudioUnitUninitialize(fAUHAL);
     CloseComponent(fAUHAL);
     return NO_ERR;

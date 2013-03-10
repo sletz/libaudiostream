@@ -499,6 +499,11 @@ int main(int argc, char* argv[])
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
     }
     
+    if (!player) {
+         printf("Cannot open AudioPlayer...\n");
+         return -1;
+    } 
+    
     StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");

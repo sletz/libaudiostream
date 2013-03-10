@@ -46,11 +46,11 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         string fName;
         SNDFILE* fFile;
 
-        static void ReadBufferAux(TFileAudioStream* obj, SHORT_BUFFER buffer, long framesNum, long framePos);
-        static void WriteBufferAux(TFileAudioStream* obj, SHORT_BUFFER buffer, long framesNum, long framePos);
+        static void ReadBufferAux(TFileAudioStream* obj, FLOAT_BUFFER buffer, long framesNum, long framePos);
+        static void WriteBufferAux(TFileAudioStream* obj, FLOAT_BUFFER buffer, long framesNum, long framePos);
 
-        void ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
-        void WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
+        void ReadBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        void WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
     public:
      
@@ -59,11 +59,11 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         virtual ~TFileAudioStream()
         {}
 
-        virtual long Write(SHORT_BUFFER buffer, long framesNum, long framePos)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
