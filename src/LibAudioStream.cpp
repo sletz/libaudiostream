@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -23,7 +23,6 @@ research@grame.fr
 #include "TAudioEngine.h"
 #include "TAudioRendererFactory.h"
 #include "TAudioStreamFactory.h"
-
 #include "TVolAudioEffect.h"
 #include "TPitchShiftAudioEffect.h"
 #include "TPanAudioEffect.h"
@@ -331,20 +330,20 @@ long AUDIOAPI GetChannelsSound(AudioStream s)
     return (s) ? (static_cast<TAudioStreamPtr>(s))->Channels() : 0;
 }
 
-long AUDIOAPI ReadSound(AudioStream s, float* buffer, long buffer_size, long channels)
+long AUDIOAPI ReadSound(AudioStream sound, float* buffer, long buffer_size, long channels)
 {
-    if (s && buffer) {
+    if (sound && buffer) {
         TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
 		UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
-        return static_cast<TAudioStreamPtr>(s)->Read(&process, buffer_size, 0, channels);
+        return static_cast<TAudioStreamPtr>(sound)->Read(&process, buffer_size, 0, channels);
     } else {
         return 0;
     }
 }
 
-void AUDIOAPI ResetSound(AudioStream s)
+void AUDIOAPI ResetSound(AudioStream sound)
 {
-	static_cast<TAudioStreamPtr>(s)->Reset();
+	static_cast<TAudioStreamPtr>(sound)->Reset();
 }
 
 AudioStreamPtr AUDIOAPI MakeSoundPtr(AudioStream sound) 
@@ -414,16 +413,16 @@ AudioStreamPtr AUDIOAPI MakeInputSoundPtr()
     return MakeSoundPtr(TAudioStreamFactory::MakeInputSound());
 }
 
-AudioStreamPtr AUDIOAPI MakeTransformSoundPtr(AudioStreamPtr s, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
+AudioStreamPtr AUDIOAPI MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
 {
-    return (s && list_effect) 
-		? MakeSoundPtr(TAudioStreamFactory::MakeTransformSound(static_cast<TAudioStreamPtr>(*s), static_cast<TAudioEffectListPtr>(*list_effect), fadeIn, fadeOut))
+    return (sound && list_effect) 
+		? MakeSoundPtr(TAudioStreamFactory::MakeTransformSound(static_cast<TAudioStreamPtr>(*sound), static_cast<TAudioEffectListPtr>(*list_effect), fadeIn, fadeOut))
 		: 0;
 }
 
-AudioStreamPtr AUDIOAPI MakePitchSchiftTimeStretchSoundPtr(AudioStream s, double* pitch_shift, double* time_strech)
+AudioStreamPtr AUDIOAPI MakePitchSchiftTimeStretchSoundPtr(AudioStream sound, double* pitch_shift, double* time_strech)
 {
-    return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s), pitch_shift, time_strech)) : 0;
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(sound), pitch_shift, time_strech)) : 0;
     /*
 #ifdef SOUND_TOUCH
 	return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeSoundTouchSound(static_cast<TAudioStreamPtr>(s), pitch_shift, time_strech)) : 0;
@@ -433,37 +432,37 @@ AudioStreamPtr AUDIOAPI MakePitchSchiftTimeStretchSoundPtr(AudioStream s, double
     */
 }
 
-AudioStreamPtr AUDIOAPI MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format)
+AudioStreamPtr AUDIOAPI MakeWriteSoundPtr(char* name, AudioStreamPtr sound, long format)
 {
-    return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeWriteSound(name, static_cast<TAudioStreamPtr>(*s), format)) : 0;
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeWriteSound(name, static_cast<TAudioStreamPtr>(*sound), format)) : 0;
 }
 
-AudioStreamPtr AUDIOAPI MakeRendererSoundPtr(AudioStreamPtr s)
+AudioStreamPtr AUDIOAPI MakeRendererSoundPtr(AudioStreamPtr sound)
 {
-    return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeDTRenderer(static_cast<TAudioStreamPtr>(*s))) : 0;
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeDTRenderer(static_cast<TAudioStreamPtr>(*sound))) : 0;
 }
 
-long AUDIOAPI GetLengthSoundPtr(AudioStreamPtr s)
+long AUDIOAPI GetLengthSoundPtr(AudioStreamPtr sound)
 {
-    return (s) ? (static_cast<TAudioStreamPtr>(*s))->Length() : 0;
+    return (sound) ? (static_cast<TAudioStreamPtr>(*sound))->Length() : 0;
 }
 
-long AUDIOAPI GetChannelsSoundPtr(AudioStreamPtr s)
+long AUDIOAPI GetChannelsSoundPtr(AudioStreamPtr sound)
 {
-    return (s) ? (static_cast<TAudioStreamPtr>(*s))->Channels() : 0;
+    return (sound) ? (static_cast<TAudioStreamPtr>(*sound))->Channels() : 0;
 }
 
-void AUDIOAPI ResetSoundPtr(AudioStreamPtr s)
+void AUDIOAPI ResetSoundPtr(AudioStreamPtr sound)
 {
-	static_cast<TAudioStreamPtr>(*s)->Reset();
+	static_cast<TAudioStreamPtr>(*sound)->Reset();
 }
 
-long AUDIOAPI ReadSoundPtr(AudioStreamPtr s, float* buffer, long buffer_size, long channels)
+long AUDIOAPI ReadSoundPtr(AudioStreamPtr sound, float* buffer, long buffer_size, long channels)
 {
-    if (s && buffer) {
+    if (sound && buffer) {
         TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
 		UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
-        return static_cast<TAudioStreamPtr>(*s)->Read(&process, buffer_size, 0, channels);
+        return static_cast<TAudioStreamPtr>(*sound)->Read(&process, buffer_size, 0, channels);
     } else {
         return 0;
     }
@@ -477,7 +476,7 @@ AudioEffectList AUDIOAPI MakeAudioEffectList()
 
 AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect)
 {
-   if (list_effect && effect) {
+    if (list_effect && effect) {
        static_cast<TAudioEffectListPtr>(list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(effect));
     }
     return list_effect;

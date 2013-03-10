@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -31,9 +31,7 @@ research@grame.fr
 #include "TInputAudioStream.h"
 #include "TTransformAudioStream.h"
 #include "TEventAudioStream.h"
-
 #include "TRubberBandAudioStream.h"
-
 #ifdef SOUND_TOUCH
 #include "TSoundTouchAudioStream.h"
 #endif
@@ -155,18 +153,18 @@ TAudioStreamPtr TAudioStreamFactory::MakeSoundTouchSound(TAudioStreamPtr s1,  do
 }
 #endif
 
-TAudioStreamPtr TAudioStreamFactory::MakeWriteSound(string name, TAudioStreamPtr s, long format)
+TAudioStreamPtr TAudioStreamFactory::MakeWriteSound(string name, TAudioStreamPtr sound, long format)
 {
-    return (s) ? new TWriteFileAudioStream(name, s, format) : 0;
+    return (sound) ? new TWriteFileAudioStream(name, sound, format) : 0;
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeRTRenderer(TAudioStreamPtr s)
+TAudioStreamPtr TAudioStreamFactory::MakeRTRenderer(TAudioStreamPtr sound)
 {
-    return (s) ? new TRTRendererAudioStream(s) : 0;
+    return (sound) ? new TRTRendererAudioStream(sound) : 0;
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeDTRenderer(TAudioStreamPtr s)
+TAudioStreamPtr TAudioStreamFactory::MakeDTRenderer(TAudioStreamPtr sound)
 {
-    return (s) ? new TDTRendererAudioStream(s) : 0;
+    return (sound) ? new TDTRendererAudioStream(sound) : 0;
 }
 

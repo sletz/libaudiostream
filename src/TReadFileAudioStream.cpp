@@ -1,5 +1,5 @@
 /*
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -51,7 +51,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     fChannels = long(fInfo.channels);
     fBeginFrame = beginFrame;
 
-	// Needed because we later on use sf_readf_short, would be remove is sf_readf_float is used instead.
+	// Needed because we later on use sf_readf_short, should be removed is sf_readf_float is used instead.
     if (fInfo.format & SF_FORMAT_FLOAT) {
         int arg = SF_TRUE;
         sf_command(fFile, SFC_SET_SCALE_FLOAT_INT_READ, &arg, sizeof(arg));
@@ -62,12 +62,12 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     }
 
     // Dynamic allocation
-    fBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fMemoryBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
     fCopyBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
   
     // Read first buffer directly
-    TBufferedAudioStream::ReadBuffer(fBuffer, TAudioGlobals::fStreamBufferSize, 0);
-    TAudioBuffer<short>::Copy(fCopyBuffer, 0, fBuffer, 0, TAudioGlobals::fStreamBufferSize);
+    TBufferedAudioStream::ReadBuffer(fMemoryBuffer, TAudioGlobals::fStreamBufferSize, 0);
+    TAudioBuffer<short>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
 
     fReady = true;
 }
@@ -79,7 +79,7 @@ TReadFileAudioStream::~TReadFileAudioStream()
         fFile = 0;
     }
 
-    delete fBuffer;
+    delete fMemoryBuffer;
     delete fCopyBuffer;
 }
 
@@ -96,7 +96,7 @@ void TReadFileAudioStream::ReadEndBufferAux(TReadFileAudioStreamPtr obj, long fr
 // Use the end of the copy buffer
 void TReadFileAudioStream::ReadEndBuffer(long framesNum, long framePos)
 {
-    TAudioBuffer<short>::Copy(fBuffer, framePos, fCopyBuffer, framePos, framesNum);
+    TAudioBuffer<short>::Copy(fMemoryBuffer, framePos, fCopyBuffer, framePos, framesNum);
 }
 
 void TReadFileAudioStream::Reset()
@@ -109,14 +109,14 @@ void TReadFileAudioStream::Reset()
     int copySize = TAudioGlobals::fBufferSize * 4;
 
     if (copySize < TAudioGlobals::fStreamBufferSize) {
-        TAudioBuffer<short>::Copy(fBuffer, 0, fCopyBuffer, 0, copySize);
+        TAudioBuffer<short>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, copySize);
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
         assert(fManager);
         fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
     } else {
-        TAudioBuffer<short>::Copy(fBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStreamBufferSize);
+        TAudioBuffer<short>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStreamBufferSize);
     }
 
     TBufferedAudioStream::Reset();
@@ -125,7 +125,6 @@ void TReadFileAudioStream::Reset()
 // Called by TCmdManager
 long TReadFileAudioStream::Read(SHORT_BUFFER buffer, long framesNum, long framePos)
 {
-    assert(fBuffer);
     assert(fFile);
     return long(sf_readf_short(fFile, buffer->GetFrame(framePos), framesNum)); // In frames
 }

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2012
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -38,7 +38,7 @@ The Read method calls the ReadBuffer method when the end of a "big" buffer is re
 Subclasses will possibly implements ReadBuffer for their special need. For example a sound file subclass
 will have a ReadBuffer method that calls the real disk read function inside a low-prority thread.
  
-    - A TFileAudioStream object is the LibSndFile read stream
+    - A TFileAudioStream object is the LibSndFile stream
  
     - A TReadFileAudioStream object is the LibSndFile read stream
  
@@ -61,13 +61,13 @@ will have a ReadBuffer method that calls the real disk read function inside a lo
                                                         !
                                                         !
                                                         !     						
-                                --------------------------------------------------                          
-                                !                        			 !
-				//------------------------------//	  	//------------------------------// 					
-				//								//		//								//
-                //    TReadFileAudioStream      //		//    TWriteFileAudioStream     //      
-                //			        			//		//								//
-                //------------------------------//		//------------------------------//   
+                                ---------------------------------------------                         
+                                !                        			        !
+				//------------------------------//	  	    //------------------------------// 					
+				//								//		    //								//
+                //    TReadFileAudioStream      //		    //    TWriteFileAudioStream     //      
+                //			        			//		    //								//
+                //------------------------------//		    //------------------------------//   
  
 */
 
@@ -80,14 +80,14 @@ class TBufferedAudioStream : public TAudioStream
 
     protected:
 
-        SHORT_BUFFER fBuffer;
+        SHORT_BUFFER fMemoryBuffer;
 
         long fChannels;		// Number of channels
         long fCurFrame;		// Position inside a buffer
         long fFramesNum;	// Total file frames number
         long fTotalFrames;	// Total frames already handled
      
-        bool fReady;		// For disk access error detection
+        volatile bool fReady; // For disk access error detection
 
         virtual long Write(SHORT_BUFFER buffer, long framesNum, long framePos)
         {
@@ -102,8 +102,7 @@ class TBufferedAudioStream : public TAudioStream
         virtual void WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
 
         long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read_or_write);
-        void Init(SHORT_BUFFER buffer);
-
+  
     public:
 
         TBufferedAudioStream();
@@ -130,7 +129,7 @@ class TBufferedAudioStream : public TAudioStream
         virtual TAudioStreamPtr Copy()
         {
             return new TBufferedAudioStream();
-        } // Le buffer interne est partagé??
+        } 
 };
 
 typedef TBufferedAudioStream * TBufferedAudioStreamPtr;
