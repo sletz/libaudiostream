@@ -65,12 +65,12 @@ double time_strech = 1.0;
 void printControls(AudioEffect faust_effect)
 {
     printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
-	}
+    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
+        float min, max, init;
+        char label[32];
+        GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
+        printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
+    }
 }
 
 AudioStream test0()
