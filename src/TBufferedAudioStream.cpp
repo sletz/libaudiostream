@@ -74,11 +74,11 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
         assert((fCurFrame + framesNum) <= fMemoryBuffer->GetSize());
 
         if (read) {
-            // Read the frames from the disk buffer to the argument buffer
+            // Read the frames from the memory buffer and mix to the argument buffer
             UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(fCurFrame), buffer->GetFrame(framePos), framesNum, fChannels, channels);
         } else {
-            // Write the argument buffer frames to the disk buffer
-            UAudioTools::Float2FloatMix(buffer->GetFrame(framePos), fMemoryBuffer->GetFrame(fCurFrame), framesNum, channels, fChannels);
+            // Write the argument buffer frames to the memory buffer
+            UAudioTools::Float2Float(buffer->GetFrame(framePos), fMemoryBuffer->GetFrame(fCurFrame), framesNum, channels, fChannels);
         }
 
         fCurFrame += framesNum;
@@ -101,11 +101,13 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
         assert((fCurFrame + frames1) <= fMemoryBuffer->GetSize());
 
         if (read) {
+            // Read the frames from the memory buffer and mix to the argument buffer
             UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(fCurFrame), buffer->GetFrame(framePos), frames1, fChannels, channels);
             UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(0), buffer->GetFrame(frames1 + framePos), frames2, fChannels, channels);
         } else {
-            UAudioTools::Float2FloatMix(buffer->GetFrame(framePos), fMemoryBuffer->GetFrame(fCurFrame), frames1, channels, fChannels);
-            UAudioTools::Float2FloatMix(buffer->GetFrame(frames1 + framePos), fMemoryBuffer->GetFrame(0), frames2, channels, fChannels);
+            // Write the argument buffer frames to the memory buffer
+            UAudioTools::Float2Float(buffer->GetFrame(framePos), fMemoryBuffer->GetFrame(fCurFrame), frames1, channels, fChannels);
+            UAudioTools::Float2Float(buffer->GetFrame(frames1 + framePos), fMemoryBuffer->GetFrame(0), frames2, channels, fChannels);
         }
 
         fCurFrame = frames2;
@@ -122,9 +124,11 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
         assert((fCurFrame + framesNum) <= fMemoryBuffer->GetSize());
 
         if (read) {
+            // Read the frames from the memory buffer and mix to the argument buffer
             UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(fCurFrame), buffer->GetFrame(framePos), framesNum, fChannels, channels);
         } else {
-            UAudioTools::Float2FloatMix(buffer->GetFrame(framePos), fMemoryBuffer->GetFrame(fCurFrame), framesNum, channels, fChannels);
+            // Write the argument buffer frames to the memory buffer
+            UAudioTools::Float2Float(buffer->GetFrame(framePos), fMemoryBuffer->GetFrame(fCurFrame), framesNum, channels, fChannels);
         }
 
         fCurFrame += framesNum;

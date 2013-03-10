@@ -396,6 +396,24 @@ class UAudioTools
                 }
             }
         }
+        
+        static inline void Float2Float(float* in, float* out, long framesNum, long channelsIn, long channelsOut)
+        {
+            if (channelsIn < channelsOut) {  // distribute channels
+                for (long i = 0; i < framesNum; i++) {
+                    for (long j = 0; j < channelsOut; j++) {
+                        out [i*channelsOut + j] = in[i * channelsIn + j % channelsIn];
+                    }
+                }
+            } else {
+                for (long i = 0; i < framesNum * channelsOut; i += 4) {
+                    out[i] = in[i];
+                    out[i + 1] = in[i + 1];
+                    out[i + 2] = in[i + 2];
+                    out[i + 3] = in[i + 3];
+                }
+            }
+        }
 
         static inline void MultFrame(float* frame, float val, long channels)
         {

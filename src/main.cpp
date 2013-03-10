@@ -128,7 +128,8 @@ AudioStream test6()
     printf("---------------------------------------------------------\n");
     printf("Build a input/output through and record the output stream\n");
     printf("---------------------------------------------------------\n\n");
-    return MakeWriteSound("input.aif", MakeInputSound(), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
+    // "Wav" format can be read while being written...
+    return MakeWriteSound("input.wav", MakeInputSound(), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 }
 
 AudioStream test7()
@@ -261,11 +262,23 @@ AudioStream test11()
 		float min, max, init;
 		char label[32];
 		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
+		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
+	}
+    
+    SetControlValueEffect(faust_effect, 0, 1.0);
+    SetControlValueEffect(faust_effect, 1, 1.0);
+    SetControlValueEffect(faust_effect, 2, 1.0);
+    
+    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
+    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
+		float min, max, init;
+		char label[32];
+		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
+		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
 	}
 	
 	list_effect = AddAudioEffect(list_effect, faust_effect);
-    return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+    return MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 }
 
 AudioStream test11bis()
@@ -281,13 +294,23 @@ AudioStream test11bis()
 		float min, max, init;
 		char label[32];
 		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
+		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
 	}
-    SetControlValueEffect(faust_effect, 9, 1.0);
-    SetControlValueEffect(faust_effect, 10, 20.0);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
+    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
+		float min, max, init;
+		char label[32];
+		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
+		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
+	}
   
 	list_effect = AddAudioEffect(list_effect, faust_effect);
-    return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+    return MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 }
 
 AudioStream test12()
@@ -332,7 +355,7 @@ void test21()
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
     printf("-----------------------------------------------------------\n\n");
-    AudioStream sound = MakeRendererSound(MakeWriteSound("output.aif", MakeReadSound(FILENAME3),SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+    AudioStream sound = MakeRendererSound(MakeWriteSound("output.aif", MakeReadSound(FILENAME3), SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
     float buffer[512 * OUT_CHANNELS];
     long res;
 	do {

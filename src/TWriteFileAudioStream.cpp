@@ -73,8 +73,8 @@ void TWriteFileAudioStream::Open()
 
 void TWriteFileAudioStream::Close()
 {
-	if (fFile) {
-		sf_close(fFile);
+  	if (fFile) {
+        sf_close(fFile);
         fFile = 0;
     }
 }
