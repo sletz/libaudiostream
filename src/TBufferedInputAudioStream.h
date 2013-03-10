@@ -38,21 +38,27 @@ using namespace std;
 
 class TBufferedInputAudioStream : public TBufferedAudioStream
 {
-
-    protected:
-   
- 
+    private:
+        
+        FLOAT_BUFFER fTmpBuffer;
+    
     public:
      
-        TBufferedInputAudioStream(long framesNum): TBufferedAudioStream()
+        TBufferedInputAudioStream(long endFrame): TBufferedAudioStream()
         {
-            fFramesNum = framesNum;
+            fFramesNum = endFrame;
+            
+            // Hack : always stereo for now
+            fChannels = 2;
+            
             // Dynamic allocation
-            fMemoryBuffer = new TLocalAudioBuffer<float>(framesNum, fChannels);
+            fMemoryBuffer = new TLocalAudioBuffer<float>(endFrame, fChannels);
+            fTmpBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
         }
         virtual ~TBufferedInputAudioStream()
         {
             delete fMemoryBuffer;
+            delete fTmpBuffer;
         }
         
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
@@ -69,19 +75,26 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         {
             return 0;
         }
+    
         virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
         {
+            // Read input
             assert(TSharedBuffers::GetInBuffer());
             UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
                                              framesNum,
                                              channels);
-            // Write buffer in memory
-            return TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); 
+                                             
+            // Read input and write it to memory
+            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos),
+                                             TSharedBuffers::GetInBuffer(),
+                                             framesNum,
+                                             channels);
+            return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos, channels); 
         }
 
-        virtual void Reset() {}
-		virtual TAudioStreamPtr CutBegin(long frames)
+        virtual TAudioStreamPtr CutBegin(long frames)
         {
             printf("TBufferedInputAudioStream::CutBegin Error\n");
             return NULL;

@@ -206,9 +206,17 @@ extern "C"
     
     /*!
     \brief Create an buffered input stream.
+    \param endFrame The RT stream duration in frames.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeBufferedInputSoundPtr();
+    AudioStreamPtr MakeBufferedInputSoundPtr(long endFrame);
+    
+    /*!
+    \brief Create an shared stream on the input stream.
+    \param beginFrame The RT stream first fraems to read.
+    \return A pointer to new stream object.
+    */
+    AudioStreamPtr MakeSharedBufferedInputSoundPtr(long beginFrame);
     
     /*!
     \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.

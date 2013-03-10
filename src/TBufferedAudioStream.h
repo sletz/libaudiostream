@@ -130,10 +130,72 @@ class TBufferedAudioStream : public TAudioStream
         }
         virtual TAudioStreamPtr Copy()
         {
-            return new TBufferedAudioStream();
+            assert(false);
+            return 0;
         } 
+        
+        FLOAT_BUFFER GetMemoryBuffer() {return fMemoryBuffer; }
 };
 
 typedef TBufferedAudioStream * TBufferedAudioStreamPtr;
+
+//-----------------------------------
+// Class TSharedBufferedAudioStream
+//-----------------------------------
+
+class TSharedBufferedAudioStream : public TBufferedAudioStream
+{
+    protected:
+    
+        long fBeginFrame;  // First frame to be read in the shared buffer
+
+    public:
+    
+        TSharedBufferedAudioStream(long beginFrame, FLOAT_BUFFER shared_buffer): TBufferedAudioStream()
+        {
+            fBeginFrame = beginFrame;
+            assert(fBeginFrame < shared_buffer->GetSize());
+            
+            // Hack : always stereo for now
+            fChannels = 2;
+           
+            // Keep the shared buffer
+            fMemoryBuffer = shared_buffer;
+            // Start from fBeginFrame
+            fCurFrame = fBeginFrame;
+            fFramesNum = fMemoryBuffer->GetSize();
+        }
+        virtual ~TSharedBufferedAudioStream()
+        {}
+        
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        {
+            // Read buffer from memory
+            return TBufferedAudioStream::Read(buffer, framesNum, framePos, channels); 
+        }
+        
+        virtual TAudioStreamPtr CutBegin(long frames)
+        {
+            return new TSharedBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
+        }
+        virtual long Length()
+        {
+            return fMemoryBuffer->GetSize() - fBeginFrame;
+        }
+        
+        virtual TAudioStreamPtr Copy()
+        {
+            return new TSharedBufferedAudioStream(fBeginFrame, fMemoryBuffer);
+        } 
+        
+        void Reset()
+        {
+            fCurFrame = fBeginFrame;
+            fTotalFrames = 0;
+        }
+
+};
+
+typedef TSharedBufferedAudioStream * TSharedBufferedAudioStreamPtr;
 
 #endif

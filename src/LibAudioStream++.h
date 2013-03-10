@@ -252,14 +252,18 @@ AudioStream MakeWriteSound(char* name, AudioStream sound, long format);
 \return A pointer to new stream object.
 */
 AudioStream MakeInputSound();
-
 /*!
 \brief Create an buffered input stream.
-\param framesNum The total number of frames.
+\param endFrame The RT stream duration in frames.
 \return A pointer to new stream object.
 */
-AudioStream MakeBufferedInputSound(long framesNum);
-    
+AudioStream MakeBufferedInputSound(long endFrame);
+/*!
+\brief Create an shared stream on the input stream.
+\param beginFrame The RT stream first fraems to read.
+\return A pointer to new stream object.
+*/
+AudioStream MakeSharedBufferedInputSound(long beginFrame);
 /*!
 \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
 \return A pointer to new stream object.

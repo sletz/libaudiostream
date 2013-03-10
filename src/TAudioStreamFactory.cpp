@@ -49,6 +49,8 @@ research@grame.fr
 // External API
 /*--------------------------------------------------------------------------*/
 
+TBufferedAudioStream* TAudioStreamFactory::fSharedInput = NULL;
+
 TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
 {
     return new TNullAudioStream(length);
@@ -137,9 +139,21 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
     return new TInputAudioStream();
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeBufferedInputSound(long framesNum)
+TAudioStreamPtr TAudioStreamFactory::MakeBufferedInputSound(long endFrame)
 {
-    return new TBufferedInputAudioStream(framesNum);
+    if (!fSharedInput) {
+        fSharedInput = new TBufferedInputAudioStream(endFrame);
+        return fSharedInput;
+    } else {
+        printf("fSharedInput already allocated...\n");
+        assert(false);
+        return NULL;
+    }
+}
+
+TAudioStreamPtr TAudioStreamFactory::MakeSharedBufferedInputSound(long beginFrame)
+{
+    return new TSharedBufferedAudioStream(beginFrame, fSharedInput->GetMemoryBuffer());
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)

@@ -61,10 +61,10 @@ static bool EndSecond (int curframe, int framesNum, int buffersize)
 long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read)
 {
     assert(fMemoryBuffer);
-
+  
     // Check length
     framesNum = UTools::Min(framesNum, fFramesNum - (fTotalFrames + fCurFrame));
-
+   
     if (EndFirst(fCurFrame, framesNum, fMemoryBuffer->GetSize() / 2)) { // End of first buffer
 
         if (!fReady) {

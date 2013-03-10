@@ -55,8 +55,13 @@ typedef TAudioStreamPtr BinayOp(TAudioStreamPtr s1, TAudioStreamPtr s2);
 \brief A factory for streams.
 */
 
+class TBufferedAudioStream;
+
 class AUDIO_EXPORTS TAudioStreamFactory
 {
+    private:
+    
+        static TBufferedAudioStream* fSharedInput;
 
     public:
 
@@ -66,7 +71,8 @@ class AUDIO_EXPORTS TAudioStreamFactory
         {}
 
         static TAudioStreamPtr MakeInputSound();
-        static TAudioStreamPtr MakeBufferedInputSound(long framesNum);
+        static TAudioStreamPtr MakeBufferedInputSound(long endFrame);
+        static TAudioStreamPtr MakeSharedBufferedInputSound(long beginFrame);
         static TAudioStreamPtr MakeNullSound(long lengthFrame);
         static TAudioStreamPtr MakeReadSound(string name);
         static TAudioStreamPtr MakeRegionSound(string name, long beginFrame, long endFrame);
