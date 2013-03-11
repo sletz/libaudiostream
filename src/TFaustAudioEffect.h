@@ -287,7 +287,8 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			strcpy(fName, name);
 			fHandle = LoadFaustModule(name);
 			if (!fHandle) {
-				 throw -1;
+                printf("Cannot LoadFaustModule %s", name);
+                throw -1;
             }
 			fNew = (newDsp)GetFaustProc(fHandle, "newDsp");
 			fDelete = (deleteDsp)GetFaustProc(fHandle, "deleteDsp");
@@ -300,6 +301,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSampleRate);
 			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
+                printf("DSP instance is not stereo and has %d ins and %d outs \n", fGetNumInputs(fDsp), fGetNumOutputs(fDsp));
 				fDelete(fDsp);
 				UnloadFaustModule(fHandle);
 				throw -2;
@@ -347,7 +349,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         // Global DSP factory table
         static std::map<string, llvm_dsp_factory*> fFactoryTable;
         
-        string getTArget()
+        string getTarget()
         {
             int tmp;
             return (sizeof(&tmp) == 8) ? "x86_64-apple-darwin12.2.1" : "i386-apple-darwin10.6.0";
@@ -372,7 +374,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             // Try filename...
             argv[0] = code.c_str();
          
-            factory = createDSPFactory(argc, argv, "", "", "", "", getTArget(), error_msg, 3);
+            factory = createDSPFactory(argc, argv, "", "", "", "", getTarget(), error_msg, 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -380,7 +382,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             }
    
             // Try DSP code...
-            factory = createDSPFactory(0, NULL, "", "", "in", code, getTArget(), error_msg, 3);
+            factory = createDSPFactory(0, NULL, "", "", "in", code, getTarget(), error_msg, 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -388,7 +390,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             }
             
             // Try bitcode code string...
-            factory = readDSPFactoryFromBitcode(code, "", 3);
+            factory = readDSPFactoryFromBitcode(code, getTarget(), 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -396,7 +398,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             }
      
             // Try bitcode code file...
-            factory = readDSPFactoryFromBitcodeFile(code, "", 3);
+            factory = readDSPFactoryFromBitcodeFile(code, getTarget(), 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -404,7 +406,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             }
        
             // Try IR code string...
-            factory = readDSPFactoryFromIR(code, "", 3);
+            factory = readDSPFactoryFromIR(code, getTarget(), 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -412,7 +414,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             }
       
             // Try IR code file...
-            factory = readDSPFactoryFromIRFile(code, "", 3);
+            factory = readDSPFactoryFromIRFile(code, getTarget(), 3);
             if (!factory) {
                 printf("readDSPFactoryFromIRFile error \n");
                 throw -1;
@@ -421,15 +423,17 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         make_instance:
         
             assert(factory);
-        
-			fDsp = createDSPInstance(factory);
+            
+            fDsp = createDSPInstance(factory);
             if (!fDsp) {
+                printf("DSP instance cannot be created... \n");
                 deleteDSPFactory(factory);
                 throw -2;
             }
             
             fDsp->init(TAudioGlobals::fSampleRate);
 			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
+                printf("DSP instance is not stereo and has %d ins and %d outs \n", fDsp->getNumInputs(), fDsp->getNumOutputs());
                 deleteDSPInstance(fDsp);
                 deleteDSPFactory(factory);
 				throw -3;

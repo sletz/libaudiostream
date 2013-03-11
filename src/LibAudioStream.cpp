@@ -664,7 +664,7 @@ AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (int n) {
-        printf("MakeFaustAudioEffect exception %d \n", n);
+        printf("TModuleFaustAudioEffect exception %d \n", n);
         try {
             return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name));
         } catch (int n) {
@@ -683,14 +683,17 @@ AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (int n) {
-        printf("MakeFaustAudioEffect exception %d \n", n);
-        try {
-            dispatch_sync(dispatch_get_main_queue(), ^{ gDSP = new TCodeFaustAudioEffect(name); });
-            return new LA_SMARTP<TAudioEffectInterface>(gDSP);
-        } catch (int n) {
-            printf("TCodeFaustAudioEffect exception %d \n", n);
-            return 0;
-        }
+        printf("TModuleFaustAudioEffect exception %d \n", n);
+        dispatch_sync(dispatch_get_main_queue(),
+        ^{ 
+            try {
+                gDSP = new TCodeFaustAudioEffect(name); 
+            } catch (int n) {
+                printf("TCodeFaustAudioEffect exception %d \n", n);
+                gDSP = NULL;
+            } 
+        });
+        return (gDSP) ? new LA_SMARTP<TAudioEffectInterface>(gDSP) : 0; 
     }
 }
 #endif

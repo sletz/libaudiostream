@@ -130,7 +130,7 @@ AudioStream test4()
 AudioStream test5()
 {
     printf("------------------------------------\n");
-    printf("Build a input/output through stream \n");
+    printf("Build a input/output thru stream \n");
     printf("------------------------------------\n\n");
     return MakeInputSound();
 }
@@ -138,7 +138,7 @@ AudioStream test5()
 AudioStream test5bis()
 {
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output through stream \n");
+    printf("Build a buffered input/output thru stream \n");
     printf("-----------------------------------------------\n\n");
     return MakeBufferedInputSound(10 * SAMPLE_RATE);
 }
@@ -146,7 +146,7 @@ AudioStream test5bis()
 AudioStream test5ter()
 {
     printf("----------------------------------------------------------------\n");
-    printf("Build seq of a buffered input/output through stream and a region\n");
+    printf("Build seq of a buffered input/output thru stream and a region\n");
     printf("----------------------------------------------------------------\n\n");
     return MakeSeqSound(MakeBufferedInputSound(10 * SAMPLE_RATE), MakeRegionSound(FILENAME1, 200000, 500000), 88200);
 }
@@ -154,7 +154,7 @@ AudioStream test5ter()
 AudioStream test5ter1()
 {
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output through stream   \n");
+    printf("Build a buffered input/output thru stream   \n");
     printf("-----------------------------------------------\n\n");
     return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeSharedBufferedInputSound(SAMPLE_RATE), 10000), MakeBufferedInputSound(20 * SAMPLE_RATE));
 }
@@ -174,7 +174,7 @@ AudioStream test5ter2()
     printControls(faust_effect);
    
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output through stream   \n");
+    printf("Build a buffered input/output thru stream   \n");
     printf("-----------------------------------------------\n\n");
     return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100), 10000), 
         MakeBufferedInputSound(20 * SAMPLE_RATE));
@@ -198,7 +198,7 @@ AudioStream test5ter3()
     list_effect2 = AddAudioEffect(list_effect2, MakeVolAudioEffect(0.1));
    
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output through stream   \n");
+    printf("Build a buffered input/output thru stream   \n");
     printf("-----------------------------------------------\n\n");
     return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE*3), 
         MakeCutSound(MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 0, 5*SAMPLE_RATE), 10000), 
@@ -209,7 +209,7 @@ AudioStream test5ter3()
 AudioStream test6()
 {
     printf("---------------------------------------------------------\n");
-    printf("Build a input/output through and record the output stream\n");
+    printf("Build a input/output thru and record the output stream\n");
     printf("---------------------------------------------------------\n\n");
     // "Wav" format can be read while being written...
     return MakeWriteSound("input.wav", MakeInputSound(), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
