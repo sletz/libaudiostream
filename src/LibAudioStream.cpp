@@ -105,7 +105,10 @@ extern "C"
 	AudioEffectPtr AUDIOAPI MakeMonoPanAudioEffectPtr(float pan);
 	AudioEffectPtr AUDIOAPI MakeStereoPanAudioEffectPtr(float panLeft, float panRight);
 	AudioEffectPtr AUDIOAPI MakePitchShiftAudioEffectPtr(float pitch);
-	AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
+    AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name);
+#ifdef __APPLE__
+    AudioEffectPtr AUDIOAPI MakeDispatchFaustAudioEffectPtr(const char* name);
+#endif
 	AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
 
 	long AUDIOAPI GetControlCountEffectPtr(AudioEffectPtr effect);
@@ -547,7 +550,7 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 		return new TModuleFaustAudioEffect(name);
 	} catch (int n) {
 		printf("TModuleFaustAudioEffect exception %d \n", n);
-		try {
+        try {
             return new TCodeFaustAudioEffect(name);
         } catch (int n) {
             printf("TCodeFaustAudioEffect exception %d \n", n);
@@ -658,18 +661,39 @@ AudioEffectPtr AUDIOAPI MakePitchShiftAudioEffectPtr(float pitch)
 
 AudioEffectPtr AUDIOAPI MakeFaustAudioEffectPtr(const char* name)
 {
-	try {
-		return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
-	} catch (int n) {
-		printf("MakeFaustAudioEffect exception %d \n", n);
-		try {
+    try {
+        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+    } catch (int n) {
+        printf("MakeFaustAudioEffect exception %d \n", n);
+        try {
             return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name));
         } catch (int n) {
             printf("TCodeFaustAudioEffect exception %d \n", n);
             return 0;
         }
-	}
+    }
 }
+
+#ifdef __APPLE__
+#include<dispatch/dispatch.h>
+static TCodeFaustAudioEffect* gDSP = NULL;
+
+AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
+{
+    try {
+        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+    } catch (int n) {
+        printf("MakeFaustAudioEffect exception %d \n", n);
+        try {
+            dispatch_sync(dispatch_get_main_queue(), ^{ gDSP = new TCodeFaustAudioEffect(name); });
+            return new LA_SMARTP<TAudioEffectInterface>(gDSP);
+        } catch (int n) {
+            printf("TCodeFaustAudioEffect exception %d \n", n);
+            return 0;
+        }
+    }
+}
+#endif
 
 AudioEffectPtr AUDIOAPI MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect)
 {

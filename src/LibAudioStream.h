@@ -319,6 +319,7 @@ extern "C"
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
 	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
+    AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name);
 	/*!
 	\brief Create an effect by "wrapping" an externally built effect.
 	\param effect The effect to be wrapped.
