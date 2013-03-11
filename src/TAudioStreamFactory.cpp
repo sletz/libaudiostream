@@ -153,7 +153,13 @@ TAudioStreamPtr TAudioStreamFactory::MakeBufferedInputSound(long endFrame)
 
 TAudioStreamPtr TAudioStreamFactory::MakeSharedBufferedInputSound(long beginFrame)
 {
-    return new TSharedBufferedAudioStream(beginFrame, fSharedInput->GetMemoryBuffer());
+    if (!fSharedInput) {
+        printf("fSharedInput is *not* allocated...\n");
+        assert(false);
+        return NULL;
+    } else {
+        return new TSharedBufferedAudioStream(beginFrame, fSharedInput->GetMemoryBuffer());
+    }
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)

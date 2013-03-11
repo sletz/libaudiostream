@@ -33,7 +33,7 @@ using namespace std;
 // Class TBufferedInputAudioStream
 //---------------------------------
 /*!
-\brief Buffered RT stream
+\brief Buffered input stream
 */
 
 class TBufferedInputAudioStream : public TBufferedAudioStream
@@ -97,6 +97,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             printf("TBufferedInputAudioStream::CutBegin Error\n");
+            assert(false);
             return NULL;
         }
         virtual long Length() 
@@ -106,6 +107,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         virtual TAudioStreamPtr Copy() 
         {
             printf("TBufferedInputAudioStream::Copy Error\n");
+            assert(false);
             return NULL;
         }
 };

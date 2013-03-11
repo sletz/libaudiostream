@@ -48,6 +48,7 @@ research@grame.fr
 #endif
 
 #include <vector>
+#include <map>
 
 #ifndef FAUSTFLOAT
 #define FAUSTFLOAT float
@@ -174,6 +175,15 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 	protected:
 	
 		vector<UIObject*> fUITable;
+        
+        TFaustAudioEffectBase* CopyState(TFaustAudioEffectBase* src)
+        {
+            // Copy current control values
+            for (int i = 0; i < src->GetControlCount(); i++) {
+                SetControlValue(i, src->GetControlValue(i));
+            }
+            return this;
+        }
 
     public:
 
@@ -311,7 +321,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 
         TAudioEffectInterface* Copy()
         {
-            return new TModuleFaustAudioEffect(fName);
+             return (new TModuleFaustAudioEffect(fName))->CopyState(this);
         }
         void Reset()
         {
@@ -332,90 +342,105 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
     private:
 	
 		llvm_dsp* fDsp;
-        llvm_dsp_factory* fFactory;
         string fCode;
+        
+        // Global DSP factory table
+        static std::map<string, llvm_dsp_factory*> fFactoryTable;
+        
+        string getTArget()
+        {
+            int tmp;
+            return (sizeof(&tmp) == 8) ? "x86_64-apple-darwin12.2.1" : "i386-apple-darwin10.6.0";
+        }
 		
     public:
 
         TCodeFaustAudioEffect(const string& code):TFaustAudioEffectBase()
         {
-            char error_msg[256];
-            fCode = code;
-            
-            // Try filename...
             int argc = 1;
             const char* argv[argc];
+            char error_msg[256];
+            llvm_dsp_factory* factory = NULL;
+            fCode = code;
+            
+            if (fFactoryTable.find(code) != fFactoryTable.end()) {
+                printf("DSP factory already created...\n");
+                factory = fFactoryTable[code];
+                goto make_instance;
+            }
+            
+            // Try filename...
             argv[0] = code.c_str();
          
-            fFactory = createDSPFactory(argc, argv, "", "", "", "", "i386-apple-darwin10.6.0", error_msg, 3);
-            if (fFactory) {
+            factory = createDSPFactory(argc, argv, "", "", "", "", getTArget(), error_msg, 3);
+            if (factory) {
                 goto make_instance;
             }  else {
                 printf("createDSPFactory error from DSP file %s", error_msg);
             }
    
             // Try DSP code...
-            fFactory = createDSPFactory(0, NULL, "", "", "in", code, "i386-apple-darwin10.6.0", error_msg, 3);
-            if (fFactory) {
+            factory = createDSPFactory(0, NULL, "", "", "in", code, getTArget(), error_msg, 3);
+            if (factory) {
                 goto make_instance;
             }  else {
                 printf("createDSPFactory error from DSP code %s", error_msg);
             }
             
             // Try bitcode code string...
-            fFactory = readDSPFactoryFromBitcode(code, "", 3);
-            if (fFactory) {
+            factory = readDSPFactoryFromBitcode(code, "", 3);
+            if (factory) {
                 goto make_instance;
             }  else {
                 printf("readDSPFactoryFromBitcode error \n");
             }
      
             // Try bitcode code file...
-            fFactory = readDSPFactoryFromBitcodeFile(code, "", 3);
-            if (fFactory) {
+            factory = readDSPFactoryFromBitcodeFile(code, "", 3);
+            if (factory) {
                 goto make_instance;
             }  else {
                 printf("readDSPFactoryFromBitcodeFile error \n");
             }
        
             // Try IR code string...
-            fFactory = readDSPFactoryFromIR(code, "", 3);
-            if (fFactory) {
+            factory = readDSPFactoryFromIR(code, "", 3);
+            if (factory) {
                 goto make_instance;
             }  else {
                 printf("readDSPFactoryFromIR error \n");
             }
       
             // Try IR code file...
-            fFactory = readDSPFactoryFromIRFile(code, "", 3);
-            if (!fFactory) {
+            factory = readDSPFactoryFromIRFile(code, "", 3);
+            if (!factory) {
                 printf("readDSPFactoryFromIRFile error \n");
                 throw -1;
             } 
                         
         make_instance:
         
-            assert(fFactory);
+            assert(factory);
         
-			fDsp = createDSPInstance(fFactory);
+			fDsp = createDSPInstance(factory);
             if (!fDsp) {
-                deleteDSPFactory(fFactory);
+                deleteDSPFactory(factory);
                 throw -2;
             }
             
             fDsp->init(TAudioGlobals::fSampleRate);
 			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
                 deleteDSPInstance(fDsp);
-                deleteDSPFactory(fFactory);
+                deleteDSPFactory(factory);
 				throw -3;
 			}
             
+            fFactoryTable[code] = factory;
 			fDsp->buildUserInterface(this);
 		}
         virtual ~TCodeFaustAudioEffect()
         {
             deleteDSPInstance(fDsp);
-            deleteDSPFactory(fFactory);
         }
         void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum, long channels)
         {
@@ -424,7 +449,8 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 
         TAudioEffectInterface* Copy()
         {
-            return new TCodeFaustAudioEffect(fCode);
+            // Allocate copy
+            return (new TCodeFaustAudioEffect(fCode))->CopyState(this);
         }
         void Reset()
         {
