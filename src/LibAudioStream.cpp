@@ -122,6 +122,7 @@ extern "C"
 	AUDIOAPI void ResetEffectPtr(AudioEffectPtr effect);
 
 	AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
+    AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
 	
 	AUDIOAPI void DeleteEffectListPtr(AudioEffectListPtr list_effect);
 	AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect);
@@ -245,12 +246,12 @@ AUDIOAPI void ResetEffect(AudioEffect effect);
 
 AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 
-long LibVersion()
-{
-	return 126;
-}
+char gLastLibError[512] = {0};
 
-static char gLastLibError[256] = {0};
+AUDIOAPI long LibVersion()
+{
+	return 1262;
+}
 
 AUDIOAPI const char* GetLastLibError()
 {
@@ -556,12 +557,12 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 {
 	try {
 		return new TModuleFaustAudioEffect(name);
-	} catch (int n) {
-		printf("TModuleFaustAudioEffect exception %d \n", n);
+	} catch (const char* error) {
+	    strncpy(gLastLibError, error, 512);
         try {
             return new TCodeFaustAudioEffect(name);
-        } catch (int n) {
-            printf("TCodeFaustAudioEffect exception %d \n", n);
+        } catch (const char* error) {
+            strncpy(gLastLibError, error, 512);
             return 0;
         }
 	}
@@ -605,6 +606,17 @@ AUDIOAPI void ResetEffect(AudioEffect effect)
 AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels)
 {
 	static_cast<TAudioEffectInterfacePtr>(effect)->Process(input, output, framesNum, channels);
+}
+
+AUDIOAPI const char* GetJsonEffect(AudioEffect effect) 
+{ 
+    TAudioEffectInterface* effect_tmp = static_cast<TAudioEffectInterface*>(effect);
+    TFaustAudioEffectBase* faust_effect;
+    if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
+        return faust_effect->GetJson();
+    } else {
+        return "";
+    }
 }
 
 // Effect management with pointer
@@ -671,12 +683,12 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
-    } catch (int n) {
-        printf("TModuleFaustAudioEffect exception %d \n", n);
+    } catch (const char* error) {
+        strncpy(gLastLibError, error, 512);
         try {
             return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name));
-        } catch (int n) {
-            printf("TCodeFaustAudioEffect exception %d \n", n);
+        } catch (const char* error) {
+            strncpy(gLastLibError, error, 512);
             return 0;
         }
     }
@@ -690,14 +702,14 @@ AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
-    } catch (int n) {
-        printf("TModuleFaustAudioEffect exception %d \n", n);
+    } catch (const char* error) {
+        strncpy(gLastLibError, error, 512);
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
                 gDSP = new TCodeFaustAudioEffect(name); 
-            } catch (int n) {
-                printf("TCodeFaustAudioEffect exception %d \n", n);
+            } catch (const char* error) {
+                strncpy(gLastLibError, error, 512);
                 gDSP = NULL;
             } 
         });
@@ -751,6 +763,17 @@ AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** out
 	static_cast<TAudioEffectInterfacePtr>(*effect)->Process(input, output, framesNum, channels);
 }
 
+AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect) 
+{ 
+    TAudioEffectInterface* effect_tmp = static_cast<TAudioEffectInterface*>(*effect);
+    TFaustAudioEffectBase* faust_effect;
+    if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
+        return faust_effect->GetJson();
+    } else {
+        return "";
+    }
+}
+
 // Open/Close
 
 AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency)
@@ -773,6 +796,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
 	
 	if (thread_num < 1) {
 		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");
+        strncpy(gLastLibError, "OpenAudioPlayer error: thread_num parameter should be at least one !!", 256);
     }
 
     TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);

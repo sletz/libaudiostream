@@ -38,6 +38,8 @@ research@grame.fr
 #include "TCoreAudioRenderer.h"
 #endif
 
+extern char* gLastLibError;
+
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
 	try {
@@ -83,6 +85,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 				return NULL;
 		}
 	} catch (...) {
+        strncpy(gLastLibError, "Renderer allocation error", 512);
 		return NULL;
 	}
 }

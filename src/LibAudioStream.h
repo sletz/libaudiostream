@@ -394,6 +394,8 @@ extern "C"
 	*/
 	void DeleteEffectPtr(AudioEffectPtr effect);
     
+    const char* GetJsonEffect(AudioEffectPtr effect);
+    
     /*@}*/
     
     /**

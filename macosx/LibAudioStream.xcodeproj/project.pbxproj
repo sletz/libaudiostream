@@ -1469,6 +1469,7 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
+					"-lHTTPDFaust",
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -1608,6 +1609,7 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
+					"-lHTTPDFaust",
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",

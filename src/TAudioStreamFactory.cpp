@@ -45,6 +45,8 @@ research@grame.fr
 #include <assert.h>
 #include <stdio.h>
 
+extern char* gLastLibError;
+
 /*--------------------------------------------------------------------------*/
 // External API
 /*--------------------------------------------------------------------------*/
@@ -67,8 +69,8 @@ TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
         } else {
             return stereo_sound;
         }
-    } catch (int n) {
-        printf("MakeReadSound exception %d \n", n);
+    } catch (const char* error) {
+        strncpy(gLastLibError, error, 512);
         return 0;
     }
 }
@@ -85,8 +87,8 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
             } else {
                 return new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length()));
             }
-        } catch (int n) {
-            printf("MakeRegionSound exception %d \n", n);
+        } catch (const char* error) {
+            strncpy(gLastLibError, error, 512);
             return 0;
         }
     } else {

@@ -63,7 +63,9 @@ void TWriteFileAudioStream::Open()
 	
 		// Check file
 		if (!fFile) {
-			throw - 1;
+            char error[512];
+            snprintf(error, 512, "Cannot open filename %s", utf8name);
+			throw error;
         }
 			
 		sf_seek(fFile, 0, SEEK_SET);

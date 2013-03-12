@@ -25,6 +25,7 @@ research@grame.fr
 #include "faust/audio/dsp.h"
 #include "faust/gui/UI.h"
 #include "faust/llvm-dsp.h"
+#include "faust/gui/jsonfaustui.h"
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
@@ -255,6 +256,8 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 		{
 			return (param < long(fUITable.size())) ? fUITable[param]->GetControlValue() : 0.0f;
 		}
+        
+        virtual const char* GetJson() { return ""; }
 };
 
 typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
@@ -287,8 +290,9 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			strcpy(fName, name);
 			fHandle = LoadFaustModule(name);
 			if (!fHandle) {
-                printf("Cannot LoadFaustModule %s", name);
-                throw -1;
+                char error[512];
+                snprintf(error, 512, "Cannot LoadFaustModule %s", name);
+                throw error;
             }
 			fNew = (newDsp)GetFaustProc(fHandle, "newDsp");
 			fDelete = (deleteDsp)GetFaustProc(fHandle, "deleteDsp");
@@ -301,11 +305,12 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			fDsp = fNew();
 			fInit(fDsp, TAudioGlobals::fSampleRate);
 			if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
-                printf("DSP instance is not stereo and has %d ins and %d outs \n", fGetNumInputs(fDsp), fGetNumOutputs(fDsp));
-				fDelete(fDsp);
+                fDelete(fDsp);
 				UnloadFaustModule(fHandle);
-				throw -2;
-			}
+                char error[512];
+                snprintf(error, 512, "DSP instance is not stereo and has %d ins and %d outs \n", fGetNumInputs(fDsp), fGetNumOutputs(fDsp));
+                throw error;
+      		}
 			fBuildUserInterface(fDsp, this);
 		}
         virtual ~TModuleFaustAudioEffect()
@@ -361,7 +366,8 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         {
             int argc = 1;
             const char* argv[argc];
-            char error_msg[256];
+            char error_msg[256] = {0};
+            char error_lib[512] = {0};
             llvm_dsp_factory* factory = NULL;
             fCode = code;
             
@@ -378,7 +384,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("createDSPFactory error from DSP file %s", error_msg);
+                snprintf(error_lib, 512, "createDSPFactory error from DSP file %s", error_msg);
             }
    
             // Try DSP code...
@@ -386,7 +392,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("createDSPFactory error from DSP code %s", error_msg);
+                snprintf(error_lib, 512, "createDSPFactory error from DSP code %s", error_msg);
             }
             
             // Try bitcode code string...
@@ -394,7 +400,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("readDSPFactoryFromBitcode error \n");
+                printf("readDSPFactoryFromBitcode error");
             }
      
             // Try bitcode code file...
@@ -402,7 +408,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("readDSPFactoryFromBitcodeFile error \n");
+                printf("readDSPFactoryFromBitcodeFile error");
             }
        
             // Try IR code string...
@@ -410,14 +416,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("readDSPFactoryFromIR error \n");
+                printf("readDSPFactoryFromIR error");
             }
       
             // Try IR code file...
             factory = readDSPFactoryFromIRFile(code, getTarget(), 3);
             if (!factory) {
-                printf("readDSPFactoryFromIRFile error \n");
-                throw -1;
+                printf("readDSPFactoryFromIR error");
+                throw error_lib;
             } 
                         
         make_instance:
@@ -426,17 +432,17 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             
             fDsp = createDSPInstance(factory);
             if (!fDsp) {
-                printf("DSP instance cannot be created... \n");
+                snprintf(error_lib, 512, "DSP instance cannot be created");
                 deleteDSPFactory(factory);
-                throw -2;
+                throw error_lib;
             }
             
             fDsp->init(TAudioGlobals::fSampleRate);
 			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
-                printf("DSP instance is not stereo and has %d ins and %d outs \n", fDsp->getNumInputs(), fDsp->getNumOutputs());
+                snprintf(error_lib, 512, "DSP instance is not stereo and has %d ins and %d outs \n", fDsp->getNumInputs(), fDsp->getNumOutputs());
                 deleteDSPInstance(fDsp);
                 deleteDSPFactory(factory);
-				throw -3;
+				throw error_lib;
 			}
             
             fFactoryTable[code] = factory;
@@ -463,6 +469,16 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         long Channels()
         {
             return fDsp->getNumInputs();
+        }
+        
+        const char* GetJson()
+        {
+            httpdfaust::jsonfaustui json("", "", 0);
+            fDsp->buildUserInterface(&json);
+            metadataDSPFactory(fFactoryTable[fCode], &json);
+            json.numInput(fDsp->getNumInputs());
+            json.numOutput(fDsp->getNumOutputs());
+            return json.json();
         }
 		
 };

@@ -39,12 +39,15 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 	
     // Check file
     if (!fFile) {
-        throw - 1;
+        char error[512];
+        snprintf(error, 512, "Cannot open filename %s", utf8name);
+        throw error;
     }
 
     if (sf_seek(fFile, beginFrame, SEEK_SET) < 0) {
+        const char* error = sf_strerror(fFile);
         sf_close(fFile);
-        throw - 2;
+        throw error;
     }
 
     fFramesNum = long(fInfo.frames);

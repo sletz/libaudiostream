@@ -413,6 +413,8 @@ void ResetEffect(AudioEffect effect);
 */
 void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels);
 
+const char* GetJsonEffect(AudioEffect effect);
+
 #ifdef __cplusplus
 extern "C"
 {
