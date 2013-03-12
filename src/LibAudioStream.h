@@ -103,6 +103,12 @@ extern "C"
     \return the library version number as a 3 digits long value.
     */
 	long LibVersion();
+    
+    /*!
+    \brief Return a string describing the last error.
+    \return the error.
+    */
+	const char* GetLastLibError();
 	
     /**
      * @defgroup SoundFunctions Sound creation and manipulation functions
@@ -627,7 +633,7 @@ extern "C"
     \param sampleRate The sampling rate. On input, contains the wanted value, on return the really used one.
  	\return An error code.
 	*/
-	int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  
+	long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  
 	/*!
     \brief Close an audio renderer.
     \param renderer The audio renderer to be closed.
