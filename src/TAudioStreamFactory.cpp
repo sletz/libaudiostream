@@ -75,21 +75,21 @@ TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 
 TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFrame, long endFrame)
 {
-	if (beginFrame >= 0 && beginFrame <= endFrame) {
-        try {
+    try {
+        if (beginFrame >= 0 && beginFrame <= endFrame) {
             TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
             // Force stereo mode here...
             TAudioStreamPtr stereo_sound = MakeStereoSound(sound);
- 	        if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
+            if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
                 return new TSampleRateAudioStream(new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length())), double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
             } else {
                 return new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length()));
             }
-        } catch (const char* error) {
-            strncpy(gLastLibError, error, 512);
+        } else {
             return 0;
         }
-    } else {
+    } catch (const char* error) {
+        strncpy(gLastLibError, error, 512);
         return 0;
     }
 }
@@ -141,13 +141,8 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
 
 TAudioStreamPtr TAudioStreamFactory::MakeSharedBufferedInputSound(long beginFrame)
 {
-    if (!TAudioGlobals::fSharedInput) {
-        printf("fSharedInput is *not* allocated...\n");
-        assert(false);
-        return NULL;
-    } else {
-        return new TSharedBufferedAudioStream(beginFrame, TAudioGlobals::fSharedInput->GetMemoryBuffer());
-    }
+    assert(TAudioGlobals::fSharedInput);
+    return new TSharedBufferedAudioStream(beginFrame, TAudioGlobals::fSharedInput->GetMemoryBuffer());
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)
