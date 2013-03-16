@@ -179,7 +179,9 @@ AudioStream test5ter2()
     printf("-----------------------------------------------\n");
     printf("Build a buffered input/output thru stream   \n");
     printf("-----------------------------------------------\n\n");
-    return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100), 10000);
+    //return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 0), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100), 0);
+    //return MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100);
+    return MakeSharedBufferedInputSound(0);
 }
 
 AudioStream test5ter3()

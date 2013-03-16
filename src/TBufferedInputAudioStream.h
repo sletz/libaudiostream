@@ -52,7 +52,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             fChannels = 2;
             
             // Dynamic allocation
-            fMemoryBuffer = new TLocalAudioBuffer<float>(endFrame, fChannels);
+            fMemoryBuffer = new TLocalAudioBuffer<float>(endFrame, fChannels, true);
             fTmpBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
         }
         virtual ~TBufferedInputAudioStream()
