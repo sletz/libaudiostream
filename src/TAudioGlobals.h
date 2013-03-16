@@ -33,6 +33,8 @@ research@grame.fr
 \brief Global state.
 */
 
+class TBufferedAudioStream;
+
 class AUDIO_EXPORTS TAudioGlobals
 {
 
@@ -43,7 +45,6 @@ class AUDIO_EXPORTS TAudioGlobals
 
     public:
 
-        static SHORT_BUFFER fInBuffer;          // Shared buffer for Real-Time stream
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
         static long fChannels;                  // Number of sound channels
@@ -56,6 +57,8 @@ class AUDIO_EXPORTS TAudioGlobals
 
 		static long fInputLatency;				// Suggested input latency (when used with PortAudio)
 		static long fOutputLatency;				// Suggested output latency (when used with PortAudio)
+        
+        static TBufferedAudioStream* fSharedInput;  // Shared real-time input
 
         TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);

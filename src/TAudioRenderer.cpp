@@ -44,7 +44,10 @@ long TAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long
 
 void TAudioRenderer::Run(float* inputBuffer, float* outputBuffer, long frames)
 {
+    // Clean ouput buffer
     UAudioTools::ZeroFloatBlk(outputBuffer, frames, fOutput);
+    
+    // Setup in/out real-time buffers
     TSharedBuffers::SetInBuffer(inputBuffer);
     TSharedBuffers::SetOutBuffer(outputBuffer);
 

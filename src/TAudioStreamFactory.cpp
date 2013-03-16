@@ -51,8 +51,6 @@ extern char* gLastLibError;
 // External API
 /*--------------------------------------------------------------------------*/
 
-TBufferedAudioStream* TAudioStreamFactory::fSharedInput = NULL;
-
 TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
 {
     return new TNullAudioStream(length);
@@ -141,26 +139,14 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
     return new TInputAudioStream();
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeBufferedInputSound(long endFrame)
-{
-    if (!fSharedInput) {
-        fSharedInput = new TBufferedInputAudioStream(endFrame);
-        return fSharedInput;
-    } else {
-        printf("fSharedInput already allocated...\n");
-        assert(false);
-        return NULL;
-    }
-}
-
 TAudioStreamPtr TAudioStreamFactory::MakeSharedBufferedInputSound(long beginFrame)
 {
-    if (!fSharedInput) {
+    if (!TAudioGlobals::fSharedInput) {
         printf("fSharedInput is *not* allocated...\n");
         assert(false);
         return NULL;
     } else {
-        return new TSharedBufferedAudioStream(beginFrame, fSharedInput->GetMemoryBuffer());
+        return new TSharedBufferedAudioStream(beginFrame, TAudioGlobals::fSharedInput->GetMemoryBuffer());
     }
 }
 

@@ -3,6 +3,7 @@
 ;;(in-package :las)
 (libaudiostream-framework)
 
+(LibVersion)
 
 ;;;=======================
 ;;; SoundFiles
@@ -18,11 +19,11 @@
 
 (defparameter soundfile2 "/Users/letz/Music/Sounds/tango.wav")
 ;;(defparameter effect1 "/Volumes/Document1/Developpement/ProjectsCVS/FaustCVS/FaustCVS/faust/examples/moduledir/freeverb.so")
-(defparameter effect1 "/Documents/faust-sf/examples/freeverb.dsp")
-(defparameter effect1 "/Documents/faust-sf/examples/freeverb.bc")
-(defparameter effect1 "process = _,_;")
 
-(defparameter effect1 "process = component(\"effect.lib\").zita_rev1;")
+(defparameter effect1 "/Documents/faust-sf/examples/freeverb.dsp")
+(defparameter effect2 "/Documents/faust-sf/examples/zita_rev1.bc")
+(defparameter effect3 "process = _,_;")
+(defparameter effect4 "process = component(\"effect.lib\").zita_rev1;")
 
 ;;;=======================
 ;;; Multi-channel Player
@@ -61,6 +62,8 @@
 ;;==============================
 
 (StartAudioPlayer player)
+(StopAudioPlayer player)
+
 
 ;; Stream creation using files
 ;;=============================
@@ -131,24 +134,29 @@
 ;;====================================================
 
 (defvar freeverb1 (MakeFaustAudioEffect effect1))
-(defvar freeverb2 (MakeFaustAudioEffect effect1))
-(defvar freeverb3 (MakeFaustAudioEffect effect1))
-(defvar freeverb4 (MakeFaustAudioEffect effect1))
+(defvar freeverb2 (MakeFaustAudioEffect effect2))
+(defvar freeverb3 (MakeFaustAudioEffect effect3))
+(defvar freeverb4 (MakeFaustAudioEffect effect4))
 
 (defvar paramEQ1 (MakeFaustAudioEffect effect2))
 
+(MakeFaustAudioEffect "import(\"music.lib\"); process = vgroup(\"echo-simple\", echo1s);")
+
 ;; Print effect parameters
 
-(GetControlParam freeverb1 0)
-(GetControlParam freeverb1 1)
-(GetControlParam freeverb1 2)
+(GetControlParamEffect freeverb1 0)
+(GetControlParamEffect freeverb1 1)
+(GetControlParamEffect freeverb1 2)
 
 (defun print-params (effect)
   (dotimes (i (GetControlCountEffect effect))
     (multiple-value-bind (name min max init) (GetControlParamEffect effect i)
-      (print (list name min max init)))))
+      (print (list name min max init (GetControlValueEffect effect i))))))
 
 (print-params freeverb1)
+(print-params freeverb2)
+(print-params freeverb3)
+(print-params freeverb4)
 (print-params paramEQ1)
 
 (defvar effect_list1 (MakeAudioEffectList))
@@ -164,22 +172,26 @@
 (setq effect_list4 (AddAudioEffect effect_list4 freeverb4))
 
 
-(setq s8 (MakeTransformSound (MakeReadSound soundfile1) effect_list 100 100))
+(setq s8 (MakeTransformSound (MakeReadSound soundfile1) effect_list1 100 100))
+
+(setq s8 (MakeTransformSound (MakeReadSound soundfile1) (AddAudioEffect  (MakeAudioEffectList) (MakeFaustAudioEffect "/Documents/LibAudioStream-git/lisp/freeverb.dsp")) 100 100))
+
 
 ;; Change effect parameters : parameters are reseted to their default value each time the "transform" stream is reseted, 
 ;; typically when the stream is re-started: changing parameters value can be done "on the fly" when the stream is playing  
 
-(SetControlValue freeverb1 1 0.9)
-(SetControlValue freeverb1 2 0.6)
+(SetControlValueEffect freeverb1 0 0.9)
+(SetControlValueEffect freeverb1 1 0.9)
+(SetControlValueEffect freeverb1 2 0.9)
 
-(SetControlValue freeverb2 1 0.1)
-(SetControlValue freeverb2 2 0.1)
+(SetControlValueEffect freeverb2 1 0.1)
+(SetControlValueEffect freeverb2 2 0.1)
 
-(SetControlValue freeverb3 1 0.9)
-(SetControlValue freeverb3 2 0.6)
+(SetControlValueEffect freeverb3 1 0.9)
+(SetControlValueEffect freeverb3 2 0.6)
 
-(SetControlValue freeverb4 1 0.1)
-(SetControlValue freeverb4 2 0.1)
+(SetControlValueEffect freeverb4 1 0.1)
+(SetControlValueEffect freeverb4 2 0.1)
 
 
 (SetEffectListAudioPlayer player effect_list1 88100 88100)
@@ -268,6 +280,11 @@
 (SetPanChannel player 1 1.0 1.0)  // full left
 (SetPanChannel player 1 0.0 0.0)  // full right
 (SetPanChannel player 1 1.0 0.0)  // center
+(SetPanChannel player 8 1.0 0.0)  // center
+
+(SetPanChannel player 8 1.0 1.0) // full left
+(SetPanChannel player 8 0.0 0.0  // full left
+(SetPanChannel player 8 1.0 1.0)  // center
 
 
 ;; Set audio player volume (0 1)

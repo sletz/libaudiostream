@@ -33,7 +33,7 @@ using namespace std;
 // Class TBufferedInputAudioStream
 //---------------------------------
 /*!
-\brief Buffered input stream
+\brief Buffered input stream (singleton like use)
 */
 
 class TBufferedInputAudioStream : public TBufferedAudioStream
@@ -80,10 +80,13 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         {
             // Read input
             assert(TSharedBuffers::GetInBuffer());
+            /*
+            // Audio thru
             UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
                                              framesNum,
                                              channels);
+            */
                                              
             // Read input and write it to memory
             UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);

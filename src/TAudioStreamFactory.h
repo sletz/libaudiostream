@@ -60,9 +60,7 @@ class TBufferedAudioStream;
 class AUDIO_EXPORTS TAudioStreamFactory
 {
     private:
-    
-        static TBufferedAudioStream* fSharedInput;
-
+ 
     public:
 
         TAudioStreamFactory()
@@ -71,7 +69,6 @@ class AUDIO_EXPORTS TAudioStreamFactory
         {}
 
         static TAudioStreamPtr MakeInputSound();
-        static TAudioStreamPtr MakeBufferedInputSound(long endFrame);
         static TAudioStreamPtr MakeSharedBufferedInputSound(long beginFrame);
         static TAudioStreamPtr MakeNullSound(long lengthFrame);
         static TAudioStreamPtr MakeReadSound(string name);

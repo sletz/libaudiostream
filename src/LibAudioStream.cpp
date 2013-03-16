@@ -28,6 +28,7 @@ research@grame.fr
 #include "TPanAudioEffect.h"
 #include "TFaustAudioEffect.h"
 #include "TWrapperAudioEffect.h"
+#include "TBufferedInputAudioStream.h"
 
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
@@ -88,7 +89,6 @@ extern "C"
 	AUDIOAPI AudioStreamPtr MakeRubberBandSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
     AUDIOAPI AudioStreamPtr MakeInputSoundPtr();
-    AUDIOAPI AudioStreamPtr MakeBufferedInputSoundPtr(long endFrame);
     AUDIOAPI AudioStreamPtr MakeSharedBufferedInputSoundPtr(long beginFrame);
     AUDIOAPI AudioStreamPtr MakeRendererSoundPtr(AudioStreamPtr s);
 
@@ -215,7 +215,6 @@ AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectList effec
 AudioStream AUDIOAPI MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
 AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format);
 AudioStream AUDIOAPI MakeInputSound();
-AudioStream AUDIOAPI MakeBufferedInputSound(long beginFrame, long endFrame);
 AudioStream AUDIOAPI MakeRendererSound(AudioStream s);
 
 AUDIOAPI long GetLengthSound(AudioStream s);
@@ -250,7 +249,7 @@ char gLastLibError[512] = {0};
 
 AUDIOAPI long LibVersion()
 {
-	return 1262;
+	return 1264;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -306,11 +305,6 @@ AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2)
 AudioStream AUDIOAPI MakeInputSound()
 {
     return TAudioStreamFactory::MakeInputSound();
-}
-
-AudioStream AUDIOAPI MakeBufferedInputSound(long endFrame)
-{
-    return TAudioStreamFactory::MakeBufferedInputSound(endFrame);
 }
 
 AudioStream AUDIOAPI MakeSharedBufferedInputSound(long beginFrame)
@@ -436,11 +430,6 @@ AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2)
 AUDIOAPI AudioStreamPtr MakeInputSoundPtr()
 {
     return MakeSoundPtr(TAudioStreamFactory::MakeInputSound());
-}
-
-AUDIOAPI AudioStreamPtr MakeBufferedInputSoundPtr(long endFrame)
-{
-    return MakeSoundPtr(TAudioStreamFactory::MakeBufferedInputSound( endFrame));
 }
 
 AUDIOAPI AudioStreamPtr MakeSharedBufferedInputSoundPtr(long beginFrame)
@@ -956,14 +945,18 @@ AUDIOAPI void AbortChannel(AudioPlayerPtr player, long chan)
 AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
 {
     if (player && player->fMixer && player->fRenderer) {
+        // Reset real-time input
+        TAudioGlobals::fSharedInput->Reset();
+        // Start player
         player->fRenderer->Start();
     }
 }
 
 AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player)
 {
-    if (player && player->fMixer && player->fRenderer)
+    if (player && player->fMixer && player->fRenderer) {
         player->fRenderer->Stop();
+    }
 }
 
 // Params

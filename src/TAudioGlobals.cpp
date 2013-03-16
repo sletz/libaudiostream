@@ -24,6 +24,7 @@ research@grame.fr
 #include "TAudioConstants.h"
 #include "TPanTable.h"
 #include "TRendererAudioStream.h"
+#include "TBufferedInputAudioStream.h"
 #include "TSharedBuffers.h"
 
 #ifndef WIN32
@@ -42,7 +43,6 @@ TCmdManagerPtr la_smartable1::fManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
 long TAudioGlobals::fClientCount = 0;
-SHORT_BUFFER TAudioGlobals::fInBuffer = 0;
 
 long TAudioGlobals::fInput = 0;
 long TAudioGlobals::fOutput = 0;
@@ -58,6 +58,8 @@ long TAudioGlobals::fFileMax = 0;
 
 long TAudioGlobals::fInputLatency = -1;
 long TAudioGlobals::fOutputLatency = -1;
+
+TBufferedAudioStream* TAudioGlobals::fSharedInput = NULL;
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
@@ -122,8 +124,6 @@ void TAudioGlobals::Destroy()
 TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                              long buffer_size, long stream_buffer_size, long rtstream_buffer_size)
 {
-    fInBuffer = new TLocalAudioBuffer<short>(rtstream_buffer_size, inChan);
-    assert(fInBuffer);
     fInput = inChan;
     fOutput = outChan;
     fChannels = channels;
@@ -132,11 +132,14 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     fRTStreamBufferSize = rtstream_buffer_size;
     fSampleRate = sample_rate;
     fDiskError = 0;
+    
+    // Allocate shared real-time input with a given duration
+    fSharedInput = new TBufferedInputAudioStream(sample_rate * 60 * 10);  // 10 mins 
 }
 
 TAudioGlobals::~TAudioGlobals()
 {
-    delete fInBuffer;
+    delete fSharedInput;
 }
 
 void TAudioGlobals::LogError()

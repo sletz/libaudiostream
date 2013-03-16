@@ -28,6 +28,8 @@ research@grame.fr
 #include "UAudioTools.h"
 #include "TPanTable.h"
 #include "TSharedBuffers.h"
+#include "TAudioGlobals.h"
+#include "TBufferedInputAudioStream.h"
 
 /*--------------------------------------------------------------------------*/
 // Internal API
@@ -61,7 +63,10 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 {
     // Init buffer
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
-	
+    
+    // Real-time input
+    TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
+
     // Mix all SoundChannels
 	list<TAudioChannelPtr>::iterator iter = fSoundChannelSeq.begin();
 	while (iter != fSoundChannelSeq.end()) {

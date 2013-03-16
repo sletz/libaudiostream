@@ -135,6 +135,7 @@ AudioStream test5()
     return MakeInputSound();
 }
 
+/*
 AudioStream test5bis()
 {
     printf("-----------------------------------------------\n");
@@ -151,6 +152,7 @@ AudioStream test5ter()
     return MakeSeqSound(MakeBufferedInputSound(10 * SAMPLE_RATE), MakeRegionSound(FILENAME1, 200000, 500000), 88200);
 }
 
+
 AudioStream test5ter1()
 {
     printf("-----------------------------------------------\n");
@@ -158,6 +160,7 @@ AudioStream test5ter1()
     printf("-----------------------------------------------\n\n");
     return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeSharedBufferedInputSound(SAMPLE_RATE), 10000), MakeBufferedInputSound(20 * SAMPLE_RATE));
 }
+*/
 
 AudioStream test5ter2()
 {
@@ -176,8 +179,7 @@ AudioStream test5ter2()
     printf("-----------------------------------------------\n");
     printf("Build a buffered input/output thru stream   \n");
     printf("-----------------------------------------------\n\n");
-    return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100), 10000), 
-        MakeBufferedInputSound(20 * SAMPLE_RATE));
+    return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100), 10000);
 }
 
 AudioStream test5ter3()
@@ -200,10 +202,8 @@ AudioStream test5ter3()
     printf("-----------------------------------------------\n");
     printf("Build a buffered input/output thru stream   \n");
     printf("-----------------------------------------------\n\n");
-    return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE*3), 
-        MakeCutSound(MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 0, 5*SAMPLE_RATE), 10000), 
-        //MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 10000), 
-        MakeTransformSound(MakeBufferedInputSound(20*SAMPLE_RATE), list_effect2, SAMPLE_RATE, SAMPLE_RATE));
+    return MakeSeqSound(MakeNullSound(SAMPLE_RATE*3), 
+                        MakeCutSound(MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 0, 5*SAMPLE_RATE), 10000);
 }
 
 AudioStream test6()
@@ -435,6 +435,10 @@ void TestPlay(AudioPlayerPtr player)
     char c;
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
+    
+    // To reset real-time input
+    StopAudioPlayer(player);
+    StartAudioPlayer(player);
 	
     while ((c = getchar()) && (c != 'n')) {
 
@@ -596,9 +600,10 @@ int main(int argc, char* argv[])
     //ExecTest(player, test5bis());
     //ExecTest(player, test5ter());
     ExecTest(player, test5ter1());
-    // ExecTest(player, test5ter2());
-   */
-   ExecTest(player, test5ter3());
+    */
+
+    ExecTest(player, test5ter2());
+    ExecTest(player, test5ter3());
 	
     
     /*
