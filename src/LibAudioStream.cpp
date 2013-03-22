@@ -249,7 +249,7 @@ char gLastLibError[512] = {0};
 
 AUDIOAPI long LibVersion()
 {
-	return 1264;
+	return 1265;
 }
 
 AUDIOAPI const char* GetLastLibError()

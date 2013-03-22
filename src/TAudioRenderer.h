@@ -146,22 +146,22 @@ class AUDIO_EXPORTS TAudioRenderer
         long GetInputs() { return fInput; }
         long GetOutputs() { return fOutput; }
 
-        uint64_t ConvertSample2Ms(uint64_t sample)
+        double ConvertSample2Ms(double sample)
         {
-            return uint64_t((double(sample) * 1000.0) / fSampleRate);
+            return (double(sample) * 1000.0) / double(fSampleRate);
         }
-        uint64_t ConvertMs2Sample(uint64_t ms)
+        double ConvertMs2Sample(double ms)
         {
-            return uint64_t((double(ms) * double(fSampleRate)) / 1000.0);
+            return (double(ms) * double(fSampleRate)) / 1000.0;
         }
         
-        uint64_t ConvertSample2Usec(uint64_t sample)
+        double ConvertSample2Usec(double sample)
         {
-            return uint64_t((double(sample) * 1000000.0) / fSampleRate);
+            return (double(sample) * 1000000.0) / double(fSampleRate);
         }
-        uint64_t ConvertUsec2Sample(uint64_t usec)
+        double ConvertUsec2Sample(double usec)
         {
-            return uint64_t((double(usec) * double(fSampleRate)) / 1000000.0);
+            return (double(usec) * double(fSampleRate)) / 1000000.0;
         }
 
 };

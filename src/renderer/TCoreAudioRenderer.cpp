@@ -37,21 +37,6 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define DEBUG 1
 
-double TCoreAudioRenderer::fTimeRatio = 0.0;
-
-void TCoreAudioRenderer::InitTime()
-{
-    if (fTimeRatio == 0.0) {
-        mach_timebase_info_data_t info;
-        mach_timebase_info(&info);
-        fTimeRatio = ((float)info.numer / info.denom) / 1000;
-    }
-}
-
-double TCoreAudioRenderer::GetMicroSeconds()
-{
-    return double(mach_absolute_time()) * fTimeRatio;
-}
 
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
@@ -158,6 +143,14 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
     
     // Keep time
     fCallbackTime = *inTimeStamp;
+    
+    fCallbackHostTime = AudioGetCurrentHostTime();
+    
+    // Take time stamp of first call to Process 
+    if (fAnchorHostTime == 0) {
+        fAnchorFrameTime = fCallbackTime.mSampleTime;
+        fAnchorHostTime = fCallbackHostTime;
+    }
   
     memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
     Run((float*)fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
@@ -1122,10 +1115,14 @@ long TCoreAudioRenderer::Close()
 
 long TCoreAudioRenderer::Start()
 {
-  if (AudioOutputUnitStart(fAUHAL) != noErr) {
+    if (AudioOutputUnitStart(fAUHAL) != noErr) {
         printf("Error while opening device : device open error \n");
         return OPEN_ERR;
     } else {
+    
+        // Init timing here
+        fAnchorFrameTime = 0;
+        fAnchorHostTime = 0;
     
         // Waiting for Render callback to be called (= driver has started)
         fState = false;
@@ -1164,9 +1161,9 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    uint64_t cur_time = mach_absolute_time();
-    info->fCurFrame = fCallbackTime.mSampleTime + ConvertUsec2Sample((double(cur_time - fCallbackTime.mHostTime) * fTimeRatio));
-    info->fCurUsec = uint64_t(double(cur_time) * fTimeRatio);
+    UInt64 cur_host_time = AudioGetCurrentHostTime();
+    info->fCurFrame = uint64_t(fCallbackTime.mSampleTime + ConvertUsec2Sample(AudioConvertHostTimeToNanos(cur_host_time - fCallbackHostTime)/1000.) - fAnchorFrameTime);
+    info->fCurUsec = (AudioConvertHostTimeToNanos(cur_host_time) - AudioConvertHostTimeToNanos(fAnchorHostTime))/1000.;
 }
 
 long TCoreAudioRenderer::GetDeviceCount()

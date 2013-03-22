@@ -52,7 +52,9 @@ class TCoreAudioRenderer : public TAudioRenderer
         bool fState;
         AudioTimeStamp fCallbackTime;
         
-        static double fTimeRatio;
+        Float64 fAnchorFrameTime;
+        UInt64 fAnchorHostTime;
+        UInt64 fCallbackHostTime;
 		
 		OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
         int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
@@ -94,10 +96,10 @@ class TCoreAudioRenderer : public TAudioRenderer
 
     public:
 
-        TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),fAUHAL(0),fPluginID(0),fState(false)
-        {
-            InitTime();
-        }
+        TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),
+            fAUHAL(0),fPluginID(0),fState(false),
+            fAnchorFrameTime(0.), fAnchorHostTime(0), fCallbackHostTime(0)
+        {}
         virtual ~TCoreAudioRenderer()
         {}
 

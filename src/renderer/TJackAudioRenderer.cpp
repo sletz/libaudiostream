@@ -34,6 +34,12 @@ int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 {
 	int i;
     TJackAudioRendererPtr renderer = (TJackAudioRendererPtr)arg;
+    
+    // Take time stamp of first call to Process 
+    if (fAnchorFrameTime == 0) {
+        fAnchorFrameTime =  jack_frame_time(fClient);
+        fAnchorUsecTime = jack_get_time();
+    }
 
     // Copy input and interleaving
 	for (i = 0; i < renderer->fInput; i++) {
@@ -63,6 +69,8 @@ TJackAudioRenderer::TJackAudioRenderer(): TAudioRenderer()
     fOutputBuffer = new float[TAudioGlobals::fBufferSize * TAudioGlobals::fOutput];
 	fInput_ports = (jack_port_t**)calloc(fInput, sizeof(jack_port_t*));
 	fOutput_ports = (jack_port_t**)calloc(fOutput, sizeof(jack_port_t*));
+    fAnchorFrameTime = 0;
+    fAnchorUsecTime = 0;
 }
 
 TJackAudioRenderer::~TJackAudioRenderer()
@@ -154,6 +162,10 @@ long TJackAudioRenderer::Close()
 long TJackAudioRenderer::Start()
 {
     const char** ports = NULL;
+    
+    // Init timing here
+    fAnchorFrameTime = 0;
+    fAnchorUsecTime = 0;
 
     if (jack_activate(fClient)) {
         printf("Cannot activate client");
@@ -205,8 +217,8 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    info->fCurFrame = jack_frame_time(fClient);
-    info->fCurUsec = jack_get_time(fClient);
+    info->fCurFrame = jack_frame_time(fClient) - fAnchorFrameTime;
+    info->fCurUsec = jack_get_time() - fAnchorUsecTime;
 }
 
 long TJackAudioRenderer::GetDeviceCount()
