@@ -64,11 +64,13 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             //printf("Memory read framesNum = %d framePos = %d\n", framesNum, framePos);
+            return framesNum;
         }
         
         long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             //printf("Memory write framesNum = %d framePos = %d\n", framesNum, framePos);
+            return framesNum;
         }
 
         virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)

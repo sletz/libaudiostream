@@ -23,6 +23,7 @@ research@grame.fr
 #define __TAudioBuffer__
 
 #include <assert.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/mman.h>
 
@@ -53,10 +54,10 @@ research@grame.fr
             return true;
         }
     }
-    #define CHECK_MUNLOCK(ptr, size) (VirtualUnlock((ptr), (size)) != 0)
+    #define MUNLOCK(ptr, size) VirtualUnlock((ptr), (size))
 #else
     #define CHECK_MLOCK(ptr, size) (mlock((ptr), (size)) == 0)
-    #define CHECK_MUNLOCK(ptr, size) (munlock((ptr), (size)) == 0)
+    #define MUNLOCK(ptr, size) munlock((ptr), (size))
 #endif
 
 //--------------------
@@ -84,7 +85,9 @@ class TAudioBuffer
                 for (int i = 0; i < fFrames * fChannels; i+= 4096 / sizeof(float)) {
                     fBuffer[i] = 0.f;
                 }
-                CHECK_MLOCK(fBuffer, fFrames * fChannels * sizeof(float));
+                if (!CHECK_MLOCK(fBuffer, fFrames * fChannels * sizeof(float))) {
+                    printf("Cannot lock TAudioBuffer !\n");
+                }
             }
         }
       
@@ -94,7 +97,7 @@ class TAudioBuffer
         {}
         virtual ~TAudioBuffer()
         {
-            CHECK_MUNLOCK(fBuffer, fFrames * fChannels * sizeof(float));
+            MUNLOCK(fBuffer, fFrames * fChannels * sizeof(float));
         }
 
         long GetSize()

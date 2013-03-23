@@ -59,6 +59,7 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         virtual ~TFileAudioStream()
         {}
 
+        /*
         virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
@@ -67,6 +68,7 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         {
             return 0;
         }
+        */
 
         virtual void Reset() = 0;
 		virtual TAudioStreamPtr CutBegin(long frames) = 0;

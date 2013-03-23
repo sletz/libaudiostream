@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2002-2007
+Copyright ï¿½ Grame 2002-2007
 
 This library is free software; you can redistribute it and modify it under 
 the terms of the GNU Library General Public License as published by the 
@@ -246,13 +246,13 @@ void TPortAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
     info->fCurFrame = long(Pa_StreamTime(fStream));
-    info->fCurMs = ConvertSample2Ms(info->fCurFrame);
+    info->fCurUsec = ConvertSample2Ms(info->fCurFrame);
 #if defined(WIN32) && defined(IMUTUS)
     info->fOutputLatencyFrame = Pa_GetOutputLatency(fStream);
-    info->fOutputLatencyMs = ConvertSample2Ms(info->fOutputLatencyFrame);
+    info->fOutputLatencyUsec = ConvertSample2Usec(info->fOutputLatencyFrame);
 #else
 	info->fOutputLatencyFrame = 0;
-    info->fOutputLatencyMs = 0;
+    info->fOutputLatencyUsec = 0;
 #endif
 }
 
