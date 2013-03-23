@@ -30,10 +30,16 @@ research@grame.fr
 	#define snprintf _snprintf
 #endif
 
+
 int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 {
-	int i;
     TJackAudioRendererPtr renderer = (TJackAudioRendererPtr)arg;
+    return renderer->ProcessAux(nframes);
+}
+
+int TJackAudioRenderer::ProcessAux(jack_nframes_t nframes)
+{
+	int i;
     
     // Take time stamp of first call to Process 
     if (fAnchorFrameTime == 0) {
@@ -42,20 +48,20 @@ int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
     }
 
     // Copy input and interleaving
-	for (i = 0; i < renderer->fInput; i++) {
-		float* input = (float*)jack_port_get_buffer(renderer->fInput_ports[i], nframes);
+	for (i = 0; i < fInput; i++) {
+		float* input = (float*)jack_port_get_buffer(fInput_ports[i], nframes);
 		for (jack_nframes_t j = 0; j < nframes; j++) {
-			renderer->fInputBuffer[renderer->fInput * j + i] = input[j];
+			fInputBuffer[fInput * j + i] = input[j];
 		}
     }
 	
-    renderer->Run(renderer->fInputBuffer, renderer->fOutputBuffer, nframes);
+    Run(fInputBuffer, fOutputBuffer, nframes);
 
     // Copy output and de-interleaving
-	for (i = 0; i < renderer->fOutput; i++) {
-		float* output = (float*)jack_port_get_buffer(renderer->fOutput_ports[i], nframes);
+	for (i = 0; i < fOutput; i++) {
+		float* output = (float*)jack_port_get_buffer(fOutput_ports[i], nframes);
 		for (jack_nframes_t j = 0; j < nframes; j++) {
-			 output[j] = renderer->fOutputBuffer[renderer->fOutput * j + i];
+			 output[j] = fOutputBuffer[fOutput * j + i];
 		}
     }
 

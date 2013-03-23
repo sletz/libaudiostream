@@ -61,8 +61,8 @@ class TJackAudioRenderer : public TAudioRenderer
         jack_nframes_t fAnchorFrameTime;    // Time stamp of the begining of rendering
         jack_time_t fAnchorUsecTime;        // Time stamp of the begining of rendering
 
-
         static int Process(jack_nframes_t nframes, void *arg);
+        int ProcessAux(jack_nframes_t nframes);
 
     public:
 
