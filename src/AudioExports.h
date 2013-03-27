@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2006-2007
+Copyright (C) Grame 2006-2007
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -44,9 +44,7 @@ research@grame.fr
 #endif
 
 #else
-
 #define AUDIO_EXPORTS
-
 #endif
 
 #endif

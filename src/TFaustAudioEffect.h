@@ -263,7 +263,7 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
 
 /*!
-\brief Faust effect.
+\brief Faust static effect (loaded from a DLL).
 */
 
 class TModuleFaustAudioEffect : public TFaustAudioEffectBase
@@ -342,6 +342,10 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 };
 
 typedef TModuleFaustAudioEffect * TModuleFaustAudioEffectPtr;
+
+/*!
+\brief Faust dynamic effect generated form source using libfaust + LLVM.
+*/
 
 class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 {

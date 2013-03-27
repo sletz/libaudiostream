@@ -592,6 +592,7 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     return noErr;
 
 error:
+    printf("Cannot create aggregate device : modify your audio setup so that default audio input and output devices can be aggregated\n");
     DestroyAggregateDevice();
     return -1;
 }
