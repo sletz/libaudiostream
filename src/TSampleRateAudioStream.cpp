@@ -68,7 +68,7 @@ TSampleRateAudioStream::~TSampleRateAudioStream()
 
 TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
 {
-    return new TSampleRateAudioStream(fStream->CutBegin(frames * fRatio), fRatio);
+    return new TSampleRateAudioStream(fStream->CutBegin(frames / fRatio), fRatio);
 }
 
 long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
