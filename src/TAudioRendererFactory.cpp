@@ -20,6 +20,8 @@ research@grame.fr
 
 */
 
+#include <cstddef>
+#include <cstring>
 #include "TAudioRendererFactory.h"
 
 #ifdef __JACK__

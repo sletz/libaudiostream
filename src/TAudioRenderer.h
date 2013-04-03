@@ -26,6 +26,7 @@ research@grame.fr
 #include "TAudioClient.h"
 #include "AudioExports.h"
 #include <list>
+#include <stdint.h>
 
 using namespace std;
 

@@ -23,6 +23,7 @@ research@grame.fr
 #ifndef __TAudioChannel__
 #define __TAudioChannel__
 
+#include <unistd.h>
 #include "TFadeAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TAudioEffect.h"

@@ -14,12 +14,13 @@ OBJ_JACK = $(patsubst %.cpp, %.o, $(CPPSRC_JACK)) $(patsubst %.c, %.o, $(CSRC))
 
 #CXXFLAG = -Wall -I../src/atomic -I../src/renderer -I../src -D__JACK__ -D__PORTAUDIO__
 #CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__ -D__PORTAUDIOV19__
-CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__
+# CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__
+CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__ -std=gnu++11  -fPIC -march=native
+CFLAGS = -fPIC
 
 TARGET = libaudiostream.a
 
 $(TARGET) : $(OBJ_PORTAUDIO_V18)
-	
 	ar -ru $(TARGET) $(OBJ_PORTAUDIO_V18) 
 	ranlib  $(TARGET)
 

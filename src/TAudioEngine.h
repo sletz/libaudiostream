@@ -23,6 +23,7 @@ research@grame.fr
 #ifndef __TAudioEngine__
 #define __TAudioEngine__
 
+#include <stdint.h>
 #include "TAudioRenderer.h"
 #include "TAudioMixer.h"
 

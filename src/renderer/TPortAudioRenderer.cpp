@@ -20,6 +20,7 @@ research@grame.fr
 
 */
 
+#include <cstring>
 #include "TPortAudioRenderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"

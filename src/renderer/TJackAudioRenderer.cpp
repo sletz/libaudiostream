@@ -19,7 +19,9 @@ Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
 research@grame.fr
 
 */
+#include <cstring>
 
+#include "TAudioEffect.h"
 #include "TJackAudioRenderer.h"
 #include "TAudioGlobals.h"
 #include "TSharedBuffers.h"
@@ -29,7 +31,6 @@ research@grame.fr
 	#define vsnprintf _vsnprintf
 	#define snprintf _snprintf
 #endif
-
 
 int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 {
