@@ -177,11 +177,12 @@ AudioStream test5ter2()
     printControls(faust_effect);
    
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output thru stream   \n");
+    printf("Build a buffered input/output thru stream      \n");
     printf("-----------------------------------------------\n\n");
-    //return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 0), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100), 0);
+    return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 0, 0), 0);
+    //return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeSharedBufferedInputSound(0), 0);
     //return MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100);
-    return MakeSharedBufferedInputSound(0);
+    //return MakeSharedBufferedInputSound(0);
 }
 
 AudioStream test5ter3()
@@ -202,10 +203,10 @@ AudioStream test5ter3()
     list_effect2 = AddAudioEffect(list_effect2, MakeVolAudioEffect(0.1));
    
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output thru stream   \n");
+    printf("Build a buffered input/output thru stream      \n");
     printf("-----------------------------------------------\n\n");
     return MakeSeqSound(MakeNullSound(SAMPLE_RATE*3), 
-                        MakeCutSound(MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 0, 5*SAMPLE_RATE), 10000);
+                        MakeCutSound(MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 0, 2*SAMPLE_RATE), 10000);
 }
 
 AudioStream test6()
@@ -439,23 +440,32 @@ void TestPlay(AudioPlayerPtr player)
     AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
     
     // To reset real-time input
-    StopAudioPlayer(player);
-    StartAudioPlayer(player);
+    //StopAudioPlayer(player);
+    //StartAudioPlayer(player);
 	
     while ((c = getchar()) && (c != 'n')) {
 
         switch (c) {
 
             case 'b':
+                StopAudioPlayer(player);
+                
                 StartChannel(player, 1);
-				break;
+                StartAudioPlayer(player);
+            break;
 
             case 'p':
+                StopAudioPlayer(player);
+               
                 ContChannel(player, 1);
+                StartAudioPlayer(player);
                 break;
 
             case 's':
                 StopChannel(player, 1);
+                
+                StopAudioPlayer(player);
+                StartAudioPlayer(player);
                 break;
 
             case '+':
@@ -565,7 +575,7 @@ int main(int argc, char* argv[])
          return -1;
     } 
     
-    StartAudioPlayer(player);
+    //StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");

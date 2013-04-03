@@ -1116,21 +1116,22 @@ long TCoreAudioRenderer::Close()
 
 long TCoreAudioRenderer::Start()
 {
+    // Init timing here
+    fAnchorFrameTime = 0;
+    fAnchorHostTime = 0;
+        
     if (AudioOutputUnitStart(fAUHAL) != noErr) {
         printf("Error while opening device : device open error \n");
         return OPEN_ERR;
     } else {
     
-        // Init timing here
-        fAnchorFrameTime = 0;
-        fAnchorHostTime = 0;
-    
+        /*
         // Waiting for Render callback to be called (= driver has started)
         fState = false;
         int count = 0;
         
         while (!fState && count++ < WAIT_COUNTER) {
-            usleep(100000);
+            usleep(50000);
             printf("TCoreAudioRenderer::Start : wait count = %d\n", count);
         }
 
@@ -1140,6 +1141,8 @@ long TCoreAudioRenderer::Start()
         } else {
             return OPEN_ERR;
         }
+        */
+        return NO_ERR;
 	}
 }
 
