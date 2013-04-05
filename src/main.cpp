@@ -179,7 +179,7 @@ AudioStream test5ter2()
     printf("-----------------------------------------------\n");
     printf("Build a buffered input/output thru stream      \n");
     printf("-----------------------------------------------\n\n");
-    return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 0, 0), 0);
+    return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeTransformSound(MakeSharedInputSound(), list_effect, 0, 0), 0);
     //return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeSharedBufferedInputSound(0), 0);
     //return MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100);
     //return MakeSharedBufferedInputSound(0);
@@ -198,15 +198,24 @@ AudioStream test5ter3()
     SetControlValueEffect(faust_effect, 2, 0.9);
     
     printControls(faust_effect);
-    
-    AudioEffectList list_effect2 = MakeAudioEffectList();
-    list_effect2 = AddAudioEffect(list_effect2, MakeVolAudioEffect(0.1));
    
     printf("-----------------------------------------------\n");
     printf("Build a buffered input/output thru stream      \n");
     printf("-----------------------------------------------\n\n");
-    return MakeSeqSound(MakeNullSound(SAMPLE_RATE*3), 
-                        MakeCutSound(MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect1, SAMPLE_RATE, SAMPLE_RATE), 0, 2*SAMPLE_RATE), 10000);
+    
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeTransformSound(MakeSharedInputSound(), list_effect1, 0, 0), SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+    
+    /*
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 2SAMPLE_RATE, 5*SAMPLE_RATE), list_effect1, 0, 0), 0);
+                        
+    */
+    /*
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+    */
+ 
 }
 
 AudioStream test6()
@@ -614,7 +623,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test5ter1());
     */
 
-    ExecTest(player, test5ter2());
+    //ExecTest(player, test5ter2());
     ExecTest(player, test5ter3());
 	
     

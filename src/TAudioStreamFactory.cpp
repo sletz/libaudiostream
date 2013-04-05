@@ -139,10 +139,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
     return new TInputAudioStream();
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeSharedBufferedInputSound(long beginFrame)
+TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
 {
     assert(TAudioGlobals::fSharedInput);
-    return new TSharedBufferedAudioStream(beginFrame, TAudioGlobals::fSharedInput->GetMemoryBuffer());
+    return new TSharedBufferedAudioStream(0, TAudioGlobals::fSharedInput->GetMemoryBuffer());
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)

@@ -212,10 +212,9 @@ extern "C"
     
     /*!
     \brief Create a shared stream on the input stream.
-    \param beginFrame The input stream first frame to read.
     \return A pointer to new stream object.
     */
-    AudioStreamPtr MakeSharedBufferedInputSoundPtr(long beginFrame);
+    AudioStreamPtr MakeSharedInputSoundPtr();
     
     /*!
     \brief Create a renderer "wrapper" on a stream, to be used for direct access to the stream content.

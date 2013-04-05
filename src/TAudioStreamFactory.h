@@ -69,7 +69,7 @@ class AUDIO_EXPORTS TAudioStreamFactory
         {}
 
         static TAudioStreamPtr MakeInputSound();
-        static TAudioStreamPtr MakeSharedBufferedInputSound(long beginFrame);
+        static TAudioStreamPtr MakeSharedInputSound();
         static TAudioStreamPtr MakeNullSound(long lengthFrame);
         static TAudioStreamPtr MakeReadSound(string name);
         static TAudioStreamPtr MakeRegionSound(string name, long beginFrame, long endFrame);

@@ -163,7 +163,7 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
             fMemoryBuffer = shared_buffer;
             // Start from fBeginFrame
             fCurFrame = fBeginFrame;
-            fFramesNum = fMemoryBuffer->GetSize();
+            fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
         }
         virtual ~TSharedBufferedAudioStream()
         {}

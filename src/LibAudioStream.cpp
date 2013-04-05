@@ -89,7 +89,7 @@ extern "C"
 	AUDIOAPI AudioStreamPtr MakeRubberBandSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
     AUDIOAPI AudioStreamPtr MakeInputSoundPtr();
-    AUDIOAPI AudioStreamPtr MakeSharedBufferedInputSoundPtr(long beginFrame);
+    AUDIOAPI AudioStreamPtr MakeSharedInputSoundPtr();
     AUDIOAPI AudioStreamPtr MakeRendererSoundPtr(AudioStreamPtr s);
 
     AUDIOAPI long GetLengthSoundPtr(AudioStreamPtr s);
@@ -307,9 +307,9 @@ AudioStream AUDIOAPI MakeInputSound()
     return TAudioStreamFactory::MakeInputSound();
 }
 
-AudioStream AUDIOAPI MakeSharedBufferedInputSound(long beginFrame)
+AudioStream AUDIOAPI MakeSharedInputSound()
 {
-    return TAudioStreamFactory::MakeSharedBufferedInputSound(beginFrame);
+    return TAudioStreamFactory::MakeSharedInputSound();
 }
 
 AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
@@ -432,9 +432,9 @@ AUDIOAPI AudioStreamPtr MakeInputSoundPtr()
     return MakeSoundPtr(TAudioStreamFactory::MakeInputSound());
 }
 
-AUDIOAPI AudioStreamPtr MakeSharedBufferedInputSoundPtr(long beginFrame)
+AUDIOAPI AudioStreamPtr MakeSharedInputSoundPtr()
 {
-    return MakeSoundPtr(TAudioStreamFactory::MakeSharedBufferedInputSound(beginFrame));
+    return MakeSoundPtr(TAudioStreamFactory::MakeSharedInputSound());
 }
 
 AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
