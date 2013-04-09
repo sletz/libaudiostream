@@ -624,7 +624,7 @@ int main(int argc, char* argv[])
     */
 
     //ExecTest(player, test5ter2());
-    ExecTest(player, test5ter3());
+    //ExecTest(player, test5ter3());
 	
     
     /*
@@ -638,7 +638,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test11bis());
     */
     
-    ExecTest(player, test11ter());
+    ///ExecTest(player, test11ter());
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());

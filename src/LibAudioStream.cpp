@@ -177,7 +177,7 @@ extern "C"
 	AUDIOAPI AudioRendererPtr MakeAudioRenderer(long renderer);
 	AUDIOAPI void DeleteAudioRenderer(AudioRendererPtr renderer);
 	
-	long AUDIOAPI OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+	AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 	AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer); 
 	AUDIOAPI void StartAudioRenderer(AudioRendererPtr renderer); 
     AUDIOAPI void StartAudioRenderer(AudioRendererPtr renderer); 
@@ -202,20 +202,20 @@ extern "C"
 #endif
 
 // Build sound (using smartptr)
-AudioStream AUDIOAPI MakeNullSound(long lengthFrame);
-AudioStream AUDIOAPI MakeReadSound(char* name);
-AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame);
-AudioStream AUDIOAPI MakeStereoSound(AudioStream sound);
-AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
-AudioStream AUDIOAPI MakeLoopSound(AudioStream sound, long n);
-AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
-AudioStream AUDIOAPI MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
-AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2);
-AudioStream AUDIOAPI MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
-AudioStream AUDIOAPI MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
-AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format);
-AudioStream AUDIOAPI MakeInputSound();
-AudioStream AUDIOAPI MakeRendererSound(AudioStream s);
+AUDIOAPI AudioStream MakeNullSound(long lengthFrame);
+AUDIOAPI AudioStream MakeReadSound(char* name);
+AUDIOAPI AudioStream MakeRegionSound(char* name, long beginFrame, long endFrame);
+AUDIOAPI AudioStream MakeStereoSound(AudioStream sound);
+AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
+AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n);
+AUDIOAPI AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
+AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
+AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
+AUDIOAPI AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
+AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
+AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
+AUDIOAPI AudioStream MakeInputSound();
+AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
 
 AUDIOAPI long GetLengthSound(AudioStream s);
 AUDIOAPI long GetChannelsSound(AudioStream s);
@@ -223,16 +223,16 @@ AUDIOAPI long ReadSound(AudioStream stream, float* buffer, long buffer_size, lon
 AUDIOAPI void ResetSound(AudioStream sound);
 
 // Effect management (using smartptr)
-AudioEffectList AUDIOAPI MakeAudioEffectList();
-AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-AudioEffectList AUDIOAPI ClearAudioEffectList(AudioEffectList list_effect);
+AUDIOAPI AudioEffectList MakeAudioEffectList();
+AUDIOAPI AudioEffectList AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
+AUDIOAPI AudioEffectList RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
+AUDIOAPI AudioEffectList ClearAudioEffectList(AudioEffectList list_effect);
 
-AudioEffect AUDIOAPI MakeVolAudioEffect(float vol);
-AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan);
-AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight);
-AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch);
-AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name);
+AUDIOAPI AudioEffect MakeVolAudioEffect(float vol);
+AUDIOAPI AudioEffect MakeMonoPanAudioEffect(float pan);
+AUDIOAPI AudioEffect MakeStereoPanAudioEffect(float panLeft, float panRight);
+AUDIOAPI AudioEffect MakePitchShiftAudioEffect(float pitch);
+AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name);
 
 AUDIOAPI long GetControlCountEffect(AudioEffect effect);
 AUDIOAPI void GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
@@ -249,7 +249,7 @@ char gLastLibError[512] = {0};
 
 AUDIOAPI long LibVersion()
 {
-	return 1266;
+	return 1267;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -257,67 +257,67 @@ AUDIOAPI const char* GetLastLibError()
     return gLastLibError;
 }
 
-AudioStream AUDIOAPI MakeNullSound(long lengthFrame)
+AUDIOAPI AudioStream MakeNullSound(long lengthFrame)
 {
 	return TAudioStreamFactory::MakeNullSound(lengthFrame);
 }
 
-AudioStream AUDIOAPI MakeReadSound(char* name)
+AUDIOAPI AudioStream MakeReadSound(char* name)
 {
     return TAudioStreamFactory::MakeReadSound(name);
 }
 
-AudioStream AUDIOAPI MakeRegionSound(char* name, long beginFrame, long endFrame)
+AUDIOAPI AudioStream MakeRegionSound(char* name, long beginFrame, long endFrame)
 {
     return TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 }
 
-AudioStream AUDIOAPI MakeStereoSound(AudioStream sound)
+AUDIOAPI AudioStream MakeStereoSound(AudioStream sound)
 {
 	return TAudioStreamFactory::MakeStereoSound(sound);
 }
 
-AudioStream AUDIOAPI MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut)
+AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut)
 {
     return TAudioStreamFactory::MakeFadeSound(static_cast<TAudioStreamPtr>(sound), fadeIn, fadeOut);
 }
 
-AudioStream AUDIOAPI MakeLoopSound(AudioStream sound, long n)
+AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n)
 {
     return TAudioStreamFactory::MakeLoopSound(static_cast<TAudioStreamPtr>(sound), n);
 }
 
-AudioStream AUDIOAPI MakeCutSound(AudioStream sound, long beginFrame, long endFrame)
+AUDIOAPI AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame)
 {
     return TAudioStreamFactory::MakeCutSound(static_cast<TAudioStreamPtr>(sound), beginFrame, endFrame);
 }
 
-AudioStream AUDIOAPI MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade)
+AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade)
 {
     return TAudioStreamFactory::MakeSeqSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioStreamPtr>(s2), crossFade);
 }
 
-AudioStream AUDIOAPI MakeMixSound(AudioStream s1, AudioStream s2)
+AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2)
 {
     return TAudioStreamFactory::MakeMixSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioStreamPtr>(s2));
 }
 
-AudioStream AUDIOAPI MakeInputSound()
+AUDIOAPI AudioStream MakeInputSound()
 {
     return TAudioStreamFactory::MakeInputSound();
 }
 
-AudioStream AUDIOAPI MakeSharedInputSound()
+AUDIOAPI AudioStream MakeSharedInputSound()
 {
     return TAudioStreamFactory::MakeSharedInputSound();
 }
 
-AudioStream AUDIOAPI MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
+AUDIOAPI AudioStream MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
 {
 	return TAudioStreamFactory::MakeTransformSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioEffectListPtr>(list_effect), fadeIn, fadeOut);
 }
 
-AudioStream AUDIOAPI MakePitchSchiftTimeStretchSound(AudioStream s1, double* pitch_shift, double* time_strech)
+AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pitch_shift, double* time_strech)
 {
 	return TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
     /*
@@ -329,12 +329,12 @@ AudioStream AUDIOAPI MakePitchSchiftTimeStretchSound(AudioStream s1, double* pit
     */
 }
 
-AudioStream AUDIOAPI MakeWriteSound(char* name, AudioStream s, long format)
+AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format)
 {
     return TAudioStreamFactory::MakeWriteSound(name, static_cast<TAudioStreamPtr>(s), format);
 }
 
-AudioStream AUDIOAPI MakeRendererSound(AudioStream s)
+AUDIOAPI AudioStream MakeRendererSound(AudioStream s)
 {
     return TAudioStreamFactory::MakeDTRenderer(static_cast<TAudioStreamPtr>(s));
 }
@@ -687,7 +687,7 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name)
 #include<dispatch/dispatch.h>
 static TCodeFaustAudioEffect* gDSP = NULL;
 
-AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
+AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
@@ -1033,7 +1033,7 @@ AUDIOAPI void DeleteAudioRenderer(AudioRendererPtr obj)
 	delete renderer;
 }
 
-long AUDIOAPI OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	return static_cast<TAudioRendererPtr>(renderer)->Open(inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
 }
