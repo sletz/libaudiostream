@@ -45,7 +45,7 @@ research@grame.fr
 #include <assert.h>
 #include <stdio.h>
 
-extern char* gLastLibError;
+char gLastLibError[512];
 
 /*--------------------------------------------------------------------------*/
 // External API

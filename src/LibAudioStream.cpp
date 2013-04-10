@@ -86,7 +86,7 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade);
     AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-	AUDIOAPI AudioStreamPtr MakeRubberBandSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
+    AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
     AUDIOAPI AudioStreamPtr MakeInputSoundPtr();
     AUDIOAPI AudioStreamPtr MakeSharedInputSoundPtr();
@@ -245,7 +245,7 @@ AUDIOAPI void ResetEffect(AudioEffect effect);
 
 AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 
-char gLastLibError[512] = {0};
+extern char* gLastLibError;
 
 AUDIOAPI long LibVersion()
 {
@@ -444,9 +444,9 @@ AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectL
 		: 0;
 }
 
-AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStream sound, double* pitch_shift, double* time_strech)
+AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech)
 {
-    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(sound), pitch_shift, time_strech)) : 0;
+    return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(*sound), pitch_shift, time_strech)) : 0;
     /*
 #ifdef SOUND_TOUCH
 	return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeSoundTouchSound(static_cast<TAudioStreamPtr>(s), pitch_shift, time_strech)) : 0;
