@@ -86,6 +86,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
                 return new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length()));
             }
         } else {
+            snprintf(gLastLibError, sizeof(gLastLibError) - 1, "beginFrame < O or endFrame > sound length");
             return 0;
         }
     } catch (const char* error) {
@@ -113,6 +114,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
 {
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
 		if (beginFrame > sound->Length()) {
+            snprintf(gLastLibError, sizeof(gLastLibError) - 1, "beginFrame < O or endFrame > sound length");
 			return 0;
 		} else {
 			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
