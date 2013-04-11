@@ -20,6 +20,7 @@ research@grame.fr
 */
 
 #include "TReadFileAudioStream.h"
+#include "TLASException.h"
 #include "TCmdManager.h"
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
@@ -40,14 +41,14 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     // Check file
     if (!fFile) {
         char error[512];
-        snprintf(error, 512, "Cannot open filename %s", utf8name);
-        throw error;
+        snprintf(error, 512, "Cannot open filename \'%s\'\n", utf8name);
+        throw TLASException(error);
     }
 
     if (sf_seek(fFile, beginFrame, SEEK_SET) < 0) {
         const char* error = sf_strerror(fFile);
         sf_close(fFile);
-        throw error;
+        throw TLASException(error);
     }
 
     fFramesNum = long(fInfo.frames);

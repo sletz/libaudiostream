@@ -128,6 +128,10 @@
 		4BB3FEDC0B39BAD400CA1607 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BB3FEDD0B39BAD400CA1607 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
 		4BB3FEDE0B39BAD400CA1607 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; };
+		4BB9AE8817170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
+		4BB9AE8917170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
+		4BB9AE8A17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
+		4BB9AE8B17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BCB2B100D12ACE500AB3F6D /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BCB2B110D12ACE500AB3F6D /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 		4BCB2B120D12ACE500AB3F6D /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
@@ -432,6 +436,7 @@
 		4BB3A97D16FDDBE3000F728C /* StringTools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringTools.cpp; path = ../src/StringTools.cpp; sourceTree = "<group>"; };
 		4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = la_smartpointer.cpp; path = ../src/la_smartpointer.cpp; sourceTree = SOURCE_ROOT; };
 		4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = la_smartpointer.h; path = ../src/la_smartpointer.h; sourceTree = SOURCE_ROOT; };
+		4BB9AE8717170DB000A56C3A /* TLASException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLASException.h; path = ../src/TLASException.h; sourceTree = SOURCE_ROOT; };
 		4BC6136207F4990300ACC53C /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../src/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136407F4990B00ACC53C /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../src/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136907F499E200ACC53C /* TAudioStreamFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioStreamFactory.h; path = ../src/TAudioStreamFactory.h; sourceTree = SOURCE_ROOT; };
@@ -579,6 +584,7 @@
 				4B7BD8DC097D0EF30029D6DC /* CoreAudio.framework */,
 				4B7BD8D8097D0ED00029D6DC /* AudioUnit.framework */,
 				F5F4A853032657D901053105 /* TAudioConstants.h */,
+				4BB9AE8717170DB000A56C3A /* TLASException.h */,
 				4BA0DEDE087FE455003B1CB3 /* main.cpp */,
 				F5EDBD21032F870801053105 /* Channel */,
 				F5D82C3D032DEAA101053105 /* Effect */,
@@ -836,6 +842,7 @@
 				4B16AD2A165548EB00FBB3EA /* TSeqAudioStream.h in Headers */,
 				4BE4D18A165671C700495934 /* TRubberBandAudioStream.h in Headers */,
 				4B66D56816ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
+				4BB9AE8817170DB000A56C3A /* TLASException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,6 +901,7 @@
 				4B9A47D51648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 				4BE4D190165671C700495934 /* TRubberBandAudioStream.h in Headers */,
 				4B66D56B16ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
+				4BB9AE8B17170DB000A56C3A /* TLASException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,6 +967,7 @@
 				4B9A47D31648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 				4BE4D18E165671C700495934 /* TRubberBandAudioStream.h in Headers */,
 				4B66D56A16ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
+				4BB9AE8A17170DB000A56C3A /* TLASException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1020,6 +1029,7 @@
 				4B9A47D11648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 				4BE4D18C165671C700495934 /* TRubberBandAudioStream.h in Headers */,
 				4B66D56916ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
+				4BB9AE8917170DB000A56C3A /* TLASException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,6 +29,7 @@ research@grame.fr
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
+#include "TLASException.h"
 
 #ifdef WIN32
 
@@ -292,7 +293,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			if (!fHandle) {
                 char error[512];
                 snprintf(error, 512, "Cannot LoadFaustModule %s", name);
-                throw error;
+                throw TLASException(error);
             }
 			fNew = (newDsp)GetFaustProc(fHandle, "newDsp");
 			fDelete = (deleteDsp)GetFaustProc(fHandle, "deleteDsp");
@@ -309,7 +310,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 				UnloadFaustModule(fHandle);
                 char error[512];
                 snprintf(error, 512, "DSP instance is not stereo and has %d ins and %d outs \n", fGetNumInputs(fDsp), fGetNumOutputs(fDsp));
-                throw error;
+                throw TLASException(error);
       		}
 			fBuildUserInterface(fDsp, this);
 		}
@@ -427,7 +428,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             factory = readDSPFactoryFromIRFile(code, getTarget(), 3);
             if (!factory) {
                 printf("readDSPFactoryFromIR error");
-                throw error_lib;
+                throw TLASException(error_lib);
             } 
                         
         make_instance:
@@ -438,7 +439,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (!fDsp) {
                 snprintf(error_lib, 512, "DSP instance cannot be created");
                 deleteDSPFactory(factory);
-                throw error_lib;
+                throw TLASException(error_lib);
             }
             
             fDsp->init(TAudioGlobals::fSampleRate);
@@ -446,7 +447,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 snprintf(error_lib, 512, "DSP instance is not stereo and has %d ins and %d outs \n", fDsp->getNumInputs(), fDsp->getNumOutputs());
                 deleteDSPInstance(fDsp);
                 deleteDSPFactory(factory);
-				throw error_lib;
+				throw TLASException(error_lib);
 			}
             
             fFactoryTable[code] = factory;

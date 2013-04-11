@@ -75,21 +75,25 @@ static int GetMaximumFiles(long* filecount)
 }
 
 #else
-static int SetMaximumFiles(long filecount)
+static bool SetMaximumFiles(long filecount)
 {
     struct rlimit lim;
     lim.rlim_cur = lim.rlim_max = (rlim_t)filecount;
-    return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
+    if (setrlimit(RLIMIT_NOFILE, &lim) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-static int GetMaximumFiles(long* filecount) 
+static bool GetMaximumFiles(long* filecount) 
 {
     struct rlimit lim;
     if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
         *filecount = (long)lim.rlim_max;
-        return 0;
+        return true;
     } else {
-		return errno;
+        return false;
 	}
 }
 #endif

@@ -21,6 +21,7 @@ research@grame.fr
 */
 
 #include "TWriteFileAudioStream.h"
+#include "TLASException.h"
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 #include "UTools.h"
@@ -64,8 +65,8 @@ void TWriteFileAudioStream::Open()
 		// Check file
 		if (!fFile) {
             char error[512];
-            snprintf(error, 512, "Cannot open filename %s", utf8name);
-			throw error;
+            snprintf(error, 512, "Cannot open filename \'%s\'\n", utf8name);
+            throw TLASException(error);
         }
 			
 		sf_seek(fFile, 0, SEEK_SET);

@@ -20,7 +20,6 @@ research@grame.fr
 
 */
 
-
 #include "LibAudioStream++.h"
 #include <sndfile.h>
 #include <stdio.h>
@@ -53,6 +52,8 @@ research@grame.fr
 #define SAMPLE_RATE 44100
 
 AudioEffect faust_effect = 0;
+
+AudioPlayerPtr player;
 
 static void TestCallback(void* context)
 {
@@ -208,7 +209,7 @@ AudioStream test5ter3()
     
     /*
     return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
-                        MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 2SAMPLE_RATE, 5*SAMPLE_RATE), list_effect1, 0, 0), 0);
+                        MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), list_effect1, 0, 0), 0);
                         
     */
     /*
@@ -216,6 +217,33 @@ AudioStream test5ter3()
                         MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
     */
  
+}
+
+AudioStream test5ter4()
+{
+    
+    AudioEffectList list_effect1 = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+    list_effect1 = AddAudioEffect(list_effect1, faust_effect);
+ 	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+   
+    printf("-----------------------------------------------\n");
+    printf("Build a buffered input/output thru stream      \n");
+    printf("-----------------------------------------------\n\n");
+    
+    // Remove part of the input stream from the beginning
+    RendererInfo info;
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
+    GetAudioRendererInfo(renderer, &info);
+ 
+    return MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 0, info.fCurFrame), list_effect1, 0, 0);
 }
 
 AudioStream test6()
@@ -569,7 +597,7 @@ int main(int argc, char* argv[])
 	int res = LibVersion();
     
 	// Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
+    player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
     // If failure opens PortAudio version
     if (!player) {
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
@@ -625,6 +653,8 @@ int main(int argc, char* argv[])
 
     //ExecTest(player, test5ter2());
     //ExecTest(player, test5ter3());
+    
+    ExecTest(player, test5ter4());
 	
     
     /*

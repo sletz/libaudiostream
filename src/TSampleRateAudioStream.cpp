@@ -21,6 +21,7 @@ research@grame.fr
 
 #include "TAudioGlobals.h"
 #include "TSampleRateAudioStream.h"
+#include "TLASException.h"
 #include "UTools.h"
 
 TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ratio, unsigned int quality)
@@ -52,7 +53,7 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
 	fResampler = src_new(quality, stream->Channels(), &error);
     fRatio = ratio;
     if (error != 0) {
-        throw src_strerror(error);
+        throw TLASException(src_strerror(error));
     }
      
     fReadPos = 0;
