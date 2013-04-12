@@ -57,6 +57,8 @@ class AUDIO_EXPORTS TAudioGlobals
 		static long fInputLatency;				// Suggested input latency (when used with PortAudio)
 		static long fOutputLatency;				// Suggested output latency (when used with PortAudio)
         
+        static char* fLastLibError;
+        
         static TBufferedAudioStream* fSharedInput;  // Shared real-time input
 
         TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,

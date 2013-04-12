@@ -23,6 +23,7 @@ research@grame.fr
 #include <cstddef>
 #include <cstring>
 #include "TAudioRendererFactory.h"
+#include "TAudioGlobals.h"
 
 #ifdef __JACK__
 #include "TJackAudioRenderer.h"
@@ -39,8 +40,6 @@ research@grame.fr
 #ifdef __COREAUDIO__
 #include "TCoreAudioRenderer.h"
 #endif
-
-extern char* gLastLibError;
 
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
@@ -87,7 +86,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 				return NULL;
 		}
 	} catch (...) {
-        strncpy(gLastLibError, "Renderer allocation error\n", 512);
+        strncpy(TAudioGlobals::fLastLibError, "Renderer allocation error\n", 512);
 		return NULL;
 	}
 }

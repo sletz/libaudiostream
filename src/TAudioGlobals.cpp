@@ -59,6 +59,7 @@ long TAudioGlobals::fInputLatency = -1;
 long TAudioGlobals::fOutputLatency = -1;
 
 TBufferedAudioStream* TAudioGlobals::fSharedInput = NULL;
+char* TAudioGlobals::fLastLibError = NULL;
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
@@ -137,11 +138,13 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     
     // Allocate shared real-time input
     fSharedInput = new TBufferedInputAudioStream(rtstream_duration); 
+    fLastLibError = new char[512];
 }
 
 TAudioGlobals::~TAudioGlobals()
 {
     delete fSharedInput;
+    delete [] fLastLibError;
 }
 
 void TAudioGlobals::LogError()

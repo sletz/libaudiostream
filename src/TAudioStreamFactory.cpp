@@ -46,8 +46,6 @@ research@grame.fr
 #include <assert.h>
 #include <stdio.h>
 
-char* gLastLibError = new char[512];
-
 /*--------------------------------------------------------------------------*/
 // External API
 /*--------------------------------------------------------------------------*/
@@ -58,7 +56,7 @@ char* gLastLibError = new char[512];
 #define CATCH_EXCEPTION                                     \
     } catch (TLASException& e) {                            \
         printf("LAS error = %s", e.Message().c_str());    \
-        strncpy(gLastLibError, e.Message().c_str(), 512);   \
+        strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);   \
         return 0;                                           \
     }                                                       \
     
@@ -94,7 +92,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
             return new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         }
     } else {
-        snprintf(gLastLibError, sizeof(gLastLibError) - 1, "beginFrame < O or endFrame > sound length");
+        snprintf(TAudioGlobals::fLastLibError, sizeof(TAudioGlobals::fLastLibError) - 1, "beginFrame < O or endFrame > sound length");
         return 0;
     }
     CATCH_EXCEPTION
@@ -126,7 +124,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
     TRY_CALL
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
 		if (beginFrame > sound->Length()) {
-            snprintf(gLastLibError, sizeof(gLastLibError) - 1, "beginFrame < O or endFrame > sound length");
+            snprintf(TAudioGlobals::fLastLibError, sizeof(TAudioGlobals::fLastLibError) - 1, "beginFrame < O or endFrame > sound length");
 			return 0;
 		} else {
 			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
