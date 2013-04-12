@@ -135,9 +135,8 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     fSampleRate = sample_rate;
     fDiskError = 0;
     
-    // Allocate shared real-time input with a given duration
-    //fSharedInput = new TBufferedInputAudioStream(rtstream_duration); 
-    fSharedInput = new TBufferedInputAudioStream(sample_rate * 60 * 10);  // 10 mins 
+    // Allocate shared real-time input
+    fSharedInput = new TBufferedInputAudioStream(rtstream_duration); 
 }
 
 TAudioGlobals::~TAudioGlobals()

@@ -216,7 +216,6 @@ AudioStream test5ter3()
     return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
                         MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
     */
- 
 }
 
 AudioStream test5ter4()
@@ -410,7 +409,7 @@ AudioStream test11ter()
     
     printControls(faust_effect);
   
-  return MakeMixSound(
+    return MakeMixSound(
         MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16), 
         MakeSeqSound(MakeNullSound(3 * 44100), MakeReadSound("reverb_input.wav"), 100));
 }

@@ -292,7 +292,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			fHandle = LoadFaustModule(name);
 			if (!fHandle) {
                 char error[512];
-                snprintf(error, 512, "Cannot LoadFaustModule %s", name);
+                snprintf(error, 512, "Cannot LoadFaustModule %s\n", name);
                 throw TLASException(error);
             }
 			fNew = (newDsp)GetFaustProc(fHandle, "newDsp");
@@ -309,7 +309,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
                 fDelete(fDsp);
 				UnloadFaustModule(fHandle);
                 char error[512];
-                snprintf(error, 512, "DSP instance is not stereo and has %d ins and %d outs \n", fGetNumInputs(fDsp), fGetNumOutputs(fDsp));
+                snprintf(error, 512, "DSP instance is not stereo and has %d ins and %d outs\n", fGetNumInputs(fDsp), fGetNumOutputs(fDsp));
                 throw TLASException(error);
       		}
 			fBuildUserInterface(fDsp, this);
@@ -437,14 +437,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             
             fDsp = createDSPInstance(factory);
             if (!fDsp) {
-                snprintf(error_lib, 512, "DSP instance cannot be created");
+                snprintf(error_lib, 512, "DSP instance cannot be created\n");
                 deleteDSPFactory(factory);
                 throw TLASException(error_lib);
             }
             
             fDsp->init(TAudioGlobals::fSampleRate);
 			if (fDsp->getNumInputs() != 2 || fDsp->getNumOutputs() != 2) { // Temporary
-                snprintf(error_lib, 512, "DSP instance is not stereo and has %d ins and %d outs \n", fDsp->getNumInputs(), fDsp->getNumOutputs());
+                snprintf(error_lib, 512, "DSP instance is not stereo and has %d ins and %d outs\n", fDsp->getNumInputs(), fDsp->getNumOutputs());
                 deleteDSPInstance(fDsp);
                 deleteDSPFactory(factory);
 				throw TLASException(error_lib);
