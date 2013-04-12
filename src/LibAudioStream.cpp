@@ -249,7 +249,7 @@ extern char* gLastLibError;
 
 AUDIOAPI long LibVersion()
 {
-	return 1271;
+	return 1272;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -691,14 +691,14 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
-    } catch (const char* error) {
-        strncpy(gLastLibError, error, 512);
+    } catch (TLASException& e) {
+        strncpy(gLastLibError, e.Message().c_str(), 512);
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
                 gDSP = new TCodeFaustAudioEffect(name); 
-            } catch (const char* error) {
-                strncpy(gLastLibError, error, 512);
+            } catch (TLASException& e) {
+                strncpy(gLastLibError, e.Message().c_str(), 512);
                 gDSP = NULL;
             } 
         });
