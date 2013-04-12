@@ -51,7 +51,6 @@ class AUDIO_EXPORTS TAudioGlobals
         static long fSampleRate;                // Sampling Rate
         static long fBufferSize;                // I/O Buffer size
         static long fStreamBufferSize;          // Stream Buffer size
-        static long fRTStreamBufferSize;        // Real-Time Stream Buffer size
         static long fDiskError;                 // Counter of disk streaming errors
 		static long fFileMax;
 

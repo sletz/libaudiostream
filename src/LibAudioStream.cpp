@@ -135,7 +135,7 @@ extern "C"
                                             long sample_rate, 
                                             long buffer_size, 
                                             long stream_buffer_size, 
-                                            long rtstream_buffer_size, 
+                                            long rtstream_duration, 
                                             long renderer,
                                             long thread_num);
 	AUDIOAPI AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer);	
@@ -193,7 +193,7 @@ extern "C"
 									long sample_rate,
 									long buffer_size, 
 									long stream_buffer_size, 
-									long rtstream_buffer_size,
+									long rtstream_duration,
 									long thread_num);
 	AUDIOAPI void AudioGlobalsDestroy();
 
@@ -249,7 +249,7 @@ extern char* gLastLibError;
 
 AUDIOAPI long LibVersion()
 {
-	return 1269;
+	return 127;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -546,12 +546,12 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
 {
 	try {
 		return new TModuleFaustAudioEffect(name);
-	} catch (const char* error) {
-	    strncpy(gLastLibError, error, 512);
+	} catch (TLASException& e) {
+	    strncpy(gLastLibError, e.Message().c_str(), 512);
         try {
             return new TCodeFaustAudioEffect(name);
-        } catch (const char* error) {
-            strncpy(gLastLibError, error, 512);
+        } catch (TLASException& e) {
+            strncpy(gLastLibError, e.Message().c_str(), 512);
             return 0;
         }
 	}
@@ -672,12 +672,12 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
-    } catch (const char* error) {
-        strncpy(gLastLibError, error, 512);
+    } catch (TLASException& e) {
+	    strncpy(gLastLibError, e.Message().c_str(), 512);
         try {
             return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name));
-        } catch (const char* error) {
-            strncpy(gLastLibError, error, 512);
+        } catch (TLASException& e) {
+            strncpy(gLastLibError, e.Message().c_str(), 512);
             return 0;
         }
     }
@@ -777,7 +777,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
                                         long sample_rate, 
                                         long buffer_size, 
                                         long stream_buffer_size, 
-                                        long rtstream_buffer_size, 
+                                        long rtstream_duration, 
                                         long renderer,
                                         long thread_num)
 {
@@ -788,7 +788,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
         strncpy(gLastLibError, "OpenAudioPlayer error: thread_num parameter should be at least one !!", 256);
     }
 
-    TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);
+    TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
 
     AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
     if (!player) {
@@ -1074,10 +1074,10 @@ AUDIOAPI void AudioGlobalsInit(long inChan,
 								long sample_rate,
 								long buffer_size, 
 								long stream_buffer_size, 
-								long rtstream_buffer_size,
+								long rtstream_duration,
 								long thread_num)
 {
-	TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_buffer_size, thread_num);
+	TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
 }
 
 AUDIOAPI void AudioGlobalsDestroy()

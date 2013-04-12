@@ -50,7 +50,6 @@ long TAudioGlobals::fChannels = 0;
 
 long TAudioGlobals::fBufferSize = 0;
 long TAudioGlobals::fStreamBufferSize = 0;
-long TAudioGlobals::fRTStreamBufferSize = 0;
 
 long TAudioGlobals::fSampleRate = 0;
 long TAudioGlobals::fDiskError = 0;
@@ -126,18 +125,18 @@ void TAudioGlobals::Destroy()
 }
 
 TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
-                             long buffer_size, long stream_buffer_size, long rtstream_buffer_size)
+                             long buffer_size, long stream_buffer_size, long rtstream_duration)
 {
     fInput = inChan;
     fOutput = outChan;
     fChannels = channels;
     fBufferSize = buffer_size;
     fStreamBufferSize = stream_buffer_size;
-    fRTStreamBufferSize = rtstream_buffer_size;
     fSampleRate = sample_rate;
     fDiskError = 0;
     
     // Allocate shared real-time input with a given duration
+    //fSharedInput = new TBufferedInputAudioStream(rtstream_duration); 
     fSharedInput = new TBufferedInputAudioStream(sample_rate * 60 * 10);  // 10 mins 
 }
 

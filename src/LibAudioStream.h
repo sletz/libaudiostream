@@ -412,7 +412,7 @@ extern "C"
     \param sample_rate The sampling rate.
     \param buffer_size The audio player internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
-    \param rtstream_buffer_size The input stream buffer size.
+    \param rtstream_duration The input stream duration in frames.
     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer, kJackRenderer or kCoreAudioRenderer.
     \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
     \return A pointer to new audio player object.
@@ -423,7 +423,7 @@ extern "C"
                                    long sample_rate,
                                    long buffer_size,
                                    long stream_buffer_size,
-                                   long rtstream_buffer_size,
+                                   long rtstream_duration,
                                    long renderer,
                                    long thread_num);
 								   
@@ -673,7 +673,7 @@ extern "C"
     \param sample_rate The sampling rate.
     \param buffer_size The audio player internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
-    \param rtstream_buffer_size The input stream buffer size.
+    \param rtstream_duration The input stream duration in frames.
     \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
     */
 	void AudioGlobalsInit(long inChan, 
@@ -682,7 +682,7 @@ extern "C"
 						long sample_rate,
 						long buffer_size, 
 						long stream_buffer_size, 
-						long rtstream_buffer_size,
+						long rtstream_duration,
 						long thread_num);
 	/*!
     \brief Destroy the global audio context.

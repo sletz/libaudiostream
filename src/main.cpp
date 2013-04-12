@@ -235,10 +235,10 @@ AudioStream test5ter4()
     printControls(faust_effect);
    
     printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output thru stream      \n");
+    printf("Takes current portion of the input stream      \n");
     printf("-----------------------------------------------\n\n");
     
-    // Remove part of the input stream from the beginning
+    // Remove portion of the input stream from the beginning
     RendererInfo info;
     AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
     GetAudioRendererInfo(renderer, &info);
@@ -597,14 +597,14 @@ int main(int argc, char* argv[])
 	int res = LibVersion();
     
 	// Try to open Jack version
-    player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
+    player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, SAMPLE_RATE * 60 * 10, kJackRenderer, 1);
     // If failure opens PortAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kPortAudioRenderer, 1);
     }
     // If failure opens CoreAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kCoreAudioRenderer, 1);
     }
     
     if (!player) {
