@@ -1111,6 +1111,7 @@ long TCoreAudioRenderer::Close()
     }
 	AudioUnitUninitialize(fAUHAL);
     CloseComponent(fAUHAL);
+    DestroyAggregateDevice();
     return NO_ERR;
 }
 

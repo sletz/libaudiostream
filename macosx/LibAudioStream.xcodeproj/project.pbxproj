@@ -132,6 +132,7 @@
 		4BB9AE8917170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BB9AE8A17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BB9AE8B17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
+		4BBBF3C1172A7E7D0019A47E /* tester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBBF3C0172A7E7D0019A47E /* tester.cpp */; };
 		4BCB2B100D12ACE500AB3F6D /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BCB2B110D12ACE500AB3F6D /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 		4BCB2B120D12ACE500AB3F6D /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
@@ -437,6 +438,8 @@
 		4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = la_smartpointer.cpp; path = ../src/la_smartpointer.cpp; sourceTree = SOURCE_ROOT; };
 		4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = la_smartpointer.h; path = ../src/la_smartpointer.h; sourceTree = SOURCE_ROOT; };
 		4BB9AE8717170DB000A56C3A /* TLASException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TLASException.h; path = ../src/TLASException.h; sourceTree = SOURCE_ROOT; };
+		4BBBF3B0172A7E210019A47E /* LAStester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LAStester; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BBBF3C0172A7E7D0019A47E /* tester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tester.cpp; path = ../src/tester.cpp; sourceTree = SOURCE_ROOT; };
 		4BC6136207F4990300ACC53C /* lffifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lffifo.c; path = ../src/atomic/lffifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136407F4990B00ACC53C /* lflifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lflifo.c; path = ../src/atomic/lflifo.c; sourceTree = SOURCE_ROOT; };
 		4BC6136907F499E200ACC53C /* TAudioStreamFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioStreamFactory.h; path = ../src/TAudioStreamFactory.h; sourceTree = SOURCE_ROOT; };
@@ -518,6 +521,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4BBBF3AA172A7E210019A47E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BCB2B610D12ACE500AB3F6D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -586,6 +596,7 @@
 				F5F4A853032657D901053105 /* TAudioConstants.h */,
 				4BB9AE8717170DB000A56C3A /* TLASException.h */,
 				4BA0DEDE087FE455003B1CB3 /* main.cpp */,
+				4BBBF3C0172A7E7D0019A47E /* tester.cpp */,
 				F5EDBD21032F870801053105 /* Channel */,
 				F5D82C3D032DEAA101053105 /* Effect */,
 				F5C1FF5F0328B7D201053105 /* Factory */,
@@ -613,6 +624,7 @@
 				4BCB2B6C0D12ACE500AB3F6D /* LibAudioStream.framework */,
 				4BCB2BE60D12B71300AB3F6D /* testPlayer */,
 				4B0060721112ED0300B6A836 /* LibAudioStream.framework */,
+				4BBBF3B0172A7E210019A47E /* LAStester */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -846,6 +858,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4BBBF3A7172A7E210019A47E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BCB2B0F0D12ACE500AB3F6D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1063,6 +1082,25 @@
 			productReference = 4B0060721112ED0300B6A836 /* LibAudioStream.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		4BBBF3A6172A7E210019A47E /* LAStester */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BBBF3AC172A7E210019A47E /* Build configuration list for PBXNativeTarget "LAStester" */;
+			buildPhases = (
+				4BBBF3A7172A7E210019A47E /* Headers */,
+				4BBBF3A8172A7E210019A47E /* Sources */,
+				4BBBF3AA172A7E210019A47E /* Frameworks */,
+				4BBBF3AB172A7E210019A47E /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LAStester;
+			productInstallPath = /usr/local/bin;
+			productName = testLibrary;
+			productReference = 4BBBF3B0172A7E210019A47E /* LAStester */;
+			productType = "com.apple.product-type.tool";
+		};
 		4BCB2B0E0D12ACE500AB3F6D /* LibAudioStream PortAudio Intel */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4BCB2B680D12ACE500AB3F6D /* Build configuration list for PBXNativeTarget "LibAudioStream PortAudio Intel" */;
@@ -1189,6 +1227,7 @@
 				4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio */,
 				4BEA623D095806CD001F733A /* testPlayer */,
 				4BCB2BDC0D12B71300AB3F6D /* testPlayer Intel */,
+				4BBBF3A6172A7E210019A47E /* LAStester */,
 			);
 		};
 /* End PBXProject section */
@@ -1230,6 +1269,13 @@
 
 /* Begin PBXRezBuildPhase section */
 		4B00606D1112ED0300B6A836 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BBBF3AB172A7E210019A47E /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1309,6 +1355,14 @@
 				4B9A47CE1648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
 				4BE4D189165671C700495934 /* TRubberBandAudioStream.cpp in Sources */,
 				4BB3A97E16FDDBE3000F728C /* StringTools.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BBBF3A8172A7E210019A47E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BBBF3C1172A7E7D0019A47E /* tester.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2162,6 +2216,85 @@
 			};
 			name = Default;
 		};
+		4BBBF3AD172A7E210019A47E /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					LibAudioStream,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = LAStester;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BBBF3AE172A7E210019A47E /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					LibAudioStream,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = LAStester;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BBBF3AF172A7E210019A47E /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				FRAMEWORK_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					LibAudioStream,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = testPlayer;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
 		4BCB2B690D12ACE500AB3F6D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2422,6 +2555,16 @@
 				4B95A74B0A39EF5C00916AF3 /* Development */,
 				4B95A74C0A39EF5C00916AF3 /* Deployment */,
 				4B95A74D0A39EF5C00916AF3 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BBBF3AC172A7E210019A47E /* Build configuration list for PBXNativeTarget "LAStester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BBBF3AD172A7E210019A47E /* Development */,
+				4BBBF3AE172A7E210019A47E /* Deployment */,
+				4BBBF3AF172A7E210019A47E /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

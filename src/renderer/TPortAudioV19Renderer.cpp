@@ -46,10 +46,12 @@ void TPortAudioV19Renderer::DisplayDevices()
     for (i = 0; i < numDevices; i++) {
         pdi = Pa_GetDeviceInfo(i);
         printf("---------------------------------------------- #%d", i );
-        if (i == Pa_GetDefaultInputDevice())
+        if (i == Pa_GetDefaultInputDevice()) {
             printf(" DefaultInput");
-        if (i == Pa_GetDefaultOutputDevice())
+        }
+        if (i == Pa_GetDefaultOutputDevice()) {
             printf(" DefaultOutput");
+        }
         printf("\nName         = %s\n", pdi->name);
         printf("Max Inputs   = %d", pdi->maxInputChannels);
         printf(", Max Outputs = %d\n", pdi->maxOutputChannels);
@@ -156,10 +158,12 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
     }
     
     // Otherwise Pa_OpenStream will fail... 
-    if (inChan == 0)
+    if (inChan == 0) {
         inDevice = paNoDevice;
-    if (outChan == 0)
+    }
+    if (outChan == 0) {
         outDevice = paNoDevice;
+    }
  	
 	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
@@ -201,8 +205,9 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
 								Process,
 								this);
 
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
+    }
     return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
 
 error:
@@ -213,8 +218,9 @@ error:
 
 long TPortAudioV19Renderer::Close()
 {
-    if (fStream) 
+    if (fStream) {
         Pa_CloseStream(fStream);
+    }
     return NO_ERR;
 }
 

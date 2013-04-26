@@ -55,6 +55,10 @@
 (setq player (OpenAudioPlayer 2 2 32 96000 512 65536 (* 96000 60 10) kCoreAudioRenderer 1))
 
 (setq player (OpenAudioPlayer 0 2 32 48000 512 65536 (* 48000 60 10) kCoreAudioRenderer 1))
+(setq player (OpenAudioPlayer 1 2 32 48000 512 65536 (* 48000 60 10) kCoreAudioRenderer 1))
+
+(setq player (OpenAudioPlayer 2 1 32 48000 512 65536 (* 48000 60 10) kCoreAudioRenderer 1))
+
 (setq player (OpenAudioPlayer 2 2 32 48000 512 65536 (* 48000 60 10) kCoreAudioRenderer 1))
 
 (CloseAudioPlayer player)

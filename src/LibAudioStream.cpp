@@ -247,7 +247,7 @@ AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 AUDIOAPI long LibVersion()
 {
-	return 1273;
+	return 1274;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -409,7 +409,7 @@ AUDIOAPI AudioStreamPtr MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, l
 {
 	if (sound) {
 		TAudioStreamPtr cut = TAudioStreamFactory::MakeCutSound(static_cast<TAudioStreamPtr>(*sound), beginFrame, endFrame);
-		return (cut) ?  MakeSoundPtr(cut) : 0;
+		return (cut) ? MakeSoundPtr(cut) : 0;
 	} else {
         return 0;
 	}  

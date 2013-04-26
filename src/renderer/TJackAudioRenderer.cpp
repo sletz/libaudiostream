@@ -120,14 +120,16 @@ long TJackAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
 	for (i = 0; i < fInput; i++) {
 		snprintf(buf, sizeof(buf) - 1, "in%d", i + 1);
 		fInput_ports[i] = jack_port_register(fClient, buf, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
-		if (!fInput_ports[i])
+		if (!fInput_ports[i]) {
 			goto error;
+        }
 	}
 	for (i = 0; i < fOutput; i++) {
 		snprintf(buf, sizeof(buf) - 1, "out%d", i + 1);
 		fOutput_ports[i] = jack_port_register(fClient, buf, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-		if (!fOutput_ports[i])
+		if (!fOutput_ports[i]) {
 			goto error;
+        }
 	}
 
 	return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
