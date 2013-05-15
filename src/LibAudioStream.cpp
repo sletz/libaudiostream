@@ -544,10 +544,10 @@ AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch)
 
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path)
 {
-	try {
+    TAudioGlobals::ClearLibError();
+    try {
 		return new TModuleFaustAudioEffect(name);
 	} catch (TLASException& e) {
-	    strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
         try {
             return new TCodeFaustAudioEffect(name, library_path, draw_path);
         } catch (TLASException& e) {
@@ -670,10 +670,10 @@ AUDIOAPI AudioEffectPtr MakePitchShiftAudioEffectPtr(float pitch)
 
 AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
 {
+    TAudioGlobals::ClearLibError();
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (TLASException& e) {
-	    strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
         try {
             return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name, library_path, draw_path));
         } catch (TLASException& e) {
@@ -689,10 +689,10 @@ static TCodeFaustAudioEffect* gDSP = NULL;
 
 AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
 {
+    TAudioGlobals::ClearLibError();
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (TLASException& e) {
-        strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
@@ -782,6 +782,8 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
                                         long thread_num)
 {
     int res;
+  
+   TAudioGlobals::ClearLibError();
 	
 	if (thread_num < 1) {
 		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");

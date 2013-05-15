@@ -39,8 +39,8 @@ research@grame.fr
 	#define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
 	#define EFFECT1 ""
     //#define LLVM_EFFECT1 "process = component(\"effect.lib\").zita_rev1;"
-    #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
-    //#define LLVM_EFFECT1 "process = _,_;"
+    //#define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
+    #define LLVM_EFFECT1 "process = _,_;"
 #endif
 
 
@@ -399,7 +399,29 @@ AudioStream test11ter()
     printf("Input stream + Faust LLVM freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "/var/tmp");
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "/Users/letz/SVG");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
+	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+  
+    return MakeMixSound(
+        MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16), 
+        MakeSeqSound(MakeNullSound(3 * 44100), MakeReadSound("reverb_input.wav"), 100));
+}
+
+AudioStream test11quad(const char* faust_code)
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("Input stream + Faust LLVM freeverb effect                               \n");
+    printf("-------------------------------------------------------------------\n\n");
+    AudioEffectList list_effect = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(faust_code, "", "/Users/letz/SVG");
     list_effect = AddAudioEffect(list_effect, faust_effect);
 	
     printControls(faust_effect);
@@ -624,7 +646,7 @@ int main(int argc, char* argv[])
     printf("Type 'n' to go to next test\n");
     
    
-	
+	/*
     ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
@@ -632,6 +654,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
+    */
     
 
     /*
@@ -669,6 +692,8 @@ int main(int argc, char* argv[])
     */
     
     ExecTest(player, test11ter());
+    ExecTest(player, test11quad("process = _,_;"));
+    ExecTest(player, test11quad("process = _,_  ;"));
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());

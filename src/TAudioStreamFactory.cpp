@@ -50,12 +50,13 @@ research@grame.fr
 // External API
 /*--------------------------------------------------------------------------*/
 
-#define TRY_CALL    \
-    try {           \
+#define TRY_CALL                    \
+    TAudioGlobals::ClearLibError(); \
+    try {                           \
     
 #define CATCH_EXCEPTION                                     \
     } catch (TLASException& e) {                            \
-        printf("LAS error = %s", e.Message().c_str());    \
+        printf("LAS error = %s", e.Message().c_str());      \
         strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);   \
         return 0;                                           \
     }                                                       \

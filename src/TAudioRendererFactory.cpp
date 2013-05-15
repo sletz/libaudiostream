@@ -43,6 +43,7 @@ research@grame.fr
 
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
+    TAudioGlobals::ClearLibError();
 	try {
 		switch (renderer) {
 

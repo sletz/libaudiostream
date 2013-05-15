@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "AudioExports.h"
 #include "TAudioBuffer.h"
+#include <string.h>
 
 //---------------------
 // Class TAudioGlobals
@@ -71,6 +72,12 @@ class AUDIO_EXPORTS TAudioGlobals
 
         static void LogError();
         static void Destroy();
+        
+        static void ClearLibError()
+        {
+            // First clear error message
+            strncpy(fLastLibError, "", 512);
+        }
 };
 
 typedef TAudioGlobals * TAudioGlobalsPtr;
