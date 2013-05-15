@@ -38,11 +38,12 @@ class TEventHandler
 
     protected:
 
-        long fNum; // event number
+        long fNum;      // event number
+        bool fFired;    // Fired state
 
     public:
 
-        TEventHandler(long num): fNum(num)
+        TEventHandler(long num): fNum(num), fFired(false)
         {}
         virtual ~TEventHandler()
         {}
@@ -61,10 +62,10 @@ typedef TEventHandler * TEventHandlerPtr;
 
 class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 {
-
+    
     public:
 
-        TEventSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2,  long crossFade, long num): TSeqAudioStream(s1, s2, crossFade), TEventHandler(num)
+        TEventSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade, long num): TSeqAudioStream(s1, s2, crossFade), TEventHandler(num)
         {}
         virtual ~TEventSeqAudioStream()
         {}
@@ -76,11 +77,12 @@ class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 
         bool HandleEvent(long num)
         {
-            if ((fNum == num) && (fStream == fStream1)) {
-                fStream = fStream2;
-            }
-            return (fNum == num);
+            fFired = (fNum == num);
+            return fFired;
         }
+        
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        void Reset();
 };
 
 typedef TEventSeqAudioStream * TEventSeqAudioStreamPtr;
@@ -92,7 +94,7 @@ typedef TEventSeqAudioStream * TEventSeqAudioStreamPtr;
 \brief A STL list which contains the TEventHandler nodes of a stream expression.
 */
 
-class TEventHandlerList : public list<TEventHandlerPtr>
+class TEventHandlerList : public std::list<TEventHandlerPtr>
 {
 
     private:
@@ -153,7 +155,7 @@ class TEventAudioStream : public TDecoratedAudioStream, public TEventHandler
         {
             bool res = false;
             // Iterate through list
-            for (list<TEventHandlerPtr>::iterator iter = fHandlerList.begin(); iter != fHandlerList.end(); iter++) {
+            for (std::list<TEventHandlerPtr>::iterator iter = fHandlerList.begin(); iter != fHandlerList.end(); iter++) {
                 TEventHandlerPtr handler = *iter;
                 res |= handler->HandleEvent(num);
             }
