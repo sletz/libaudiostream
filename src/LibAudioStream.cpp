@@ -106,9 +106,10 @@ extern "C"
 	AUDIOAPI AudioEffectPtr MakeMonoPanAudioEffectPtr(float pan);
 	AUDIOAPI AudioEffectPtr MakeStereoPanAudioEffectPtr(float panLeft, float panRight);
 	AUDIOAPI AudioEffectPtr MakePitchShiftAudioEffectPtr(float pitch);
-    AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
+    AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 #ifdef __APPLE__
-    AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name);
+    // To be used from LispWorks
+    AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 #endif
 	AUDIOAPI AudioEffectPtr MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
 
@@ -232,7 +233,7 @@ AUDIOAPI AudioEffect MakeVolAudioEffect(float vol);
 AUDIOAPI AudioEffect MakeMonoPanAudioEffect(float pan);
 AUDIOAPI AudioEffect MakeStereoPanAudioEffect(float panLeft, float panRight);
 AUDIOAPI AudioEffect MakePitchShiftAudioEffect(float pitch);
-AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name);
+AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
 
 AUDIOAPI long GetControlCountEffect(AudioEffect effect);
 AUDIOAPI void GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
@@ -247,7 +248,7 @@ AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 AUDIOAPI long LibVersion()
 {
-	return 1274;
+	return 1275;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -540,14 +541,14 @@ AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch)
     return new TPitchShiftAudioEffect(pitch);
 }
 
-AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name)
+AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path)
 {
 	try {
 		return new TModuleFaustAudioEffect(name);
 	} catch (TLASException& e) {
 	    strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
         try {
-            return new TCodeFaustAudioEffect(name);
+            return new TCodeFaustAudioEffect(name, library_path, draw_path);
         } catch (TLASException& e) {
             strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
             return 0;
@@ -666,14 +667,14 @@ AUDIOAPI AudioEffectPtr MakePitchShiftAudioEffectPtr(float pitch)
     return new LA_SMARTP<TAudioEffectInterface>(new TPitchShiftAudioEffect(pitch));
 }
 
-AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name)
+AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (TLASException& e) {
 	    strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
         try {
-            return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name));
+            return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(name, library_path, draw_path));
         } catch (TLASException& e) {
             strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
             return 0;
@@ -685,7 +686,7 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name)
 #include<dispatch/dispatch.h>
 static TCodeFaustAudioEffect* gDSP = NULL;
 
-AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
+AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
 {
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
@@ -694,7 +695,7 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name)
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
-                gDSP = new TCodeFaustAudioEffect(name); 
+                gDSP = new TCodeFaustAudioEffect(name, library_path, draw_path); 
             } catch (TLASException& e) {
                 strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
                 gDSP = NULL;

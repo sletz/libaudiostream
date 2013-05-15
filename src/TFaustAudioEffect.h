@@ -355,6 +355,8 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 	
 		llvm_dsp* fDsp;
         string fCode;
+        string fLibraryPath;
+        string fDrawPath;
         
         // Global DSP factory table
         static std::map<string, llvm_dsp_factory*> fFactoryTable;
@@ -367,14 +369,16 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 		
     public:
 
-        TCodeFaustAudioEffect(const string& code):TFaustAudioEffectBase()
+        TCodeFaustAudioEffect(const string& code, const string& library_path, const string& draw_path):TFaustAudioEffectBase()
         {
-            int argc = 1;
-            const char* argv[argc];
+            int argc;
+            const char* argv[32];
             char error_msg[256] = {0};
             char error_lib[512] = {0};
             llvm_dsp_factory* factory = NULL;
             fCode = code;
+            fLibraryPath = library_path;
+            fDrawPath = draw_path;
             
             if (fFactoryTable.find(code) != fFactoryTable.end()) {
                 printf("DSP factory already created...\n");
@@ -384,16 +388,33 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             
             // Try filename...
             argv[0] = code.c_str();
+            
+            // Add -svg parameter if necessary
+            if (draw_path != "") {
+                argc = 2;
+                argv[1] = "-svg";
+            } else {
+                argc = 1;
+            }
          
-            factory = createDSPFactory(argc, argv, "", "", "", "", getTarget(), error_msg, 3);
+            factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
             if (factory) {
                 goto make_instance;
             }  else {
+                printf("error_lib %s\n", error_msg);
                 snprintf(error_lib, 512, "createDSPFactory error from DSP file %s", error_msg);
+            }
+            
+            // Add -svg parameter if necessary
+            if (draw_path != "") {
+                argc = 1;
+                argv[0] = "-svg";
+            } else {
+                argc = 0;
             }
    
             // Try DSP code...
-            factory = createDSPFactory(0, NULL, "", "", "in", code, getTarget(), error_msg, 3);
+            factory = createDSPFactory(argc, argv, library_path, draw_path, "in", code, getTarget(), error_msg, 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -465,7 +486,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         TAudioEffectInterface* Copy()
         {
             // Allocate copy
-            return (new TCodeFaustAudioEffect(fCode))->CopyState(this);
+            return (new TCodeFaustAudioEffect(fCode, fLibraryPath, fDrawPath))->CopyState(this);
         }
         void Reset()
         {

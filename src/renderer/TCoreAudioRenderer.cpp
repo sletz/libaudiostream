@@ -364,8 +364,8 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
 
     CFMutableDictionaryRef aggDeviceDict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-    CFStringRef AggregateDeviceNameRef = CFSTR("JackDuplex");
-    CFStringRef AggregateDeviceUIDRef = CFSTR("com.grame.JackDuplex");
+    CFStringRef AggregateDeviceNameRef = CFSTR("CoreAudioDuplex");
+    CFStringRef AggregateDeviceUIDRef = CFSTR("com.grame.CoreAudioDuplex");
 
     // add the name of the device to the dictionary
     CFDictionaryAddValue(aggDeviceDict, CFSTR(kAudioAggregateDeviceNameKey), AggregateDeviceNameRef);
@@ -439,8 +439,9 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     vector<CFStringRef> captureDeviceUID;
     for (UInt32 i = 0; i < captureDeviceID.size(); i++) {
         CFStringRef ref = GetDeviceName(captureDeviceID[i]);
-        if (ref == NULL)
+        if (ref == NULL) {
             return -1;
+        }
         captureDeviceUID.push_back(ref);
         // input sub-devices in this example, so append the sub-device's UID to the CFArray
         CFArrayAppendValue(subDevicesArray, ref);
@@ -449,8 +450,9 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     vector<CFStringRef> playbackDeviceUID;
     for (UInt32 i = 0; i < playbackDeviceID.size(); i++) {
         CFStringRef ref = GetDeviceName(playbackDeviceID[i]);
-        if (ref == NULL)
+        if (ref == NULL) {
             return -1;
+        }
         playbackDeviceUID.push_back(ref);
         // output sub-devices in this example, so append the sub-device's UID to the CFArray
         CFArrayAppendValue(subDevicesArray, ref);

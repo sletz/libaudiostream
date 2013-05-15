@@ -166,7 +166,7 @@ AudioStream test5ter1()
 AudioStream test5ter2()
 {
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     list_effect = AddAudioEffect(list_effect, faust_effect);
 	
     printControls(faust_effect);
@@ -189,7 +189,7 @@ AudioStream test5ter2()
 AudioStream test5ter3()
 {
     AudioEffectList list_effect1 = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     list_effect1 = AddAudioEffect(list_effect1, faust_effect);
  	
     printControls(faust_effect);
@@ -222,7 +222,7 @@ AudioStream test5ter4()
 {
     
     AudioEffectList list_effect1 = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     list_effect1 = AddAudioEffect(list_effect1, faust_effect);
  	
     printControls(faust_effect);
@@ -320,7 +320,7 @@ AudioStream test10()
     AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioStream sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
 	AudioEffectList list_effect = MakeAudioEffectList();
-    faust_effect = MakeFaustAudioEffect(EFFECT1);
+    faust_effect = MakeFaustAudioEffect(EFFECT1, "", "");
     
     printControls(faust_effect);
    	
@@ -337,7 +337,7 @@ AudioStream test10bis()
     AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioStream sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioEffectList list_effect = MakeAudioEffectList();
-    faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+    faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     list_effect = AddAudioEffect(list_effect, faust_effect);
     
 	printControls(faust_effect);
@@ -358,7 +358,7 @@ AudioStream test11()
     printf("Input stream + Faust freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(EFFECT1);
+	faust_effect = MakeFaustAudioEffect(EFFECT1, "", "");
     list_effect = AddAudioEffect(list_effect, faust_effect);
 	
     printControls(faust_effect);
@@ -378,7 +378,7 @@ AudioStream test11bis()
     printf("Input stream + Faust LLVM freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     list_effect = AddAudioEffect(list_effect, faust_effect);
 	
     printControls(faust_effect);
@@ -398,7 +398,7 @@ AudioStream test11ter()
     printf("Input stream + Faust LLVM freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "/var/tmp");
     list_effect = AddAudioEffect(list_effect, faust_effect);
 	
     printControls(faust_effect);
@@ -633,7 +633,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test0());
     */
 
-    
+    /*
     ExecTest(player, test0());
     ExecTest(player, test1());
 	ExecTest(player, test1());
@@ -642,7 +642,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test4());
     ExecTest(player, test5());
     ExecTest(player, test6());
-    
+    */
     
     /*
     //ExecTest(player, test5bis());
@@ -653,7 +653,7 @@ int main(int argc, char* argv[])
     //ExecTest(player, test5ter2());
     //ExecTest(player, test5ter3());
     
-    ExecTest(player, test5ter4());
+    //ExecTest(player, test5ter4());
 	
     
     /*
@@ -667,7 +667,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test11bis());
     */
     
-    ///ExecTest(player, test11ter());
+    ExecTest(player, test11ter());
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());
