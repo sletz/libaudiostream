@@ -50,7 +50,8 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
     }
     
     int error;    
-	fResampler = src_new(quality, stream->Channels(), &error);
+    // Resampler always openned in stereo mode even if only one (mono stream...) will be actually used.
+    fResampler = src_new(quality, TAudioGlobals::fOutput, &error);
     fRatio = ratio;
     if (error != 0) {
         throw TLASException(src_strerror(error));
