@@ -216,6 +216,7 @@ AUDIOAPI AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effec
 AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
 AUDIOAPI AudioStream MakeInputSound();
+AUDIOAPI AudioStream MakeSharedInputSound();
 AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
 
 AUDIOAPI long GetLengthSound(AudioStream s);
@@ -248,7 +249,7 @@ AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 AUDIOAPI long LibVersion()
 {
-	return 1275;
+	return 1276;
 }
 
 AUDIOAPI const char* GetLastLibError()

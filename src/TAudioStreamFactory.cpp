@@ -69,12 +69,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 {
     TRY_CALL
     TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, 0);
-    // Force stereo mode here...
-    TAudioStreamPtr stereo_sound = MakeStereoSound(sound);
     if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
-        return new TSampleRateAudioStream(stereo_sound, double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
+        return new TSampleRateAudioStream(sound, double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
     } else {
-        return stereo_sound;
+        return sound;
     }
     CATCH_EXCEPTION
 }
@@ -84,12 +82,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
     TRY_CALL
     if (beginFrame >= 0 && beginFrame <= endFrame) {
         TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
-        // Force stereo mode here...
-        TAudioStreamPtr stereo_sound = MakeStereoSound(sound);
         if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
-            return new TSampleRateAudioStream(new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length())), double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
+            return new TSampleRateAudioStream(new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length())), double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
         } else {
-            return new TCutEndAudioStream(stereo_sound, UTools::Min(endFrame - beginFrame, sound->Length()));
+            return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         }
     } else {
         snprintf(TAudioGlobals::fLastLibError, sizeof(TAudioGlobals::fLastLibError) - 1, "beginFrame < O or endFrame > sound length");

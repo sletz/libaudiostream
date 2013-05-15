@@ -446,13 +446,15 @@
     (register-rsrc effect :effect)
     effect))
 
-(cffi:defcfun  ("MakeDispatchFaustAudioEffectPtr" make-faust-audio-effect-ptr) :pointer  (s audio-name))
+(cffi:defcfun  ("MakeDispatchFaustAudioEffectPtr" make-faust-audio-effect-ptr) :pointer (s1 audio-name) (s2 :pointer) (s3 :pointer))
 
-(defun MakeFaustAudioEffect (name)
-  (cffi:with-foreign-string (s name)
-    (let ((effect (make-faust-audio-effect-ptr s)))
-      (register-rsrc effect :effect)
-      effect)))
+(defun MakeFaustAudioEffect (name library_path draw_path)
+  (cffi:with-foreign-string (s1 name) 
+     (cffi:with-foreign-string (s2 library_path)
+         (cffi:with-foreign-string (s3 draw_path)
+            (let ((effect (make-faust-audio-effect-ptr s1 s2 s3)))
+                (register-rsrc effect :effect)
+                effect)))))
 
 (cffi:defcfun  ("GetControlCountEffectPtr" get-control-count-effect-ptr) :long  (effect :pointer))
 

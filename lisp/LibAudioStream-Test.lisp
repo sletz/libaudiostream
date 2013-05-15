@@ -138,14 +138,14 @@
 ;; Use of a Faust effect (http://faudiostream.sf.net)
 ;;====================================================
 
-(defvar freeverb1 (MakeFaustAudioEffect effect1))
-(defvar freeverb2 (MakeFaustAudioEffect effect2))
-(defvar freeverb3 (MakeFaustAudioEffect effect3))
-(defvar freeverb4 (MakeFaustAudioEffect effect4))
+(defvar freeverb1 (MakeFaustAudioEffect effect1 "" ""))
+(defvar freeverb2 (MakeFaustAudioEffect effect2 "" ""))
+(defvar freeverb3 (MakeFaustAudioEffect effect3 "" ""))
+(defvar freeverb4 (MakeFaustAudioEffect effect4 "" "/var/tmp" ))
 
 (defvar paramEQ1 (MakeFaustAudioEffect effect2))
 
-(MakeFaustAudioEffect "import(\"music.lib\"); process = vgroup(\"echo-simple\", echo1s);")
+(MakeFaustAudioEffect "import(\"music.lib\"); process = vgroup(\"echo-simple\", echo1s);" "" "")
 
 ;; Print effect parameters
 

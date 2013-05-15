@@ -36,7 +36,7 @@ research@grame.fr
     #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 	#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 	#define FILENAME3 "/Users/letz/son1.wav"
-	#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
+	#define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
 	#define EFFECT1 ""
     //#define LLVM_EFFECT1 "process = component(\"effect.lib\").zita_rev1;"
     #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
@@ -80,7 +80,8 @@ AudioStream test0()
     printf("Build a region \n");
     printf("-------------- \n\n");
     AudioStream s1;
-    s1 = MakeReadSound(FILENAME1);
+    //s1 = MakeReadSound(FILENAME1);
+    s1 = MakeReadSound(FILENAME4);
     return s1;
 }
 
@@ -623,7 +624,7 @@ int main(int argc, char* argv[])
     printf("Type 'n' to go to next test\n");
     
    
-	/*
+	
     ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
@@ -631,7 +632,7 @@ int main(int argc, char* argv[])
 	ExecTest(player, test0());
 	ExecTest(player, test0());
 	ExecTest(player, test0());
-    */
+    
 
     /*
     ExecTest(player, test0());
