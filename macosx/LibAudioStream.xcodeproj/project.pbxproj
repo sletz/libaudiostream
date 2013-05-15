@@ -1553,7 +1553,8 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					"-lHTTPDFaust",
+					/usr/local/lib/faust/libHTTPDFaust.a,
+					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -1638,7 +1639,6 @@
 					"-lLLVMObject",
 					"-lLLVMCore",
 					"-lLLVMSupport",
-					"-lfaust",
 					libSoundTouch.a,
 					libsndfile.a,
 					libsndfile_i386.a,
@@ -1693,7 +1693,8 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					"-lHTTPDFaust",
+					/usr/local/lib/faust/libHTTPDFaust.a,
+					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -1778,7 +1779,6 @@
 					"-lLLVMObject",
 					"-lLLVMCore",
 					"-lLLVMSupport",
-					"-lfaust",
 					libSoundTouch.a,
 					libportaudioV19.a,
 					libsndfile.a,
