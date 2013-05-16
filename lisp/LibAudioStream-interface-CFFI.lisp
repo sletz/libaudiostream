@@ -446,7 +446,7 @@
     (register-rsrc effect :effect)
     effect))
 
-(cffi:defcfun  ("MakeDispatchFaustAudioEffectPtr" make-faust-audio-effect-ptr) :pointer (s1 audio-name) (s2 :pointer) (s3 :pointer))
+(cffi:defcfun  ("MakeDispatchFaustAudioEffectPtr" make-faust-audio-effect-ptr) :pointer (s1 audio-name) (s2 audio-name) (s3 audio-name))
 
 (defun MakeFaustAudioEffect (name library_path draw_path)
   (cffi:with-foreign-string (s1 name) 

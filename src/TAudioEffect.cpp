@@ -25,6 +25,7 @@ research@grame.fr
 #include "UAudioTools.h"
 
 std::map<string, llvm_dsp_factory*> TCodeFaustAudioEffect::fFactoryTable;
+int TCodeFaustAudioEffect::fFactoryNumber = 0;
 
 void TAudioEffectList::Init(float fade_in_val, float fade_in_time, float fade_out_val, float fade_out_time)
 {

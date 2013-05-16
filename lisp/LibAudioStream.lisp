@@ -93,11 +93,26 @@
   (fLeftOut :long)
   (fRightOut :long))
 
-
+(cffi:define-foreign-type uint64_t () ':unsigned-long)
 (cffi:define-foreign-type audio-name () ':pointer)
 (cffi:define-foreign-type sound-ptr () ':pointer)
 (cffi:define-foreign-type effect-ptr () ':pointer)
 (cffi:define-foreign-type effectlist-ptr () ':pointer)
+(cffi:define-foreign-type stop-callback () ':pointer)
+(cffi:define-foreign-type stop-callback-ptr () ':pointer)
+(cffi:define-foreign-type context-ptr () ':pointer)
+
+(cffi:defcstruct TRendererInfo 
+  (fInput :long)
+  (fOutput :long)
+  (fSampleRate :float)
+  (fBufferSize :float)
+  (fCurFrame uint64_t)
+  (fCurUsec uint64_t)
+  (fOutputLatencyFrame :long)
+  (fOutputLatencyUsec :float)
+  (fInputLatencyFrame :long)
+  (fInputLatencyUsec :long))
 
 (defstruct las-sound (ptr nil))
 (defstruct las-effect (ptr nil))
@@ -301,6 +316,13 @@
      (register-rsrc snd)
      snd))
  
+;................................................................................: MakeSharedInputSound
+(cffi:defcfun  ( "MakeSharedInputSoundPtr" make-shared-input-sound-ptr) sound-ptr)
+
+(defun MakeSharedInputSound ()
+   (let ((snd (make-las-sound :ptr (make-shared-input-sound-ptr))))
+     (register-rsrc snd)
+     snd))
 
 ;................................................................................: MakeRendererSound
 (cffi:defcfun  ( "MakeRendererSoundPtr" make-renderer-sound-ptr) sound-ptr (sound sound-ptr))
@@ -445,7 +467,7 @@
 (defun SetVolAudioPlayer (player vol)
  (set-vol-audio-player player vol))
 ;................................................................................: SetPanSound
-(cffi:defcfun  ("SetPanAudioPlayer" set-pan-audio-player) :void (player :pointer)  (vol :float) (panl :float) (panr :float))
+(cffi:defcfun  ("SetPanAudioPlayer" set-pan-audio-player) :void (player :pointer) (panl :float) (panr :float))
 
 (defun SetPanAudioPlayer (player panLeft panRight)
   (set-pan-audio-player player panLeft panRight))
@@ -455,6 +477,18 @@
 
 (defun SetEffectListAudioPlayer (player effect_list fadein fadeout)
   (set-effect-list-audio-player player (las-effectlist-ptr effect_list) fadein fadeout))
+
+;................................................................................: GetAudioPlayerRenderer
+(cffi:defcfun  ("GetAudioPlayerRenderer" get-audio-player-renderer) :pointer (player :pointer))
+
+(defun GetAudioPlayerRenderer (player)
+  (get-audio-player-renderer player))
+
+;................................................................................: GetInfoChannel
+(cffi:defcfun  ("GetAudioRendererInfo" get-audio-renderer-info) :void (renderer :pointer) (info :pointer))
+
+(defun GetAudioRendererInfo (renderer info) 
+  (get-audio-renderer-info renderer info))
 
 ;;;========================== EFFECTS 
 
@@ -482,7 +516,7 @@
   (add-audio-effect-ptr (las-effectlist-ptr effect-list) (las-effect-ptr effect))
   effect-list)
 
-(cffi:defcfun  ("RemoveAudioEffect" remove-audio-effect-ptr) effectlist-ptr  (effectlist effectlist-ptr) (effect effect-ptr))
+(cffi:defcfun  ("RemoveAudioEffectPtr" remove-audio-effect-ptr) effectlist-ptr  (effectlist effectlist-ptr) (effect effect-ptr))
 
 (defun RemoveAudioEffect (effect-list effect)
   (remove-audio-effect-ptr (las-effectlist-ptr effect-list) (las-effect-ptr effect))
@@ -509,15 +543,35 @@
     (register-rsrc effect)
     effect))
 
-(cffi:defcfun  ("MakeFaustAudioEffectPtr" make-faust-audio-effect-ptr) effect-ptr (s audio-name))
+(cffi:defcfun  ("MakeDispatchFaustAudioEffectPtr" make-faust-audio-effect-ptr) effect-ptr (s0 audio-name) (s1 audio-name) (s2 audio-name))
 
-(defun MakeFaustAudioEffect (name)
-  (cffi:with-foreign-string (s name)
-    (let ((effect (make-las-effect :ptr (make-faust-audio-effect-ptr s))))
-      (register-rsrc effect)
-      effect)))
+(defun MakeFaustAudioEffect (name library_path draw_path)
+  (cffi:with-foreign-string (s0 name)
+    (cffi:with-foreign-string (s1 library_path)
+      (cffi:with-foreign-string (s2 draw_path)
+        (let ((effect (make-las-effect :ptr (make-faust-audio-effect-ptr s0 s1 s2))))
+          (register-rsrc effect)
+          effect)))))
 
 
+;;;//////////////////////////
+
+(cffi:defcfun  ("GetJsonEffectPtr" get-json-effect-ptr) :string (effect effect-ptr))
+
+(defun GetJsonEffect (effect)
+  (get-json-effect-ptr (las-effect-ptr effect)))
+
+(cffi:defcfun  ("GetLastLibError" get-last-lib-error) :string)
+
+(defun GetLastLibError ()
+  (get-last-lib-error))
+
+(cffi:defcfun  ("SetStopCallbackChannel" set-stop-callback-channel) :void (player :pointer) (channel :long) (callback stop-callback) (context context-ptr))
+
+(defun SetStopCallbackChannel (player channel callback context)
+  (set-stop-callback-channel player channel callback context))
+
+;;;////////////////////////////
 (cffi:defcfun  ("GetControlCountEffectPtr" get-control-count-effect-ptr) :long  (effect effect-ptr))
 
 (defun GetControlCount (effect)
@@ -539,7 +593,7 @@
  (cffi::foreign-free min)
  (cffi::foreign-free max)
  (cffi::foreign-free init)
- (values str minrep maxrep initrep)))
+ (list str minrep maxrep initrep)))
 
 
 (cffi:defcfun  ("SetControlValueEffectPtr" set-control-value-effect-ptr) :void  (effect effect-ptr) (control :long) (value :float))
@@ -552,4 +606,19 @@
 (defun GetControlValue (effect control)
   (get-control-value-effect-ptr (las-effect-ptr effect) control))
 
+
+(cffi:defcfun  ("ResetEffectPtr" reset-effect-ptr) :void  (effect effect-ptr))
+
+(defun ResetEffect (effect)
+  (reset-effect-ptr (las-effect-ptr effect)))
+
+(cffi:defcfun  ("GetStateEffectPtr" get-state-effect-ptr) :long  (effect effect-ptr))
+
+(defun GetStateEffect (effect)
+  (get-state-effect-ptr (las-effect-ptr effect)))
+
+(cffi:defcfun  ("SetStateEffectPtr" set-state-effect-ptr) :void  (effect effect-ptr) (state :long))
+
+(defun SetStateEffect (effect state)
+  (set-state-effect-ptr (las-effect-ptr effect) state))
 

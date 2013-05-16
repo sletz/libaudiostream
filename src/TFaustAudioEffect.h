@@ -360,6 +360,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         
         // Global DSP factory table
         static std::map<string, llvm_dsp_factory*> fFactoryTable;
+        static int fFactoryNumber;
         
         string getTarget()
         {
@@ -412,9 +413,12 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             } else {
                 argc = 0;
             }
+            
+            char input_name[64];
+            sprintf(input_name, "LAS-faustfx-%d", fFactoryNumber);
    
             // Try DSP code...
-            factory = createDSPFactory(argc, argv, library_path, draw_path, "in", code, getTarget(), error_msg, 3);
+            factory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, getTarget(), error_msg, 3);
             if (factory) {
                 goto make_instance;
             }  else {
@@ -472,6 +476,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 			}
             
             fFactoryTable[code] = factory;
+            fFactoryNumber++;
 			fDsp->buildUserInterface(this);
 		}
         virtual ~TCodeFaustAudioEffect()

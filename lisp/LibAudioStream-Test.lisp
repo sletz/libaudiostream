@@ -1,6 +1,6 @@
 
-(in-package :au)
-;;(in-package :las)
+;;(in-package :au)
+(in-package :las)
 (libaudiostream-framework)
 
 (LibVersion)
@@ -139,13 +139,13 @@
 ;;====================================================
 
 (defvar freeverb1 (MakeFaustAudioEffect effect1 "" ""))
-(defvar freeverb2 (MakeFaustAudioEffect effect2 "" ""))
-(defvar freeverb3 (MakeFaustAudioEffect effect3 "" ""))
+(defvar freeverb2 (MakeFaustAudioEffect effect2 ""  "/var/tmp"))
+(defvar freeverb3 (MakeFaustAudioEffect effect3 "" "/var/tmp"))
 (defvar freeverb4 (MakeFaustAudioEffect effect4 "" "/var/tmp" ))
 
 (defvar paramEQ1 (MakeFaustAudioEffect effect2))
 
-(MakeFaustAudioEffect "import(\"music.lib\"); process = vgroup(\"echo-simple\", echo1s);" "" "")
+(MakeFaustAudioEffect "import(\"music.lib\"); process = vgroup(\"echo-simple\", echo1s);" ""  "/var/tmp")
 
 ;; Print effect parameters
 
