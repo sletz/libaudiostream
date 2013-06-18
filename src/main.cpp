@@ -693,7 +693,7 @@ int main(int argc, char* argv[])
     
     ExecTest(player, test11ter());
     ExecTest(player, test11quad("process = _,_;"));
-    ExecTest(player, test11quad("process = _,_  ;"));
+    ExecTest(player, test11quad("process = _,_;"));
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());

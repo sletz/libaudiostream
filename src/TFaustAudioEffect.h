@@ -26,6 +26,7 @@ research@grame.fr
 #include "faust/gui/UI.h"
 #include "faust/llvm-dsp.h"
 #include "faust/gui/jsonfaustui.h"
+//#include "faust/gui/OSCUI.h"
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
@@ -361,6 +362,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         // Global DSP factory table
         static std::map<string, llvm_dsp_factory*> fFactoryTable;
         static int fFactoryNumber;
+        //GUI* fOSCInterface;
         
         string getTarget()
         {
@@ -377,6 +379,8 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             char error_msg[256] = {0};
             char error_lib[512] = {0};
             llvm_dsp_factory* factory = NULL;
+            char input_name[64];
+            
             fCode = code;
             fLibraryPath = library_path;
             fDrawPath = draw_path;
@@ -414,7 +418,6 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 argc = 0;
             }
             
-            char input_name[64];
             sprintf(input_name, "LAS-faustfx-%d", fFactoryNumber);
    
             // Try DSP code...
@@ -476,12 +479,19 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 			}
             
             fFactoryTable[code] = factory;
+            /*
+            argc = 1;
+            argv[0] = "--port";
+            fOSCInterface = new OSCUI(input_name, argc, (char**)argv);
+            fDsp->buildUserInterface(fOSCInterface);
+            */
+      		fDsp->buildUserInterface(this);
             fFactoryNumber++;
-			fDsp->buildUserInterface(this);
 		}
         virtual ~TCodeFaustAudioEffect()
         {
             deleteDSPInstance(fDsp);
+            //delete fOSCInterface;
         }
         void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum, long channels)
         {

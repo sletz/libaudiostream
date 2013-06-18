@@ -105,7 +105,7 @@ long TAudioMixer::Load(TAudioStreamPtr stream, long chan, float vol, float panLe
         channel->SetPan(panLeft, panRight);
         return NO_ERR;
     } else {
-        printf("Allocate : Channel already inserted  %ld\n", chan);
+        printf("Allocate : Channel already inserted %ld\n", chan);
         return LOAD_ERR;
     }
 }
@@ -118,7 +118,7 @@ void TAudioMixer::Start(long chan)
         channel->Reset();
         channel->SoundOn();
         channel->SetState(true);
-		// This is supposed to be unsafe since fSoundChannelSeq list is also read in AudioCallback thread... but no crash even occured
+		// This is supposed to be unsafe since fSoundChannelSeq list is also read in AudioCallback thread... but no crash ever occured
         fSoundChannelSeq.push_front(channel);
     } else {
         printf("Start : Channel already playing : %ld\n", chan);

@@ -499,8 +499,8 @@ extern "C"
     \param chan The audio channel number to be used.
     \param info The channel info structure to be filled.
     */
-    void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
     void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+    void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
 	/*!
     \brief Set a callback to be called when the channel stops.
     \param player The audio player.
