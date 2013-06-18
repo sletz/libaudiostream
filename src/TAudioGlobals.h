@@ -76,7 +76,9 @@ class AUDIO_EXPORTS TAudioGlobals
         static void ClearLibError()
         {
             // First clear error message
-            strncpy(fLastLibError, "", 512);
+            if (fLastLibError) {
+                strncpy(fLastLibError, "", 512);
+            }
         }
 };
 

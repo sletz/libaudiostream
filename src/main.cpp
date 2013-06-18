@@ -39,8 +39,8 @@ research@grame.fr
 	#define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
 	#define EFFECT1 ""
     //#define LLVM_EFFECT1 "process = component(\"effect.lib\").zita_rev1;"
-    //#define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
-    #define LLVM_EFFECT1 "process = _,_;"
+    #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
+    //#define LLVM_EFFECT1 "process = _,_;"
 #endif
 
 
@@ -690,6 +690,8 @@ int main(int argc, char* argv[])
 	//ExecTest(player, test11());
     ExecTest(player, test11bis());
     */
+    
+    ExecTest(player, test10bis());
     
     ExecTest(player, test11ter());
     ExecTest(player, test11quad("process = _,_;"));
