@@ -559,7 +559,7 @@ void TestPlay(AudioPlayerPtr player)
                 RendererInfo info;
                 GetAudioRendererInfo(renderer, &info);
                 printf("info.fCurFrame %lld\n", info.fCurFrame);
-                printf("info.fCurUsec %lld\n", info.fCurUsec);
+                printf("info.fCurUsec %lld %f\n", info.fCurUsec, float(info.fCurUsec/1000000));
 				break;
 
             /*

@@ -134,6 +134,7 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
                                      UInt32 inNumberFrames,
                                      AudioBufferList *ioData)
 {
+
     // Signal waiting start function...
     fState = true;
     
@@ -1168,9 +1169,13 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    UInt64 cur_host_time = AudioGetCurrentHostTime();
-    info->fCurFrame = uint64_t(fCallbackTime.mSampleTime + ConvertUsec2Sample(AudioConvertHostTimeToNanos(cur_host_time - fCallbackHostTime)/1000.) - fAnchorFrameTime);
-    info->fCurUsec = (AudioConvertHostTimeToNanos(cur_host_time) - AudioConvertHostTimeToNanos(fAnchorHostTime))/1000.;
+    if (fAnchorHostTime != 0) {
+        UInt64 cur_host_time = AudioGetCurrentHostTime();
+        info->fCurFrame = uint64_t(fCallbackTime.mSampleTime + ConvertUsec2Sample(AudioConvertHostTimeToNanos(cur_host_time - fCallbackHostTime)/1000.) - fAnchorFrameTime);
+        info->fCurUsec = (AudioConvertHostTimeToNanos(cur_host_time) - AudioConvertHostTimeToNanos(fAnchorHostTime))/1000.;
+    } else {
+        info->fCurFrame = info->fCurUsec = 0;
+    }
 }
 
 long TCoreAudioRenderer::GetDeviceCount()
