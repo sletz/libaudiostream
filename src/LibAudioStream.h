@@ -36,7 +36,7 @@ extern "C"
 
 #define NO_ERR 0
 #define OPEN_ERR -1
-#define CLOSE_ERR -1
+#define CLOSE_ERR -2
 #define LOAD_ERR -3
 #define FILE_NOT_FOUND_ERR -4
 

@@ -88,7 +88,7 @@ AudioStream test0()
 AudioStream test1()
 {
     printf("--------------------------- \n");
-    printf("Build a region with a fade \n");
+    printf("Build a region with a fade  \n");
     printf("--------------------------- \n\n");
     AudioStream s1;
     s1 = MakeRegionSound(FILENAME1, 200000, 500000);
@@ -178,9 +178,9 @@ AudioStream test5ter2()
     
     printControls(faust_effect);
    
-    printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output thru stream      \n");
-    printf("-----------------------------------------------\n\n");
+    printf("---------------------------------------------------\n");
+    printf("Build delayed + effect version of the input stream \n");
+    printf("---------------------------------------------------\n\n");
     return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeTransformSound(MakeSharedInputSound(), list_effect, 0, 0), 0);
     //return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeSharedBufferedInputSound(0), 0);
     //return MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100);
@@ -201,13 +201,15 @@ AudioStream test5ter3()
     
     printControls(faust_effect);
    
-    printf("-----------------------------------------------\n");
-    printf("Build a buffered input/output thru stream      \n");
-    printf("-----------------------------------------------\n\n");
+    printf("-------------------------------------------------\n");
+    printf("Build sequence of parts of the input stream      \n");
+    printf("-------------------------------------------------\n\n");
     
+    /*
     return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
                         MakeCutSound(MakeTransformSound(MakeSharedInputSound(), list_effect1, 0, 0), SAMPLE_RATE, 5*SAMPLE_RATE), 0);
     
+    */
     /*
     return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
                         MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), list_effect1, 0, 0), 0);
@@ -217,6 +219,10 @@ AudioStream test5ter3()
     return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
                         MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
     */
+    
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeSharedInputSound(), 0*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+   
 }
 
 AudioStream test5ter4()
@@ -242,8 +248,10 @@ AudioStream test5ter4()
     RendererInfo info;
     AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
     GetAudioRendererInfo(renderer, &info);
+    
+    printf("info.fCurFrame %d\n", info.fCurFrame);
  
-    return MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 0, info.fCurFrame), list_effect1, 0, 0);
+    return MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 0, info.fCurFrame + 1), list_effect1, 0, 0);
 }
 
 AudioStream test6()
@@ -597,15 +605,38 @@ void SaveSound(AudioStream sound, char* name)
 }
 */
 
-void ExecTest(AudioPlayerPtr player, AudioStream sound)
+static void printError(int err)
+{
+    switch (err) {
+        case 0:
+            printf("NO_ERR\n");
+            break;
+        case -1:
+            printf("OPEN_ERR\n");
+            break;
+        case -2:
+            printf("CLOSE_ERR\n");
+            break;
+        case -3:
+            printf("LOAD_ERR\n");
+            break;
+        case -4:
+            printf("FILE_NOT_FOUND_ERR\n");
+            break;
+    
+    }
+}
+
+static void ExecTest(AudioPlayerPtr player, AudioStream sound)
 {
 	printf("ExecTest channels = %ld \n", GetChannelsSound(sound));
-    int res = LoadChannel(player, sound, 1, 1.0f, 1.0f, 0.0f);
+    int err = LoadChannel(player, sound, 1, 1.0f, 1.0f, 0.0f);
 	SetStopCallbackChannel(player, 1, TestCallback, NULL);
-    if (res == NO_ERR) {
+    if (err == NO_ERR) {
         TestPlay(player);
     } else {
-        printf("LoadChannel error %d \n", res);
+        printf("LoadChannel error %d \n", err);
+        printError(err);
     }
     StopChannel(player, 1);
 }
@@ -630,8 +661,8 @@ int main(int argc, char* argv[])
     }
     
     if (!player) {
-         printf("Cannot open AudioPlayer...\n");
-         return -1;
+        printf("Cannot open AudioPlayer...\n");
+        return -1;
     } 
     
     //StartAudioPlayer(player);
@@ -677,7 +708,7 @@ int main(int argc, char* argv[])
     //ExecTest(player, test5ter2());
     //ExecTest(player, test5ter3());
     
-    //ExecTest(player, test5ter4());
+    ExecTest(player, test5ter4());
 	
     
     /*
@@ -691,6 +722,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test11bis());
     */
     
+    /*
     ExecTest(player, test10bis());
     
     ExecTest(player, test11ter());
@@ -699,6 +731,7 @@ int main(int argc, char* argv[])
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());
+    */
 
     /*
 	test20();
