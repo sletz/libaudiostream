@@ -181,7 +181,7 @@ extern "C"
 	AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 	AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer); 
 	AUDIOAPI void StartAudioRenderer(AudioRendererPtr renderer); 
-    AUDIOAPI void StartAudioRenderer(AudioRendererPtr renderer); 
+    AUDIOAPI void StopAudioRenderer(AudioRendererPtr renderer); 
     AUDIOAPI void GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info); 
 	
 	AUDIOAPI void AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
@@ -1037,7 +1037,7 @@ AUDIOAPI void DeleteAudioRenderer(AudioRendererPtr obj)
 
 AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
-	return static_cast<TAudioRendererPtr>(renderer)->Open(inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
+   return static_cast<TAudioRendererPtr>(renderer)->OpenDefault( inChan, outChan, bufferSize, sampleRate);
 }
 
 AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer)

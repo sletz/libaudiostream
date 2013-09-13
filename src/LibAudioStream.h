@@ -624,8 +624,8 @@ extern "C"
     \param inputDevice The audio input device index.
     \param outputDevice The audio output device index.
 	\param inChan The number of input channels. <B>Only stereo players are currently supported </b>. On input, contains the wanted value, on return the really used one.
-	\param outChan The number of output channels.  On input, contains the wanted value, on return the really used one.
-	\param bufferSize The audio player internal buffer size.  On input, contains the wanted value, on return the really used one.
+	\param outChan The number of output channels. On input, contains the wanted value, on return the really used one.
+	\param bufferSize The audio player internal buffer size. On input, contains the wanted value, on return the really used one.
     \param sampleRate The sampling rate. On input, contains the wanted value, on return the really used one.
  	\return An error code.
 	*/
