@@ -7,107 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B0060121112ED0300B6A836 /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
-		4B0060131112ED0300B6A836 /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
-		4B0060141112ED0300B6A836 /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
-		4B0060151112ED0300B6A836 /* TAudioMixer.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5970330CB0801053105 /* TAudioMixer.h */; };
-		4B0060161112ED0300B6A836 /* TCmdManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D59C0330CB1E01053105 /* TCmdManager.h */; };
-		4B0060171112ED0300B6A836 /* TThreadCmdManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5A00330CB2F01053105 /* TThreadCmdManager.h */; };
 		4B0060181112ED0300B6A836 /* TAudioBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E2072A032E1EA501053105 /* TAudioBuffer.h */; };
 		4B0060191112ED0300B6A836 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5D60330CC8501053105 /* Object.h */; };
 		4B00601A1112ED0300B6A836 /* Envelope.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5BD0330CC5A01053105 /* Envelope.h */; };
 		4B00601B1112ED0300B6A836 /* UAudioTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F68E6D0D0334858B01DE1461 /* UAudioTools.h */; };
-		4B00601C1112ED0300B6A836 /* TAudioGlobals.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5EA0330CCD601053105 /* TAudioGlobals.h */; };
 		4B00601D1112ED0300B6A836 /* TSharedBuffers.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5F90330CCFF01053105 /* TSharedBuffers.h */; };
-		4B00601E1112ED0300B6A836 /* TAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5FC0330CD3801053105 /* TAudioStream.h */; };
-		4B00601F1112ED0300B6A836 /* TBufferedAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1FF850328C9C301053105 /* TBufferedAudioStream.h */; };
-		4B0060201112ED0300B6A836 /* TTransformAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C41032DEB9D01053105 /* TTransformAudioStream.h */; };
-		4B0060211112ED0300B6A836 /* TCutEndAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5FE0330CD3801053105 /* TCutEndAudioStream.h */; };
-		4B0060221112ED0300B6A836 /* TFadeAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D6000330CD3801053105 /* TFadeAudioStream.h */; };
-		4B0060231112ED0300B6A836 /* TLoopAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D6110330CD5501053105 /* TLoopAudioStream.h */; };
-		4B0060241112ED0300B6A836 /* TMixAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D6130330CD5501053105 /* TMixAudioStream.h */; };
-		4B0060251112ED0300B6A836 /* TNullAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D61E0330CD7501053105 /* TNullAudioStream.h */; };
-		4B0060261112ED0300B6A836 /* TFileAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C5B1FF033220AA01053105 /* TFileAudioStream.h */; };
-		4B0060271112ED0300B6A836 /* TReadFileAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C5B205033220C001053105 /* TReadFileAudioStream.h */; };
-		4B0060281112ED0300B6A836 /* TWriteFileAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C5B21303322F5801053105 /* TWriteFileAudioStream.h */; };
-		4B0060291112ED0300B6A836 /* TInputAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F665FF400332A4BE01913B4D /* TInputAudioStream.h */; };
-		4B00602A1112ED0300B6A836 /* TRendererAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BA3E1780459506A00053105 /* TRendererAudioStream.h */; };
 		4B00602B1112ED0300B6A836 /* TAudioClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB2752F056B798A00053105 /* TAudioClient.h */; };
 		4B00602C1112ED0300B6A836 /* TAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0391DF0585040A006C929E /* TAudioRenderer.h */; };
-		4B00602D1112ED0300B6A836 /* TAudioRendererFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0391E10585040A006C929E /* TAudioRendererFactory.h */; };
-		4B00602E1112ED0300B6A836 /* TAudioEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5E80330CCD601053105 /* TAudioEngine.h */; };
 		4B00602F1112ED0300B6A836 /* lffifo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51474A07F18D980059C4C8 /* lffifo.h */; };
 		4B0060301112ED0300B6A836 /* msAtomic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51474D07F18D9F0059C4C8 /* msAtomic.h */; };
 		4B0060311112ED0300B6A836 /* lflifo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCC1A8007F1AA7E003E6784 /* lflifo.h */; };
-		4B0060321112ED0300B6A836 /* TAudioStreamFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BC6136907F499E200ACC53C /* TAudioStreamFactory.h */; };
 		4B0060331112ED0300B6A836 /* UTools.h in Headers */ = {isa = PBXBuildFile; fileRef = F68E6D0F0334858B01DE1461 /* UTools.h */; };
-		4B0060341112ED0300B6A836 /* LibAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B83CA1A07FBE5AE00256489 /* LibAudioStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B0060351112ED0300B6A836 /* TAudioEffectInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA7E085CB187002CD798 /* TAudioEffectInterface.h */; };
-		4B0060361112ED0300B6A836 /* TVolAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA81085CB19E002CD798 /* TVolAudioEffect.h */; };
-		4B0060371112ED0300B6A836 /* TFaustAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA84085CB1AD002CD798 /* TFaustAudioEffect.h */; };
-		4B0060381112ED0300B6A836 /* TThreadUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BFC6E7E08729C6F0012D079 /* TThreadUtils.h */; };
-		4B0060391112ED0300B6A836 /* TBinaryAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BFC6E8108729C830012D079 /* TBinaryAudioStream.h */; };
-		4B00603A1112ED0300B6A836 /* TCmdHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BFC6E8408729C970012D079 /* TCmdHandler.h */; };
 		4B00603B1112ED0300B6A836 /* TAudioConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F4A853032657D901053105 /* TAudioConstants.h */; };
-		4B00603C1112ED0300B6A836 /* TPanAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BF92831088E3B16006A013D /* TPanAudioEffect.h */; };
-		4B00603D1112ED0300B6A836 /* LibAudioStream++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B1C2D4D0894D242003BC2A6 /* LibAudioStream++.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B00603E1112ED0300B6A836 /* TChannelizerAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BAC748E08CD8D6E00F6E555 /* TChannelizerAudioStream.h */; };
 		4B00603F1112ED0300B6A836 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; };
 		4B0060421112ED0300B6A836 /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */; };
 		4B0060431112ED0300B6A836 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8E50E30CAA86670070FDA9 /* StringTools.h */; };
-		4B0060441112ED0300B6A836 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B0060461112ED0300B6A836 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */; };
-		4B0060481112ED0300B6A836 /* TAudioChannel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D58D0330C7F001053105 /* TAudioChannel.cpp */; };
-		4B0060491112ED0300B6A836 /* TAudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5D82C47032DF3CC01053105 /* TAudioEffect.cpp */; };
-		4B00604A1112ED0300B6A836 /* TAudioMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D5960330CB0801053105 /* TAudioMixer.cpp */; };
-		4B00604B1112ED0300B6A836 /* TThreadCmdManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D59F0330CB2F01053105 /* TThreadCmdManager.cpp */; };
-		4B00604C1112ED0300B6A836 /* TAudioStreamFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D5A80330CB4101053105 /* TAudioStreamFactory.cpp */; };
 		4B00604D1112ED0300B6A836 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D5D50330CC8501053105 /* Object.cpp */; };
 		4B00604E1112ED0300B6A836 /* Envelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6FC02B9033249ED010531C2 /* Envelope.cpp */; };
-		4B00604F1112ED0300B6A836 /* TAudioGlobals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D5E90330CCD601053105 /* TAudioGlobals.cpp */; };
-		4B0060501112ED0300B6A836 /* TBufferedAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1FF840328C9C301053105 /* TBufferedAudioStream.cpp */; };
-		4B0060511112ED0300B6A836 /* TTransformAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5D82C44032DF22401053105 /* TTransformAudioStream.cpp */; };
-		4B0060521112ED0300B6A836 /* TCutEndAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D5FD0330CD3801053105 /* TCutEndAudioStream.cpp */; };
-		4B0060531112ED0300B6A836 /* TFadeAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D5FF0330CD3801053105 /* TFadeAudioStream.cpp */; };
-		4B0060541112ED0300B6A836 /* TLoopAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D6100330CD5501053105 /* TLoopAudioStream.cpp */; };
-		4B0060551112ED0300B6A836 /* TMixAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D6120330CD5501053105 /* TMixAudioStream.cpp */; };
-		4B0060561112ED0300B6A836 /* TSeqAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D6210330CD8701053105 /* TSeqAudioStream.cpp */; };
-		4B0060571112ED0300B6A836 /* TFileAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C5B1FE033220AA01053105 /* TFileAudioStream.cpp */; };
-		4B0060581112ED0300B6A836 /* TReadFileAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C5B204033220C001053105 /* TReadFileAudioStream.cpp */; };
-		4B0060591112ED0300B6A836 /* TWriteFileAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C5B21203322F5801053105 /* TWriteFileAudioStream.cpp */; };
 		4B00605A1112ED0300B6A836 /* TAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB27531056B7DF100053105 /* TAudioRenderer.cpp */; };
-		4B00605B1112ED0300B6A836 /* TAudioRendererFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B0391E00585040A006C929E /* TAudioRendererFactory.cpp */; };
-		4B00605C1112ED0300B6A836 /* TRendererAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B22F6071FB980005E6873 /* TRendererAudioStream.cpp */; };
-		4B00605D1112ED0300B6A836 /* TAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B22FD071FB9D1005E6873 /* TAudioEngine.cpp */; };
 		4B00605E1112ED0300B6A836 /* lffifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC6136207F4990300ACC53C /* lffifo.c */; };
 		4B00605F1112ED0300B6A836 /* lflifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC6136407F4990B00ACC53C /* lflifo.c */; };
-		4B0060601112ED0300B6A836 /* LibAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B83CA1907FBE5AE00256489 /* LibAudioStream.cpp */; };
 		4B0060611112ED0300B6A836 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
 		4B0060641112ED0300B6A836 /* TCoreAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */; };
-		4B0060661112ED0300B6A836 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
 		4B0060681112ED0300B6A836 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192308B9CD8D00C1962D /* Accelerate.framework */; };
 		4B0060691112ED0300B6A836 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4B00606A1112ED0300B6A836 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8D8097D0ED00029D6DC /* AudioUnit.framework */; };
 		4B00606B1112ED0300B6A836 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8DC097D0EF30029D6DC /* CoreAudio.framework */; };
 		4B00606C1112ED0300B6A836 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
-		4B16AD2A165548EB00FBB3EA /* TSeqAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D6220330CD8701053105 /* TSeqAudioStream.h */; };
 		4B63B0540BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0520BDF790600CD9753 /* TPortAudioV19Renderer.cpp */; };
 		4B63B0550BDF790600CD9753 /* TPortAudioV19Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0530BDF790600CD9753 /* TPortAudioV19Renderer.h */; };
 		4B63B0560BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0520BDF790600CD9753 /* TPortAudioV19Renderer.cpp */; };
 		4B63B0570BDF790600CD9753 /* TPortAudioV19Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0530BDF790600CD9753 /* TPortAudioV19Renderer.h */; };
 		4B63B05A0BDF791A00CD9753 /* TJackAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0580BDF791A00CD9753 /* TJackAudioRenderer.cpp */; };
 		4B63B05B0BDF791A00CD9753 /* TJackAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0590BDF791A00CD9753 /* TJackAudioRenderer.h */; };
-		4B66D56816ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B66D56716ECD1C100AF5DDD /* TBufferedInputAudioStream.h */; };
 		4B66D56916ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B66D56716ECD1C100AF5DDD /* TBufferedInputAudioStream.h */; };
 		4B66D56A16ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B66D56716ECD1C100AF5DDD /* TBufferedInputAudioStream.h */; };
 		4B66D56B16ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B66D56716ECD1C100AF5DDD /* TBufferedInputAudioStream.h */; };
 		4B7BD8D9097D0ED00029D6DC /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8D8097D0ED00029D6DC /* AudioUnit.framework */; };
 		4B7BD8DD097D0EF30029D6DC /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8DC097D0EF30029D6DC /* CoreAudio.framework */; };
-		4B884DA51743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B884DA41743CF4D004AAD1D /* TEventAudioStream.cpp */; };
 		4B884DA61743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B884DA41743CF4D004AAD1D /* TEventAudioStream.cpp */; };
 		4B884DA71743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B884DA41743CF4D004AAD1D /* TEventAudioStream.cpp */; };
 		4B884DA81743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B884DA41743CF4D004AAD1D /* TEventAudioStream.cpp */; };
-		4B884DAA1743CF53004AAD1D /* TEventAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B884DA91743CF53004AAD1D /* TEventAudioStream.h */; };
 		4B884DAB1743CF53004AAD1D /* TEventAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B884DA91743CF53004AAD1D /* TEventAudioStream.h */; };
 		4B884DAC1743CF53004AAD1D /* TEventAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B884DA91743CF53004AAD1D /* TEventAudioStream.h */; };
 		4B884DAD1743CF53004AAD1D /* TEventAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B884DA91743CF53004AAD1D /* TEventAudioStream.h */; };
@@ -120,8 +61,6 @@
 		4B98A5C00D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
 		4B98A5C10D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B98A5C50D168B4300A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
-		4B9A47CE1648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
-		4B9A47CF1648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
 		4B9A47D01648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
 		4B9A47D11648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
 		4B9A47D21648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
@@ -221,8 +160,6 @@
 		4BCB2B630D12ACE500AB3F6D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4BCB2B640D12ACE500AB3F6D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
 		4BCB2BDF0D12B71300AB3F6D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0DEDE087FE455003B1CB3 /* main.cpp */; };
-		4BE4D189165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
-		4BE4D18A165671C700495934 /* TRubberBandAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE4D188165671C700495934 /* TRubberBandAudioStream.h */; };
 		4BE4D18B165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
 		4BE4D18C165671C700495934 /* TRubberBandAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE4D188165671C700495934 /* TRubberBandAudioStream.h */; };
 		4BE4D18D165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
@@ -376,6 +313,7 @@
 		4BEA6240095806CD001F733A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0DEDE087FE455003B1CB3 /* main.cpp */; };
 		4BEFE9810C59C93E00F8AE0C /* TCoreAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */; };
 		4BEFE9820C59C93E00F8AE0C /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */; };
+		4BFA24A417E75ACC00BBA6EB /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -813,61 +751,23 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B0060121112ED0300B6A836 /* TAudioChannel.h in Headers */,
-				4B0060131112ED0300B6A836 /* TPanTable.h in Headers */,
-				4B0060141112ED0300B6A836 /* TAudioEffect.h in Headers */,
-				4B0060151112ED0300B6A836 /* TAudioMixer.h in Headers */,
-				4B0060161112ED0300B6A836 /* TCmdManager.h in Headers */,
-				4B0060171112ED0300B6A836 /* TThreadCmdManager.h in Headers */,
 				4B0060181112ED0300B6A836 /* TAudioBuffer.h in Headers */,
 				4B0060191112ED0300B6A836 /* Object.h in Headers */,
 				4B00601A1112ED0300B6A836 /* Envelope.h in Headers */,
 				4B00601B1112ED0300B6A836 /* UAudioTools.h in Headers */,
-				4B00601C1112ED0300B6A836 /* TAudioGlobals.h in Headers */,
 				4B00601D1112ED0300B6A836 /* TSharedBuffers.h in Headers */,
-				4B00601E1112ED0300B6A836 /* TAudioStream.h in Headers */,
-				4B00601F1112ED0300B6A836 /* TBufferedAudioStream.h in Headers */,
-				4B0060201112ED0300B6A836 /* TTransformAudioStream.h in Headers */,
-				4B0060211112ED0300B6A836 /* TCutEndAudioStream.h in Headers */,
-				4B0060221112ED0300B6A836 /* TFadeAudioStream.h in Headers */,
-				4B0060231112ED0300B6A836 /* TLoopAudioStream.h in Headers */,
-				4B0060241112ED0300B6A836 /* TMixAudioStream.h in Headers */,
-				4B0060251112ED0300B6A836 /* TNullAudioStream.h in Headers */,
-				4B0060261112ED0300B6A836 /* TFileAudioStream.h in Headers */,
-				4B0060271112ED0300B6A836 /* TReadFileAudioStream.h in Headers */,
-				4B0060281112ED0300B6A836 /* TWriteFileAudioStream.h in Headers */,
-				4B0060291112ED0300B6A836 /* TInputAudioStream.h in Headers */,
-				4B00602A1112ED0300B6A836 /* TRendererAudioStream.h in Headers */,
 				4B00602B1112ED0300B6A836 /* TAudioClient.h in Headers */,
 				4B00602C1112ED0300B6A836 /* TAudioRenderer.h in Headers */,
-				4B00602D1112ED0300B6A836 /* TAudioRendererFactory.h in Headers */,
-				4B00602E1112ED0300B6A836 /* TAudioEngine.h in Headers */,
 				4B00602F1112ED0300B6A836 /* lffifo.h in Headers */,
 				4B0060301112ED0300B6A836 /* msAtomic.h in Headers */,
 				4B0060311112ED0300B6A836 /* lflifo.h in Headers */,
-				4B0060321112ED0300B6A836 /* TAudioStreamFactory.h in Headers */,
 				4B0060331112ED0300B6A836 /* UTools.h in Headers */,
-				4B0060341112ED0300B6A836 /* LibAudioStream.h in Headers */,
-				4B0060351112ED0300B6A836 /* TAudioEffectInterface.h in Headers */,
-				4B0060361112ED0300B6A836 /* TVolAudioEffect.h in Headers */,
-				4B0060371112ED0300B6A836 /* TFaustAudioEffect.h in Headers */,
-				4B0060381112ED0300B6A836 /* TThreadUtils.h in Headers */,
-				4B0060391112ED0300B6A836 /* TBinaryAudioStream.h in Headers */,
-				4B00603A1112ED0300B6A836 /* TCmdHandler.h in Headers */,
 				4B00603B1112ED0300B6A836 /* TAudioConstants.h in Headers */,
-				4B00603C1112ED0300B6A836 /* TPanAudioEffect.h in Headers */,
-				4B00603D1112ED0300B6A836 /* LibAudioStream++.h in Headers */,
-				4B00603E1112ED0300B6A836 /* TChannelizerAudioStream.h in Headers */,
 				4B00603F1112ED0300B6A836 /* la_smartpointer.h in Headers */,
 				4B0060421112ED0300B6A836 /* TCoreAudioRenderer.h in Headers */,
 				4B0060431112ED0300B6A836 /* StringTools.h in Headers */,
-				4B0060441112ED0300B6A836 /* TSoundTouchAudioStream.h in Headers */,
-				4B9A47CF1648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
-				4B16AD2A165548EB00FBB3EA /* TSeqAudioStream.h in Headers */,
-				4BE4D18A165671C700495934 /* TRubberBandAudioStream.h in Headers */,
-				4B66D56816ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
 				4BB9AE8817170DB000A56C3A /* TLASException.h in Headers */,
-				4B884DAA1743CF53004AAD1D /* TEventAudioStream.h in Headers */,
+				4BFA24A417E75ACC00BBA6EB /* TPanTable.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1340,38 +1240,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B0060481112ED0300B6A836 /* TAudioChannel.cpp in Sources */,
-				4B0060491112ED0300B6A836 /* TAudioEffect.cpp in Sources */,
-				4B00604A1112ED0300B6A836 /* TAudioMixer.cpp in Sources */,
-				4B00604B1112ED0300B6A836 /* TThreadCmdManager.cpp in Sources */,
-				4B00604C1112ED0300B6A836 /* TAudioStreamFactory.cpp in Sources */,
 				4B00604D1112ED0300B6A836 /* Object.cpp in Sources */,
 				4B00604E1112ED0300B6A836 /* Envelope.cpp in Sources */,
-				4B00604F1112ED0300B6A836 /* TAudioGlobals.cpp in Sources */,
-				4B0060501112ED0300B6A836 /* TBufferedAudioStream.cpp in Sources */,
-				4B0060511112ED0300B6A836 /* TTransformAudioStream.cpp in Sources */,
-				4B0060521112ED0300B6A836 /* TCutEndAudioStream.cpp in Sources */,
-				4B0060531112ED0300B6A836 /* TFadeAudioStream.cpp in Sources */,
-				4B0060541112ED0300B6A836 /* TLoopAudioStream.cpp in Sources */,
-				4B0060551112ED0300B6A836 /* TMixAudioStream.cpp in Sources */,
-				4B0060561112ED0300B6A836 /* TSeqAudioStream.cpp in Sources */,
-				4B0060571112ED0300B6A836 /* TFileAudioStream.cpp in Sources */,
-				4B0060581112ED0300B6A836 /* TReadFileAudioStream.cpp in Sources */,
-				4B0060591112ED0300B6A836 /* TWriteFileAudioStream.cpp in Sources */,
 				4B00605A1112ED0300B6A836 /* TAudioRenderer.cpp in Sources */,
-				4B00605B1112ED0300B6A836 /* TAudioRendererFactory.cpp in Sources */,
-				4B00605C1112ED0300B6A836 /* TRendererAudioStream.cpp in Sources */,
-				4B00605D1112ED0300B6A836 /* TAudioEngine.cpp in Sources */,
 				4B00605E1112ED0300B6A836 /* lffifo.c in Sources */,
 				4B00605F1112ED0300B6A836 /* lflifo.c in Sources */,
-				4B0060601112ED0300B6A836 /* LibAudioStream.cpp in Sources */,
 				4B0060611112ED0300B6A836 /* la_smartpointer.cpp in Sources */,
 				4B0060641112ED0300B6A836 /* TCoreAudioRenderer.cpp in Sources */,
-				4B0060661112ED0300B6A836 /* TSoundTouchAudioStream.cpp in Sources */,
-				4B9A47CE1648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
-				4BE4D189165671C700495934 /* TRubberBandAudioStream.cpp in Sources */,
 				4BB3A97E16FDDBE3000F728C /* StringTools.cpp in Sources */,
-				4B884DA51743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
