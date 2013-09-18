@@ -110,7 +110,7 @@ class TBufferedAudioStream : public TAudioStream
         {}
 
         virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
-        virtual long Read( FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
 
         virtual void Reset();
 		
