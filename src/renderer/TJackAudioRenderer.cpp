@@ -44,36 +44,29 @@ int TJackAudioRenderer::ProcessAux(jack_nframes_t nframes)
     
     // Take time stamp of first call to Process 
     if (fAnchorFrameTime == 0) {
-        fAnchorFrameTime =  jack_frame_time(fClient);
+        fAnchorFrameTime = jack_frame_time(fClient);
         fAnchorUsecTime = jack_get_time();
     }
 
-    // Copy input and interleaving
+    // Copy input buffers
 	for (i = 0; i < fInput; i++) {
-		float* input = (float*)jack_port_get_buffer(fInput_ports[i], nframes);
-		for (jack_nframes_t j = 0; j < nframes; j++) {
-			fInputBuffer[fInput * j + i] = input[j];
-		}
+		fInputBuffer[i] = (float*)jack_port_get_buffer(fInput_ports[i], nframes);
+    }
+    
+    // Copy output buffers
+    for (i = 0; i < fOutput; i++) {
+		fOutputBuffer[i] = (float*)jack_port_get_buffer(fOutput_ports[i], nframes);
     }
 	
     Run(fInputBuffer, fOutputBuffer, nframes);
-
-    // Copy output and de-interleaving
-	for (i = 0; i < fOutput; i++) {
-		float* output = (float*)jack_port_get_buffer(fOutput_ports[i], nframes);
-		for (jack_nframes_t j = 0; j < nframes; j++) {
-			 output[j] = fOutputBuffer[fOutput * j + i];
-		}
-    }
-
     return 0;
 }
 
 TJackAudioRenderer::TJackAudioRenderer(): TAudioRenderer()
 {
 	fInput = fOutput = MAX_PORTS;
-    fInputBuffer = new float[TAudioGlobals::fBufferSize * TAudioGlobals::fInput];
-    fOutputBuffer = new float[TAudioGlobals::fBufferSize * TAudioGlobals::fOutput];
+    fInputBuffer = new float*[TAudioGlobals::fInput];
+    fOutputBuffer = new float*[TAudioGlobals::fOutput];
 	fInput_ports = (jack_port_t**)calloc(fInput, sizeof(jack_port_t*));
 	fOutput_ports = (jack_port_t**)calloc(fOutput, sizeof(jack_port_t*));
     fAnchorFrameTime = 0;

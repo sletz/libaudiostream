@@ -42,7 +42,7 @@ long TAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long
     return NO_ERR;
 }
 
-void TAudioRenderer::Run(float* inputBuffer, float* outputBuffer, long frames)
+void TAudioRenderer::Run(float** inputBuffer, float** outputBuffer, long frames)
 {
     // Clean output buffer
     UAudioTools::ZeroFloatBlk(outputBuffer, frames, fOutput);

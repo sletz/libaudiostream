@@ -52,8 +52,8 @@ class TJackAudioRenderer : public TAudioRenderer
         jack_port_t** fInput_ports;
         jack_port_t** fOutput_ports;
 
-        float* fInputBuffer;
-        float* fOutputBuffer;
+        float** fInputBuffer;
+        float** fOutputBuffer;
 		
 		long fInput;
 		long fOutput;

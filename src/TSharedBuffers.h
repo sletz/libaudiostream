@@ -37,23 +37,23 @@ class TSharedBuffers
 
     public:
 
-        static float* fInBuffer;
-        static float* fOutBuffer;
+        static float** fInBuffer;
+        static float** fOutBuffer;
 
-        static float* GetInBuffer()
+        static float** GetInBuffer()
         {
             return fInBuffer;
         }
-        static float* GetOutBuffer()
+        static float** GetOutBuffer()
         {
             return fOutBuffer;
         }
 
-        static void SetInBuffer(float* input)
+        static void SetInBuffer(float** input)
         {
             fInBuffer = input;
         }
-        static void SetOutBuffer(float* output)
+        static void SetOutBuffer(float** output)
         {
             fOutBuffer = output;
         }

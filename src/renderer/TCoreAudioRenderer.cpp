@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2006-2007
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under 
 the terms of the GNU Library General Public License as published by the 
@@ -138,7 +138,7 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
     // Signal waiting start function...
     fState = true;
     
-    if (GetInputs() > 0) {
+    if (fInput > 0) {
         AudioUnitRender(fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, fInputData);
     }
     
@@ -152,9 +152,20 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
         fAnchorFrameTime = fCallbackTime.mSampleTime;
         fAnchorHostTime = fCallbackHostTime;
     }
+    
+    float* inputBuffers[fInput];
+    float* outputBuffers[fOutput];
+    
+    for (int i = 0; i < fInput; i++) {
+        inputBuffers[i] = (float*)fInputData->mBuffers[i].mData;
+    }
+    
+    for (int i = 0; i < fOutput; i++) {
+        memset((float*)ioData->mBuffers[i].mData, 0, ioData->mBuffers[i].mDataByteSize); // Necessary since renderer does a *mix*
+        inputBuffers[i] = (float*)ioData->mBuffers[i].mData;
+    }
   
-    memset((float*)ioData->mBuffers[0].mData, 0, ioData->mBuffers[0].mDataByteSize); // Necessary since renderer does a *mix*
-    Run((float*)fInputData->mBuffers[0].mData, (float*)ioData->mBuffers[0].mData, inNumberFrames);
+    Run(inputBuffers, outputBuffers, inNumberFrames);
 	return 0;
 }
 
@@ -857,7 +868,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         }
     }
  	
-	if (GetDefaultDevice(inChan, outChan, samplerate, &fDeviceID) != noErr){
+	if (GetDefaultDevice(inChan, outChan, samplerate, &fDeviceID) != noErr) {
 		printf("Cannot open default device\n");
 		return OPEN_ERR;
 	}
@@ -1014,11 +1025,12 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         srcFormat.mSampleRate = samplerate;
         srcFormat.mFormatID = kAudioFormatLinearPCM;
         srcFormat.mBitsPerChannel = 32;
-        srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-        srcFormat.mChannelsPerFrame = inChan;
+        srcFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked | kLinearPCMFormatFlagIsNonInterleaved;
+        srcFormat.mBytesPerPacket = sizeof(float);
         srcFormat.mFramesPerPacket = 1;
-        srcFormat.mBytesPerFrame = srcFormat.mBitsPerChannel * srcFormat.mChannelsPerFrame / 8;
-        srcFormat.mBytesPerPacket = srcFormat.mBytesPerFrame * srcFormat.mFramesPerPacket;
+        srcFormat.mBytesPerFrame = sizeof(float);
+        srcFormat.mChannelsPerFrame = inChan;
+        srcFormat.mBitsPerChannel = 32;
         PrintStreamDesc(&srcFormat);
        
         err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &srcFormat, sizeof(AudioStreamBasicDescription));
@@ -1044,11 +1056,12 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         dstFormat.mSampleRate = samplerate;
         dstFormat.mFormatID = kAudioFormatLinearPCM;
         dstFormat.mBitsPerChannel = 32;
-        dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-        dstFormat.mChannelsPerFrame = outChan;
+        dstFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked | kLinearPCMFormatFlagIsNonInterleaved;
+        dstFormat.mBytesPerPacket = sizeof(float);
         dstFormat.mFramesPerPacket = 1;
-        dstFormat.mBytesPerFrame = dstFormat.mBitsPerChannel * dstFormat.mChannelsPerFrame / 8;
-        dstFormat.mBytesPerPacket = dstFormat.mBytesPerFrame * dstFormat.mFramesPerPacket;
+        dstFormat.mBytesPerFrame = sizeof(float);
+        dstFormat.mChannelsPerFrame = outChan;
+        dstFormat.mBitsPerChannel = 32;
         PrintStreamDesc(&dstFormat);
         
         err1 = AudioUnitSetProperty(fAUHAL, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &dstFormat, sizeof(AudioStreamBasicDescription));
@@ -1086,12 +1099,14 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
 		printf("Cannot allocate memory for input buffers\n");
         goto error;
 	}
-    fInputData->mNumberBuffers = 1;
 
     // Prepare buffers
-	fInputData->mBuffers[0].mNumberChannels = inChan;
-	fInputData->mBuffers[0].mDataByteSize = inChan * bufferSize * sizeof(float);
-    fInputData->mBuffers[0].mData = malloc(inChan * bufferSize * sizeof(float));
+    fInputData->mNumberBuffers = inChan;
+    for (int i = 0; i < inChan; i++) {
+        fInputData->mBuffers[i].mNumberChannels = 1;
+        fInputData->mBuffers[i].mData = malloc(bufferSize * sizeof(float));
+        fInputData->mBuffers[i].mDataByteSize = bufferSize * sizeof(float);
+    }
  	
     return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, samplerate);
 
@@ -1109,7 +1124,9 @@ long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, 
 long TCoreAudioRenderer::Close()
 {   
     if (fInputData) {
-        free(fInputData->mBuffers[0].mData);
+        for (int i = 0; i < fInput; i++) {
+            free(fInputData->mBuffers[i].mData);
+        }   
         free(fInputData);
     }
 	AudioUnitUninitialize(fAUHAL);

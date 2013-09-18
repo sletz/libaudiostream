@@ -206,6 +206,13 @@ class UAudioTools
         {
             memset(dst, 0, sizeof(float) * framesNum * channels);
         }
+        
+        static inline void ZeroFloatBlk(float** dst, long framesNum, long channels)
+        {
+            for (int i = 0; i < channels; i++) {
+                memset(dst[i], 0, sizeof(float) * framesNum);
+            }
+        }
 
         static inline void ZeroShortBlk(short* dst, long framesNum, long channels)
         {

@@ -31,7 +31,7 @@ int TPortAudioV19Renderer::Process(const void* inputBuffer, void* outputBuffer, 
 									const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData)
 {
     TPortAudioV19RendererPtr renderer = (TPortAudioV19RendererPtr)userData;
-    renderer->Run((float*)inputBuffer, (float*)outputBuffer, framesPerBuffer);
+    renderer->Run((float**)inputBuffer, (float**)outputBuffer, framesPerBuffer);
     return 0;
 }
 
@@ -178,7 +178,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
 	
 	inputParameters.device = inputDevice;
     inputParameters.channelCount = inChan;
-    inputParameters.sampleFormat = paFloat32;		// 32 bit floating point output
+    inputParameters.sampleFormat = paFloat32 | paNonInterleaved;		// 32 bit floating point output
     inputParameters.suggestedLatency = (inputDevice != paNoDevice)		// TODO: check how to setup this on ASIO
                                        ? ((TAudioGlobals::fInputLatency > 0) 
 										? (float(TAudioGlobals::fInputLatency) / 1000.f)
@@ -188,7 +188,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
 
     outputParameters.device = outputDevice;
     outputParameters.channelCount = outChan;
-    outputParameters.sampleFormat = paFloat32;		// 32 bit floating point output
+    outputParameters.sampleFormat = paFloat32 | paNonInterleaved;		// 32 bit floating point output
     outputParameters.suggestedLatency = (outputDevice != paNoDevice)	// TODO: check how to setup this on ASIO
                                         ? ((TAudioGlobals::fOutputLatency > 0) 
 										 ? (float(TAudioGlobals::fOutputLatency) / 1000.f)
@@ -272,8 +272,7 @@ long TPortAudioV19Renderer::GetDeviceCount()
 
 void TPortAudioV19Renderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
-	const PaDeviceInfo* pdi;
-	pdi = Pa_GetDeviceInfo(deviceNum);
+	const PaDeviceInfo* pdi = Pa_GetDeviceInfo(deviceNum);
 	
 	info->fMaxInputChannels = pdi->maxInputChannels;
 	info->fMaxOutputChannels = pdi->maxOutputChannels;

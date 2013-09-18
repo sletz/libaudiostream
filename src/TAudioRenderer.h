@@ -82,7 +82,7 @@ struct TRTAudioClient : public TAudioClient
 	virtual ~TRTAudioClient()
 	{}
 
-	virtual bool AudioCallback(float* inputBuffer, float* outputBuffer, long frames)
+	virtual bool AudioCallback(float** inputBuffer, float** outputBuffer, long frames)
 	{
 		return true;
 	}
@@ -107,7 +107,7 @@ class AUDIO_EXPORTS TAudioRenderer
         long fOutput;
         long fBufferSize;
 
-        void Run(float* inputBuffer, float* outputBuffer, long frames);
+        void Run(float** inputBuffer, float** outputBuffer, long frames);
 
     public:
 

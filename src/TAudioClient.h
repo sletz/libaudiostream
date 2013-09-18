@@ -42,12 +42,12 @@ class TAudioClient
 
 		/*!
 		\brief Audio callback called by the AudioManager.
-		\param inputBuffer The input buffer as a array of interleaved float samples (stereo here).
-		\param outputBuffer The output buffer as a array of interleaved float samples (stereo here).
+		\param inputBuffer The input buffer as an array of non interleaved float samples arrays.
+		\param outputBuffer The output buffer as an array of non interleaved float samples arrays.
 		\param frames The input/output buffer number of frames.
 		\return true if success, false otherwise.
 		*/
-        virtual bool AudioCallback(float* inputBuffer, float* outputBuffer, long frames) = 0;
+        virtual bool AudioCallback(float** inputBuffer, float** outputBuffer, long frames) = 0;
 };
 
 typedef TAudioClient * TAudioClientPtr;
