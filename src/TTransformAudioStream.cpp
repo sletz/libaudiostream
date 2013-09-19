@@ -45,13 +45,13 @@ long TTransformAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long frame
 	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
     
     /* Use temporary fBuffer from the beginning */
-    long res = fStream->Read(fBuffer, framesNum, 0, channels);
+    long res = fStream->Read(fBuffer, framesNum, 0);
      
     /* Use temporary fBuffer from the beginning */
-    fEffectList->Process(fBuffer->GetFrame(0), framesNum, channels);
+    fEffectList->Process(fBuffer->GetFrame(0), framesNum);
     
    /* Use temporary fBuffer from the beginning */
-    UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos), fBuffer->GetFrame(0), framesNum, channels);
+    UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos), fBuffer->GetFrame(0), framesNum);
      
     return res;
 }

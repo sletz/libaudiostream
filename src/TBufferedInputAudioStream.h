@@ -94,9 +94,8 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
             UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
-                                             framesNum,
-                                             channels);
-            return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos, channels); 
+                                             framesNum);
+            return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos); 
         }
 
         virtual TAudioStreamPtr CutBegin(long frames)
