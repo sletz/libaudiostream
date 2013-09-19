@@ -25,14 +25,14 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
-TFadeAudioStream::TFadeAudioStream(): TDecoratedAudioStream(0)
+TFadeAudioStream::TFadeAudioStream():TDecoratedAudioStream(0)
 {
     fStatus = kIdle;
     fFadeInFrames = 0;
     fFadeOutFrames = 0;
     fCurFrame = 0;
     fFramesNum = 0;
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 }
 
 TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut): TDecoratedAudioStream(stream)
@@ -42,33 +42,33 @@ TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fad
     fFadeOutFrames = fadeOut;
     fCurFrame = 0;
 	fFramesNum = UTools::Max(0, fStream->Length() - fFadeOutFrames); // Number of frames - FadeOut 
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
     Init(0.0f, float(fadeIn), 1.0f, float(fadeOut));
 }
 
-long TFadeAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     switch (fStatus) {
         case kIdle:
             return 0;
 
         case kPlaying:
-            return ReadAux(buffer, framesNum, framePos, channels);
+            return ReadAux(buffer, framesNum, framePos);
 
         case kFadeIn:
-            return FadeIn(buffer, framesNum, framePos, channels);
+            return FadeIn(buffer, framesNum, framePos);
 
         case kFadeOut:
-            return FadeOut(buffer, framesNum, framePos, channels);
+            return FadeOut(buffer, framesNum, framePos);
 
         default:
             return 0;
     }
 }
 
-long TFadeAudioStream::ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    long res = fStream->Read(buffer, framesNum, framePos, channels);
+    long res = fStream->Read(buffer, framesNum, framePos);
     fCurFrame += res;
 
     if (res < framesNum) { // should never happens
@@ -81,19 +81,19 @@ long TFadeAudioStream::ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePo
 
 // TODO : start FadeOut while doing FadeIn
 
-long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), framesNum, channels);
-    long res = fStream->Read(fMixBuffer, framesNum, framePos, channels);
+    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), framesNum, fStream->Channels());
+    long res = fStream->Read(fMixBuffer, framesNum, framePos);
     fCurFrame += res;
 
     for (int i = framePos; i < framePos + framesNum; i++) {
-        UAudioTools::MultFrame(fMixBuffer->GetFrame(i), fFadeIn.tick(), channels);
+        UAudioTools::MultFrame(fMixBuffer->GetFrame(i), fFadeIn.tick(), fStream->Channels());
     }
 
     UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos),
                                     fMixBuffer->GetFrame(framePos),
-                                    framesNum, channels);
+                                    framesNum, fStream->Channels());
 
     if (res < framesNum) {
         fStatus = kIdle;
@@ -104,19 +104,19 @@ long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos
     return res;
 }
 
-long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), framesNum, channels);
-    long res = fStream->Read(fMixBuffer, framesNum, framePos, channels);
+    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), framesNum, fStream->Channels());
+    long res = fStream->Read(fMixBuffer, framesNum, framePos);
     fCurFrame += res;
 
     for (int i = framePos; i < framePos + framesNum; i++) {
-        UAudioTools::MultFrame(fMixBuffer->GetFrame(i), fFadeOut.tick(), channels);
+        UAudioTools::MultFrame(fMixBuffer->GetFrame(i), fFadeOut.tick(), fStream->Channels());
     }
 
     UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos),
                                     fMixBuffer->GetFrame(framePos),
-                                    framesNum, channels);
+                                    framesNum, fStream->Channels());
 
     if ((res < framesNum) || (fFadeOut.lastOut() <= 0.0f)) {
         fStatus = kIdle;

@@ -30,13 +30,13 @@ TLoopAudioStream::TLoopAudioStream(TAudioStreamPtr stream, long loop): TDecorate
     fCurLoop = 0;
 }
 
-long TLoopAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TLoopAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    long res = fStream->Read(buffer, framesNum, framePos, channels);
+    long res = fStream->Read(buffer, framesNum, framePos);
 
     if ((res < framesNum) && (++fCurLoop < fLoopNum)) { // Loop
         fStream->Reset();
-        return res + Read(buffer, framesNum - res, framePos + res, channels); // Read the end of the buffer
+        return res + Read(buffer, framesNum - res, framePos + res); // Read the end of the buffer
     } else {
         return res;
     }

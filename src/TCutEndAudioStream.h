@@ -46,7 +46,7 @@ class TCutEndAudioStream : public TDecoratedAudioStream
         virtual ~TCutEndAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
         long Length()

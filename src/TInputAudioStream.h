@@ -43,7 +43,7 @@ class TInputAudioStream : public TAudioStream
         virtual ~TInputAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(TSharedBuffers::GetInBuffer());
             UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos),

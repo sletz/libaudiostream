@@ -51,14 +51,14 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
 
     protected:
 
-        long Write(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        long WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
     public:
 
         TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format);
         virtual ~TWriteFileAudioStream();
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
        

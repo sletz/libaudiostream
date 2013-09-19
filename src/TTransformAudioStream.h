@@ -51,11 +51,11 @@ class TTransformAudioStream : public TDecoratedAudioStream
     		delete fBuffer;
         }
 
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
         TAudioStreamPtr CutBegin(long frames);    // Length in frames

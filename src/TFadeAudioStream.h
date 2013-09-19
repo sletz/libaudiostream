@@ -47,9 +47,9 @@ class TFadeAudioStream : public TDecoratedAudioStream
         long fFramesNum;		// Frames number
         FLOAT_BUFFER fMixBuffer;     // Used for mixing
 
-        long ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
-        long FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
-        long FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        long FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        long FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Init(float v1, float f1, float v2, float f2);
 
@@ -64,11 +64,11 @@ class TFadeAudioStream : public TDecoratedAudioStream
             delete fMixBuffer;
         }
 
-        long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
         TAudioStreamPtr CutBegin(long frames);

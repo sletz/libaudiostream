@@ -52,8 +52,8 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             fChannels = 2;
             
             // Dynamic allocation
-            fMemoryBuffer = new TLocalAudioBuffer<float>(endFrame, fChannels, true);
-            fTmpBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
+            fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(endFrame, fChannels, true);
+            fTmpBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
         }
         virtual ~TBufferedInputAudioStream()
         {
@@ -73,12 +73,12 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             return framesNum;
         }
 
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
     
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             // Read input
             assert(TSharedBuffers::GetInBuffer());

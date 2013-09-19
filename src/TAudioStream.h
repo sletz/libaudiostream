@@ -51,11 +51,11 @@ class TAudioStream : public la_smartable
         virtual ~TAudioStream()
         {}
 
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
@@ -140,16 +140,16 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             fStream = stream;
         }
 
-		virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+		virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(fStream);
-            return fStream->Write(buffer, framesNum, framePos, channels);
+            return fStream->Write(buffer, framesNum, framePos);
         }
 
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(fStream);
-            return fStream->Read(buffer, framesNum, framePos, channels);
+            return fStream->Read(buffer, framesNum, framePos);
         }
 
         virtual void Reset()

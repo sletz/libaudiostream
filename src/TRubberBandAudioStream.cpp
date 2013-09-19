@@ -34,7 +34,7 @@ TRubberBandAudioStream::TRubberBandAudioStream(TAudioStreamPtr stream, double* p
 	fTimeStretchVal = *time_strech;
    
 	fRubberBand = new RubberBandStretcher(TAudioGlobals::fSampleRate, stream->Channels(), RubberBandStretcher::OptionProcessRealTime);
-	fBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
+	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
 	
 	fRubberBand->setTimeRatio(1/fTimeStretchVal);
 	fRubberBand->setPitchScale(fPitchShiftVal);
@@ -63,7 +63,7 @@ TAudioStreamPtr TRubberBandAudioStream::CutBegin(long frames)
     return new TRubberBandAudioStream(fStream->CutBegin(frames), fPitchShift, fTimeStretch);
 }
 
-long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
   	if (fTimeStretchVal != *fTimeStretch) {
 		fTimeStretchVal = *fTimeStretch;
@@ -78,16 +78,16 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         int needFrames = std::min((int)framesNum, (int)fRubberBand->getSamplesRequired());
         if (needFrames > 0) {
             UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
-            fStream->Read(fBuffer, needFrames, 0, channels);
+            fStream->Read(fBuffer, needFrames, 0);
             // Deinterleave...
-            UAudioTools::Deinterleave(fTemp1, fBuffer->GetFrame(0), needFrames, channels);
+            UAudioTools::Deinterleave(fTemp1, fBuffer->GetFrame(0), needFrames, Channels());
             fRubberBand->process(fTemp1, needFrames, false);
         }
     }
     
     fRubberBand->retrieve(fTemp2, std::min((int)framesNum, fRubberBand->available()));
     // Interleave...
-    UAudioTools::Interleave(buffer->GetFrame(0), fTemp2, framesNum, channels);
+    UAudioTools::Interleave(buffer->GetFrame(0), fTemp2, framesNum);
 	return framesNum;
 }
 

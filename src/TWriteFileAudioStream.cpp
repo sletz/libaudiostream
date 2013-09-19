@@ -34,7 +34,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream
         : TFileAudioStream(name)
 {
     fChannels = stream->Channels();
-    fMemoryBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
     fStream = stream;
     fFormat = format;
     fFramesNum = fStream->Length();
@@ -83,10 +83,10 @@ void TWriteFileAudioStream::Close()
     }
 }
 
-long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    long res = fStream->Read(buffer, framesNum, framePos, channels);
-    TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
+    long res = fStream->Read(buffer, framesNum, framePos);
+    TBufferedAudioStream::Write(buffer, framesNum, framePos); // Write on disk
 	if (res < framesNum) {
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
@@ -105,10 +105,12 @@ void TWriteFileAudioStream::Reset()
 }
 
 // Called by TCmdManager
-long TWriteFileAudioStream::Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
+long TWriteFileAudioStream::WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    return long(sf_writef_float(fFile, buffer->GetFrame(framePos), framesNum));  // In frames
+    float tmp_buffer[fChannels * framesNum];
+    UAudioTools::Interleave(tmp_buffer, buffer->GetFrame(framePos), framesNum, fChannels);
+    return long(sf_writef_float(fFile, tmp_buffer, framesNum));  // In frames
 }
 
 void TWriteFileAudioStream::Flush()

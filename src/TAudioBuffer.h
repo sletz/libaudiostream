@@ -73,32 +73,15 @@ class TAudioBuffer
 
     protected:
 
-        T* fBuffer;
         long fFrames;
         long fChannels;
-        long fPos;
-        
-        void TouchAndLock(bool touch)
-        {
-            if (touch) {
-                // Force pages loading (4k)
-                for (int i = 0; i < fFrames * fChannels; i+= 4096 / sizeof(float)) {
-                    fBuffer[i] = 0.f;
-                }
-                if (!CHECK_MLOCK(fBuffer, fFrames * fChannels * sizeof(float))) {
-                    printf("Cannot lock TAudioBuffer !\n");
-                }
-            }
-        }
-      
+          
     public:
 
-        TAudioBuffer(): fBuffer(0), fFrames(0), fChannels(0), fPos(0)
+        TAudioBuffer():fFrames(0), fChannels(0)
         {}
         virtual ~TAudioBuffer()
-        {
-            MUNLOCK(fBuffer, fFrames * fChannels * sizeof(float));
-        }
+        {}
 
         long GetSize()
         {
@@ -108,25 +91,144 @@ class TAudioBuffer
         {
             return fChannels;
         }
+        
+};
+
+//-------------------------------
+// Class TInterleavedAudioBuffer
+//-------------------------------
+/*!
+\brief Template based class for interleaved buffers.
+*/
+
+template <class T>
+class TInterleavedAudioBuffer : public TAudioBuffer<T>
+{
+
+    protected:
+
+        T* fBuffer;
+        
+        void TouchAndLock(bool touch)
+        {
+            if (touch) {
+                // Force pages loading (4k)
+                for (int i = 0; i < this->fFrames * this->fChannels; i+= 4096 / sizeof(T)) {
+                    fBuffer[i] = 0.f;
+                }
+                if (!CHECK_MLOCK(fBuffer, this->fFrames * this->fChannels * sizeof(T))) {
+                    printf("Cannot lock TInterleavedAudioBuffer !\n");
+                }
+            }
+        }
+      
+    public:
+
+        TInterleavedAudioBuffer():TAudioBuffer<T>(), fBuffer(0)
+        {}
+        virtual ~TInterleavedAudioBuffer()
+        {
+            MUNLOCK(fBuffer, this->fFrames * this->fChannels * sizeof(T));
+        }
 
         T* GetFrame(long frame)
         {
-            assert(frame <= fFrames);
-            return &fBuffer[frame * fChannels];
+            assert(frame <= this->fFrames);
+            return &fBuffer[frame * this->fChannels];
         }
 
-        T* GetPos()
-        {
-            assert(fPos <= fFrames);
-            return &fBuffer[fPos * fChannels];
-        }
-
-        static void Copy(TAudioBuffer* b1, long f1, TAudioBuffer* b2, long f2, long frames)
+        static void Copy(TInterleavedAudioBuffer* b1, long f1, TInterleavedAudioBuffer* b2, long f2, long frames)
         {
             assert(frames + f1 <= b1->GetSize());
             assert(frames + f2 <= b2->GetSize());
             assert(b1->GetChannels() == b2->GetChannels());
-            memcpy(b1->GetFrame(f1), b2->GetFrame(f2), frames*sizeof(T)*b1->GetChannels());
+            memcpy(b1->GetFrame(f1), b2->GetFrame(f2), frames * sizeof(T) * b1->GetChannels());
+        }
+};
+
+//-------------------------------
+// Class TNonInterleavedAudioBuffer
+//-------------------------------
+/*!
+\brief Template based class for non-interleaved buffers.
+*/
+
+template <class T>
+class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
+{
+
+    protected:
+
+        T** fBuffer;
+        
+        void TouchAndLock(bool touch)
+        {
+            if (touch) {
+                // Force pages loading (4k)
+                for (int i = 0; i < this->fChannels; i++) {
+                    for (int j = 0; j < this->fFrames; j++) {
+                        this->fBuffer[i][j] = 0.f;
+                    }
+                    if (!CHECK_MLOCK(this->fBuffer[i], this->fFrames * sizeof(T))) {
+                        printf("Cannot lock TNonInterleavedAudioBuffer !\n");
+                    }
+                }
+            }
+        }
+      
+    public:
+
+        TNonInterleavedAudioBuffer():TAudioBuffer<T>(), fBuffer(0)
+        {}
+        virtual ~TNonInterleavedAudioBuffer()
+        {
+            for (int i = 0; i < this->fChannels; i++) {
+                MUNLOCK(fBuffer[i], this->fFrames * sizeof(T));
+            }
+        }
+    
+        T** GetFrame(long frame)
+        {
+            assert(frame <= this->fFrames);
+            T* res[this->fChannels];
+            for (int i = 0; i < this->fChannels; i++) {
+                res[i] = &fBuffer[i][this->fFrames];
+            }
+            return res;
+        }
+
+        static void Copy(TNonInterleavedAudioBuffer* b1, long f1, TNonInterleavedAudioBuffer* b2, long f2, long frames)
+        {
+            assert(frames + f1 <= b1->GetSize());
+            assert(frames + f2 <= b2->GetSize());
+            assert(b1->GetChannels() == b2->GetChannels());
+            for (int i = 0; i < b1->GetChannels(); i++) {
+                memcpy(b1->GetFrame(f1)[i], b2->GetFrame(f2)[i], frames * sizeof(T));
+            }
+        }
+};
+
+
+/*!
+\brief Template based class for local buffers.
+*/
+
+template <class T>
+class TLocalInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
+{
+
+    public:
+
+        TLocalInterleavedAudioBuffer(long frames, long channels, bool touch = false)
+        {
+            this->fBuffer = new T[frames * channels];
+            this->fFrames = frames;
+            this->fChannels = channels;
+            this->TouchAndLock(touch);
+        }
+        virtual ~TLocalInterleavedAudioBuffer()
+        {
+            delete []this->fBuffer;
         }
 };
 
@@ -135,21 +237,26 @@ class TAudioBuffer
 */
 
 template <class T>
-class TLocalAudioBuffer : public TAudioBuffer<T>
+class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
 {
 
     public:
 
-        TLocalAudioBuffer(long frames, long channels, bool touch = false)
+        TLocalNonInterleavedAudioBuffer(long frames, long channels, bool touch = false)
         {
-            this->fBuffer = new T[frames * channels];
+            this->fBuffer = new T*[channels];
+            for (int i = 0; i < channels; i++) {
+                this->fBuffer[i] = new T[frames];
+            }
             this->fFrames = frames;
             this->fChannels = channels;
-            this->fPos = 0;
             this->TouchAndLock(touch);
         }
-        virtual ~TLocalAudioBuffer()
+        virtual ~TLocalNonInterleavedAudioBuffer()
         {
+            for (int i = 0; i < this->fChannels; i++) {
+                delete []this->fBuffer[i];
+            }
             delete []this->fBuffer;
         }
 };
@@ -159,23 +266,25 @@ class TLocalAudioBuffer : public TAudioBuffer<T>
 */
 
 template <class T>
-class TSharedAudioBuffer : public TAudioBuffer<T>
+class TSharedInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
 {
 
     public:
 
-        TSharedAudioBuffer(T* buffer, long frames, long channels)
+        TSharedInterleavedAudioBuffer(T* buffer, long frames, long channels)
         {
             this->fBuffer = buffer;
             this->fFrames = frames;
             this->fChannels = channels;
-            this->fPos = 0;
         }
-        virtual ~TSharedAudioBuffer()
+        virtual ~TSharedInterleavedAudioBuffer()
         {}
 };
 
-typedef TAudioBuffer<float>* FLOAT_BUFFER;
-typedef TAudioBuffer<short>* SHORT_BUFFER;
+//typedef TAudioBuffer<float>* FLOAT_BUFFER;
+//typedef TAudioBuffer<short>* SHORT_BUFFER;
+
+typedef TNonInterleavedAudioBuffer<float>* FLOAT_BUFFER;
+typedef TNonInterleavedAudioBuffer<short>* SHORT_BUFFER;
 
 #endif

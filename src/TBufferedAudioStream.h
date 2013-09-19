@@ -89,11 +89,11 @@ class TBufferedAudioStream : public TAudioStream
      
         volatile bool fReady; // For disk access error detection
 
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        virtual long WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        virtual long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
@@ -101,7 +101,7 @@ class TBufferedAudioStream : public TAudioStream
         virtual void ReadBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
         virtual void WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
-        long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels, bool read_or_write);
+        long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, bool read_or_write);
   
     public:
 
@@ -109,8 +109,8 @@ class TBufferedAudioStream : public TAudioStream
         virtual ~TBufferedAudioStream()
         {}
 
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         virtual void Reset();
 		
@@ -134,7 +134,7 @@ class TBufferedAudioStream : public TAudioStream
             return 0;
         } 
         
-        FLOAT_BUFFER GetMemoryBuffer() {return fMemoryBuffer; }
+        FLOAT_BUFFER GetMemoryBuffer() { return fMemoryBuffer; }
 };
 
 typedef TBufferedAudioStream * TBufferedAudioStreamPtr;
@@ -168,10 +168,10 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
         virtual ~TSharedBufferedAudioStream()
         {}
         
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             // Read buffer from memory
-            return TBufferedAudioStream::Read(buffer, framesNum, framePos, channels); 
+            return TBufferedAudioStream::Read(buffer, framesNum, framePos); 
         }
         
         virtual TAudioStreamPtr CutBegin(long frames)

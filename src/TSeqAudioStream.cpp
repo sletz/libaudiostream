@@ -43,23 +43,23 @@ TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long cr
     fCurFrame = 0;
 }
 
-long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fStream);
-    long res = fStream->Read(buffer, framesNum, framePos, channels);
+    long res = fStream->Read(buffer, framesNum, framePos);
     fCurFrame += res;
 
     if (fStream == fStream1) {
         if (res < framesNum) { // End of fStream1
             fStream = fStream2;
             if (fCurFrame > fFramesNum) { // CrossFade
-                return fStream->Read(buffer, framesNum, framePos, channels); // Mix with the end of the buffer
+                return fStream->Read(buffer, framesNum, framePos); // Mix with the end of the buffer
             } else {
-                return res + Read(buffer, framesNum - res, framePos + res, channels); // Read the end of the buffer
+                return res + Read(buffer, framesNum - res, framePos + res); // Read the end of the buffer
             }
         } else if (fCurFrame > fFramesNum) {
             // Mix FadeOut of fStream1 with FadeIn of fStream2
-            fStream2->Read(buffer, framesNum, framePos, channels);
+            fStream2->Read(buffer, framesNum, framePos);
         }
     }
 

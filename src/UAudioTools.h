@@ -128,6 +128,15 @@ class UAudioTools
                 }
             }
 		}
+        
+        static inline void MixFrameToFrameBlk(float** dst, float** src, long framesNum, long channels)
+        {
+			for (int i = 0; i < channels; i++) {
+                for (int j = 0; j < framesNum; j++) { 
+                    dst[i][i] += src[i][i];
+                }
+            }
+		}
 
         static inline void MixFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {
@@ -186,6 +195,7 @@ class UAudioTools
                 }
             }
         }
+       
 
         static inline void ZeroStereoBlk(long* dst, long nbsamples)
         {
@@ -256,20 +266,20 @@ class UAudioTools
             }
         }
 		
-		static inline void Interleave(float* dst, float** src,long nbsamples, long channels)
+		static inline void Interleave(float* dst, float** src,long framesNum, long channels)
         {
 			int i, j;
-			for (i = 0; i < nbsamples; i++) {
+			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {
 					dst[i * channels + j] = src[j][i]; 
 				}
 			}
         }
 		
-		static inline void Deinterleave(float** dst, float* src,long nbsamples, long channels)
+		static inline void Deinterleave(float** dst, float* src,long framesNum, long channels)
         {
 			int i, j;
-			for (i = 0; i < nbsamples; i++) {
+			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {
 					dst[j][i] = src[i * channels + j];
 				}
@@ -404,6 +414,18 @@ class UAudioTools
             }
         }
         
+        static inline void Float2FloatMix(float** in, float** out, long framesNum, long channels)
+        {
+            for (long i = 0; i < channels; i ++) {
+                for (long j = 0; j < framesNum; j += 4) {
+                    out[i][j] += in[j][i];
+                    out[i][j + 1] += in[i][j + 1];
+                    out[i][j + 2] += in[i][j + 2];
+                    out[i][j + 3] += in[i][j + 3];
+                }
+            }
+        }
+        
         static inline void Float2Float(float* in, float* out, long framesNum, long channelsIn, long channelsOut)
         {
             if (channelsIn < channelsOut) {  // distribute channels
@@ -421,6 +443,18 @@ class UAudioTools
                 }
             }
         }
+        
+        static inline void Float2Float(float** in, float** out, long framesNum, long channels)
+        {
+            for (long i = 0; i < channels; i ++) {
+                for (long j = 0; j < framesNum; j += 4) {
+                    out[i][j] += in[j][i];
+                    out[i][j + 1] += in[i][j + 1];
+                    out[i][j + 2] += in[i][j + 2];
+                    out[i][j + 3] += in[i][j + 3];
+                }
+            }        
+        }
 
         static inline void MultFrame(float* frame, float val, long channels)
         {
@@ -429,6 +463,15 @@ class UAudioTools
                 frame[i] *= val;
             }
         }
+        
+        static inline void MultFrame(float** frame, float val, long channels)
+        {
+            // A optimiser
+            for (int i = 0 ; i < channels; i++) {
+                frame[i][0] *= val;
+            }
+        }
+
 		
         static void cTocCopy(char *dest, const char* src)
         {

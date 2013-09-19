@@ -60,12 +60,12 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     }
 
     // Dynamic allocation
-    fMemoryBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
-    fCopyBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fCopyBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
   
     // Read first buffer directly
     TBufferedAudioStream::ReadBuffer(fMemoryBuffer, TAudioGlobals::fStreamBufferSize, 0);
-    TAudioBuffer<float>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
+    TNonInterleavedAudioBuffer<float>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
 
     fReady = true;
 }
@@ -94,7 +94,7 @@ void TReadFileAudioStream::ReadEndBufferAux(TReadFileAudioStreamPtr obj, long fr
 // Use the end of the copy buffer
 void TReadFileAudioStream::ReadEndBuffer(long framesNum, long framePos)
 {
-    TAudioBuffer<float>::Copy(fMemoryBuffer, framePos, fCopyBuffer, framePos, framesNum);
+    TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, framePos, fCopyBuffer, framePos, framesNum);
 }
 
 void TReadFileAudioStream::Reset()
@@ -107,24 +107,27 @@ void TReadFileAudioStream::Reset()
     int copySize = TAudioGlobals::fBufferSize * 4;
 
     if (copySize < TAudioGlobals::fStreamBufferSize) {
-        TAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, copySize);
+        TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, copySize);
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
         assert(fManager);
         fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
     } else {
-        TAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStreamBufferSize);
+        TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStreamBufferSize);
     }
 
     TBufferedAudioStream::Reset();
 }
 
 // Called by TCmdManager
-long TReadFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    return long(sf_readf_float(fFile, buffer->GetFrame(framePos), framesNum)); // In frames
+    float tmp_buffer[fChannels * framesNum];
+    int res = sf_readf_float(fFile, tmp_buffer, framesNum); // In frames
+    UAudioTools::Deinterleave(buffer->GetFrame(framePos), tmp_buffer, framesNum, fChannels);
+    return res;
 }
 
 
