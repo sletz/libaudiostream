@@ -85,6 +85,10 @@
 		4BB9AE8917170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BB9AE8A17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BB9AE8B17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
+		4BBA8C0A17EAEEE70056D5BD /* TAudioEffectInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA7E085CB187002CD798 /* TAudioEffectInterface.h */; };
+		4BBA8C0B17EAEEE70056D5BD /* TFaustAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA84085CB1AD002CD798 /* TFaustAudioEffect.h */; };
+		4BBA8C0C17EAEEE80056D5BD /* TPanAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BF92831088E3B16006A013D /* TPanAudioEffect.h */; };
+		4BBA8C0D17EAEEE90056D5BD /* TVolAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA81085CB19E002CD798 /* TVolAudioEffect.h */; };
 		4BBBF3C1172A7E7D0019A47E /* tester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBBF3C0172A7E7D0019A47E /* tester.cpp */; };
 		4BCB2B100D12ACE500AB3F6D /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BCB2B110D12ACE500AB3F6D /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
@@ -788,6 +792,10 @@
 				4B7AFC4C17E9D4F0005FA935 /* TAudioGlobals.h in Headers */,
 				4B7AFC6517E9D58A005FA935 /* TCmdManager.h in Headers */,
 				4B7AFC6717E9D58B005FA935 /* TThreadCmdManager.h in Headers */,
+				4BBA8C0A17EAEEE70056D5BD /* TAudioEffectInterface.h in Headers */,
+				4BBA8C0B17EAEEE70056D5BD /* TFaustAudioEffect.h in Headers */,
+				4BBA8C0C17EAEEE80056D5BD /* TPanAudioEffect.h in Headers */,
+				4BBA8C0D17EAEEE90056D5BD /* TVolAudioEffect.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

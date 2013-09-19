@@ -61,23 +61,24 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable
             return fState;
         }
 
-        void ProcessAux(float** input, float** output, long framesNum, long channels)
+        void ProcessAux(float** input, float** output, long framesNum)
         {
             if (fState) {
-                Process(input, output, framesNum, channels);
+                Process(input, output, framesNum);
             }
         }
 
         // Pure virtual : to be implemented by sub-classes
 		
-        virtual void Process(float** input, float** output, long framesNum, long channels) = 0;
+        virtual void Process(float** input, float** output, long framesNum) = 0;
         virtual TAudioEffectInterface* Copy() = 0;
         virtual void Reset() = 0;
-        virtual long Channels() = 0;
+        virtual long Inputs() = 0;
+        virtual long Outputs() = 0;
 		
 		virtual long GetControlCount() = 0;
 		virtual void GetControlParam(long param, char* label, float* min, float* max, float* init) = 0;
-		virtual void SetControlValue(long param, float f) = 0; 
+		virtual void SetControlValue(long param, float value) = 0; 
 		virtual float GetControlValue(long param) = 0;
 
 };

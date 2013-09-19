@@ -75,7 +75,7 @@ class UIObject {
 		UIObject(const char* label, FAUSTFLOAT* zone):fLabel(label),fZone(zone) {}
 		virtual ~UIObject() {}
 		
-		virtual void SetControlValue(float f) {*fZone = Range(0.0f, 1.0f, f);}
+		virtual void SetControlValue(float value) {*fZone = Range(0.0f, 1.0f, value);}
 		virtual float GetControlValue() {return *fZone;}
 		virtual void GetControlParam(char* label, FAUSTFLOAT* min, FAUSTFLOAT* max, FAUSTFLOAT* init)
 		{
@@ -125,7 +125,7 @@ class Slider : public UIObject {
 			:UIObject(label, zone),fInit(init),fMin(min),fMax(max),fStep(step) {}
 		virtual ~Slider() {}	
 		
-		void SetControlValue(float f) {*fZone = Range(fMin, fMax, f);}
+		void SetControlValue(float value) {*fZone = Range(fMin, fMax, value);}
 		
 		virtual void GetControlParam(char* label, FAUSTFLOAT* min, FAUSTFLOAT* max, FAUSTFLOAT* init)
 		{
@@ -149,7 +149,7 @@ class Bargraph : public UIObject {
 			:UIObject(label,zone),fMin(min),fMax(max) {}
 		virtual ~Bargraph() {}	
 		
-		void SetControlValue(FAUSTFLOAT f) {*fZone = Range(fMin, fMax, f);}
+		void SetControlValue(FAUSTFLOAT value) {*fZone = Range(fMin, fMax, value);}
 		
 		virtual void GetControlParam(char* label, FAUSTFLOAT* min, FAUSTFLOAT* max, FAUSTFLOAT* init)
 		{
@@ -247,10 +247,10 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
             }
 		}
 		
-		void SetControlValue(long param, FAUSTFLOAT f) 
+		void SetControlValue(long param, FAUSTFLOAT value) 
 		{
 			if (param < long(fUITable.size())) {
-				fUITable[param]->SetControlValue(f);
+				fUITable[param]->SetControlValue(value);
             }
 		}
 		
@@ -323,7 +323,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 			}
 		}
 
-        void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum, long channels)
+        void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum)
         {
 			fCompute(fDsp, framesNum, input, output);
 		}
@@ -336,9 +336,13 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
         {
 			fInit(fDsp, TAudioGlobals::fSampleRate);
 		}
-        long Channels()
+        long Inputs()
         {
             return fGetNumInputs(fDsp);
+        }
+        long Outputs()
+        {
+            return fGetNumOutputs(fDsp);
         }
 		
 };
@@ -493,7 +497,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             deleteDSPInstance(fDsp);
             //delete fOSCInterface;
         }
-        void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum, long channels)
+        void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum)
         {
 			fDsp->compute(framesNum, input, output);
 		}
@@ -507,9 +511,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         {
 			fDsp->init(TAudioGlobals::fSampleRate);
 		}
-        long Channels()
+        
+        long Inputs()
         {
             return fDsp->getNumInputs();
+        }
+        long Outputs()
+        {
+            return fDsp->getNumOutputs();
         }
         
         const char* GetJson()

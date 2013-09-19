@@ -24,7 +24,7 @@ research@grame.fr
 #define __TPanAudioEffect__
 
 #if !defined(PI)
- #define PI (float) 3.14159265359
+#define PI (float) 3.14159265359
 #endif
 
 #include "TAudioEffectInterface.h"
@@ -55,7 +55,7 @@ class TMonoPanAudioEffect : public TAudioEffectInterface
         virtual ~TMonoPanAudioEffect()
         {}
 		
-		void Process(float** input, float** output, long framesNum, long channels)
+		void Process(float** input, float** output, long framesNum)
         {
 			for (int i = 0; i < framesNum; i++) {
 				output[0][i] = input[0][i] * fLeftVol;
@@ -71,15 +71,20 @@ class TMonoPanAudioEffect : public TAudioEffectInterface
 		void Reset() 
 		{}
 		
-        long Channels()
-		{
+        long Inputs()
+        {
+            return 2;
+        }
+        
+        long Outputs()
+        {
             return 2;
         }
 		
-		void SetControlValue(long param, float pan)
+		void SetControlValue(long param, float value)
 		{
 			if (param == 0) {
-				fPan = pan;
+				fPan = value;
 				TPanTable::GetLR(1.0f, fPan, &fLeftVol, &fRightVol);
 			}
 		}
@@ -147,8 +152,13 @@ class TStereoPanAudioEffect : public TAudioEffectInterface
 		void Reset() 
 		{}
 		
-        long Channels()
-		{
+        long Inputs()
+        {
+            return 2;
+        }
+        
+        long Outputs()
+        {
             return 2;
         }
 		
@@ -166,13 +176,14 @@ class TStereoPanAudioEffect : public TAudioEffectInterface
 		
 		float GetControlValue(long param)
 		{
-			if (param == 0)  
+			if (param == 0) {
 				return fPanLeft;
-			else if (param == 1)  
+			} else if (param == 1) {
 				return fPanRight;
-			else 
+			} else {
 				return 0.0f;
-		}
+            }
+        }
 		
 		long GetControlCount()
 		{

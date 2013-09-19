@@ -34,7 +34,7 @@ typedef unsigned char Boolean;
 #define MAX_CHANNELS  	64 
 
 
-#define MAX_PLUG_CHANNELS 4
+#define MAX_PLUG_CHANNELS 128
 
 // For MidiDiMan Delta 1010
 #define DELTA_OUTVOICES 	8

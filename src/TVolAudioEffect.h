@@ -46,10 +46,10 @@ class TVolAudioEffect : public TAudioEffectInterface
         virtual ~TVolAudioEffect()
         {}
 
-        void Process(float** input, float** output, long framesNum, long channels)
+        void Process(float** input, float** output, long framesNum)
         {
             for (int i = 0; i < framesNum; i++) {
-                for (int j = 0; j < channels; j++) {
+                for (int j = 0; j < Outputs(); j++) {
                     output[j][i] = input[j][i] * fVol;
                 }
             }
@@ -61,11 +61,17 @@ class TVolAudioEffect : public TAudioEffectInterface
         }
         void Reset()
         {}
-        long Channels()
+        
+        long Inputs()
         {
             return 2;
         }
-		
+        
+        long Outputs()
+        {
+            return 2;
+        }
+	
 		long GetControlCount()
 		{
 			return 1;
@@ -79,10 +85,11 @@ class TVolAudioEffect : public TAudioEffectInterface
 			*init = 1.0f;
 		}
 		
-		void SetControlValue(long param, float f)
+		void SetControlValue(long param, float value)
 		{
-			if (param == 0)
-				fVol = f;
+			if (param == 0) {
+				fVol = value;
+            }
 		}
 		float GetControlValue(long param)
 		{
