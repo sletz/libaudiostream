@@ -100,7 +100,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
 
         virtual TAudioStreamPtr CutBegin(long frames)
         {
-            printf("TBufferedInputAudioStream::CutBegin Error\n");
+            printf("TBufferedInputAudioStream::CutBegin error\n");
             assert(false);
             return NULL;
         }
@@ -110,7 +110,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         } 
         virtual TAudioStreamPtr Copy() 
         {
-            printf("TBufferedInputAudioStream::Copy Error\n");
+            printf("TBufferedInputAudioStream::Copy error\n");
             assert(false);
             return NULL;
         }

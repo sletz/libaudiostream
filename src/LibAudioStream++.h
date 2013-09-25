@@ -438,7 +438,7 @@ void SetAudioLatencies(long inputLatency, long outputLatency);
 
 /*!
 \brief Open the audio player.
-\param inChan The number of input channels. <B>Only stereo players are currently supported </b>
+\param inChan The number of input channels. 
 \param outChan The number of output channels.
 \param channels The number of stream channels.
 \param sample_rate The sampling rate.
@@ -636,10 +636,10 @@ void DeleteAudioRenderer(AudioRendererPtr renderer);
 \param renderer The audio renderer used.
 \param inputDevice The audio input device index.
 \param outputDevice The audio output device index.
-\param inChan The number of input channels. <B>Only stereo players are currently supported </b>. On input, contains the wanted value, on return the really used one.
-\param outChan The number of output channels. On input, contains the wanted value, on return the really used one.
-\param bufferSize The audio player internal buffer size. On input, contains the wanted value, on return the really used one.
-\param sampleRate The sampling rate. On input, contains the wanted value, on return the really used one.
+\param inChan The number of input channels. 
+\param outChan The number of output channels. 
+\param bufferSize The audio player internal buffer size. 
+\param sampleRate The sampling rate.
 \return An error code.
 */
 long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  

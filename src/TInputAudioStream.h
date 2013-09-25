@@ -58,7 +58,7 @@ class TInputAudioStream : public TAudioStream
         // Cut the beginning of the stream
         virtual TAudioStreamPtr CutBegin(long frames)
         {
-            printf("TInputAudioStream::CutBegin Error\n");
+            printf("TInputAudioStream::CutBegin error\n");
             assert(false);
             return NULL;
         }
@@ -66,15 +66,15 @@ class TInputAudioStream : public TAudioStream
         // Length in frames
         virtual long Length()
         {
-            return 0x07FFFFFF;
+            return LONG_MAX;
         } 	
         virtual long Channels()
         {
-            return 2;
+            return TAudioGlobals::fInput;
         } 	
         virtual TAudioStreamPtr Copy()
         {
-            printf("TInputAudioStream::Copy Error\n");
+            printf("TInputAudioStream::Copy error\n");
             assert(false);
             return NULL;
         }
