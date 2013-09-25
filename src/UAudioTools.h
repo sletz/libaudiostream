@@ -266,7 +266,7 @@ class UAudioTools
             }
         }
 		
-		static inline void Interleave(float* dst, float** src,long framesNum, long channels)
+		static inline void Interleave(float* dst, float** src, long framesNum, long channels)
         {
 			int i, j;
 			for (i = 0; i < framesNum; i++) {
@@ -276,7 +276,7 @@ class UAudioTools
 			}
         }
 		
-		static inline void Deinterleave(float** dst, float* src,long framesNum, long channels)
+		static inline void Deinterleave(float** dst, float* src, long framesNum, long channels)
         {
 			int i, j;
 			for (i = 0; i < framesNum; i++) {
@@ -284,6 +284,25 @@ class UAudioTools
 					dst[j][i] = src[i * channels + j];
 				}
 			}
+        }
+        
+        static inline void Adapt(float** dst, float** src, long framesNum, long channelsIn, long channelsOut)
+        {
+			if (channelsIn < channelsOut) {
+                for (int split = 0; split < channelsOut/channelsIn; split++) {
+                    // TODO
+                    memcpy(dst[split], src[split], framesNum * sizeof(float));
+                }
+            } else if (channelsIn == channelsOut) {
+                for (int split = 0; split = channelsOut; split++) {
+                    memcpy(dst[split], src[split], framesNum * sizeof(float));
+                }
+            } else {
+                for (int split = 0; split < channelsIn/channelsOut; split++) {
+                    // TODO
+                    memcpy(dst[split], src[split], framesNum * sizeof(float));
+                }
+            }
         }
 
         static inline float ClipFloat (float sample)

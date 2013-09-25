@@ -24,6 +24,7 @@ grame@rd.grame.fr
 #define __TAdapterAudioStream__
 
 #include "TAudioStream.h"
+#include "TAudioGlobals.h"
 
 //---------------------------
 // Class TAdapterAudioStream
@@ -38,15 +39,19 @@ class TAdapterAudioStream : public TDecoratedAudioStream
     private:
 
         long fChannels;
+        FLOAT_BUFFER fAdaptBuffer;
    
     public:
 	
-		// To be improved with a matrix based "in channels" to "out channels" description 
         TAdapterAudioStream(TAudioStreamPtr stream, long channels):TDecoratedAudioStream(stream),fChannels(channels)
-		{}
+		{
+            fAdaptBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
+        }
 		
         virtual ~TAdapterAudioStream()
-        {}
+        {
+            delete fAdaptBuffer;
+        }
         
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
        	

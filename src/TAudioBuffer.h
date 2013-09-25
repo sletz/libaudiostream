@@ -285,6 +285,5 @@ class TSharedInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
 //typedef TAudioBuffer<short>* SHORT_BUFFER;
 
 typedef TNonInterleavedAudioBuffer<float>* FLOAT_BUFFER;
-typedef TNonInterleavedAudioBuffer<short>* SHORT_BUFFER;
 
 #endif

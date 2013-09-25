@@ -21,15 +21,15 @@ grame@rd.grame.fr
 */
 
 #include "TAdapterAudioStream.h"
+#include "TAudioGlobals.h"
 
 long TAdapterAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     if (fStream->Channels() == fChannels) {
-        return fChannels->Read(buffer, framesNum, framePos);
+        return fStream->Read(buffer, framesNum, framePos);
     } else {
-        float tmp_buffer[fStream->Channels()][TAudioGlobals::fBufferSize];
-        int res = fChannels->Read(tmp_buffer, framesNum, framePos);
-        UAudioTools::Adapt(buffer->GetFrame(framePos), tmp_buffer, Stream->Channels(), fChannels);
+        int res = fStream->Read(fAdaptBuffer, framesNum, framePos);
+        UAudioTools::Adapt(buffer->GetFrame(framePos), fAdaptBuffer->GetFrame(framePos), framesNum, fStream->Channels(), fChannels);
         return res;
     }
 }
