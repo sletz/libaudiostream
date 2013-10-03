@@ -24,9 +24,9 @@ research@grame.fr
 #include "TAudioConstants.h"
 #include "TPanTable.h"
 #include "TRendererAudioStream.h"
-#ifndef MULTI_CHAN
+//#ifndef MULTI_CHAN
 #include "TBufferedInputAudioStream.h"
-#endif
+//#endif
 #include "TSharedBuffers.h"
 
 #ifndef WIN32
@@ -60,9 +60,9 @@ long TAudioGlobals::fFileMax = 0;
 long TAudioGlobals::fInputLatency = -1;
 long TAudioGlobals::fOutputLatency = -1;
 
-#ifndef MULTI_CHAN
+//#ifndef MULTI_CHAN
 TBufferedAudioStream* TAudioGlobals::fSharedInput = NULL;
-#endif
+//#endif
 char* TAudioGlobals::fLastLibError = NULL;
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
@@ -108,10 +108,10 @@ void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_r
 	if (fClientCount++ == 0 && !fInstance) {
 		fInstance = new TAudioGlobals(inChan, outChan, channels, sample_rate,
 									  buffer_size, stream_buffer_size, rtstream_buffer_size);
-#ifndef MULTI_CHAN
+//#ifndef MULTI_CHAN
 		TDTRendererAudioStream::Init();
 		TRTRendererAudioStream::Init(thread_num);
-#endif
+//#endif
 		la_smartable1::Init();
 		TPanTable::FillTable();
 		GetMaximumFiles(&fFileMax);
@@ -122,10 +122,10 @@ void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_r
 void TAudioGlobals::Destroy()
 {
 	if (--fClientCount == 0 && fInstance) {
-#ifndef MULTI_CHAN  
+//#ifndef MULTI_CHAN  
 		TDTRendererAudioStream::Destroy();
 		TRTRendererAudioStream::Destroy();
-#endif		
+//#endif		
 		la_smartable1::Destroy();
 		delete fInstance;
 		fInstance = NULL;
@@ -143,18 +143,18 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     fStreamBufferSize = stream_buffer_size;
     fSampleRate = sample_rate;
     fDiskError = 0;
-#ifndef MULTI_CHAN    
+//#ifndef MULTI_CHAN    
     // Allocate shared real-time input
     fSharedInput = new TBufferedInputAudioStream(rtstream_duration); 
     fLastLibError = new char[512];
-#endif
+//#endif
 }
 
 TAudioGlobals::~TAudioGlobals()
 {
-#ifndef MULTI_CHAN
+//#ifndef MULTI_CHAN
     delete fSharedInput;
-#endif
+//#endif
     delete [] fLastLibError;
 }
 

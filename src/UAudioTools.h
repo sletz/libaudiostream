@@ -171,6 +171,15 @@ class UAudioTools
                 }
             }
         }
+        
+        static inline void MixFrameToFrameBlk1(float** dst, float** src, long framesNum, long channels)
+        {
+            for (int i = 0 ; i < channels; i++) {
+                for (int j = 0 ; j < framesNum; j++) { 
+                    dst[i][j] += src[i][j];
+                }
+            }
+        }
 
         static inline void ReplaceFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {

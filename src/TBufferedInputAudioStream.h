@@ -61,13 +61,13 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             delete fTmpBuffer;
         }
         
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             //printf("Memory read framesNum = %d framePos = %d\n", framesNum, framePos);
             return framesNum;
         }
         
-        long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        long WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             //printf("Memory write framesNum = %d framePos = %d\n", framesNum, framePos);
             return framesNum;
@@ -94,7 +94,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
             UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
-                                             framesNum);
+                                             framesNum, TAudioGlobals::fInput);
             return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos); 
         }
 

@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "TAudioStream.h"
 #include "TSharedBuffers.h"
+#include "TAudioGlobals.h"
 
 //-------------------------
 // Class TInputAudioStream
@@ -48,7 +49,7 @@ class TInputAudioStream : public TAudioStream
             assert(TSharedBuffers::GetInBuffer());
             UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
-                                             framesNum);
+                                             framesNum, TAudioGlobals::fInput);
             return framesNum;
         }
 

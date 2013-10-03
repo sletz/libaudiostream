@@ -63,9 +63,9 @@ class AUDIO_EXPORTS TAudioGlobals
         
         static char* fLastLibError;
     
-    #ifndef MULTI_CHAN    
+   // #ifndef MULTI_CHAN    
         static TBufferedAudioStream* fSharedInput;  // Shared real-time input
-    #endif
+  //  #endif
 
         TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
