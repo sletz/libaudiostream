@@ -484,10 +484,10 @@ class UAudioTools
             }        
         }
 
-        static inline void MultFrame(float* frame, float val, long channels)
+        static inline void MultFrame(float* frame, float val, long size)
         {
             // A optimiser
-            for (int i = 0 ; i < channels; i++) {
+            for (int i = 0 ; i < size; i++) {
                 frame[i] *= val;
             }
         }
