@@ -115,8 +115,7 @@ player:
     SetControlValueEffect(faust_effect, 0, 0.9);
     SetControlValueEffect(faust_effect, 1, 0.9);
     SetControlValueEffect(faust_effect, 2, 0.9);
-  	
-    
+  	 
     // Add in/out client
     gAudioClient = new TAudioLASClient();
     AddAudioClient(gAudioRenderer, gAudioClient); 
