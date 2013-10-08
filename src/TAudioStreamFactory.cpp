@@ -163,6 +163,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
     CATCH_EXCEPTION
 }
 
+/*
 TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut)
 {
     TRY_CALL
@@ -185,6 +186,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeSoundTouchSound(TAudioStreamPtr s1, dou
     CATCH_EXCEPTION
 }
 #endif
+*/
 
 TAudioStreamPtr TAudioStreamFactory::MakeWriteSound(string name, TAudioStreamPtr sound, long format)
 {
