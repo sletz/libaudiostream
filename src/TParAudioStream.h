@@ -36,13 +36,15 @@ research@grame.fr
 class TParAudioStream : public TBinaryAudioStream
 {
 
+    private:
+    
+        FLOAT_BUFFER fBuffer;
+        
     public:
 
-        TParAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2): TBinaryAudioStream(s1, s2, NULL)
-        {}
-        virtual ~TParAudioStream()
-        {}
-
+        TParAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2);
+        virtual ~TParAudioStream();
+    
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();

@@ -31,7 +31,7 @@ TEffectAudioStream::TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInter
     fStream = new TFadeAudioStream(new TSeqAudioStream(stream, new TNullAudioStream(fadeOut), fadeIn), fadeIn, fadeOut);
     fFadeIn = fadeIn;
     fFadeOut = fadeOut;
-	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
+	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, stream->Channels());
 }
 
 TAudioStreamPtr TEffectAudioStream::CutBegin(long frames)
@@ -42,7 +42,7 @@ TAudioStreamPtr TEffectAudioStream::CutBegin(long frames)
 long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     /* Cleanup temporary fBuffer */
-	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, fStream->Channels());
     
     /* Use temporary fBuffer from the beginning */
     long res = fStream->Read(fBuffer, framesNum, 0);

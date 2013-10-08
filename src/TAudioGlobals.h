@@ -27,7 +27,7 @@ research@grame.fr
 #include "TAudioBuffer.h"
 #include <string.h>
 
-
+#define MAX_OUTPUT_CHAN 64 // Used in TExpAudioMixer
 #define MULTI_CHAN 1
 
 //---------------------

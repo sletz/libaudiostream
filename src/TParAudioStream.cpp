@@ -24,27 +24,36 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include <assert.h>
 
+TParAudioStream::TParAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2): TBinaryAudioStream(s1, s2, NULL)
+{
+    fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, s2->Channels());
+}
+TParAudioStream::~TParAudioStream()
+{
+    delete fBuffer;
+}
+
 long TParAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    // TODO
-    /*
     if (fStream) { // One of the 2 stream is finished
         return fStream->Read(buffer, framesNum, framePos);
     } else {
         long res1 = fStream1->Read(buffer, framesNum, framePos);
-
+        UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, fStream2->Channels());
         if (res1 < framesNum) {
             fStream = fStream2; // Stream1 is finished, fStream variable is used as the remaining stream
-            return fStream2->Read(buffer, framesNum, framePos);
+            long res2 = fStream2->Read(fBuffer, framesNum, framePos);
+            UAudioTools::CopyChannelsTo(buffer->GetFrame(0), fBuffer->GetFrame(0), res2, fStream1->Channels(), fStream2->Channels());
+            return res2;
         } else {
-            long res2 = fStream2->Read(buffer, framesNum, framePos);
+            long res2 = fStream2->Read(fBuffer, framesNum, framePos);
+            UAudioTools::CopyChannelsTo(buffer->GetFrame(0), fBuffer->GetFrame(0), res2, fStream1->Channels(), fStream2->Channels());
             if (res2 < framesNum) {
                 fStream = fStream1; // Stream2 is finished, fStream variable is used as the remaining stream
             }
             return res1;
         }
     }
-    */
 }
 
 /*

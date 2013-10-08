@@ -32,7 +32,7 @@ research@grame.fr
 
 TExpAudioMixer::TExpAudioMixer ()
 {
-    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, MAX_OUTPUT_CHAN);
 }
 
 TExpAudioMixer::~TExpAudioMixer()
@@ -43,7 +43,7 @@ TExpAudioMixer::~TExpAudioMixer()
 bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, long frames)
 {
     // Init buffer
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, MAX_OUTPUT_CHAN);
    
     // Real-time input
     //TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
@@ -52,7 +52,7 @@ bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, lo
 	list<TAudioStreamPtr>::iterator iter = fStreamSeq.begin();
 	while (iter != fStreamSeq.end()) {
 		TAudioStreamPtr stream = *iter;
-		if (stream->Read(fMixBuffer, TAudioGlobals::fBufferSize, TAudioGlobals::fOutput) < TAudioGlobals::fBufferSize) { // End of stream
+    	if (stream->Read(fMixBuffer, TAudioGlobals::fBufferSize, TAudioGlobals::fOutput) < TAudioGlobals::fBufferSize) { // End of stream
             iter = fStreamSeq.erase(iter);
 		} else {
 			iter++;

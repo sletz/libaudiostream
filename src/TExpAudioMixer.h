@@ -51,7 +51,8 @@ class TExpAudioMixer : public TAudioClient
         virtual ~TExpAudioMixer();
 
         void AddStream(TAudioStreamPtr stream)      
-        { 
+        {   
+            // We assume stream->Channels() < MAX_OUTPUT_CHAN here
             fStreamSeq.push_back(stream); 
         }
         void RemoveStream(TAudioStreamPtr stream)   

@@ -52,8 +52,15 @@ class UAudioTools
         static const float fGain;
 
     public:
+    
+        static inline void CopyChannelsTo(float** dst, float** src, long framesNum, long shift_chan, long channels)
+        {
+            for (int i = 0; i < channels; i++) {
+                memcpy(dst[shift_chan + i], src[i], framesNum * sizeof(float));
+            }
+        }
 
-        static inline void MonoToStereo(short* dst, short* src, long nbsamples)
+        static inline void MonoToStereo(short* dst, short* src, long framesNum)
         {
             do {
                 int x = *src++;
@@ -61,14 +68,14 @@ class UAudioTools
                 dst++;
                 *dst += x;
                 dst++;
-            } while (--nbsamples);
+            } while (--framesNum);
         }
 
-        static inline void MixMonoToStereoBlk(long* dst, short* src, long nbsamples, short leftamp, short rightamp)
+        static inline void MixMonoToStereoBlk(long* dst, short* src, long framesNum, short leftamp, short rightamp)
         {
             long x, y, i, j;
 
-            for ( i = 0, j = 0 ; i < nbsamples; i += 2, j += 4) {
+            for (i = 0, j = 0 ; i < framesNum; i += 2, j += 4) {
                 x = src[i];
                 y = src[i + 1];
                 dst[j] += (x * leftamp);
@@ -78,12 +85,12 @@ class UAudioTools
             }
         }
 
-        static inline void MixMonoToStereoBlk(float* dst, float* src, long nbsamples, float leftamp, float rightamp)
+        static inline void MixMonoToStereoBlk(float* dst, float* src, long framesNum, float leftamp, float rightamp)
         {
             float x, y;
             long i, j;
 
-            for ( i = 0, j = 0 ; i < nbsamples; i += 2, j += 4) {
+            for ( i = 0, j = 0 ; i < framesNum; i += 2, j += 4) {
                 x = src[i];
                 y = src[i + 1];
                 dst[j] += (x * leftamp);
@@ -93,11 +100,11 @@ class UAudioTools
             }
         }
 
-        static inline void MixStereoToStereoBlk(long* dst, short* src, long nbsamples, short leftamp, short rightamp)
+        static inline void MixStereoToStereoBlk(long* dst, short* src, long framesNum, short leftamp, short rightamp)
         {
             long x, y ;
 
-            for (long i = 0 ; i < nbsamples; i += 2) {
+            for (long i = 0 ; i < framesNum; i += 2) {
                 x = src[i];
                 y = src[i + 1];
                 dst [i] += (x * leftamp);
@@ -105,11 +112,11 @@ class UAudioTools
             }
         }
 
-        static inline void MixStereoToStereoBlk(float* dst, float* src, long nbsamples, float leftamp, float rightamp)
+        static inline void MixStereoToStereoBlk(float* dst, float* src, long framesNum, float leftamp, float rightamp)
         {
             float x, y ;
 
-            for (long i = 0 ; i < nbsamples; i += 2) {
+            for (long i = 0 ; i < framesNum; i += 2) {
                 x = src[i];
                 y = src[i + 1];
                 dst [i] += (x * leftamp);
@@ -204,8 +211,7 @@ class UAudioTools
                 }
             }
         }
-       
-
+   
         static inline void ZeroStereoBlk(long* dst, long nbsamples)
         {
             memset(dst, 0, sizeof(long) * nbsamples);
@@ -499,8 +505,7 @@ class UAudioTools
                 frame[i][0] *= val;
             }
         }
-
-		
+	
         static void cTocCopy(char *dest, const char* src)
         {
             register short i = 0;

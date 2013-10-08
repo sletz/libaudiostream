@@ -25,6 +25,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
+/*
 TFadeAudioStream::TFadeAudioStream():TDecoratedAudioStream(0)
 {
     fStatus = kIdle;
@@ -34,6 +35,7 @@ TFadeAudioStream::TFadeAudioStream():TDecoratedAudioStream(0)
     fFramesNum = 0;
     fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 }
+*/
 
 TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut): TDecoratedAudioStream(stream)
 {
@@ -42,7 +44,7 @@ TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fad
     fFadeOutFrames = fadeOut;
     fCurFrame = 0;
 	fFramesNum = UTools::Max(0, fStream->Length() - fFadeOutFrames); // Number of frames - FadeOut 
-    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fStream->Channels());
     Init(0.0f, float(fadeIn), 1.0f, float(fadeOut));
 }
 
