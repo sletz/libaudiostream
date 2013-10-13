@@ -168,6 +168,7 @@
 		4BBA8C0C17EAEEE80056D5BD /* TPanAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BF92831088E3B16006A013D /* TPanAudioEffect.h */; };
 		4BBA8C0D17EAEEE90056D5BD /* TVolAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B7AFA81085CB19E002CD798 /* TVolAudioEffect.h */; };
 		4BBBF3C1172A7E7D0019A47E /* tester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBBF3C0172A7E7D0019A47E /* tester.cpp */; };
+		4BC5FAAD18080D80001E7660 /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
 		4BCB2B100D12ACE500AB3F6D /* TAudioChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D58E0330C7F001053105 /* TAudioChannel.h */; };
 		4BCB2B110D12ACE500AB3F6D /* TPanTable.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C1D5930330CAEF01053105 /* TPanTable.h */; };
 		4BCB2B120D12ACE500AB3F6D /* TAudioEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = F5D82C3E032DEAB501053105 /* TAudioEffect.h */; };
@@ -1518,6 +1519,7 @@
 				4B18BC2717FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */,
 				4B0128721803FC54000735C7 /* TParAudioStream.cpp in Sources */,
 				4BB9D8E818043048001B620C /* TAudioStreamFactory.cpp in Sources */,
+				4BC5FAAD18080D80001E7660 /* TSampleRateAudioStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -59,7 +59,7 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
      
     fReadPos = 0;
     fReadFrames = 0;    
-    fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
+    fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 }
 
 TSampleRateAudioStream::~TSampleRateAudioStream()
@@ -89,8 +89,17 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
             end = fReadFrames < TAudioGlobals::fBufferSize;
         }
         
-        src_data.data_in = fBuffer->GetFrame(fReadPos);
-        src_data.data_out = buffer->GetFrame(framePos);
+        float tmp_buffer_in[fStream->Channels() * framesNum];
+        float tmp_buffer_out[fStream->Channels() * framesNum];
+        
+        UAudioTools::Interleave(tmp_buffer_in, fBuffer->GetFrame(fReadPos), framesNum, fStream->Channels());
+ 
+        //src_data.data_in = fBuffer->GetFrame(fReadPos);
+        //src_data.data_out = buffer->GetFrame(framePos);
+        
+        src_data.data_in = tmp_buffer_in;
+        src_data.data_out = tmp_buffer_out;
+        
         src_data.input_frames = fReadFrames;
         src_data.output_frames = int(framesNum - written);
         src_data.end_of_input = end;
@@ -107,6 +116,8 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         
         fReadPos += src_data.input_frames_used;
         fReadFrames -= src_data.input_frames_used; 
+        
+        UAudioTools::Deinterleave(buffer->GetFrame(framePos), tmp_buffer_out, framesNum, fStream->Channels());
     }
       
     return written;
