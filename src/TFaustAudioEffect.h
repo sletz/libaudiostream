@@ -360,10 +360,6 @@ class TCodeFaustAudioEffectFactory
 
     private:
 	
-        string fCode;
-        string fLibraryPath;
-        string fDrawPath;
-        
         // Global DSP factory table
         static std::map<string, llvm_dsp_factory*> fFactoryTable;
         static int fFactoryNumber;
@@ -382,16 +378,10 @@ class TCodeFaustAudioEffectFactory
             const char* argv[32];
             char error_msg[256] = {0};
             char error_lib[512] = {0};
-            llvm_dsp_factory* factory = NULL;
             char input_name[64];
-            
-            fCode = code;
-            fLibraryPath = library_path;
-            fDrawPath = draw_path;
             
             if (fFactoryTable.find(code) != fFactoryTable.end()) {
                 printf("DSP factory already created...\n");
-                factory = fFactoryTable[code];
                 return;
             }
             
@@ -406,7 +396,7 @@ class TCodeFaustAudioEffectFactory
                 argc = 1;
             }
          
-            factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
+            llvm_dsp_factory* factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
             if (factory) {
                 return;
             }  else {
@@ -466,6 +456,11 @@ class TCodeFaustAudioEffectFactory
             fFactoryTable[code] = factory;
             fFactoryNumber++;
 		}
+        
+        llvm_dsp_factory* getFactory(const string& code)
+        {
+            return fFactoryTable[code];
+        }
 
 };
 

@@ -28,6 +28,7 @@ research@grame.fr
 #include "TBufferedInputAudioStream.h"
 //#endif
 #include "TSharedBuffers.h"
+#include "TFaustAudioEffect.h"
 
 #ifndef WIN32
 	#include <sys/errno.h>
@@ -67,6 +68,9 @@ char* TAudioGlobals::fLastLibError = NULL;
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
+
+std::map<string, llvm_dsp_factory*> TCodeFaustAudioEffectFactory::fFactoryTable;
+int TCodeFaustAudioEffectFactory::fFactoryNumber = 0;
 
 #ifdef WIN32
 static int SetMaximumFiles(long filecount)

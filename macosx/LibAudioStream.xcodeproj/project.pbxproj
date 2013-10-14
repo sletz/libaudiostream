@@ -249,6 +249,9 @@
 		4BCB2B630D12ACE500AB3F6D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4BCB2B640D12ACE500AB3F6D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
 		4BCB2BDF0D12B71300AB3F6D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0DEDE087FE455003B1CB3 /* main.cpp */; };
+		4BCC438A180BDCD200CD9DC7 /* LibAudioStreamMC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB9D8B518042D96001B620C /* LibAudioStreamMC.cpp */; };
+		4BCC4491180BE62600CD9DC7 /* TAudioRendererFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B0391E00585040A006C929E /* TAudioRendererFactory.cpp */; };
+		4BCC4492180BE62700CD9DC7 /* TAudioRendererFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0391E10585040A006C929E /* TAudioRendererFactory.h */; };
 		4BE4D18B165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
 		4BE4D18C165671C700495934 /* TRubberBandAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE4D188165671C700495934 /* TRubberBandAudioStream.h */; };
 		4BE4D18D165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
@@ -934,6 +937,7 @@
 				4B18BC2817FF102D00DFD142 /* TEffectAudioStream.h in Headers */,
 				4B0128731803FC54000735C7 /* TParAudioStream.h in Headers */,
 				4BB9D8B818042D96001B620C /* LibAudioStreamMC++.h in Headers */,
+				4BCC4492180BE62700CD9DC7 /* TAudioRendererFactory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1520,6 +1524,8 @@
 				4B0128721803FC54000735C7 /* TParAudioStream.cpp in Sources */,
 				4BB9D8E818043048001B620C /* TAudioStreamFactory.cpp in Sources */,
 				4BC5FAAD18080D80001E7660 /* TSampleRateAudioStream.cpp in Sources */,
+				4BCC438A180BDCD200CD9DC7 /* LibAudioStreamMC.cpp in Sources */,
+				4BCC4491180BE62600CD9DC7 /* TAudioRendererFactory.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
