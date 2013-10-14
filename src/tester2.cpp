@@ -1,16 +1,22 @@
-#include <stdio.h>
 
+#include <stdio.h>
+#include "LibAudioStreamMC++.h"
 
 #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
 
+#define CHANNELS 4
 
-#define MAX_CHAN 4
+#define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
+#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
+#define FILENAME3 "/Users/letz/son1.wav"
+#define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
 
 // Global context
 static long gSampleRate = 0;
 static long gBufferSize = 0;
+static AudioRendererPtr gAudioRenderer = 0;
+static AudioPlayerPtr gAudioPlayer = 0;
 
-/*
 static void printControls(AudioEffect faust_effect)
 {
     printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
@@ -21,7 +27,6 @@ static void printControls(AudioEffect faust_effect)
         printf("Faust effect: param label = %s min = %f max = %f init = %f value = %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
     }
 }
-*/
 
 int main(int argc, char* argv[])
 {
@@ -30,78 +35,29 @@ int main(int argc, char* argv[])
     long tmpBufferSize = 512;
     long tmpSampleRate = 44100;
     
-    long inputDevice = 2;
-    long ouputDevice = 2;
+    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 8, tmpSampleRate * 60 * 10, kJackRenderer, 1);
+    if (!gAudioPlayer) {
+        printf("Cannot OpenAudioPlayer\n");
+        return 0;
+    } 
 
-    AudioGlobalsInit(tmpInChan, tmpOutChan, MAX_CHAN, tmpSampleRate, tmpBufferSize, 65536, 65536, 1);
-
-    /*
-    // Try access Jack server
-    gAudioRenderer = MakeAudioRenderer(kJackRenderer);
-    
-    if (gAudioRenderer && (OpenAudioRenderer(gAudioRenderer, inputDevice, ouputDevice, tmpInChan, tmpOutChan, tmpBufferSize, tmpSampleRate) == NO_ERR)) {
-        gSampleRate = tmpSampleRate;
-        gBufferSize = tmpBufferSize;
-        goto player;
-    } else {
-        if (gAudioRenderer) {
-            CloseAudioRenderer(gAudioRenderer);
-            DeleteAudioRenderer(gAudioRenderer);
-        }
-    }
-    */
-
-    // Otherwise use PortAudio API
-    gAudioRenderer = MakeAudioRenderer(kCoreAudioRenderer);
-    if (gAudioRenderer && (OpenAudioRenderer(gAudioRenderer, inputDevice, ouputDevice, tmpInChan, tmpOutChan, tmpBufferSize, tmpSampleRate) == NO_ERR)) {
-        gSampleRate = tmpSampleRate;
-        gBufferSize = tmpBufferSize;
-         goto player;
-    } else {
-        if (gAudioRenderer) {
-            CloseAudioRenderer(gAudioRenderer);
-            DeleteAudioRenderer(gAudioRenderer);
-        }
-    }
-
-player:
-
-    // Open mixer client
-    //gAudioPlayer = OpenAudioClient(gAudioRenderer);
-    
-    AudioEffectList list_effect = MakeAudioEffectList();
+    //AudioEffectList list_effect = MakeAudioEffectList();
 	AudioEffect faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
-    list_effect = AddAudioEffect(list_effect, faust_effect);
+    //list_effect = AddAudioEffect(list_effect, faust_effect);
     
     SetControlValueEffect(faust_effect, 0, 0.9);
     SetControlValueEffect(faust_effect, 1, 0.9);
     SetControlValueEffect(faust_effect, 2, 0.9);
-  	 
-    // Add in/out client
-    gAudioClient = new TAudioLASClient();
-    AddAudioClient(gAudioRenderer, gAudioClient); 
     
-    int devices = GetDeviceCount(gAudioRenderer);
+    printControls(faust_effect);
     
-    printf("devices = %d\n", devices);
-
-    // Start audio rendering...
-    StartAudioRenderer(gAudioRenderer); 
-    
+    //AudioStream stream = MakeRegionSound(FILENAME1, 0, tmpSampleRate*10);
+     
     char c;
+    printf("Type 'q' to quit\n");
 
     while ((c = getchar()) && c != 'q') {
         sleep(1);
     }
     
-    // Stop audio rendering...
-    StopAudioRenderer(gAudioRenderer); 
-    
-    // Remove in/out client
-    RemoveAudioClient(gAudioRenderer, gAudioClient); 
-    
-    // Close mixer client
-    //CloseAudioClient(gAudioPlayer);
-
-    AudioGlobalsDestroy();
 }

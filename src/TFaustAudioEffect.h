@@ -398,7 +398,7 @@ class TCodeFaustAudioEffectFactory
          
             llvm_dsp_factory* factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
             if (factory) {
-                return;
+                goto end;
             }  else {
                 printf("error_lib %s\n", error_msg);
                 snprintf(error_lib, 512, "createDSPFactory error from DSP file %s", error_msg);
@@ -417,7 +417,7 @@ class TCodeFaustAudioEffectFactory
             // Try DSP code...
             factory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, getTarget(), error_msg, 3);
             if (factory) {
-                return;
+                goto end;
             } else {
                 snprintf(error_lib, 512, "createDSPFactory error from DSP code %s", error_msg);
             }
@@ -425,7 +425,7 @@ class TCodeFaustAudioEffectFactory
             // Try bitcode code string...
             factory = readDSPFactoryFromBitcode(code, getTarget(), 3);
             if (factory) {
-                return;
+                goto end;
             } else {
                 printf("readDSPFactoryFromBitcode error");
             }
@@ -433,7 +433,7 @@ class TCodeFaustAudioEffectFactory
             // Try bitcode code file...
             factory = readDSPFactoryFromBitcodeFile(code, getTarget(), 3);
             if (factory) {
-                return;
+                goto end;
             } else {
                 printf("readDSPFactoryFromBitcodeFile error");
             }
@@ -441,7 +441,7 @@ class TCodeFaustAudioEffectFactory
             // Try IR code string...
             factory = readDSPFactoryFromIR(code, getTarget(), 3);
             if (factory) {
-                return;
+                goto end;
             } else {
                 printf("readDSPFactoryFromIR error");
             }
@@ -452,6 +452,8 @@ class TCodeFaustAudioEffectFactory
                 printf("readDSPFactoryFromIR error");
                 throw TLASException(error_lib);
             } 
+            
+        end:
         
             fFactoryTable[code] = factory;
             fFactoryNumber++;
@@ -476,6 +478,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 
         TCodeFaustAudioEffect(llvm_dsp_factory* factory):TFaustAudioEffectBase()
         {
+            assert(factory);
             fFactory = factory;
             fDsp = createDSPInstance(fFactory);
             

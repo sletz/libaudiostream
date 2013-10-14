@@ -252,6 +252,8 @@
 		4BCC438A180BDCD200CD9DC7 /* LibAudioStreamMC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB9D8B518042D96001B620C /* LibAudioStreamMC.cpp */; };
 		4BCC4491180BE62600CD9DC7 /* TAudioRendererFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B0391E00585040A006C929E /* TAudioRendererFactory.cpp */; };
 		4BCC4492180BE62700CD9DC7 /* TAudioRendererFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0391E10585040A006C929E /* TAudioRendererFactory.h */; };
+		4BCC4514180BF38900CD9DC7 /* TJackAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0580BDF791A00CD9753 /* TJackAudioRenderer.cpp */; };
+		4BCC4515180BF38A00CD9DC7 /* TJackAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0590BDF791A00CD9753 /* TJackAudioRenderer.h */; };
 		4BE4D18B165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
 		4BE4D18C165671C700495934 /* TRubberBandAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE4D188165671C700495934 /* TRubberBandAudioStream.h */; };
 		4BE4D18D165671C700495934 /* TRubberBandAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4D187165671C700495934 /* TRubberBandAudioStream.cpp */; };
@@ -938,6 +940,7 @@
 				4B0128731803FC54000735C7 /* TParAudioStream.h in Headers */,
 				4BB9D8B818042D96001B620C /* LibAudioStreamMC++.h in Headers */,
 				4BCC4492180BE62700CD9DC7 /* TAudioRendererFactory.h in Headers */,
+				4BCC4515180BF38A00CD9DC7 /* TJackAudioRenderer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1526,6 +1529,7 @@
 				4BC5FAAD18080D80001E7660 /* TSampleRateAudioStream.cpp in Sources */,
 				4BCC438A180BDCD200CD9DC7 /* LibAudioStreamMC.cpp in Sources */,
 				4BCC4491180BE62600CD9DC7 /* TAudioRendererFactory.cpp in Sources */,
+				4BCC4514180BF38900CD9DC7 /* TJackAudioRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1735,12 +1739,14 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
-					"-DSOUND_TOUCH",
+					"-D__JACK__",
 					"-D__COREAUDIO__",
+					"-DSOUND_TOUCH",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
+					"-ljack",
 					/usr/local/lib/faust/libHTTPDFaust.a,
 					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,
@@ -1876,11 +1882,13 @@
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"-DSOUND_TOUCH",
+					"-D__JACK__",
 					"-D__COREAUDIO__",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
+					"-ljack",
 					/usr/local/lib/faust/libHTTPDFaust.a,
 					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,

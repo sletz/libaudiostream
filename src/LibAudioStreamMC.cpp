@@ -21,10 +21,9 @@ research@grame.fr
 */
 
 #include "TExpAudioEngine.h"
-
-
 #include "TAudioRendererFactory.h"
 #include "TAudioStreamFactory.h"
+
 //#include "TVolAudioEffect.h"
 //#include "TPitchShiftAudioEffect.h"
 //#include "TPanAudioEffect.h"
