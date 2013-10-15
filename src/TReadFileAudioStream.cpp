@@ -31,7 +31,7 @@ research@grame.fr
 
 TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
-  	memset(&fInfo, 0, sizeof(fInfo));
+    memset(&fInfo, 0, sizeof(fInfo));
 	char utf8name[512] = {0};
 	
 	assert(fName.size() < 512);
@@ -108,14 +108,14 @@ void TReadFileAudioStream::Reset()
     // Use only the beginning of the copy buffer, copy the end in the low-priority thread
     int copySize = TAudioGlobals::fBufferSize * 4;
     
-    printf("TReadFileAudioStream::Reset 1\n");
+    //printf("TReadFileAudioStream::Reset 1\n");
 
     if (copySize < TAudioGlobals::fStreamBufferSize) {
         TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, copySize);
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
-        printf("TReadFileAudioStream::Reset 2\n");
+        //printf("TReadFileAudioStream::Reset 2\n");
         assert(fManager);
         fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
     } else {
@@ -129,12 +129,17 @@ void TReadFileAudioStream::Reset()
 long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    
-    printf("TReadFileAudioStream::ReadImp framesNum %d framePos %d fChannels %d \n", framesNum, framePos, fChannels);
-     
     int res = sf_readf_float(fFile, fFileBuffer, framesNum); // In frames
+    
+    /*
+    for (int i = 0; i < fChannels * TAudioGlobals::fStreamBufferSize; i++) {
+        fFileBuffer[i] = 0.5f;
+    }
+    */
    
     UAudioTools::Deinterleave(buffer->GetFrame(framePos), fFileBuffer, framesNum, fChannels);
+    
+    //printf("buffer->GetFrame(framePos) %f %f\n", buffer->GetFrame(framePos)[0][0], buffer->GetFrame(framePos)[1][0]);
     return res;
 }
 

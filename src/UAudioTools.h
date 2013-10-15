@@ -138,12 +138,12 @@ class UAudioTools
         
         static inline void MixFrameToFrameBlk(float** dst, float** src, long framesNum, long channels)
         {
-			for (int i = 0; i < channels; i++) {
+     		for (int i = 0; i < channels; i++) {
                 for (int j = 0; j < framesNum; j++) { 
-                    dst[i][i] += src[i][i];
+                    dst[i][j] += src[i][j];
                 }
             }
-		}
+    	}
 
         static inline void MixFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {

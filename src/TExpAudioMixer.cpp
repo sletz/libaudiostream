@@ -47,9 +47,7 @@ bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, lo
    
     // Real-time input
     //TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
-    
-    //printf("TExpAudioMixer::AudioCallback %d\n", frames); 
-
+ 
     // Mix all Streams
 	list<TAudioStreamPtr>::iterator iter = fStreamSeq.begin();
 	while (iter != fStreamSeq.end()) {
@@ -63,15 +61,12 @@ bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, lo
 		}
 	}
     
-    //printf("outputBuffer %f\n", outputBuffer[2][0]);
-    //printf("fMixBuffer %f\n", fMixBuffer->GetFrame(0)[2][0]);
-   
     // Mix in outputBuffer
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
 									fMixBuffer->GetFrame(0),
 									TAudioGlobals::fBufferSize,
 									TAudioGlobals::fOutput);
-
+ 
     return true;
 }
 

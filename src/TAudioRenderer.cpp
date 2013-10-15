@@ -47,6 +47,8 @@ void TAudioRenderer::Run(float** inputBuffer, float** outputBuffer, long frames)
     // Clean output buffer
     UAudioTools::ZeroFloatBlk(outputBuffer, frames, fOutput);
     
+    //printf("TAudioRenderer::Run %f %f\n", outputBuffer[0][0], outputBuffer[1][0]);
+    
     //printf("TAudioRenderer::Run %d\n", frames);
     
     // Setup in/out real-time buffers

@@ -63,18 +63,12 @@ static bool EndSecond (int curframe, int framesNum, int buffersize)
 long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, bool read)
 {
     assert(fMemoryBuffer);
-    
-    //printf("TBufferedAudioStream::HandleBuffer fCurFrame %d framesNum %d framePos %d\n", fCurFrame, framesNum, framePos);
-    
-    //printf("TBufferedAudioStream::HandleBuffer %d\n", buffer->GetChannels());
   
     // Check length
     framesNum = UTools::Min(framesNum, fFramesNum - (fTotalFrames + fCurFrame));
    
     if (EndFirst(fCurFrame, framesNum, fMemoryBuffer->GetSize() / 2)) { // End of first buffer
-    
-        printf("TBufferedAudioStream::HandleBuffer EndFirst framesNum %d\n", framesNum);
-
+  
         if (!fReady) {
             TAudioGlobals::fDiskError++;
         }
@@ -99,9 +93,7 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
 
     } else if (EndSecond(fCurFrame, framesNum, fMemoryBuffer->GetSize() / 2)) { // End of second buffer
 
-        printf("TBufferedAudioStream::HandleBuffer EndSecond framesNum %d\n", framesNum);
-        
-		if (!fReady) {
+ 		if (!fReady) {
             TAudioGlobals::fDiskError++;
         }
 
@@ -109,9 +101,7 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
         long frames2 = framesNum - frames1;                     // Number of frames to be read or written at the beginning of the "next" buffer
 
         assert((fCurFrame + frames1) <= fMemoryBuffer->GetSize());
-        
-        printf("fCurFrame %d framesNum %d frames1 %d  frames2 %d \n", fCurFrame, framesNum, frames1, frames2);
-
+   
         if (read) {
             // Read the frames from the memory buffer and mix to the argument buffer
             UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(fCurFrame), buffer->GetFrame(framePos), frames1, fChannels);
@@ -134,9 +124,7 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
     } else { // General case
 
         assert((fCurFrame + framesNum) <= fMemoryBuffer->GetSize());
-        
-       // printf("TBufferedAudioStream::HandleBuffer framesNum %d\n", framesNum);
-
+   
         if (read) {
             // Read the frames from the memory buffer and mix to the argument buffer
             UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(fCurFrame), buffer->GetFrame(framePos), framesNum, fChannels);
