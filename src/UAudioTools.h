@@ -452,7 +452,7 @@ class UAudioTools
         {
             for (long i = 0; i < channels; i ++) {
                 for (long j = 0; j < framesNum; j += 4) {
-                    out[i][j] += in[j][i];
+                    out[i][j] += in[i][j];
                     out[i][j + 1] += in[i][j + 1];
                     out[i][j + 2] += in[i][j + 2];
                     out[i][j + 3] += in[i][j + 3];

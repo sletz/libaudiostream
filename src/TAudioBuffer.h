@@ -187,12 +187,12 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             }
         }
     
-        T** GetFrame(long frame)
+        T** GetFrame(long frame, T** res_ignored = NULL)
         {
-            assert(frame <= this->fFrames);
+            assert(frame < this->fFrames);
             T* res[this->fChannels];
             for (int i = 0; i < this->fChannels; i++) {
-                res[i] = &fBuffer[i][this->fFrames];
+                res[i] = &fBuffer[i][frame];
             }
             return res;
         }
@@ -202,8 +202,15 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             assert(frames + f1 <= b1->GetSize());
             assert(frames + f2 <= b2->GetSize());
             assert(b1->GetChannels() == b2->GetChannels());
+            
+            T* tmp1[b1->GetChannels()];
+            T* tmp2[b2->GetChannels()];
+            
+            T** dst = b1->GetFrame(f1, tmp1);
+            T** src = b2->GetFrame(f2, tmp2);
+            
             for (int i = 0; i < b1->GetChannels(); i++) {
-                memcpy(b1->GetFrame(f1)[i], b2->GetFrame(f2)[i], frames * sizeof(T));
+                memcpy(dst[i], src[i], frames * sizeof(T));
             }
         }
 };

@@ -51,7 +51,11 @@ int main(int argc, char* argv[])
     
     printControls(faust_effect);
     
-    //AudioStream stream = MakeRegionSound(FILENAME1, 0, tmpSampleRate*10);
+    AudioStream stream = MakeRegionSound(FILENAME1, 0, tmpSampleRate*10);
+    
+    AddSound(gAudioPlayer, stream);
+    
+    StartAudioPlayer(gAudioPlayer);
      
     char c;
     printf("Type 'q' to quit\n");

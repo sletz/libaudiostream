@@ -503,6 +503,9 @@ void CloseAudioClient(AudioPlayerPtr player);
 */
 //void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
 
+long AddSound(AudioPlayerPtr player, AudioStream sound);
+long RemoveSound(AudioPlayerPtr player, AudioStream sound);
+
 // Transport
 /*!
 \brief Start the audio player.

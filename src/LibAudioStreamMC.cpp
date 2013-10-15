@@ -161,6 +161,10 @@ extern "C"
     AUDIOAPI void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
 	AUDIOAPI void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
     */
+    
+    AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound);
+    AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound);
+
 
     // Transport
     AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -1005,6 +1009,20 @@ AUDIOAPI void AbortChannel(AudioPlayerPtr player, long chan)
     }
 }
 */
+
+AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        player->fMixer->AddStream(sound);
+    }
+}
+
+AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        player->fMixer->RemoveStream(sound);
+    }
+}
 
 AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
 {
