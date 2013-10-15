@@ -45,9 +45,9 @@ int main(int argc, char* argv[])
 	AudioEffect faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     //list_effect = AddAudioEffect(list_effect, faust_effect);
     
-    SetControlValueEffect(faust_effect, 0, 0.9);
-    SetControlValueEffect(faust_effect, 1, 0.9);
-    SetControlValueEffect(faust_effect, 2, 0.9);
+    SetControlValueEffect(faust_effect, 0, 0.99);
+    SetControlValueEffect(faust_effect, 1, 0.99);
+    SetControlValueEffect(faust_effect, 2, 0.99);
     
     printControls(faust_effect);
     
@@ -60,13 +60,30 @@ int main(int argc, char* argv[])
     AddSound(gAudioPlayer, stream2);
     */
     
-    
+    /*
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
     AudioStream stream3 = MakeParSound(stream1, stream2);
     AddSound(gAudioPlayer, stream3);
+    */
+    
+    /*
+    AudioStream stream1 = MakeRegionSound(FILENAME4, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AudioStream stream2 = MakeRegionSound(FILENAME4, 7 * tmpSampleRate, tmpSampleRate * 15);
+    
+    AudioStream stream3 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AudioStream stream4 = MakeParSound(stream1, MakeParSound(stream2, stream3));
+    AddSound(gAudioPlayer, stream4);
+    */
+   
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15), faust_effect, 100, 100);
+    AddSound(gAudioPlayer, stream1);
     
     StartAudioPlayer(gAudioPlayer);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
      
     char c;
     printf("Type 'q' to quit\n");

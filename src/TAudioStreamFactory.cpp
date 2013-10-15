@@ -32,6 +32,7 @@ research@grame.fr
 #include "TInputAudioStream.h"
 #include "TBufferedInputAudioStream.h"
 #include "TTransformAudioStream.h"
+#include "TEffectAudioStream.h"
 #include "TEventAudioStream.h"
 #include "TRubberBandAudioStream.h"
 #ifdef SOUND_TOUCH
@@ -168,6 +169,13 @@ TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
     TRY_CALL
     assert(TAudioGlobals::fSharedInput);
     return new TSharedBufferedAudioStream(0, TAudioGlobals::fSharedInput->GetMemoryBuffer());
+    CATCH_EXCEPTION
+}
+
+TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut)
+{
+    TRY_CALL
+    return (s1 && effect) ? new TEffectAudioStream(s1, effect, fadeIn, fadeOut) : 0;
     CATCH_EXCEPTION
 }
 

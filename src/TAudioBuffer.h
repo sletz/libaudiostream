@@ -187,20 +187,6 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             }
         }
         
-        /*
-        T** GetFrame(long frame)
-        {
-            assert(frame <= this->fFrames);
-            
-            T* res[this->fChannels];
-            for (int i = 0; i < this->fChannels; i++) {
-                res[i] = &fBuffer[i][frame];
-            }
-            return res;
-        }
-        */
-        
-        
         T** GetFrame(long frame, T** res)
         {
             assert(frame <= this->fFrames);
@@ -221,8 +207,6 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             
             T** dst = b1->GetFrame(f1, tmp1);
             T** src = b2->GetFrame(f2, tmp2);
-            
-            //printf("Copy f1 %d f2 %d frame %d\n", f1, f2, frames);
             
             for (int i = 0; i < b1->GetChannels(); i++) {
                 memcpy(dst[i], src[i], frames * sizeof(T));

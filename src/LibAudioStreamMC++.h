@@ -240,6 +240,9 @@ AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 \return A pointer to new stream object.
 */
 //AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
+
+AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
+
 /*!
 \brief To pitchshift or timestretch a stream.
 \param sound The stream to be transformed.

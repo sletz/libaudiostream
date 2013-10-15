@@ -90,6 +90,7 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     AUDIOAPI AudioStreamPtr MakeParSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     //AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
+    AUDIOAPI AudioStreamPtr MakeEffectSoundPtr(AudioStreamPtr sound, AudioEffectPtr effect, long fadeIn, long fadeOut);
     AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
     AUDIOAPI AudioStreamPtr MakeInputSoundPtr();
@@ -234,6 +235,7 @@ AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
 AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 //AUDIOAPI AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
 //AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
+AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
 AUDIOAPI AudioStream MakeInputSound();
 AUDIOAPI AudioStream MakeSharedInputSound();
@@ -340,6 +342,11 @@ AUDIOAPI AudioStream MakeInputSound()
 AUDIOAPI AudioStream MakeSharedInputSound()
 {
     return TAudioStreamFactory::MakeSharedInputSound();
+}
+
+AUDIOAPI AudioStream MakeEffectSound(AudioStream s1, AudioEffect effect, long fadeIn, long fadeOut)
+{
+	return TAudioStreamFactory::MakeEffectSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioEffectInterfacePtr>(effect), fadeIn, fadeOut);
 }
 
 /*
@@ -476,6 +483,13 @@ AUDIOAPI AudioStreamPtr MakeInputSoundPtr()
 AUDIOAPI AudioStreamPtr MakeSharedInputSoundPtr()
 {
     return MakeSoundPtr(TAudioStreamFactory::MakeSharedInputSound());
+}
+
+AUDIOAPI AudioStreamPtr MakeEffectSoundPtr(AudioStreamPtr sound, AudioEffectPtr effect, long fadeIn, long fadeOut)
+{
+    return (sound && effect) 
+		? MakeSoundPtr(TAudioStreamFactory::MakeEffectSound(static_cast<TAudioStreamPtr>(*sound), static_cast<TAudioEffectInterfacePtr>(*effect), fadeIn, fadeOut))
+		: 0;
 }
 
 /*
