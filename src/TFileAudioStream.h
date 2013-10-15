@@ -45,7 +45,8 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
 
         string fName;
         SNDFILE* fFile;
-
+        float* fFileBuffer;
+     
         static void ReadBufferAux(TFileAudioStream* obj, FLOAT_BUFFER buffer, long framesNum, long framePos);
         static void WriteBufferAux(TFileAudioStream* obj, FLOAT_BUFFER buffer, long framesNum, long framePos);
 

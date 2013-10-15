@@ -41,7 +41,7 @@ class TReadFileAudioStream : public TFileAudioStream
         FLOAT_BUFFER fCopyBuffer;
         long fBeginFrame;  // First frame to be read in the file
         SF_INFO fInfo;
-
+     
         virtual long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos);
         static void ReadEndBufferAux(TReadFileAudioStream* obj, long framesNum, long framePos);
 

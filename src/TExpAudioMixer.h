@@ -53,11 +53,14 @@ class TExpAudioMixer : public TAudioClient
         void AddStream(TAudioStreamPtr stream)      
         {   
             // We assume stream->Channels() < MAX_OUTPUT_CHAN here
+            TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             stream->Reset();
-            fStreamSeq.push_back(stream); 
+            //fStreamSeq.push_back(stream); 
+            fStreamSeq.push_back(renderer_stream); 
         }
         void RemoveStream(TAudioStreamPtr stream)   
         { 
+            // TODO : how to retrieve the stream ?
             fStreamSeq.remove(stream); 
         }
 };

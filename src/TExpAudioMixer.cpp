@@ -47,18 +47,25 @@ bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, lo
    
     // Real-time input
     //TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
+    
+    //printf("TExpAudioMixer::AudioCallback %d\n", frames); 
 
     // Mix all Streams
 	list<TAudioStreamPtr>::iterator iter = fStreamSeq.begin();
 	while (iter != fStreamSeq.end()) {
 		TAudioStreamPtr stream = *iter;
-    	if (stream->Read(fMixBuffer, TAudioGlobals::fBufferSize, TAudioGlobals::fOutput) < TAudioGlobals::fBufferSize) { // End of stream
+        
+        //printf("TExpAudioMixer::AudioCallback stream->Read %d\n", frames);
+    	if (stream->Read(fMixBuffer, TAudioGlobals::fBufferSize, 0) < TAudioGlobals::fBufferSize) { // End of stream
             iter = fStreamSeq.erase(iter);
 		} else {
 			iter++;
 		}
 	}
- 	
+    
+    //printf("outputBuffer %f\n", outputBuffer[2][0]);
+    //printf("fMixBuffer %f\n", fMixBuffer->GetFrame(0)[2][0]);
+   
     // Mix in outputBuffer
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
 									fMixBuffer->GetFrame(0),

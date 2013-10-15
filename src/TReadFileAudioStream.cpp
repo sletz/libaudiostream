@@ -62,6 +62,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     // Dynamic allocation
     fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
     fCopyBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fFileBuffer = new float[fChannels * TAudioGlobals::fStreamBufferSize];
   
     // Read first buffer directly
     TBufferedAudioStream::ReadBuffer(fMemoryBuffer, TAudioGlobals::fStreamBufferSize, 0);
@@ -79,6 +80,7 @@ TReadFileAudioStream::~TReadFileAudioStream()
 
     delete fMemoryBuffer;
     delete fCopyBuffer;
+    delete [] fFileBuffer;
 }
 
 TAudioStreamPtr TReadFileAudioStream::CutBegin(long frames)
@@ -105,12 +107,15 @@ void TReadFileAudioStream::Reset()
 
     // Use only the beginning of the copy buffer, copy the end in the low-priority thread
     int copySize = TAudioGlobals::fBufferSize * 4;
+    
+    printf("TReadFileAudioStream::Reset 1\n");
 
     if (copySize < TAudioGlobals::fStreamBufferSize) {
         TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, copySize);
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
+        printf("TReadFileAudioStream::Reset 2\n");
         assert(fManager);
         fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
     } else {
@@ -124,9 +129,12 @@ void TReadFileAudioStream::Reset()
 long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    float tmp_buffer[fChannels * framesNum];
-    int res = sf_readf_float(fFile, tmp_buffer, framesNum); // In frames
-    UAudioTools::Deinterleave(buffer->GetFrame(framePos), tmp_buffer, framesNum, fChannels);
+    
+    printf("TReadFileAudioStream::ReadImp framesNum %d framePos %d fChannels %d \n", framesNum, framePos, fChannels);
+     
+    int res = sf_readf_float(fFile, fFileBuffer, framesNum); // In frames
+   
+    UAudioTools::Deinterleave(buffer->GetFrame(framePos), fFileBuffer, framesNum, fChannels);
     return res;
 }
 

@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     long tmpBufferSize = 512;
     long tmpSampleRate = 44100;
     
-    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 8, tmpSampleRate * 60 * 10, kJackRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
     if (!gAudioPlayer) {
         printf("Cannot OpenAudioPlayer\n");
         return 0;
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
     
     printControls(faust_effect);
     
-    AudioStream stream = MakeRegionSound(FILENAME1, 0, tmpSampleRate*10);
+    AudioStream stream = MakeRegionSound(FILENAME1, 0, tmpSampleRate * 15);
     
     AddSound(gAudioPlayer, stream);
     

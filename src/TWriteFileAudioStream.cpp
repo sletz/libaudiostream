@@ -35,6 +35,7 @@ TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream
 {
     fChannels = stream->Channels();
     fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fFileBuffer = new float[fChannels * TAudioGlobals::fStreamBufferSize];
     fStream = stream;
     fFormat = format;
     fFramesNum = fStream->Length();
@@ -47,6 +48,7 @@ TWriteFileAudioStream::~TWriteFileAudioStream()
 	Flush();
     Close();	
     delete fMemoryBuffer;  // faux a revoir (si buffer partagŽ)
+    delete [] fFileBuffer;
 }
 
 void TWriteFileAudioStream::Open()
@@ -108,9 +110,8 @@ void TWriteFileAudioStream::Reset()
 long TWriteFileAudioStream::WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    float tmp_buffer[fChannels * framesNum];
-    UAudioTools::Interleave(tmp_buffer, buffer->GetFrame(framePos), framesNum, fChannels);
-    return long(sf_writef_float(fFile, tmp_buffer, framesNum));  // In frames
+    UAudioTools::Interleave(fFileBuffer, buffer->GetFrame(framePos), framesNum, fChannels);
+    return long(sf_writef_float(fFile, fFileBuffer, framesNum));  // In frames
 }
 
 void TWriteFileAudioStream::Flush()

@@ -293,6 +293,7 @@ class UAudioTools
 		
 		static inline void Deinterleave(float** dst, float* src, long framesNum, long channels)
         {
+            //printf("Deinterleave framesNum %d channels %d\n", framesNum, channels);
 			int i, j;
 			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {
@@ -456,8 +457,11 @@ class UAudioTools
                     out[i][j + 1] += in[i][j + 1];
                     out[i][j + 2] += in[i][j + 2];
                     out[i][j + 3] += in[i][j + 3];
+                    
                 }
             }
+            //printf("Float2FloatMix %f\n", out[1][0]);
+            //printf("Float2FloatMix %f\n", out[2][0]);
         }
         
         static inline void Float2Float(float* in, float* out, long framesNum, long channelsIn, long channelsOut)
