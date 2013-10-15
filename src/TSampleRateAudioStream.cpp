@@ -79,11 +79,14 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
     SRC_DATA src_data;
     bool end = false;
     
+    float* temp1[fBuffer->GetChannels()];
+    float* temp2[buffer->GetChannels()];
+    
     while (written < framesNum && !end) {
     
         if (fReadFrames == 0) {
             // Read input
-            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
             fReadFrames = fStream->Read(fBuffer, TAudioGlobals::fBufferSize, 0);
             fReadPos = 0;
             end = fReadFrames < TAudioGlobals::fBufferSize;
@@ -92,7 +95,7 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         float tmp_buffer_in[fStream->Channels() * framesNum];
         float tmp_buffer_out[fStream->Channels() * framesNum];
         
-        UAudioTools::Interleave(tmp_buffer_in, fBuffer->GetFrame(fReadPos), framesNum, fStream->Channels());
+        UAudioTools::Interleave(tmp_buffer_in, fBuffer->GetFrame(fReadPos, temp1), framesNum, fStream->Channels());
  
         //src_data.data_in = fBuffer->GetFrame(fReadPos);
         //src_data.data_out = buffer->GetFrame(framePos);
@@ -117,7 +120,7 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         fReadPos += src_data.input_frames_used;
         fReadFrames -= src_data.input_frames_used; 
         
-        UAudioTools::Deinterleave(buffer->GetFrame(framePos), tmp_buffer_out, framesNum, fStream->Channels());
+        UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp2), tmp_buffer_out, framesNum, fStream->Channels());
     }
       
     return written;

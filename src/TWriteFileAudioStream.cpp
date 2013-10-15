@@ -110,7 +110,8 @@ void TWriteFileAudioStream::Reset()
 long TWriteFileAudioStream::WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    UAudioTools::Interleave(fFileBuffer, buffer->GetFrame(framePos), framesNum, fChannels);
+    float* temp[buffer->GetChannels()];
+    UAudioTools::Interleave(fFileBuffer, buffer->GetFrame(framePos, temp), framesNum, fChannels);
     return long(sf_writef_float(fFile, fFileBuffer, framesNum));  // In frames
 }
 

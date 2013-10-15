@@ -42,8 +42,10 @@ TExpAudioMixer::~TExpAudioMixer()
 
 bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, long frames)
 {
+    float* temp[fMixBuffer->GetChannels()];
+    
     // Init buffer
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, MAX_OUTPUT_CHAN);
+    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0, temp), TAudioGlobals::fBufferSize, MAX_OUTPUT_CHAN);
    
     // Real-time input
     //TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
@@ -53,7 +55,6 @@ bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, lo
 	while (iter != fStreamSeq.end()) {
 		TAudioStreamPtr stream = *iter;
         
-        //printf("TExpAudioMixer::AudioCallback stream->Read %d\n", frames);
     	if (stream->Read(fMixBuffer, TAudioGlobals::fBufferSize, 0) < TAudioGlobals::fBufferSize) { // End of stream
             iter = fStreamSeq.erase(iter);
 		} else {
@@ -63,7 +64,7 @@ bool TExpAudioMixer::AudioCallback(float** inputBuffer, float** outputBuffer, lo
     
     // Mix in outputBuffer
 	UAudioTools::MixFrameToFrameBlk(outputBuffer,
-									fMixBuffer->GetFrame(0),
+									fMixBuffer->GetFrame(0, temp),
 									TAudioGlobals::fBufferSize,
 									TAudioGlobals::fOutput);
  

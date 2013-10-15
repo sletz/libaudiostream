@@ -41,14 +41,17 @@ TAudioStreamPtr TEffectAudioStream::CutBegin(long frames)
 
 long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    float* temp1[fBuffer->GetChannels()];
+    float* temp2[buffer->GetChannels()];
+    
     /* Cleanup temporary fBuffer */
-	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, fStream->Channels());
+	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
     
     /* Use temporary fBuffer from the beginning */
     long res = fStream->Read(fBuffer, framesNum, 0);
      
     /* Use temporary fBuffer from the beginning */
-    fEffect->Process(fBuffer->GetFrame(0), buffer->GetFrame(framePos), framesNum);
+    fEffect->Process(fBuffer->GetFrame(0, temp1), buffer->GetFrame(framePos, temp2), framesNum);
       
     return res;
 }

@@ -88,6 +88,7 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, long endFrame);
     AUDIOAPI AudioStreamPtr MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade);
     AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
+    AUDIOAPI AudioStreamPtr MakeParSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     //AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
     AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
@@ -230,6 +231,7 @@ AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n);
 AUDIOAPI AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
 AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
 AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
+AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 //AUDIOAPI AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
 //AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
@@ -323,6 +325,11 @@ AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade
 AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2)
 {
     return TAudioStreamFactory::MakeMixSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioStreamPtr>(s2));
+}
+
+AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2)
+{
+    return TAudioStreamFactory::MakeParSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioStreamPtr>(s2));
 }
 
 AUDIOAPI AudioStream MakeInputSound()
@@ -454,6 +461,11 @@ AUDIOAPI AudioStreamPtr MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, lo
 AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2)
 {
     return (s1 && s2) ? MakeSoundPtr(TAudioStreamFactory::MakeMixSound(static_cast<TAudioStreamPtr>(*s1), static_cast<TAudioStreamPtr>(*s2))) : 0;
+}
+
+AUDIOAPI AudioStreamPtr MakeParSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2)
+{
+    return (s1 && s2) ? MakeSoundPtr(TAudioStreamFactory::MakeParSound(static_cast<TAudioStreamPtr>(*s1), static_cast<TAudioStreamPtr>(*s2))) : 0;
 }
 
 AUDIOAPI AudioStreamPtr MakeInputSoundPtr()

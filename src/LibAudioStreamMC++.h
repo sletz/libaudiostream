@@ -222,6 +222,15 @@ AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
 \return A pointer to new stream object.
 */
 AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
+
+/*!
+\brief Put two streams in parallel
+\param s1 The first stream.
+\param s2 The second streamx.
+\return A pointer to new stream object.
+*/
+AudioStream MakeParSound(AudioStream s1, AudioStream s2);
+
 /*!
 \brief Apply a list of effects on a stream.
 \param sound The stream to be transformed.

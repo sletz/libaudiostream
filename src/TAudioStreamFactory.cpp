@@ -26,6 +26,7 @@ research@grame.fr
 #include "TCutEndAudioStream.h"
 #include "TSeqAudioStream.h"
 #include "TMixAudioStream.h"
+#include "TParAudioStream.h"
 #include "TNullAudioStream.h"
 #include "TReadFileAudioStream.h"
 #include "TInputAudioStream.h"
@@ -145,6 +146,13 @@ TAudioStreamPtr TAudioStreamFactory::MakeMixSound(TAudioStreamPtr s1, TAudioStre
 {
     TRY_CALL
     return (s1 && s2) ? new TMixAudioStream(s1, s2) : 0;
+    CATCH_EXCEPTION
+}
+
+TAudioStreamPtr TAudioStreamFactory::MakeParSound(TAudioStreamPtr s1, TAudioStreamPtr s2)
+{
+    TRY_CALL
+    return (s1 && s2) ? new TParAudioStream(s1, s2) : 0;
     CATCH_EXCEPTION
 }
 

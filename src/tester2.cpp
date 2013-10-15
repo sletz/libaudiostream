@@ -51,11 +51,20 @@ int main(int argc, char* argv[])
     
     printControls(faust_effect);
     
+    /*
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
     AddSound(gAudioPlayer, stream1);
     
+    
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
     AddSound(gAudioPlayer, stream2);
+    */
+    
+    
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AudioStream stream3 = MakeParSound(stream1, stream2);
+    AddSound(gAudioPlayer, stream3);
     
     StartAudioPlayer(gAudioPlayer);
      
