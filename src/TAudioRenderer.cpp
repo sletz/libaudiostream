@@ -24,7 +24,7 @@ research@grame.fr
 #include "UAudioTools.h"
 #include "TSharedBuffers.h"
 
-long TAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
+long TAudioRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     fInput = inChan;
     fOutput = outChan;
@@ -33,34 +33,21 @@ long TAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, lon
     return NO_ERR;
 }
 
-long TAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+void TAudioRenderer::Run(float** inputs, float** outputs, long frames)
 {
-    fInput = inChan;
-    fOutput = outChan;
-    fBufferSize = bufferSize;
-    fSampleRate = sampleRate;
-    return NO_ERR;
-}
-
-void TAudioRenderer::Run(float** inputBuffer, float** outputBuffer, long frames)
-{
-    // Clean output buffer
-    UAudioTools::ZeroFloatBlk(outputBuffer, frames, fOutput);
-    
-    //printf("TAudioRenderer::Run %f %f\n", outputBuffer[0][0], outputBuffer[1][0]);
-    
-    //printf("TAudioRenderer::Run %d\n", frames);
+    // Clear output buffer
+    UAudioTools::ZeroFloatBlk(outputs, frames, fOutput);
     
     // Setup in/out real-time buffers
-    TSharedBuffers::SetInBuffer(inputBuffer);
-    TSharedBuffers::SetOutBuffer(outputBuffer);
+    TSharedBuffers::SetInBuffer(inputs);
+    TSharedBuffers::SetOutBuffer(outputs);
 
-	// Client callback are supposed to *mix* their result in outputBuffer 
+	// Client callback are supposed to *mix* their result in outputs 
 	list<TRTAudioClient>::iterator iter = fClientList.begin();
 	while (iter != fClientList.end()) {
 		TAudioClientPtr client = (*iter).fRTClient;
 		if (client) {
-            client->AudioCallback(inputBuffer, outputBuffer, frames);
+            client->AudioCallback(inputs, outputs, frames);
 			iter++;
 		} else {  // Client was removed
 			iter = fClientList.erase(iter);

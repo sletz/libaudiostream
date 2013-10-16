@@ -216,7 +216,7 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
 
 
 /*!
-\brief Template based class for local buffers.
+\brief Template based class for local interleaved buffers.
 */
 
 template <class T>
@@ -239,7 +239,7 @@ class TLocalInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
 };
 
 /*!
-\brief Template based class for local buffers.
+\brief Template based class for local non-interleaved buffers.
 */
 
 template <class T>
@@ -268,7 +268,7 @@ class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
 };
 
 /*!
-\brief Template based class for shared buffers.
+\brief Template based class for shared interleaved buffers.
 */
 
 template <class T>
@@ -286,6 +286,27 @@ class TSharedInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
         virtual ~TSharedInterleavedAudioBuffer()
         {}
 };
+
+/*!
+\brief Template based class for shared non-interleaved buffers.
+*/
+
+template <class T>
+class TSharedNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
+{
+
+    public:
+
+        TSharedNonInterleavedAudioBuffer(T** buffer, long frames, long channels)
+        {
+            this->fBuffer = buffer;
+            this->fFrames = frames;
+            this->fChannels = channels;
+        }
+        virtual ~TSharedNonInterleavedAudioBuffer()
+        {}
+};
+
 
 //typedef TAudioBuffer<float>* FLOAT_BUFFER;
 //typedef TAudioBuffer<short>* SHORT_BUFFER;

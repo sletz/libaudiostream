@@ -62,7 +62,6 @@ int main(int argc, char* argv[])
     AddSound(gAudioPlayer, stream2);
     */
     
-    
     /*
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
@@ -91,7 +90,9 @@ int main(int argc, char* argv[])
     AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
     AudioStream stream3 = MakeParSound(stream1, stream2);
     AddSound(gAudioPlayer, stream3);
-    
+    //AddSound(gAudioPlayer, stream1);
+    //RemoveSound(gAudioPlayer, stream3);
+    //RemoveSound(gAudioPlayer, stream1);
     
     StartAudioPlayer(gAudioPlayer);
     

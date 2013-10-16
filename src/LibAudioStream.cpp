@@ -808,7 +808,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
     }
 
 	player->fRenderer->AddClient(player->fMixer);
-	res = player->fRenderer->OpenDefault(inChan, outChan, buffer_size, sample_rate);
+	res = player->fRenderer->Open(inChan, outChan, buffer_size, sample_rate);
 
     if (res == NO_ERR) {
         return player;
@@ -1037,7 +1037,7 @@ AUDIOAPI void DeleteAudioRenderer(AudioRendererPtr obj)
 
 AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
-   return static_cast<TAudioRendererPtr>(renderer)->OpenDefault( inChan, outChan, bufferSize, sampleRate);
+   return static_cast<TAudioRendererPtr>(renderer)->Open( inChan, outChan, bufferSize, sampleRate);
 }
 
 AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer)

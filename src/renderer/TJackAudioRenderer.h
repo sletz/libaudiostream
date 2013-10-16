@@ -63,14 +63,15 @@ class TJackAudioRenderer : public TAudioRenderer
 
         static int Process(jack_nframes_t nframes, void *arg);
         int ProcessAux(jack_nframes_t nframes);
+        
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 
     public:
 
         TJackAudioRenderer();
         virtual ~TJackAudioRenderer();
 
-      	long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+      	long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
 
         long Start();

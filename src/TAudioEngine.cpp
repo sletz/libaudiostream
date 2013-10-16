@@ -24,7 +24,7 @@ research@grame.fr
 
 long TAudioEngine::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
-    return fRenderer->OpenDefault(inChan, outChan, bufferSize, sampleRate);
+    return fRenderer->Open(inChan, outChan, bufferSize, sampleRate);
 }
 
 long TAudioEngine::Close()

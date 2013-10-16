@@ -47,7 +47,7 @@ class TAudioClient
 		\param frames The input/output buffer number of frames.
 		\return true if success, false otherwise.
 		*/
-        virtual bool AudioCallback(float** inputBuffer, float** outputBuffer, long frames) = 0;
+        virtual bool AudioCallback(float** inputs, float** outputs, long frames) = 0;
 };
 
 typedef TAudioClient * TAudioClientPtr;

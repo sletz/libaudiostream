@@ -111,7 +111,7 @@ TPortAudioV19Renderer::~TPortAudioV19Renderer()
 	Pa_Terminate();
 }
 
-long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
+long TPortAudioV19Renderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     PaError err;
     const PaDeviceInfo* pdi;
@@ -168,7 +168,7 @@ long TPortAudioV19Renderer::OpenDefault(long inChan, long outChan, long bufferSi
 	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
-long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+long TPortAudioV19Renderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
     printf("Opening device : inputDevice: %ld outputDevice: %ld inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n", 
 		inputDevice, outputDevice, inChan, outChan, bufferSize, sampleRate);
@@ -208,7 +208,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
     if (err != paNoError) {
         goto error;
     }
-    return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
+    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));

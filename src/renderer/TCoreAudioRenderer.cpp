@@ -843,7 +843,7 @@ error:
     return -1;
 }
 
-long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long samplerate)
+long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long samplerate)
 {
 	OSStatus err = noErr;
     ComponentResult err1;
@@ -1108,7 +1108,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         fInputData->mBuffers[i].mDataByteSize = bufferSize * sizeof(float);
     }
  	
-    return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, samplerate);
+    return TAudioRenderer::Open(inChan, outChan, bufferSize, samplerate);
 
 error:
     AudioUnitUninitialize(fAUHAL);
@@ -1116,7 +1116,7 @@ error:
     return OPEN_ERR;
 }
 
-long TCoreAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
+long TCoreAudioRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
 {
 	return NO_ERR;
 }

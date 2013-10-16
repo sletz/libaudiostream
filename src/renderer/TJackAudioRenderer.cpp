@@ -81,7 +81,7 @@ TJackAudioRenderer::~TJackAudioRenderer()
 	free(fOutput_ports);
 }
 
-long TJackAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
+long TJackAudioRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	int i;
  
@@ -125,7 +125,7 @@ long TJackAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         }
 	}
 
-	return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
+	return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening jack client\n");
@@ -135,9 +135,9 @@ error:
     return OPEN_ERR;
 }
 
-long TJackAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
+long TJackAudioRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
 {
-	return OpenDefault(inChan, outChan, bufferSize, samplerate);
+	return Open(inChan, outChan, bufferSize, samplerate);
 }
 
 long TJackAudioRenderer::Close()

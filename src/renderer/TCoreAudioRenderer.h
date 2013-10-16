@@ -93,7 +93,9 @@ class TCoreAudioRenderer : public TAudioRenderer
         
         static void InitTime();
         static double GetMicroSeconds();
-
+        
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+  
     public:
 
         TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),
@@ -103,9 +105,8 @@ class TCoreAudioRenderer : public TAudioRenderer
         virtual ~TCoreAudioRenderer()
         {}
 
-        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
-        long Close();
+        long Open(long inChan, long outChan, long bufferSize, long sampleRate);
+	  long Close();
 
         long Start();
         long Stop();

@@ -40,29 +40,34 @@ class TExpAudioMixer : public TAudioClient
 
     private:
 
-        list<TAudioStreamPtr>   fStreamSeq;	// List of running sound streams
-        FLOAT_BUFFER            fMixBuffer; // Buffer for mixing
+        list<TRTRendererAudioStreamPtr> fStreamSeq;	// List of running sound streams
    
-        bool AudioCallback(float** inputBuffer, float** outputBuffer, long frames);
+        bool AudioCallback(float** inputs, float** outputs, long frames);
+        
+        // a predicate implemented as a function:
+        struct is_stream {
+            TAudioStreamPtr fStream;
+            is_stream(TAudioStreamPtr stream):fStream(stream) {}
+            bool operator() (TRTRendererAudioStreamPtr stream) { return (fStream == stream->GetBranch1()); }
+        };
 
     public:
 
-        TExpAudioMixer();
-        virtual ~TExpAudioMixer();
-
+        TExpAudioMixer() {}
+        virtual ~TExpAudioMixer() {}
+      
         void AddStream(TAudioStreamPtr stream)      
         {   
             // We assume stream->Channels() < MAX_OUTPUT_CHAN here
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
-            stream->Reset();
-            //fStreamSeq.push_back(stream); 
+            renderer_stream->Reset();
             fStreamSeq.push_back(renderer_stream); 
         }
         void RemoveStream(TAudioStreamPtr stream)   
         { 
-            // TODO : how to retrieve the stream ?
-            fStreamSeq.remove(stream); 
+            fStreamSeq.remove_if(is_stream(stream)); 
         }
+    
 };
 
 typedef TExpAudioMixer * TExpAudioMixerPtr;

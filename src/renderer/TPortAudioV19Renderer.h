@@ -50,14 +50,16 @@ class TPortAudioV19Renderer : public TAudioRenderer
         void DisplayDevices();
         int GetFirstValidInputDevice();
         int GetFirstValidOutputDevice();
+        
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+     
 
     public:
 
         TPortAudioV19Renderer();        
 		virtual ~TPortAudioV19Renderer();
 
-        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+        long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
 
         long Start();
