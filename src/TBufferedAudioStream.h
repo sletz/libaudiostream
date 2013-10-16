@@ -156,8 +156,7 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
             fBeginFrame = beginFrame;
             assert(fBeginFrame < shared_buffer->GetSize());
             
-            // Hack : always stereo for now
-            fChannels = 2;
+            fChannels = shared_buffer->GetChannels();
            
             // Keep the shared buffer
             fMemoryBuffer = shared_buffer;

@@ -49,7 +49,9 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             fFramesNum = endFrame;
             
             // Hack : always stereo for now
-            fChannels = 2;
+            //fChannels = 2;
+            
+            fChannels = TAudioGlobals::fInput;
             
             // Dynamic allocation
             fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(endFrame, fChannels, true);
@@ -91,12 +93,13 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             */
                                              
             // Read input and write it to memory
-            float* temp[fChannels];
-            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            float* temp[fTmpBuffer->GetChannels()];
+            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp), TAudioGlobals::fBufferSize, TAudioGlobals::fInput);
             UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos, temp),
                                              TSharedBuffers::GetInBuffer(),
                                              framesNum, TAudioGlobals::fInput);
             return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos); 
+            //return framesNum;
         }
 
         virtual TAudioStreamPtr CutBegin(long frames)

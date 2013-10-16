@@ -4,6 +4,7 @@
 
 #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
 #define LLVM_EFFECT2 "/Documents/faust-sf/examples/zita_rev1.dsp"
+#define LLVM_EFFECT3 "/Documents/faust-sf/examples/freeverb4.dsp"
 
 #define CHANNELS 4
 
@@ -45,6 +46,8 @@ int main(int argc, char* argv[])
     //AudioEffectList list_effect = MakeAudioEffectList();
 	AudioEffect faust_effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
+    AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@10000,_@10000,_@10000;", "", "");
+    AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
     //list_effect = AddAudioEffect(list_effect, faust_effect);
     
     SetControlValueEffect(faust_effect1, 0, 0.99);
@@ -61,6 +64,7 @@ int main(int argc, char* argv[])
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
     AddSound(gAudioPlayer, stream2);
     */
+    
     
     /*
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
@@ -86,6 +90,7 @@ int main(int argc, char* argv[])
     AddSound(gAudioPlayer, stream2);
     */
     
+    /*
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
     AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
     AudioStream stream3 = MakeParSound(stream1, stream2);
@@ -93,6 +98,17 @@ int main(int argc, char* argv[])
     //AddSound(gAudioPlayer, stream1);
     //RemoveSound(gAudioPlayer, stream3);
     //RemoveSound(gAudioPlayer, stream1);
+    
+    */
+    
+    AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100); 
+    
+    /*
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeSharedInputSound(), 0*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+                        
+    */
+    AddSound(gAudioPlayer, stream1);
     
     StartAudioPlayer(gAudioPlayer);
     
@@ -102,6 +118,11 @@ int main(int argc, char* argv[])
     
     SetControlValueEffect(faust_effect2, 9, 0.9);
     SetControlValueEffect(faust_effect2, 10, 0.9);
+    
+    SetControlValueEffect(faust_effect4, 0, 0.9);
+    SetControlValueEffect(faust_effect4, 1, 0.9);
+    SetControlValueEffect(faust_effect4, 2, 0.9);
+  
      
     char c;
     printf("Type 'q' to quit\n");

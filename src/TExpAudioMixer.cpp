@@ -25,6 +25,7 @@ research@grame.fr
 #endif
 
 #include "TExpAudioMixer.h"
+#include "TBufferedInputAudioStream.h"
 
 /*--------------------------------------------------------------------------*/
 // Internal API
@@ -35,7 +36,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
    
     // Real-time input
-    //TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0, TAudioGlobals::fOutput);
+    TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
  
     // Mix all Streams
 	list<TRTRendererAudioStreamPtr>::iterator iter = fStreamSeq.begin();

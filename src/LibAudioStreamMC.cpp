@@ -31,7 +31,7 @@ research@grame.fr
 #include "TFaustAudioEffect.h"
 
 //#include "TWrapperAudioEffect.h"
-//#include "TBufferedInputAudioStream.h"
+#include "TBufferedInputAudioStream.h"
 
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
@@ -1054,8 +1054,7 @@ AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
 {
     if (player && player->fMixer && player->fRenderer) {
         // Reset real-time input
-        // TODO
-        //TAudioGlobals::fSharedInput->Reset();
+        TAudioGlobals::fSharedInput->Reset();
         // Start player
         player->fRenderer->Start();
     }
