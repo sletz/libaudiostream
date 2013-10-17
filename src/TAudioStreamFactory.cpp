@@ -85,10 +85,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
     TRY_CALL
     if (beginFrame >= 0 && beginFrame <= endFrame) {
         TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
-        printf(" TAudioStreamFactory::MakeRegionSound %d %d\n", sound->SampleRate(), TAudioGlobals::fSampleRate);
-        
         if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
-            
             return new TSampleRateAudioStream(new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length())), double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
         } else {
             return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));

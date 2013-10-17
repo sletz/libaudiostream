@@ -131,7 +131,6 @@ extern "C"
 	AUDIOAPI long GetStateEffectPtr(AudioEffectPtr effect);
 	AUDIOAPI void ResetEffectPtr(AudioEffectPtr effect);
 
-	//AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
     AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum);
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
 	
@@ -166,7 +165,6 @@ extern "C"
     
     AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound);
     AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound);
-
 
     // Transport
     AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -234,7 +232,7 @@ AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade
 AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
 AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 //AUDIOAPI AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
-//AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
+AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
 AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
 AUDIOAPI AudioStream MakeInputSound();
@@ -271,12 +269,11 @@ AUDIOAPI void SetStateEffect(AudioEffect effect, long state);
 AUDIOAPI long GetStateEffect(AudioEffect effect);
 AUDIOAPI void ResetEffect(AudioEffect effect);
 
-//AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels);
 AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum);
 
 AUDIOAPI long LibVersion()
 {
-	return 1278;
+	return 200;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -356,7 +353,6 @@ AUDIOAPI AudioStream MakeTransformSound(AudioStream s1, AudioEffectList list_eff
 }
 */
 
-
 AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pitch_shift, double* time_strech)
 {
 	return TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
@@ -368,7 +364,6 @@ AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pit
 //#endif
     
 }
-
 
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format)
 {
@@ -658,13 +653,6 @@ AUDIOAPI void ResetEffect(AudioEffect effect)
 	static_cast<TAudioEffectInterfacePtr>(effect)->Reset();
 }
 
-/*
-AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels)
-{
-	static_cast<TAudioEffectInterfacePtr>(effect)->Process(input, output, framesNum, channels);
-}
-*/
-
 AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum)
 {
 	static_cast<TAudioEffectInterfacePtr>(effect)->Process(input, output, framesNum);
@@ -827,13 +815,6 @@ AUDIOAPI void ResetEffectPtr(AudioEffectPtr effect)
 {
 	static_cast<TAudioEffectInterfacePtr>(*effect)->Reset();
 }
-
-/*
-AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum, long channels)
-{
-	static_cast<TAudioEffectInterfacePtr>(*effect)->Process(input, output, framesNum, channels);
-}
-*/
 
 AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum)
 {
@@ -1039,15 +1020,24 @@ AUDIOAPI void AbortChannel(AudioPlayerPtr player, long chan)
 AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound)
 {
     if (player && player->fMixer && player->fRenderer) {
-        player->fMixer->AddStream(sound);
-    }
+        if (sound->Channels() < MAX_OUTPUT_CHAN) {
+            player->fMixer->AddStream(sound);
+            return NO_ERR;
+        }
+    } 
+        
+    return LOAD_ERR;
 }
 
 AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound)
 {
     if (player && player->fMixer && player->fRenderer) {
-        player->fMixer->RemoveStream(sound);
+        if (player->fMixer->RemoveStream(sound)) {
+            return NO_ERR;
+        }
     }
+    
+    return LOAD_ERR;
 }
 
 AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)

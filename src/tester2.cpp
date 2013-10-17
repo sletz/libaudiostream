@@ -22,7 +22,7 @@ static AudioPlayerPtr gAudioPlayer = 0;
 static long tmpInChan = 4;
 static long tmpOutChan = 4;
 static long tmpBufferSize = 512;
-static long tmpSampleRate = 96000;
+static long tmpSampleRate = 44100;
   
 static AudioEffect faust_effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
 static AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
@@ -94,7 +94,7 @@ static void test6()
 static void test7()
 {
     AudioStream stream1 = MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 10*tmpSampleRate),
-                        MakeLoopSound(MakeCutSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), 0*tmpSampleRate, 10*tmpSampleRate), 4), 0);
+                            MakeLoopSound(MakeCutSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), 0*tmpSampleRate, 10*tmpSampleRate), 4), 0);
      
     AddSound(gAudioPlayer, stream1);
 }
@@ -105,7 +105,15 @@ double time_strech = 0.5;
 static void test8()
 {
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
-    AddSound(gAudioPlayer,  MakePitchSchiftTimeStretchSound(stream2, &pitch_shift, &time_strech));
+    AddSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream2, &pitch_shift, &time_strech));
+}
+
+static void test9()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 0, tmpSampleRate * 25);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AudioStream stream3 = MakeParSound(stream1, stream2);
+    AddSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream3, &pitch_shift, &time_strech));
 }
 
 
@@ -133,7 +141,8 @@ int main(int argc, char* argv[])
     test6();
     test7();
     */
-    test8();
+    //test8();
+    test9();
        
     StartAudioPlayer(gAudioPlayer);
     

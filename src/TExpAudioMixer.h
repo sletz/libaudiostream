@@ -44,11 +44,15 @@ class TExpAudioMixer : public TAudioClient
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
-        // a predicate implemented as a function:
         struct is_stream {
             TAudioStreamPtr fStream;
-            is_stream(TAudioStreamPtr stream):fStream(stream) {}
-            bool operator() (TRTRendererAudioStreamPtr stream) { return (fStream == stream->GetBranch1()); }
+            bool fFound;
+            is_stream(TAudioStreamPtr stream):fStream(stream),fFound(false) {}
+            bool operator() (TRTRendererAudioStreamPtr stream) 
+            { 
+                fFound = (fStream == stream->GetBranch1());
+                return fFound; 
+            }
         };
 
     public:
@@ -58,14 +62,15 @@ class TExpAudioMixer : public TAudioClient
       
         void AddStream(TAudioStreamPtr stream)      
         {   
-            // We assume stream->Channels() < MAX_OUTPUT_CHAN here
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
             fStreamSeq.push_back(renderer_stream); 
         }
-        void RemoveStream(TAudioStreamPtr stream)   
+        bool RemoveStream(TAudioStreamPtr stream)   
         { 
-            fStreamSeq.remove_if(is_stream(stream)); 
+            is_stream comparator(stream);
+            fStreamSeq.remove_if(comparator); 
+            return comparator.fFound;
         }
     
 };
