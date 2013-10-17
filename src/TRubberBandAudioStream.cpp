@@ -34,28 +34,16 @@ TRubberBandAudioStream::TRubberBandAudioStream(TAudioStreamPtr stream, double* p
 	fTimeStretchVal = *time_strech;
    
 	fRubberBand = new RubberBandStretcher(TAudioGlobals::fSampleRate, stream->Channels(), RubberBandStretcher::OptionProcessRealTime);
-	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
+	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());
 	
 	fRubberBand->setTimeRatio(1/fTimeStretchVal);
 	fRubberBand->setPitchScale(fPitchShiftVal);
-    
-    int i;
-    for (i = 0; i < 2; i++) {
-        fTemp1[i] = (float*)calloc(TAudioGlobals::fBufferSize, sizeof(float));
-        fTemp2[i] = (float*)calloc(TAudioGlobals::fBufferSize, sizeof(float));
-    }
- }
+}
 
 TRubberBandAudioStream::~TRubberBandAudioStream()
 {
 	delete fRubberBand;
 	delete fBuffer;
-    
-    int i;
-	for (i = 0; i < 2; i++) {
-		free(fTemp1[i]);
-        free(fTemp2[i]);
-	}
 }
 
 TAudioStreamPtr TRubberBandAudioStream::CutBegin(long frames)
@@ -74,20 +62,19 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 		fRubberBand->setPitchScale(fPitchShiftVal);
 	}
     
+    float* temp1[fBuffer->GetChannels()];
+    float* temp2[buffer->GetChannels()];
+    
     while (fRubberBand->available() < framesNum) {
         int needFrames = std::min((int)framesNum, (int)fRubberBand->getSamplesRequired());
         if (needFrames > 0) {
-            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
             fStream->Read(fBuffer, needFrames, 0);
-            // Deinterleave...
-            UAudioTools::Deinterleave(fTemp1, fBuffer->GetFrame(0), needFrames, Channels());
-            fRubberBand->process(fTemp1, needFrames, false);
+            fRubberBand->process(fBuffer->GetFrame(0, temp1), needFrames, false);
         }
     }
     
-    fRubberBand->retrieve(fTemp2, std::min((int)framesNum, fRubberBand->available()));
-    // Interleave...
-    UAudioTools::Interleave(buffer->GetFrame(0), fTemp2, framesNum);
+    fRubberBand->retrieve(buffer->GetFrame(framePos, temp2), std::min((int)framesNum, fRubberBand->available()));
 	return framesNum;
 }
 

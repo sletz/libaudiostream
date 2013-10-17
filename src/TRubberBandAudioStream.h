@@ -43,9 +43,7 @@ class TRubberBandAudioStream : public TDecoratedAudioStream
 		double fTimeStretchVal;
 		RubberBand::RubberBandStretcher* fRubberBand;
 		FLOAT_BUFFER fBuffer;
-        float* fTemp1[2];
-        float* fTemp2[2];
-	
+ 	
     public:
 
         TRubberBandAudioStream(TAudioStreamPtr stream, double* pitch_shift, double* time_strech);

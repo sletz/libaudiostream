@@ -99,6 +99,16 @@ static void test7()
     AddSound(gAudioPlayer, stream1);
 }
 
+double pitch_shift = 1.0;
+double time_strech = 0.5;
+
+static void test8()
+{
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AddSound(gAudioPlayer,  MakePitchSchiftTimeStretchSound(stream2, &pitch_shift, &time_strech));
+}
+
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -114,7 +124,7 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
-    test1();
+    //test();
     /*
     test2();
     test3();
@@ -123,6 +133,7 @@ int main(int argc, char* argv[])
     test6();
     test7();
     */
+    test8();
        
     StartAudioPlayer(gAudioPlayer);
     

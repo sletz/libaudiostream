@@ -189,6 +189,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAud
     return (s1 && effect) ? new TTransformAudioStream(s1, effect, fadeIn, fadeOut) : 0;
     CATCH_EXCEPTION
 }
+*/
 
 TAudioStreamPtr TAudioStreamFactory::MakeRubberBandSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech)
 {
@@ -197,6 +198,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRubberBandSound(TAudioStreamPtr s1, dou
     CATCH_EXCEPTION
 }
 
+/*
 #ifdef SOUND_TOUCH
 TAudioStreamPtr TAudioStreamFactory::MakeSoundTouchSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech)
 {

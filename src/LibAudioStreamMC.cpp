@@ -356,7 +356,7 @@ AUDIOAPI AudioStream MakeTransformSound(AudioStream s1, AudioEffectList list_eff
 }
 */
 
-/*
+
 AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pitch_shift, double* time_strech)
 {
 	return TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
@@ -368,7 +368,7 @@ AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pit
 //#endif
     
 }
-*/
+
 
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format)
 {

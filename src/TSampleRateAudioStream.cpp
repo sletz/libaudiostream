@@ -60,8 +60,6 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
     fReadFrames = 0;    
     fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());
     
-    printf("TSampleRateAudioStream %f\n", fRatio);
-    
     fTmpBufferIn = new float[stream->Channels() * TAudioGlobals::fBufferSize];
     fTmpBufferOut = new float[stream->Channels() * TAudioGlobals::fBufferSize];
 }
@@ -78,7 +76,6 @@ TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
 {
     return new TSampleRateAudioStream(fStream->CutBegin(frames / fRatio), fRatio);
 }
-
 
 long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
@@ -118,7 +115,6 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         
         written += src_data.output_frames_gen;
         framePos += src_data.output_frames_gen;
-        
         fReadPos += src_data.input_frames_used;
         fReadFrames -= src_data.input_frames_used; 
     }
@@ -136,6 +132,4 @@ TAudioStreamPtr TSampleRateAudioStream::Copy()
 {
     return new TSampleRateAudioStream(fStream->Copy(), fRatio);
 }
-
-
 

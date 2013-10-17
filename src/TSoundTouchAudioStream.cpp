@@ -32,7 +32,7 @@ TSoundTouchAudioStream::TSoundTouchAudioStream(TAudioStreamPtr stream, double* p
 	fTimeStretchVal = *time_strech;
 	
 	fSoundTouch = new soundtouch::SoundTouch();
-	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
+	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
 	
 	fSoundTouch->setSampleRate(TAudioGlobals::fSampleRate);
     fSoundTouch->setChannels(TAudioGlobals::fOutput);
