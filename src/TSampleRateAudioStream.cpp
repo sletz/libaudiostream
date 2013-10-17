@@ -62,8 +62,8 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
     
     printf("TSampleRateAudioStream %f\n", fRatio);
     
-    fTmpBufferIn = new float[fStream->Channels() * TAudioGlobals::fBufferSize];
-    fTmpBufferOut = new float[fStream->Channels() * TAudioGlobals::fBufferSize];
+    fTmpBufferIn = new float[stream->Channels() * TAudioGlobals::fBufferSize];
+    fTmpBufferOut = new float[stream->Channels() * TAudioGlobals::fBufferSize];
 }
 
 TSampleRateAudioStream::~TSampleRateAudioStream()
@@ -88,11 +88,7 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
     float* temp1[fBuffer->GetChannels()];
     float* temp2[buffer->GetChannels()];
     
-    printf("TSampleRateAudioStream::Read %f\n", fRatio);
-    
     while (written < framesNum && !end) {
-    
-        printf("TSampleRateAudioStream::Read LOOP\n");
     
         if (fReadFrames == 0) {
             // Read input
@@ -102,15 +98,11 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
             end = fReadFrames < TAudioGlobals::fBufferSize;
         }
         
-        UAudioTools::Interleave(fTmpBufferIn, fBuffer->GetFrame(fReadPos, temp1), framesNum, fStream->Channels());
- 
-        //src_data.data_in = fBuffer->GetFrame(fReadPos);
-        //src_data.data_out = buffer->GetFrame(framePos);
-        
+        UAudioTools::Interleave(fTmpBufferIn, fBuffer->GetFrame(fReadPos, temp1), fReadFrames, fStream->Channels());
+       
         SRC_DATA src_data;
         src_data.data_in = fTmpBufferIn;
         src_data.data_out = fTmpBufferOut;
-        
         src_data.input_frames = fReadFrames;
         src_data.output_frames = int(framesNum - written);
         src_data.end_of_input = end;
@@ -122,13 +114,13 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
             return written;
         }
         
+        UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp2), fTmpBufferOut, int(framesNum - written), fStream->Channels());
+        
         written += src_data.output_frames_gen;
         framePos += src_data.output_frames_gen;
         
         fReadPos += src_data.input_frames_used;
         fReadFrames -= src_data.input_frames_used; 
-        
-        UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp2), fTmpBufferOut, framesNum, fStream->Channels());
     }
       
     return written;

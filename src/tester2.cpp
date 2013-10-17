@@ -6,7 +6,7 @@
 #define LLVM_EFFECT2 "/Documents/faust-sf/examples/zita_rev1.dsp"
 #define LLVM_EFFECT3 "/Documents/faust-sf/examples/freeverb4.dsp"
 
-#define CHANNELS 2
+#define CHANNELS 4
 
 #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
@@ -22,7 +22,7 @@ static AudioPlayerPtr gAudioPlayer = 0;
 static long tmpInChan = 4;
 static long tmpOutChan = 4;
 static long tmpBufferSize = 512;
-static long tmpSampleRate = 48000;
+static long tmpSampleRate = 96000;
   
 static AudioEffect faust_effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
 static AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");

@@ -165,7 +165,7 @@ long TPortAudioV19Renderer::Open(long inChan, long outChan, long bufferSize, lon
         outDevice = paNoDevice;
     }
  	
-	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
+	return OpenImp(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
 long TPortAudioV19Renderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
