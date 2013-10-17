@@ -6,7 +6,7 @@
 #define LLVM_EFFECT2 "/Documents/faust-sf/examples/zita_rev1.dsp"
 #define LLVM_EFFECT3 "/Documents/faust-sf/examples/freeverb4.dsp"
 
-#define CHANNELS 4
+#define CHANNELS 2
 
 #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
@@ -19,6 +19,17 @@ static long gBufferSize = 0;
 static AudioRendererPtr gAudioRenderer = 0;
 static AudioPlayerPtr gAudioPlayer = 0;
 
+static long tmpInChan = 4;
+static long tmpOutChan = 4;
+static long tmpBufferSize = 512;
+static long tmpSampleRate = 48000;
+  
+static AudioEffect faust_effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+static AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
+static AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@10000,_@10000,_@10000;", "", "");
+static AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
+    
+  
 static void printControls(AudioEffect faust_effect)
 {
     printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
@@ -30,26 +41,72 @@ static void printControls(AudioEffect faust_effect)
     }
 }
 
+static void test1()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AddSound(gAudioPlayer, stream1);
+
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AddSound(gAudioPlayer, stream2);
+}
+
+static void test2()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AudioStream stream3 = MakeParSound(stream1, stream2);
+    AddSound(gAudioPlayer, stream3);
+}
+
+static void test3()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME4, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AudioStream stream2 = MakeRegionSound(FILENAME4, 7 * tmpSampleRate, tmpSampleRate * 15);
+    
+    AudioStream stream3 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AudioStream stream4 = MakeParSound(stream1, MakeParSound(stream2, stream3));
+    AddSound(gAudioPlayer, stream4);
+}
+
+static void test4()
+{
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
+    AddSound(gAudioPlayer, stream1);
+    
+    AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
+    AddSound(gAudioPlayer, stream2);
+}
+
+static void test5()
+{
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
+    AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
+    AudioStream stream3 = MakeParSound(stream1, stream2);
+    AddSound(gAudioPlayer, stream3);
+}
+
+static void test6()
+{
+    AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100); 
+    AddSound(gAudioPlayer, stream1);
+}
+
+static void test7()
+{
+    AudioStream stream1 = MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 10*tmpSampleRate),
+                        MakeLoopSound(MakeCutSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), 0*tmpSampleRate, 10*tmpSampleRate), 4), 0);
+     
+    AddSound(gAudioPlayer, stream1);
+}
+
 int main(int argc, char* argv[])
 {
-    long tmpInChan = 4;
-    long tmpOutChan = 4;
-    long tmpBufferSize = 512;
-    long tmpSampleRate = 44100;
-    
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
     if (!gAudioPlayer) {
         printf("Cannot OpenAudioPlayer\n");
         return 0;
     } 
 
-    //AudioEffectList list_effect = MakeAudioEffectList();
-	AudioEffect faust_effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
-    AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
-    AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@10000,_@10000,_@10000;", "", "");
-    AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
-    //list_effect = AddAudioEffect(list_effect, faust_effect);
-    
     SetControlValueEffect(faust_effect1, 0, 0.99);
     SetControlValueEffect(faust_effect1, 1, 0.99);
     SetControlValueEffect(faust_effect1, 2, 0.99);
@@ -57,59 +114,16 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
+    test1();
     /*
-    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
-    AddSound(gAudioPlayer, stream1);
-
-    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
-    AddSound(gAudioPlayer, stream2);
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
+    test7();
     */
-    
-    
-    /*
-    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
-    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
-    AudioStream stream3 = MakeParSound(stream1, stream2);
-    AddSound(gAudioPlayer, stream3);
-    */
-    
-    /*
-    AudioStream stream1 = MakeRegionSound(FILENAME4, 5 * tmpSampleRate, tmpSampleRate * 15);
-    AudioStream stream2 = MakeRegionSound(FILENAME4, 7 * tmpSampleRate, tmpSampleRate * 15);
-    
-    AudioStream stream3 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
-    AudioStream stream4 = MakeParSound(stream1, MakeParSound(stream2, stream3));
-    AddSound(gAudioPlayer, stream4);
-    */
-   
-    /*
-    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
-    AddSound(gAudioPlayer, stream1);
-    
-    AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
-    AddSound(gAudioPlayer, stream2);
-    */
-    
-    /*
-    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
-    AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
-    AudioStream stream3 = MakeParSound(stream1, stream2);
-    AddSound(gAudioPlayer, stream3);
-    //AddSound(gAudioPlayer, stream1);
-    //RemoveSound(gAudioPlayer, stream3);
-    //RemoveSound(gAudioPlayer, stream1);
-    
-    */
-    
-    AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100); 
-    
-    /*
-    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
-                        MakeCutSound(MakeSharedInputSound(), 0*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
-                        
-    */
-    AddSound(gAudioPlayer, stream1);
-    
+       
     StartAudioPlayer(gAudioPlayer);
     
     SetControlValueEffect(faust_effect1, 0, 0.9);
@@ -122,13 +136,23 @@ int main(int argc, char* argv[])
     SetControlValueEffect(faust_effect4, 0, 0.9);
     SetControlValueEffect(faust_effect4, 1, 0.9);
     SetControlValueEffect(faust_effect4, 2, 0.9);
-  
      
     char c;
     printf("Type 'q' to quit\n");
 
     while ((c = getchar()) && c != 'q') {
-        sleep(1);
+        switch (c) {
+        
+            case 'p':
+                AddSound(gAudioPlayer, MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 13), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100));
+                break;
+                
+             case 'o':
+                AddSound(gAudioPlayer, MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 13), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100));
+                break;
+        
+        }
+        sleep(0.01);
     }
     
 }

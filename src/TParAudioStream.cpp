@@ -40,7 +40,6 @@ long TParAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
     } else {
         float* temp1[fBuffer->GetChannels()];
         float* temp2[buffer->GetChannels()];
-   
         long res1 = fStream1->Read(buffer, framesNum, framePos);
         UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream2->Channels());
         if (res1 < framesNum) {

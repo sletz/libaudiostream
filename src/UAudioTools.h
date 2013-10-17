@@ -293,6 +293,7 @@ class UAudioTools
 		
 		static inline void Interleave(float* dst, float** src, long framesNum, long channels)
         {
+            printf("Interleave %d %d\n", framesNum, channels);
 			int i, j;
 			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {
@@ -303,6 +304,7 @@ class UAudioTools
 		
 		static inline void Deinterleave(float** dst, float* src, long framesNum, long channels)
         {
+            printf("Deinterleave %d %d\n", framesNum, channels);
          	int i, j;
 			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {

@@ -38,6 +38,9 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
     private:
 
         FLOAT_BUFFER fBuffer;
+        float* fTmpBufferIn;
+        float* fTmpBufferOut;
+       
         SRC_STATE* fResampler;
         double fRatio;
    

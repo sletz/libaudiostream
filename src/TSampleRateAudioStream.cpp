@@ -50,8 +50,7 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
     }
     
     int error;    
-    // Resampler always openned in stereo mode even if only one (mono stream...) will be actually used.
-    fResampler = src_new(quality, TAudioGlobals::fOutput, &error);
+    fResampler = src_new(quality, stream->Channels(), &error);
     fRatio = ratio;
     if (error != 0) {
         throw TLASException(src_strerror(error));
@@ -59,13 +58,20 @@ TSampleRateAudioStream::TSampleRateAudioStream(TAudioStreamPtr stream, double ra
      
     fReadPos = 0;
     fReadFrames = 0;    
-    fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());
+    
+    printf("TSampleRateAudioStream %f\n", fRatio);
+    
+    fTmpBufferIn = new float[fStream->Channels() * TAudioGlobals::fBufferSize];
+    fTmpBufferOut = new float[fStream->Channels() * TAudioGlobals::fBufferSize];
 }
 
 TSampleRateAudioStream::~TSampleRateAudioStream()
 {
 	src_delete(fResampler);
     delete fBuffer;
+    delete [] fTmpBufferIn;
+    delete [] fTmpBufferOut;
 }
 
 TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
@@ -73,35 +79,37 @@ TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
     return new TSampleRateAudioStream(fStream->CutBegin(frames / fRatio), fRatio);
 }
 
+
 long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     int written = 0;
-    SRC_DATA src_data;
     bool end = false;
     
     float* temp1[fBuffer->GetChannels()];
     float* temp2[buffer->GetChannels()];
     
+    printf("TSampleRateAudioStream::Read %f\n", fRatio);
+    
     while (written < framesNum && !end) {
+    
+        printf("TSampleRateAudioStream::Read LOOP\n");
     
         if (fReadFrames == 0) {
             // Read input
-            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
             fReadFrames = fStream->Read(fBuffer, TAudioGlobals::fBufferSize, 0);
             fReadPos = 0;
             end = fReadFrames < TAudioGlobals::fBufferSize;
         }
         
-        float tmp_buffer_in[fStream->Channels() * framesNum];
-        float tmp_buffer_out[fStream->Channels() * framesNum];
-        
-        UAudioTools::Interleave(tmp_buffer_in, fBuffer->GetFrame(fReadPos, temp1), framesNum, fStream->Channels());
+        UAudioTools::Interleave(fTmpBufferIn, fBuffer->GetFrame(fReadPos, temp1), framesNum, fStream->Channels());
  
         //src_data.data_in = fBuffer->GetFrame(fReadPos);
         //src_data.data_out = buffer->GetFrame(framePos);
         
-        src_data.data_in = tmp_buffer_in;
-        src_data.data_out = tmp_buffer_out;
+        SRC_DATA src_data;
+        src_data.data_in = fTmpBufferIn;
+        src_data.data_out = fTmpBufferOut;
         
         src_data.input_frames = fReadFrames;
         src_data.output_frames = int(framesNum - written);
@@ -110,7 +118,7 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         
         int res = src_process(fResampler, &src_data);
         if (res != 0) {
-            printf("TSampleRateAudioStream::Read ratio = %f err = %s", fRatio, src_strerror(res));
+            printf("TSampleRateAudioStream::Read ratio = %f err = %s\n", fRatio, src_strerror(res));
             return written;
         }
         
@@ -120,7 +128,7 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         fReadPos += src_data.input_frames_used;
         fReadFrames -= src_data.input_frames_used; 
         
-        UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp2), tmp_buffer_out, framesNum, fStream->Channels());
+        UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp2), fTmpBufferOut, framesNum, fStream->Channels());
     }
       
     return written;

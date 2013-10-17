@@ -26,9 +26,9 @@ research@grame.fr
 
 TEffectAudioStream::TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut)
 {
-    fEffect = effect;
     // Add rest
     fStream = new TFadeAudioStream(new TSeqAudioStream(stream, new TNullAudioStream(fadeOut), fadeIn), fadeIn, fadeOut);
+    fEffect = effect;
     fFadeIn = fadeIn;
     fFadeOut = fadeOut;
 	fBufferIn = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fEffect->Inputs());
@@ -39,6 +39,8 @@ TAudioStreamPtr TEffectAudioStream::CutBegin(long frames)
 {
     return new TEffectAudioStream(fStream->CutBegin(frames), fEffect->Copy(), fFadeIn, fFadeOut);
 }
+
+// TODO distribute effect
 
 long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
@@ -55,7 +57,7 @@ long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
     /* Use temporary fBuffer from the beginning */
     fEffect->Process(fBufferIn->GetFrame(0, temp1), fBufferOut->GetFrame(0, temp2), framesNum);
     
-    // Mix in buffer : TODO distribute effect
+    // Mix in buffer
 	UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos, temp3),
 									fBufferOut->GetFrame(0, temp2),
 									TAudioGlobals::fBufferSize,
