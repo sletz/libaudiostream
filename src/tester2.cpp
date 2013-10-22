@@ -29,7 +29,6 @@ static AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
 static AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@10000,_@10000,_@10000;", "", "");
 static AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
     
-  
 static void printControls(AudioEffect faust_effect)
 {
     printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
@@ -115,7 +114,6 @@ static void test9()
     AudioStream stream3 = MakeParSound(stream1, stream2);
     AddSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream3, &pitch_shift, &time_strech));
 }
-
 
 int main(int argc, char* argv[])
 {

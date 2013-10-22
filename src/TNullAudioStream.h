@@ -31,7 +31,7 @@ research@grame.fr
 // Class TNullAudioStream
 //------------------------
 /*!
-\brief  A TNullAudioStream generates "silence".
+\brief A TNullAudioStream generates "silence".
 */
 
 class TNullAudioStream : public TAudioStream
@@ -41,10 +41,13 @@ class TNullAudioStream : public TAudioStream
 
         long fFramesNum;
         long fCurFrame;
+        long fChannels;
 
     public:
 
-        TNullAudioStream(long lengthFrame): fFramesNum(lengthFrame), fCurFrame(0)
+        TNullAudioStream(long lengthFrame): fFramesNum(lengthFrame), fCurFrame(0), fChannels(1)
+        {}
+        TNullAudioStream(long channels, long lengthFrame): fFramesNum(lengthFrame), fCurFrame(0), fChannels(channels)
         {}
         virtual ~TNullAudioStream()
         {}
@@ -58,19 +61,27 @@ class TNullAudioStream : public TAudioStream
 
         TAudioStreamPtr CutBegin(long frames)
         {
-            return new TNullAudioStream(UTools::Max(0,fFramesNum - frames));
+            return new TNullAudioStream(fChannels, UTools::Max(0, fFramesNum - frames));
         }
+        
         long Length()
         {
             return fFramesNum;
         }
+        
+        long Channels()
+        {
+            return fChannels;
+        }
+        
         void Reset()
         {
             fCurFrame = 0;
         }
+        
         TAudioStreamPtr Copy()
         {
-            return new TNullAudioStream(fFramesNum);
+            return new TNullAudioStream(fChannels, fFramesNum);
         }
 };
 

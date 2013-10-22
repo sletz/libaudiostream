@@ -47,10 +47,6 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         TBufferedInputAudioStream(long endFrame): TBufferedAudioStream()
         {
             fFramesNum = endFrame;
-            
-            // Hack : always stereo for now
-            //fChannels = 2;
-            
             fChannels = TAudioGlobals::fInput;
             
             // Dynamic allocation
@@ -65,13 +61,11 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         
         long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
-            //printf("Memory read framesNum = %d framePos = %d\n", framesNum, framePos);
             return framesNum;
         }
         
         long WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
-            //printf("Memory write framesNum = %d framePos = %d\n", framesNum, framePos);
             return framesNum;
         }
 
@@ -99,7 +93,6 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
                                              TSharedBuffers::GetInBuffer(),
                                              framesNum, TAudioGlobals::fInput);
             return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos); 
-            //return framesNum;
         }
 
         virtual TAudioStreamPtr CutBegin(long frames)

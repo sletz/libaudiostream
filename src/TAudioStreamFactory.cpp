@@ -68,6 +68,11 @@ TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
     return new TNullAudioStream(length);
 }
 
+TAudioStreamPtr TAudioStreamFactory::MakeMultiNullSound(long channels, long length)
+{
+    return new TNullAudioStream(channels, length);
+}
+
 TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 {
     TRY_CALL

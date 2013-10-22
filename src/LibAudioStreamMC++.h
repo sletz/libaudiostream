@@ -161,9 +161,18 @@ typedef void (*StopCallback)(void* context);
 /*!
 \brief Create a stream that will produce "silence".
 \param lengthFrame The number of null frame to be produced.
-\return A pointer to new stream object.
+\return A pointer to new stream object (which has one channel).
 */
 AudioStream MakeNullSound(long lengthFrame);
+
+/*!
+\brief Create a stream that will produce "silence".
+\param channels The number of channels
+\param lengthFrame The number of null frame to be produced.
+\return A pointer to new stream object.
+*/
+AudioStream MakeMultiNullSound(long channels, long lengthFrame);
+
 /*!
 \brief Create a file reader stream.
 \param name The sound file pathname.
