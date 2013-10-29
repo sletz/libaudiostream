@@ -497,6 +497,30 @@ void test21()
     printf("Simulate non real-time rendering : use last buffer here %ld\n", res);	
 }
 
+void test22()
+{
+    printf("-----------------------------------------------------------\n");
+    printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
+    printf("-----------------------------------------------------------\n\n");
+    
+    AudioEffectList list_effect = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect("gen.dsp", "", "");
+    //printf("faust_effect %x\n", faust_effect);
+    list_effect = AddAudioEffect(list_effect, faust_effect);
+
+    AudioStream sound = MakeRendererSound(MakeWriteSound("output.aif", MakeTransformSound(MakeNullSound(44100*100), list_effect, 0, 0), SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+    float buffer[512 * OUT_CHANNELS];
+    long res;
+	do {
+        printf("GetChannelsSound(sound) %d\n", GetChannelsSound(sound));
+        //res = ReadSound(sound, buffer, 512, GetChannelsSound(sound));
+        res = ReadSound(sound, buffer, 512, OUT_CHANNELS);
+        printf("Simulate non real-time rendering : use buffer here %ld\n", res);
+        printf("Loop res = %d...\n", res);
+    } while (res == 512);
+    printf("Simulate non real-time rendering : use last buffer here %ld\n", res);	
+}
+
 void TestPlay(AudioPlayerPtr player)
 {
     float vol = 1.0f;
@@ -708,7 +732,7 @@ int main(int argc, char* argv[])
     //ExecTest(player, test5ter2());
     //ExecTest(player, test5ter3());
     
-    ExecTest(player, test5ter4());
+    //ExecTest(player, test5ter4());
 	
     
     /*
@@ -737,6 +761,8 @@ int main(int argc, char* argv[])
 	test20();
 	test21();
     */
+    
+    test22();
     
     //ExecTest(player, test0());
 	

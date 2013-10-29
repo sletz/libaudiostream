@@ -407,7 +407,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
                 goto make_instance;
             }  else {
                 printf("error_lib %s\n", error_msg);
-                snprintf(error_lib, 512, "createDSPFactory error from DSP file %s", error_msg);
+                snprintf(error_lib, 512, "createDSPFactory error from DSP file %s\n", error_msg);
             }
             
             // Add -svg parameter if necessary
@@ -425,7 +425,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                snprintf(error_lib, 512, "createDSPFactory error from DSP code %s", error_msg);
+                snprintf(error_lib, 512, "createDSPFactory error from DSP code %s\n", error_msg);
             }
             
             // Try bitcode code string...
@@ -433,7 +433,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("readDSPFactoryFromBitcode error");
+                printf("readDSPFactoryFromBitcode error\n");
             }
      
             // Try bitcode code file...
@@ -441,7 +441,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("readDSPFactoryFromBitcodeFile error");
+                printf("readDSPFactoryFromBitcodeFile error\n");
             }
        
             // Try IR code string...
@@ -449,13 +449,13 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             if (factory) {
                 goto make_instance;
             }  else {
-                printf("readDSPFactoryFromIR error");
+                printf("readDSPFactoryFromIR error\n");
             }
       
             // Try IR code file...
             factory = readDSPFactoryFromIRFile(code, getTarget(), 3);
             if (!factory) {
-                printf("readDSPFactoryFromIR error");
+                printf("readDSPFactoryFromIR error\n");
                 throw TLASException(error_lib);
             } 
                         

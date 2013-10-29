@@ -64,6 +64,12 @@ class TNullAudioStream : public TAudioStream
         {
             return fFramesNum;
         }
+        
+        long Channels()
+        {
+            return 2;
+        }
+        
         void Reset()
         {
             fCurFrame = 0;
