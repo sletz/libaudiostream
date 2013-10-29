@@ -49,7 +49,23 @@ class UTools
         {
             return (a < b) ? a : b;
         }
+        inline static float Min(float a, float b)
+        {
+            return (a < b) ? a : b;
+        }
+        inline static double Min(double a, double b)
+        {
+            return (a < b) ? a : b;
+        }
         inline static long Max(long a, long b)
+        {
+            return (a >= b) ? a : b;
+        }
+        inline static float Max(float a, float b)
+        {
+            return (a >= b) ? a : b;
+        }
+        inline static double Max(double a, double b)
         {
             return (a >= b) ? a : b;
         }
