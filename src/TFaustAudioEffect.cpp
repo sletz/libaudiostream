@@ -28,23 +28,20 @@ TAudioEffectInterfacePtr TCodeFaustAudioEffectFactory::Duplicate(TAudioEffectInt
 {
     stringstream faust_code_stream;
     faust_code_stream << "process = par(i,n," << "environment { "<< effect->GetCode() << " }.process) " << "with { n = " << num << "/" << effect->Inputs() << "; };";
-    string faust_code = faust_code_stream.str();
-    printf("new_faust_code.str() %s\n", faust_code.c_str());
-    return CreateEffect(faust_code.c_str(), "", "");
+    return CreateEffect(faust_code_stream.str().c_str(), "", "");
 }
 
 // Split a Faust effect 'num' times 
 TAudioEffectInterfacePtr TCodeFaustAudioEffectFactory::Split(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
-    faust_code_stream << "process = par(i," << num << ",_)<:" << "environment { "<< effect->GetCode() << "}.process " << ";";
-    string faust_code = faust_code_stream.str();
-    printf("new_faust_code.str() %s\n", faust_code.c_str());
-    return CreateEffect(faust_code.c_str(), "", "");
+    faust_code_stream << "process = par(i," << num << ",_)<:" << "environment { "<< effect->GetCode() << "}.process;";
+    return CreateEffect(faust_code_stream.str().c_str(), "", "");
 }
 
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const char* name, const char* library_path, const char* draw_path)
 {
+    printf("CreateEffect = %s\n", name);
     TCodeFaustAudioEffectFactory factory(name, library_path, draw_path);
     return new TCodeFaustAudioEffect(factory.GetFactory(name));
 }

@@ -182,22 +182,13 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
 {
     TRY_CALL
     // If stream and effect are compatible...
-    
-    // TODO : possibly duplicate/rebuild effect by building a new Faust textual expression
-    // ex : duplicate a stereo effect to build a 4 channels effect 
-    // import (...)
-    // process = stereo_fx,stereo_fx;  ==> advantage: allows to share controls...
-        
     if (s1 && effect) {
         if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
-            TAudioEffectInterfacePtr new_effect = TCodeFaustAudioEffectFactory::Duplicate(effect, s1->Channels() / effect->Inputs());
-            return new TEffectAudioStream(s1, new_effect, fadeIn, fadeOut);
+            return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::Duplicate(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
-            TAudioEffectInterfacePtr new_effect = TCodeFaustAudioEffectFactory::Split(effect, effect->Inputs() / s1->Channels());
-            return new TEffectAudioStream(s1, new_effect, fadeIn, fadeOut);
+            return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::Split(effect, effect->Inputs()/s1->Channels()), fadeIn, fadeOut);
         }
     }
-     
     return 0;
     CATCH_EXCEPTION
 }
