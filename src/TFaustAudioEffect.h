@@ -88,14 +88,6 @@ class UIObject {
 		}
 };
 
-class ToggleButton : public UIObject {
-	
-	public:	
-	
-		ToggleButton(const char* label, FAUSTFLOAT* zone):UIObject(label, zone) {}
-		virtual ~ToggleButton() {}
-};
-
 class CheckButton : public UIObject {
 	
 	public:
@@ -355,6 +347,8 @@ typedef TModuleFaustAudioEffect * TModuleFaustAudioEffectPtr;
 \brief Faust dynamic effect generated from source using libfaust + LLVM.
 */
 
+class TCodeFaustAudioEffect;
+
 class TCodeFaustAudioEffectFactory 
 {
 
@@ -459,11 +453,31 @@ class TCodeFaustAudioEffectFactory
             fFactoryNumber++;
 		}
         
-        llvm_dsp_factory* getFactory(const string& code)
+        static llvm_dsp_factory* GetFactory(const string& code)
         {
             return fFactoryTable[code];
         }
-
+        
+        static const char* GetCode(llvm_dsp_factory* factory)
+        {
+            std::map<string, llvm_dsp_factory*>::iterator it;
+            for (it = fFactoryTable.begin(); it != fFactoryTable.end(); it++) {
+                if ((*it).second == factory) {
+                    return (*it).first.c_str();
+                }
+            }
+            return 0;
+        }
+        
+        // Duplicate a Faust effect 'num' times 
+        static TAudioEffectInterfacePtr Duplicate(TAudioEffectInterfacePtr effect, int num);
+         
+        // Split a Faust effect 'num' times 
+        static TAudioEffectInterfacePtr Split(TAudioEffectInterfacePtr effect, int num); 
+        
+        static TCodeFaustAudioEffect* CreateEffect(const char* name, const char* library_path, const char* draw_path);
+        
+   
 };
 
 class TCodeFaustAudioEffect : public TFaustAudioEffectBase
@@ -528,9 +542,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             json.numOutput(fDsp->getNumOutputs());
             return json.json();
         }
+        
+        const char* GetCode()
+        {
+            return TCodeFaustAudioEffectFactory::GetCode(fFactory);
+        }
 		
 };
 
 typedef TCodeFaustAudioEffect * TCodeFaustAudioEffectPtr;
-
+    
 #endif

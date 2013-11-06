@@ -51,6 +51,10 @@
 		4B18BC2617FF102D00DFD142 /* TEffectAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B18BC2017FF102D00DFD142 /* TEffectAudioStream.h */; };
 		4B18BC2717FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B18BC1F17FF102D00DFD142 /* TEffectAudioStream.cpp */; };
 		4B18BC2817FF102D00DFD142 /* TEffectAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B18BC2017FF102D00DFD142 /* TEffectAudioStream.h */; };
+		4B271B36182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */; };
+		4B271B37182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */; };
+		4B271B38182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */; };
+		4B271B39182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */; };
 		4B29CD9317FDB1D0000C5D6F /* TExpAudioMixer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B29CD9217FDB1D0000C5D6F /* TExpAudioMixer.h */; };
 		4B29CD9417FDB1D0000C5D6F /* TExpAudioMixer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B29CD9217FDB1D0000C5D6F /* TExpAudioMixer.h */; };
 		4B29CD9517FDB1D0000C5D6F /* TExpAudioMixer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B29CD9217FDB1D0000C5D6F /* TExpAudioMixer.h */; };
@@ -451,6 +455,7 @@
 		4B18BC1F17FF102D00DFD142 /* TEffectAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TEffectAudioStream.cpp; path = ../src/TEffectAudioStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B18BC2017FF102D00DFD142 /* TEffectAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TEffectAudioStream.h; path = ../src/TEffectAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4B1C2D4D0894D242003BC2A6 /* LibAudioStream++.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "LibAudioStream++.h"; path = "../../LibAudioSTream-git/src/LibAudioStream++.h"; sourceTree = SOURCE_ROOT; };
+		4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TFaustAudioEffect.cpp; path = ../src/TFaustAudioEffect.cpp; sourceTree = SOURCE_ROOT; };
 		4B29CD9217FDB1D0000C5D6F /* TExpAudioMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TExpAudioMixer.h; path = ../src/TExpAudioMixer.h; sourceTree = SOURCE_ROOT; };
 		4B29CD9717FDB1E1000C5D6F /* TExpAudioMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TExpAudioMixer.cpp; path = ../src/TExpAudioMixer.cpp; sourceTree = SOURCE_ROOT; };
 		4B29CDE217FDB525000C5D6F /* TExpAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TExpAudioEngine.cpp; path = ../src/TExpAudioEngine.cpp; sourceTree = SOURCE_ROOT; };
@@ -856,6 +861,7 @@
 			children = (
 				F5C1D5930330CAEF01053105 /* TPanTable.h */,
 				4B7AFA84085CB1AD002CD798 /* TFaustAudioEffect.h */,
+				4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */,
 				4B7AFA81085CB19E002CD798 /* TVolAudioEffect.h */,
 				4BF92831088E3B16006A013D /* TPanAudioEffect.h */,
 				4B7AFA7E085CB187002CD798 /* TAudioEffectInterface.h */,
@@ -1532,6 +1538,7 @@
 				4BCC4491180BE62600CD9DC7 /* TAudioRendererFactory.cpp in Sources */,
 				4BCC4514180BF38900CD9DC7 /* TJackAudioRenderer.cpp in Sources */,
 				4B86264D18102E590088A50B /* TRubberBandAudioStream.cpp in Sources */,
+				4B271B36182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1601,6 +1608,7 @@
 				4B18BC2117FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */,
 				4B01286C1803FC54000735C7 /* TParAudioStream.cpp in Sources */,
 				4BB9D8BD18042D96001B620C /* LibAudioStreamMC.cpp in Sources */,
+				4B271B39182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1653,6 +1661,7 @@
 				4B18BC2317FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */,
 				4B01286E1803FC54000735C7 /* TParAudioStream.cpp in Sources */,
 				4BB9D8BB18042D96001B620C /* LibAudioStreamMC.cpp in Sources */,
+				4B271B38182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1700,6 +1709,7 @@
 				4B18BC2517FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */,
 				4B0128701803FC54000735C7 /* TParAudioStream.cpp in Sources */,
 				4BB9D8B918042D96001B620C /* LibAudioStreamMC.cpp in Sources */,
+				4B271B37182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

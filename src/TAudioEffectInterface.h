@@ -60,6 +60,11 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable
         {
             return fState;
         }
+        
+        virtual const char* GetCode()
+        {
+            return 0;
+        }
 
         void ProcessAux(float** input, float** output, long framesNum)
         {

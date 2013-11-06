@@ -21,6 +21,7 @@ research@grame.fr
 */
 
 #include "TAudioStreamFactory.h"
+#include "TFaustAudioEffect.h"
 #include "TFadeAudioStream.h"
 #include "TLoopAudioStream.h"
 #include "TCutEndAudioStream.h"
@@ -180,7 +181,24 @@ TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
 TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut)
 {
     TRY_CALL
-    return (s1 && effect) ? new TEffectAudioStream(s1, effect, fadeIn, fadeOut) : 0;
+    // If stream and effect are compatible...
+    
+    // TODO : possibly duplicate/rebuild effect by building a new Faust textual expression
+    // ex : duplicate a stereo effect to build a 4 channels effect 
+    // import (...)
+    // process = stereo_fx,stereo_fx;  ==> advantage: allows to share controls...
+        
+    if (s1 && effect) {
+        if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
+            TAudioEffectInterfacePtr new_effect = TCodeFaustAudioEffectFactory::Duplicate(effect, s1->Channels() / effect->Inputs());
+            return new TEffectAudioStream(s1, new_effect, fadeIn, fadeOut);
+        } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
+            TAudioEffectInterfacePtr new_effect = TCodeFaustAudioEffectFactory::Split(effect, effect->Inputs() / s1->Channels());
+            return new TEffectAudioStream(s1, new_effect, fadeIn, fadeOut);
+        }
+    }
+     
+    return 0;
     CATCH_EXCEPTION
 }
 

@@ -609,8 +609,7 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_
 		return new TModuleFaustAudioEffect(name);
 	} catch (TLASException& e) {
         try {
-            TCodeFaustAudioEffectFactory factory(name, library_path, draw_path);
-            return new TCodeFaustAudioEffect(factory.getFactory(name));
+            return TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
         } catch (TLASException& e) {
             strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
             return 0;
@@ -740,8 +739,7 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* li
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (TLASException& e) {
         try {
-            TCodeFaustAudioEffectFactory factory(name, library_path, draw_path);
-            return new LA_SMARTP<TAudioEffectInterface>(new TCodeFaustAudioEffect(factory.getFactory(name)));
+            return new LA_SMARTP<TAudioEffectInterface>(TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
         } catch (TLASException& e) {
             strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
             return 0;
@@ -762,8 +760,7 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const 
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
-                TCodeFaustAudioEffectFactory factory(name, library_path, draw_path);
-                gDSP = new TCodeFaustAudioEffect(factory.getFactory(name)); 
+                gDSP = TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
             } catch (TLASException& e) {
                 strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
                 gDSP = NULL;

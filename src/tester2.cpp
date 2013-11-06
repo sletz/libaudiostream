@@ -28,6 +28,7 @@ static AudioEffect faust_effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
 static AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
 static AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@10000,_@10000,_@10000;", "", "");
 static AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
+static AudioEffect faust_effect5 = MakeFaustAudioEffect("process = _*vslider(\"Volume\", 1, 0, 1, 0.1);", "", "");
     
 static void printControls(AudioEffect faust_effect)
 {
@@ -115,6 +116,13 @@ static void test9()
     AddSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream3, &pitch_shift, &time_strech));
 }
 
+static void test10()
+{
+    AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect5, 100, 100); 
+    AddSound(gAudioPlayer, stream1);
+}
+
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -140,7 +148,9 @@ int main(int argc, char* argv[])
     test7();
     */
     //test8();
-    test9();
+    //test9();
+    
+    test10();
        
     StartAudioPlayer(gAudioPlayer);
     
@@ -154,6 +164,8 @@ int main(int argc, char* argv[])
     SetControlValueEffect(faust_effect4, 0, 0.9);
     SetControlValueEffect(faust_effect4, 1, 0.9);
     SetControlValueEffect(faust_effect4, 2, 0.9);
+    
+    SetControlValueEffect(faust_effect5, 0, 0.9);
      
     char c;
     printf("Type 'q' to quit\n");
