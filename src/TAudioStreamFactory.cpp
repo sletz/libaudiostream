@@ -21,6 +21,7 @@ research@grame.fr
 */
 
 #include "TAudioStreamFactory.h"
+#include "TAudioGlobals.h"
 #include "TFaustAudioEffect.h"
 #include "TFadeAudioStream.h"
 #include "TLoopAudioStream.h"
@@ -60,7 +61,7 @@ research@grame.fr
 #define CATCH_EXCEPTION                                     \
     } catch (TLASException& e) {                            \
         printf("LAS error = %s", e.Message().c_str());      \
-        strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);   \
+        TAudioGlobals::AddLibError(e.Message());            \
         return 0;                                           \
     }                                                       \
     
@@ -97,7 +98,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
             return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         }
     } else {
-        snprintf(TAudioGlobals::fLastLibError, sizeof(TAudioGlobals::fLastLibError) - 1, "beginFrame < O or endFrame > sound length");
+        TAudioGlobals::AddLibError("beginFrame < O or endFrame > sound length");
         return 0;
     }
     CATCH_EXCEPTION
@@ -129,7 +130,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
     TRY_CALL
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
 		if (beginFrame > sound->Length()) {
-            snprintf(TAudioGlobals::fLastLibError, sizeof(TAudioGlobals::fLastLibError) - 1, "beginFrame < O or endFrame > sound length");
+            TAudioGlobals::AddLibError("beginFrame < O or endFrame > sound length");
 			return 0;
 		} else {
 			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
@@ -187,6 +188,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::Duplicate(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::Split(effect, effect->Inputs()/s1->Channels()), fadeIn, fadeOut);
+        } else {
+             stringstream error;
+             error << "Stream with " << s1->Channels() << " channels is incompatible with effect with " << effect->Inputs() << " inputs";
+             TAudioGlobals::AddLibError(error.str());
         }
     }
     return 0;

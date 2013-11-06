@@ -25,7 +25,7 @@ research@grame.fr
 
 #include "AudioExports.h"
 #include "TAudioBuffer.h"
-#include <string.h>
+#include <string>
 
 #define MAX_OUTPUT_CHAN 64 // Used in TExpAudioMixer
 
@@ -75,13 +75,11 @@ class AUDIO_EXPORTS TAudioGlobals
         static void LogError();
         static void Destroy();
         
-        static void ClearLibError()
-        {
-            // First clear error message
-            if (fLastLibError) {
-                strncpy(fLastLibError, "", 512);
-            }
-        }
+        static void ClearLibError();
+        static void AddLibError(char* error);
+        static void AddLibError(const char* error);
+        static void AddLibError(const std::string& error);
+      
 };
 
 typedef TAudioGlobals * TAudioGlobalsPtr;

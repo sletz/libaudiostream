@@ -155,3 +155,26 @@ void TAudioGlobals::LogError()
 {
     printf("Disk Streaming errors : %ld\n", fDiskError);
 }
+
+void TAudioGlobals::ClearLibError()
+{
+    // First clear error message
+    if (fLastLibError) {
+        strncpy(fLastLibError, "", 512);
+    }
+}
+
+void TAudioGlobals::AddLibError(char* error)
+{
+    strncpy(TAudioGlobals::fLastLibError, error, 512);
+}
+
+void TAudioGlobals::AddLibError(const char* error)
+{
+    strncpy(TAudioGlobals::fLastLibError, error, 512);
+}
+
+void TAudioGlobals::AddLibError(const std::string& error)
+{
+    strncpy(fLastLibError, error.c_str(), 512);
+}

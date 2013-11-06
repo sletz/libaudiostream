@@ -87,7 +87,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 				return NULL;
 		}
 	} catch (...) {
-        strncpy(TAudioGlobals::fLastLibError, "Renderer allocation error\n", 512);
-		return NULL;
+        TAudioGlobals::AddLibError("Renderer allocation error");
+        return NULL;
 	}
 }

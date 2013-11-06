@@ -611,7 +611,7 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_
         try {
             return TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
         } catch (TLASException& e) {
-            strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
+            TAudioGlobals::AddLibError(e.Message());
             return 0;
         }
 	}
@@ -741,7 +741,7 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* li
         try {
             return new LA_SMARTP<TAudioEffectInterface>(TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
         } catch (TLASException& e) {
-            strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
+            TAudioGlobals::AddLibError(e.Message());
             return 0;
         }
     }
@@ -762,7 +762,7 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const 
             try {
                 gDSP = TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
             } catch (TLASException& e) {
-                strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
+                TAudioGlobals::AddLibError(e.Message());
                 gDSP = NULL;
             } 
         });
@@ -853,7 +853,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
 	
 	if (thread_num < 1) {
 		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");
-        strncpy(TAudioGlobals::fLastLibError, "OpenAudioPlayer error: thread_num parameter should be at least one !!", 256);
+        TAudioGlobals::AddLibError("OpenAudioPlayer error: thread_num parameter should be at least one !!");
     }
 
     TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
