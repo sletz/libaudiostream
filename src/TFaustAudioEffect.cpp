@@ -24,24 +24,24 @@ research@grame.fr
 #include <sstream>
     
 // Duplicate a Faust effect 'num' times 
-TAudioEffectInterfacePtr TCodeFaustAudioEffectFactory::Duplicate(TAudioEffectInterfacePtr effect, int num) 
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
     faust_code_stream << "process = par(i,n," << "environment { "<< effect->GetCode() << " }.process) " << "with { n = " << num << "/" << effect->Inputs() << "; };";
-    return CreateEffect(faust_code_stream.str().c_str(), "", "");
+    return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
 // Split a Faust effect 'num' times 
-TAudioEffectInterfacePtr TCodeFaustAudioEffectFactory::Split(TAudioEffectInterfacePtr effect, int num) 
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
     faust_code_stream << "process = par(i," << num << ",_)<:" << "environment { "<< effect->GetCode() << "}.process;";
-    return CreateEffect(faust_code_stream.str().c_str(), "", "");
+    return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
-TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const char* name, const char* library_path, const char* draw_path)
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const string& name, const string& library_path, const string& draw_path)
 {
-    printf("CreateEffect = %s\n", name);
-    TCodeFaustAudioEffectFactory factory(name, library_path, draw_path);
-    return new TCodeFaustAudioEffect(factory.GetFactory(name));
+    printf("CreateEffect = %s\n", name.c_str());
+    TCodeFaustAudioEffectFactory* factory = new TCodeFaustAudioEffectFactory(name, library_path, draw_path);
+    return new TCodeFaustAudioEffect(factory);
 }

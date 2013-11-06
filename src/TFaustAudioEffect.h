@@ -355,10 +355,15 @@ class TCodeFaustAudioEffectFactory
     private:
 	
         // Global DSP factory table
-        static std::map<string, llvm_dsp_factory*> fFactoryTable;
+        static std::map<string, TCodeFaustAudioEffectFactory*> fFactoryTable;
         static int fFactoryNumber;
         
-        string getTarget()
+        string fLibraryPath;
+        string fDrawPath;
+        string fCode;
+        llvm_dsp_factory* fFactory;
+        
+        string GetTarget()
         {
             int tmp;
             return (sizeof(&tmp) == 8) ? "x86_64-apple-darwin12.2.1" : "i386-apple-darwin10.6.0";
@@ -373,6 +378,10 @@ class TCodeFaustAudioEffectFactory
             char error_msg[256] = {0};
             char error_lib[512] = {0};
             char input_name[64];
+            
+            fCode = code;
+            fLibraryPath = library_path;
+            fDrawPath = draw_path;
             
             if (fFactoryTable.find(code) != fFactoryTable.end()) {
                 printf("DSP factory already created...\n");
@@ -390,8 +399,8 @@ class TCodeFaustAudioEffectFactory
                 argc = 1;
             }
          
-            llvm_dsp_factory* factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
-            if (factory) {
+            fFactory = createDSPFactory(argc, argv, library_path, draw_path, "", "", GetTarget(), error_msg, 3);
+            if (fFactory) {
                 goto end;
             }  else {
                 printf("error_lib %s\n", error_msg);
@@ -409,74 +418,69 @@ class TCodeFaustAudioEffectFactory
             sprintf(input_name, "LAS-faustfx-%d", fFactoryNumber);
    
             // Try DSP code...
-            factory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, getTarget(), error_msg, 3);
-            if (factory) {
+            fFactory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, GetTarget(), error_msg, 3);
+            if (fFactory) {
                 goto end;
             } else {
                 snprintf(error_lib, 512, "createDSPFactory error from DSP code %s\n", error_msg);
             }
             
             // Try bitcode code string...
-            factory = readDSPFactoryFromBitcode(code, getTarget(), 3);
-            if (factory) {
+            fFactory = readDSPFactoryFromBitcode(code, GetTarget(), 3);
+            if (fFactory) {
                 goto end;
             } else {
                 printf("readDSPFactoryFromBitcode error\n");
             }
      
             // Try bitcode code file...
-            factory = readDSPFactoryFromBitcodeFile(code, getTarget(), 3);
-            if (factory) {
+            fFactory = readDSPFactoryFromBitcodeFile(code, GetTarget(), 3);
+            if (fFactory) {
                 goto end;
             } else {
                 printf("readDSPFactoryFromBitcodeFile error\n");
             }
        
             // Try IR code string...
-            factory = readDSPFactoryFromIR(code, getTarget(), 3);
-            if (factory) {
+            fFactory = readDSPFactoryFromIR(code, GetTarget(), 3);
+            if (fFactory) {
                 goto end;
             } else {
                 printf("readDSPFactoryFromIR error\n");
             }
       
             // Try IR code file...
-            factory = readDSPFactoryFromIRFile(code, getTarget(), 3);
-            if (!factory) {
+            fFactory = readDSPFactoryFromIRFile(code, GetTarget(), 3);
+            if (!fFactory) {
                 printf("readDSPFactoryFromIR error\n");
                 throw TLASException(error_lib);
             } 
             
         end:
         
-            fFactoryTable[code] = factory;
+            fFactoryTable[code] = this;
             fFactoryNumber++;
 		}
         
-        static llvm_dsp_factory* GetFactory(const string& code)
+        /*
+        static TCodeFaustAudioEffectFactory* GetFactory(const string& code)
         {
             return fFactoryTable[code];
         }
+        */
         
-        static const char* GetCode(llvm_dsp_factory* factory)
-        {
-            std::map<string, llvm_dsp_factory*>::iterator it;
-            for (it = fFactoryTable.begin(); it != fFactoryTable.end(); it++) {
-                if ((*it).second == factory) {
-                    return (*it).first.c_str();
-                }
-            }
-            return 0;
-        }
-        
+        string GetLibraryPath() { return fDrawPath; }
+        string GetDrawPath() { return fDrawPath; }
+        string GetCode() { return fCode; }
+        llvm_dsp_factory* GetFactory() { return fFactory;}
+         
         // Duplicate a Faust effect 'num' times 
-        static TAudioEffectInterfacePtr Duplicate(TAudioEffectInterfacePtr effect, int num);
+        static TCodeFaustAudioEffect* DuplicateEffect(TAudioEffectInterfacePtr effect, int num);
          
         // Split a Faust effect 'num' times 
-        static TAudioEffectInterfacePtr Split(TAudioEffectInterfacePtr effect, int num); 
+        static TCodeFaustAudioEffect* SplitEffect(TAudioEffectInterfacePtr effect, int num); 
         
-        static TCodeFaustAudioEffect* CreateEffect(const char* name, const char* library_path, const char* draw_path);
-        
+        static TCodeFaustAudioEffect* CreateEffect(const string& name, const string& library_path, const string& draw_path);
    
 };
 
@@ -486,15 +490,15 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
     private:
 	
 		llvm_dsp* fDsp;
-        llvm_dsp_factory* fFactory;
+        TCodeFaustAudioEffectFactory* fFactory;
         
     public:
 
-        TCodeFaustAudioEffect(llvm_dsp_factory* factory):TFaustAudioEffectBase()
+        TCodeFaustAudioEffect(TCodeFaustAudioEffectFactory* factory):TFaustAudioEffectBase()
         {
             assert(factory);
             fFactory = factory;
-            fDsp = createDSPInstance(fFactory);
+            fDsp = createDSPInstance(fFactory->GetFactory());
             
             if (!fDsp) {
                 char error_lib[512] = {0};
@@ -537,16 +541,16 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         {
             httpdfaust::jsonfaustui json("", "", 0);
             fDsp->buildUserInterface(&json);
-            metadataDSPFactory(fFactory, &json);
+            metadataDSPFactory(fFactory->GetFactory(), &json);
             json.numInput(fDsp->getNumInputs());
             json.numOutput(fDsp->getNumOutputs());
             return json.json();
         }
         
-        const char* GetCode()
-        {
-            return TCodeFaustAudioEffectFactory::GetCode(fFactory);
-        }
+        string GetLibraryPath() { return fFactory->GetLibraryPath(); }
+        string GetDrawPath() { return fFactory->GetDrawPath(); }
+        string GetCode() { return fFactory->GetCode(); }
+        TCodeFaustAudioEffectFactory* GetFactory() { return fFactory; }
 		
 };
 

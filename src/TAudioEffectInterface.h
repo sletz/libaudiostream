@@ -24,6 +24,7 @@ research@grame.fr
 #define __TAudioEffectInterface__
 
 #include "la_smartpointer.h"
+#include <string>
 
 //-----------------------------
 // Class TAudioEffectInterface
@@ -61,9 +62,19 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable
             return fState;
         }
         
-        virtual const char* GetCode()
+        virtual std::string GetCode()
         {
-            return 0;
+            return "";
+        }
+        
+        virtual std::string GetLibraryPath()
+        {
+            return "";
+        }
+        
+        virtual std::string GetDrawPath()
+        {
+            return "";
         }
 
         void ProcessAux(float** input, float** output, long framesNum)
