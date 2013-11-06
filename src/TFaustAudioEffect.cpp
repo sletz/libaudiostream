@@ -27,7 +27,7 @@ research@grame.fr
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
-    faust_code_stream << "process = par(i,n," << "environment { "<< effect->GetCode() << " }.process) " << "with { n = " << num << "/" << effect->Inputs() << "; };";
+    faust_code_stream << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "/" << effect->Inputs() << "; };";
     return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
@@ -35,13 +35,19 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffec
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
-    faust_code_stream << "process = par(i," << num << ",_)<:" << "environment { "<< effect->GetCode() << "}.process;";
+    faust_code_stream << "process = par(i," << num << ",_)<:" << effect->GetCode() << ";";
     return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const string& name, const string& library_path, const string& draw_path)
 {
     printf("CreateEffect = %s\n", name.c_str());
-    TCodeFaustAudioEffectFactory* factory = new TCodeFaustAudioEffectFactory(name, library_path, draw_path);
+    TCodeFaustAudioEffectFactory* factory = 0;
+    if (fFactoryTable.find(name) != fFactoryTable.end()) {
+        printf("DSP factory already created...\n");
+        factory = fFactoryTable[name];
+    } else {
+        factory = new TCodeFaustAudioEffectFactory(name, library_path, draw_path);
+    }
     return new TCodeFaustAudioEffect(factory);
 }

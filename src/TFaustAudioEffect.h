@@ -32,6 +32,9 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "TLASException.h"
 
+#include <iostream>
+#include <sstream>
+
 #ifdef WIN32
 
 #include <windows.h>
@@ -382,12 +385,7 @@ class TCodeFaustAudioEffectFactory
             fCode = code;
             fLibraryPath = library_path;
             fDrawPath = draw_path;
-            
-            if (fFactoryTable.find(code) != fFactoryTable.end()) {
-                printf("DSP factory already created...\n");
-                return;
-            }
-            
+
             // Try filename...
             argv[0] = code.c_str();
             
@@ -462,17 +460,14 @@ class TCodeFaustAudioEffectFactory
             fFactoryNumber++;
 		}
         
-        /*
-        static TCodeFaustAudioEffectFactory* GetFactory(const string& code)
-        {
-            return fFactoryTable[code];
-        }
-        */
-        
         string GetLibraryPath() { return fDrawPath; }
         string GetDrawPath() { return fDrawPath; }
-        string GetCode() { return fCode; }
-        llvm_dsp_factory* GetFactory() { return fFactory;}
+        string GetCode() 
+        { 
+            // TODO : use 'component' for file based code...
+            return "environment { " + fCode  + " }.process";
+        }
+        llvm_dsp_factory* GetFactory() { return fFactory; }
          
         // Duplicate a Faust effect 'num' times 
         static TCodeFaustAudioEffect* DuplicateEffect(TAudioEffectInterfacePtr effect, int num);
