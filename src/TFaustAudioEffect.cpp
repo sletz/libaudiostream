@@ -22,12 +22,18 @@ research@grame.fr
 #include "TFaustAudioEffect.h"
 #include <iostream>
 #include <sstream>
+
+static bool CheckEnding(const string& name, const string& end)
+{
+    unsigned int match = name.rfind(end);
+    return ((match != string::npos) && (name.size() - end.size() == match));
+}
     
 // Duplicate a Faust effect 'num' times 
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
-    faust_code_stream << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "/" << effect->Inputs() << "; };";
+    faust_code_stream << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "; };";
     return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
@@ -46,8 +52,10 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const string& 
     if (fFactoryTable.find(name) != fFactoryTable.end()) {
         printf("DSP factory already created...\n");
         factory = fFactoryTable[name];
+    } else if (CheckEnding(name, ".dsp")) {  // Here we assume only 'file' or 'string' are used (not IR stuff...)
+        factory = new TFileCodeFaustAudioEffectFactory(name, library_path, draw_path);
     } else {
-        factory = new TCodeFaustAudioEffectFactory(name, library_path, draw_path);
+        factory = new TStringCodeFaustAudioEffectFactory(name, library_path, draw_path);
     }
     return new TCodeFaustAudioEffect(factory);
 }

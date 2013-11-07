@@ -118,7 +118,8 @@ static void test9()
 
 static void test10()
 {
-    AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect5, 100, 100); 
+    //AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect5, 100, 100);
+    AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect1, 100, 100); 
     AddSound(gAudioPlayer, stream1);
 }
 

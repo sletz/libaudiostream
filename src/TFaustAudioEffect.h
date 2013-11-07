@@ -355,7 +355,7 @@ class TCodeFaustAudioEffect;
 class TCodeFaustAudioEffectFactory 
 {
 
-    private:
+    protected:
 	
         // Global DSP factory table
         static std::map<string, TCodeFaustAudioEffectFactory*> fFactoryTable;
@@ -374,13 +374,34 @@ class TCodeFaustAudioEffectFactory
 		
     public:
     
-        TCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
+        TCodeFaustAudioEffectFactory()
+        {}
+        
+        string GetLibraryPath() { return fDrawPath; }
+        string GetDrawPath() { return fDrawPath; }
+        virtual string GetCode() { return ""; }
+        llvm_dsp_factory* GetFactory() { return fFactory; }
+         
+        // Duplicate a Faust effect 'num' times 
+        static TCodeFaustAudioEffect* DuplicateEffect(TAudioEffectInterfacePtr effect, int num);
+         
+        // Split a Faust effect 'num' times 
+        static TCodeFaustAudioEffect* SplitEffect(TAudioEffectInterfacePtr effect, int num); 
+        
+        static TCodeFaustAudioEffect* CreateEffect(const string& name, const string& library_path, const string& draw_path);
+   
+};
+
+class TFileCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
+    
+    public:
+    
+        TFileCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
             int argc;
             const char* argv[32];
             char error_msg[256] = {0};
             char error_lib[512] = {0};
-            char input_name[64];
             
             fCode = code;
             fLibraryPath = library_path;
@@ -399,11 +420,35 @@ class TCodeFaustAudioEffectFactory
          
             fFactory = createDSPFactory(argc, argv, library_path, draw_path, "", "", GetTarget(), error_msg, 3);
             if (fFactory) {
-                goto end;
+                fFactoryTable[code] = this;
+                fFactoryNumber++;
             }  else {
                 printf("error_lib %s\n", error_msg);
                 snprintf(error_lib, 512, "createDSPFactory error from DSP file %s\n", error_msg);
             }
+        }
+
+        string GetCode() 
+        { 
+            return "component(\"" + fCode  + "\")";
+        }
+};
+
+class TStringCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
+
+    public :
+    
+        TStringCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
+        {
+            int argc;
+            const char* argv[32];
+            char error_msg[256] = {0};
+            char error_lib[512] = {0};
+            char input_name[64];
+            
+            fCode = code;
+            fLibraryPath = library_path;
+            fDrawPath = draw_path;
             
             // Add -svg parameter if necessary
             if (draw_path != "") {
@@ -418,10 +463,30 @@ class TCodeFaustAudioEffectFactory
             // Try DSP code...
             fFactory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, GetTarget(), error_msg, 3);
             if (fFactory) {
-                goto end;
+                fFactoryTable[code] = this;
+                fFactoryNumber++;
             } else {
                 snprintf(error_lib, 512, "createDSPFactory error from DSP code %s\n", error_msg);
             }
+        }
+        
+        string GetCode() 
+        { 
+            return "environment { " + fCode  + " }.process";
+        }
+ };
+
+class TIRCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
+
+    public :
+    
+        TIRCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
+        {
+            char error_lib[512] = {0};
+            
+            fCode = code;
+            fLibraryPath = library_path;
+            fDrawPath = draw_path;
             
             // Try bitcode code string...
             fFactory = readDSPFactoryFromBitcode(code, GetTarget(), 3);
@@ -458,25 +523,8 @@ class TCodeFaustAudioEffectFactory
         
             fFactoryTable[code] = this;
             fFactoryNumber++;
-		}
-        
-        string GetLibraryPath() { return fDrawPath; }
-        string GetDrawPath() { return fDrawPath; }
-        string GetCode() 
-        { 
-            // TODO : use 'component' for file based code...
-            return "environment { " + fCode  + " }.process";
         }
-        llvm_dsp_factory* GetFactory() { return fFactory; }
-         
-        // Duplicate a Faust effect 'num' times 
-        static TCodeFaustAudioEffect* DuplicateEffect(TAudioEffectInterfacePtr effect, int num);
-         
-        // Split a Faust effect 'num' times 
-        static TCodeFaustAudioEffect* SplitEffect(TAudioEffectInterfacePtr effect, int num); 
-        
-        static TCodeFaustAudioEffect* CreateEffect(const string& name, const string& library_path, const string& draw_path);
-   
+
 };
 
 class TCodeFaustAudioEffect : public TFaustAudioEffectBase
