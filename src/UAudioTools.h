@@ -30,6 +30,7 @@ research@grame.fr
 #include <fcntl.h>
 #include <assert.h>
 #include <limits.h>
+#include <vector>
 
 #include "TAudioConstants.h"
 
@@ -52,6 +53,15 @@ class UAudioTools
         static const float fGain;
 
     public:
+    
+    
+        static inline void SelectChannelsTo(float** dst, float** src, long framesNum, const std::vector<int>& selection)
+        {
+            int chan = 0;
+            for (unsigned int i = 0; i < selection.size(); i++) {
+                memcpy(dst[chan++], src[selection[i]], framesNum * sizeof(float));
+            }
+        }
     
         static inline void CopyChannelsTo(float** dst, float** src, long framesNum, long shift_channel, long channels)
         {

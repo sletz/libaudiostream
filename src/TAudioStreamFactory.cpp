@@ -26,6 +26,7 @@ research@grame.fr
 #include "TFadeAudioStream.h"
 #include "TLoopAudioStream.h"
 #include "TCutEndAudioStream.h"
+#include "TSelectAudioStream.h"
 #include "TSeqAudioStream.h"
 #include "TMixAudioStream.h"
 #include "TParAudioStream.h"
@@ -164,6 +165,13 @@ TAudioStreamPtr TAudioStreamFactory::MakeParSound(TAudioStreamPtr s1, TAudioStre
     CATCH_EXCEPTION
 }
 
+TAudioStreamPtr TAudioStreamFactory::MakeSelectSound(TAudioStreamPtr s1, const std::vector<int>& selection)
+{
+    TRY_CALL
+    return (s1) ? new TSelectAudioStream(s1, selection) : 0;
+    CATCH_EXCEPTION
+}
+
 TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
 {
     TRY_CALL
@@ -182,15 +190,15 @@ TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
 TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut)
 {
     TRY_CALL
-    // If stream and effect are compatible...
     if (s1 && effect) {
+        // If stream and effect are compatible...
         if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
         } else {
              stringstream error;
-             error << "Stream with " << s1->Channels() << " channels is incompatible with effect with " << effect->Inputs() << " inputs";
+             error << "Stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";
              TAudioGlobals::AddLibError(error.str());
         }
     }

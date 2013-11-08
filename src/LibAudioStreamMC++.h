@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "la_smartpointer.h"
 #include <list>
+#include <vector>
 
 #define NO_ERR 0
 #define OPEN_ERR -1
@@ -239,6 +240,8 @@ AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
 \return A pointer to new stream object.
 */
 AudioStream MakeParSound(AudioStream s1, AudioStream s2);
+
+AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
 
 /*!
 \brief Apply a list of effects on a stream.

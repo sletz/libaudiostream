@@ -19,8 +19,8 @@ static long gBufferSize = 0;
 static AudioRendererPtr gAudioRenderer = 0;
 static AudioPlayerPtr gAudioPlayer = 0;
 
-static long tmpInChan = 2;
-static long tmpOutChan = 2;
+static long tmpInChan = 4;
+static long tmpOutChan = 4;
 static long tmpBufferSize = 512;
 static long tmpSampleRate = 44100;
   
@@ -121,9 +121,24 @@ static void test10()
     //AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect5, 100, 100);
     //AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect1, 100, 100); 
     AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100); 
+    
+    printf("Error %s\n", GetLastLibError()); 
     AddSound(gAudioPlayer, stream1);
 }
 
+static void test11()
+{
+    //AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect5, 100, 100);
+    //AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect1, 100, 100); 
+    
+    std::vector <int> selection;
+    selection.push_back(0);
+    
+    AudioStream stream1 = MakeSelectSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), selection); 
+    
+    printf("Error %s\n", GetLastLibError()); 
+    //AddSound(gAudioPlayer, stream1);
+}
 
 int main(int argc, char* argv[])
 {
@@ -152,7 +167,8 @@ int main(int argc, char* argv[])
     //test8();
     //test9();
     
-    test10();
+    //test10();
+    test11();
        
     StartAudioPlayer(gAudioPlayer);
     

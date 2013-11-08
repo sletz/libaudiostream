@@ -81,6 +81,7 @@ class AUDIO_EXPORTS TAudioStreamFactory
         static TAudioStreamPtr MakeSeqSound(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade);
         static TAudioStreamPtr MakeMixSound(TAudioStreamPtr s1, TAudioStreamPtr s2);
         static TAudioStreamPtr MakeParSound(TAudioStreamPtr s1, TAudioStreamPtr s2);
+        static TAudioStreamPtr MakeSelectSound(TAudioStreamPtr sound, const std::vector<int>& selection); 
         static TAudioStreamPtr MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut);
         static TAudioStreamPtr MakeEffectSound(TAudioStreamPtr s1, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut);
 		static TAudioStreamPtr MakeRubberBandSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech);

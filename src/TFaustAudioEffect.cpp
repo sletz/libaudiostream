@@ -37,7 +37,7 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffec
     return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
-// Split a Faust effect 'num' times 
+// Split a stream 'num' times to connect to a Faust effect
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
