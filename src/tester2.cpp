@@ -137,7 +137,7 @@ static void test11()
     AudioStream stream1 = MakeSelectSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), selection); 
     
     printf("Error %s\n", GetLastLibError()); 
-    //AddSound(gAudioPlayer, stream1);
+    AddSound(gAudioPlayer, stream1);
 }
 
 int main(int argc, char* argv[])
