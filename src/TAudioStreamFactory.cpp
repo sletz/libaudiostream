@@ -187,7 +187,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
         if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
-            return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::SplitEffect(effect, effect->Inputs()/s1->Channels()), fadeIn, fadeOut);
+            return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
         } else {
              stringstream error;
              error << "Stream with " << s1->Channels() << " channels is incompatible with effect with " << effect->Inputs() << " inputs";
