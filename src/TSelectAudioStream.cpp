@@ -24,8 +24,8 @@ research@grame.fr
 
 long TSelectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    float* temp1[Channels()];
-    float* temp2[fStream->Channels()];
+    float* temp1[fBuffer->GetChannels()];
+    float* temp2[Channels()];
     
     /* Cleanup temporary fBuffer */
 	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
@@ -34,7 +34,7 @@ long TSelectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
     long res = fStream->Read(fBuffer, framesNum, framePos);
     
     /* Copy selection in output */
-    UAudioTools::SelectChannelsTo(buffer->GetFrame(0, temp1), fBuffer->GetFrame(0, temp2), framesNum, fSelection);
+    UAudioTools::SelectChannelsTo(buffer->GetFrame(0, temp2), fBuffer->GetFrame(0, temp1), framesNum, fSelection);
     return res;
 }
 
