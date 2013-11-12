@@ -140,6 +140,33 @@ static void test11()
     AddSound(gAudioPlayer, stream1);
 }
 
+static void test12()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50);
+    std::vector <int> selection;
+    selection.push_back(1);
+    selection.push_back(2);
+    AudioStream stream3 = MakeSelectSound(MakeParSound(stream1, stream2), selection);
+    AddSound(gAudioPlayer, stream3);
+}
+
+static void test13()
+{
+    std::vector <int> selection1;
+    selection1.push_back(2);
+    AudioStream stream3 = MakeSelectSound(MakeParSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), 
+        MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50)), selection1);
+        
+    std::vector <int> selection2;
+    selection2.push_back(1);
+    AudioStream stream4 = MakeSelectSound(MakeParSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), 
+        MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50)), selection2);
+        
+    AudioStream stream5 = MakeParSound(stream3, stream4);
+    AddSound(gAudioPlayer, stream5);
+}
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -168,7 +195,9 @@ int main(int argc, char* argv[])
     //test9();
     
     //test10();
-    test11();
+    //test11();
+    //test12();
+    test13();
        
     StartAudioPlayer(gAudioPlayer);
     
