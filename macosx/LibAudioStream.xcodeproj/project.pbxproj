@@ -43,6 +43,14 @@
 		4B0128711803FC54000735C7 /* TParAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B01286B1803FC54000735C7 /* TParAudioStream.h */; };
 		4B0128721803FC54000735C7 /* TParAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B01286A1803FC54000735C7 /* TParAudioStream.cpp */; };
 		4B0128731803FC54000735C7 /* TParAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B01286B1803FC54000735C7 /* TParAudioStream.h */; };
+		4B0A990A1836697800F7D5A8 /* msSorter.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B0A99081836697800F7D5A8 /* msSorter.c */; };
+		4B0A990B1836697800F7D5A8 /* msSorter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0A99091836697800F7D5A8 /* msSorter.h */; };
+		4B0A990C1836697800F7D5A8 /* msSorter.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B0A99081836697800F7D5A8 /* msSorter.c */; };
+		4B0A990D1836697800F7D5A8 /* msSorter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0A99091836697800F7D5A8 /* msSorter.h */; };
+		4B0A990E1836697800F7D5A8 /* msSorter.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B0A99081836697800F7D5A8 /* msSorter.c */; };
+		4B0A990F1836697800F7D5A8 /* msSorter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0A99091836697800F7D5A8 /* msSorter.h */; };
+		4B0A99101836697800F7D5A8 /* msSorter.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B0A99081836697800F7D5A8 /* msSorter.c */; };
+		4B0A99111836697800F7D5A8 /* msSorter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0A99091836697800F7D5A8 /* msSorter.h */; };
 		4B18BC2117FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B18BC1F17FF102D00DFD142 /* TEffectAudioStream.cpp */; };
 		4B18BC2217FF102D00DFD142 /* TEffectAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B18BC2017FF102D00DFD142 /* TEffectAudioStream.h */; };
 		4B18BC2317FF102D00DFD142 /* TEffectAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B18BC1F17FF102D00DFD142 /* TEffectAudioStream.cpp */; };
@@ -458,6 +466,8 @@
 		4B0391DF0585040A006C929E /* TAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioRenderer.h; path = ../src/TAudioRenderer.h; sourceTree = SOURCE_ROOT; };
 		4B0391E00585040A006C929E /* TAudioRendererFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TAudioRendererFactory.cpp; path = ../src/TAudioRendererFactory.cpp; sourceTree = SOURCE_ROOT; };
 		4B0391E10585040A006C929E /* TAudioRendererFactory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TAudioRendererFactory.h; path = ../src/TAudioRendererFactory.h; sourceTree = SOURCE_ROOT; };
+		4B0A99081836697800F7D5A8 /* msSorter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = msSorter.c; path = ../src/sorter/msSorter.c; sourceTree = SOURCE_ROOT; };
+		4B0A99091836697800F7D5A8 /* msSorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = msSorter.h; path = ../src/sorter/msSorter.h; sourceTree = SOURCE_ROOT; };
 		4B18BC1F17FF102D00DFD142 /* TEffectAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TEffectAudioStream.cpp; path = ../src/TEffectAudioStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B18BC2017FF102D00DFD142 /* TEffectAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TEffectAudioStream.h; path = ../src/TEffectAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4B1C2D4D0894D242003BC2A6 /* LibAudioStream++.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "LibAudioStream++.h"; path = "../../LibAudioSTream-git/src/LibAudioStream++.h"; sourceTree = SOURCE_ROOT; };
@@ -685,6 +695,7 @@
 				4BBBF3C0172A7E7D0019A47E /* tester.cpp */,
 				4B7AFCE417E9DFF9005FA935 /* tester1.cpp */,
 				4BB9D88C18042A44001B620C /* tester2.cpp */,
+				4B0A99071836697800F7D5A8 /* Sorter */,
 				F5EDBD21032F870801053105 /* Channel */,
 				F5D82C3D032DEAA101053105 /* Effect */,
 				F5C1FF5F0328B7D201053105 /* Factory */,
@@ -718,6 +729,16 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		4B0A99071836697800F7D5A8 /* Sorter */ = {
+			isa = PBXGroup;
+			children = (
+				4B0A99081836697800F7D5A8 /* msSorter.c */,
+				4B0A99091836697800F7D5A8 /* msSorter.h */,
+			);
+			name = Sorter;
+			path = ../src/sorter;
+			sourceTree = SOURCE_ROOT;
 		};
 		4B51474207F18D680059C4C8 /* Atomic */ = {
 			isa = PBXGroup;
@@ -958,6 +979,7 @@
 				4BCC4492180BE62700CD9DC7 /* TAudioRendererFactory.h in Headers */,
 				4BCC4515180BF38A00CD9DC7 /* TJackAudioRenderer.h in Headers */,
 				4BAC1F35182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
+				4B0A990B1836697800F7D5A8 /* msSorter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,6 +1068,7 @@
 				4B01286D1803FC54000735C7 /* TParAudioStream.h in Headers */,
 				4BB9D8BE18042D96001B620C /* LibAudioStreamMC++.h in Headers */,
 				4BAC1F3B182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
+				4B0A99111836697800F7D5A8 /* msSorter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1120,6 +1143,7 @@
 				4B01286F1803FC54000735C7 /* TParAudioStream.h in Headers */,
 				4BB9D8BC18042D96001B620C /* LibAudioStreamMC++.h in Headers */,
 				4BAC1F39182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
+				4B0A990F1836697800F7D5A8 /* msSorter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1190,6 +1214,7 @@
 				4B0128711803FC54000735C7 /* TParAudioStream.h in Headers */,
 				4BB9D8BA18042D96001B620C /* LibAudioStreamMC++.h in Headers */,
 				4BAC1F37182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
+				4B0A990D1836697800F7D5A8 /* msSorter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1552,6 +1577,7 @@
 				4B86264D18102E590088A50B /* TRubberBandAudioStream.cpp in Sources */,
 				4B271B36182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 				4BAC1F34182D2193003D6EFA /* TSelectAudioStream.cpp in Sources */,
+				4B0A990A1836697800F7D5A8 /* msSorter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1623,6 +1649,7 @@
 				4BB9D8BD18042D96001B620C /* LibAudioStreamMC.cpp in Sources */,
 				4B271B39182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 				4BAC1F3A182D2193003D6EFA /* TSelectAudioStream.cpp in Sources */,
+				4B0A99101836697800F7D5A8 /* msSorter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1677,6 +1704,7 @@
 				4BB9D8BB18042D96001B620C /* LibAudioStreamMC.cpp in Sources */,
 				4B271B38182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 				4BAC1F38182D2193003D6EFA /* TSelectAudioStream.cpp in Sources */,
+				4B0A990E1836697800F7D5A8 /* msSorter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1726,6 +1754,7 @@
 				4BB9D8B918042D96001B620C /* LibAudioStreamMC.cpp in Sources */,
 				4B271B37182A71CA001E13D6 /* TFaustAudioEffect.cpp in Sources */,
 				4BAC1F36182D2193003D6EFA /* TSelectAudioStream.cpp in Sources */,
+				4B0A990C1836697800F7D5A8 /* msSorter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

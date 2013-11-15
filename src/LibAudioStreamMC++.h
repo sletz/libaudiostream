@@ -236,17 +236,23 @@ AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
 /*!
 \brief Put two streams in parallel
 \param s1 The first stream.
-\param s2 The second streamx.
+\param s2 The second stream.
 \return A pointer to new stream object.
 */
 AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 
+/*!
+\brief Creates a selection of channel of a streams
+\param s1 The  stream.
+\param s2 A vector of channel to keep.
+\return A pointer to new stream object.
+*/
 AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
 
 /*!
 \brief Apply a list of effects on a stream.
 \param sound The stream to be transformed.
-\param effect_list The effect list to be used.
+\param effect The effect to be used.
 \param fadeIn A fadein section frames before the effect is fully applied.
 \param fadeOut A fadeout section frames before the effect is fully removed.
 \return A pointer to new stream object.
@@ -367,7 +373,7 @@ void ResetSound(AudioStream sound);
 //AudioEffect MakePitchShiftAudioEffect(float pitch);
 /*!
 \brief Create an effect described in the Faust DSP language.
-\param name The name of the Faust effect shared library.
+\param name The code of the Faust effect, as a DSP filename or DSP string.
 \param library_path The pathname where to locate additional DSP libraries.
 \param draw_path The pathname where to save additional resources produced during compilation (like SVG files).
 \return A pointer to new effect object or NULL if the effect cannot be located or created.
@@ -428,7 +434,6 @@ void ResetEffect(AudioEffect effect);
 \param input The input audio buffer.
 \param output The output audio buffer.
 \param framesNum The number of frame of input/output buffers.
-\param channels The number of channels of input/output buffers.
 */
 //void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels);
 void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);

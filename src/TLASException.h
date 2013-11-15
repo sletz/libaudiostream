@@ -24,6 +24,7 @@ research@grame.fr
 #define __TLASException__
 
 #include <stdexcept>
+#include <iostream>
 
 //-----------------------------
 // Class LasException
@@ -47,7 +48,7 @@ class TLASException : public std::runtime_error {
 
         void PrintMessage()
         {
-            //std::cerr << what();
+            std::cerr << what();
         }
 };
 
