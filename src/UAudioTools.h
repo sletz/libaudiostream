@@ -54,7 +54,6 @@ class UAudioTools
 
     public:
     
-    
         static inline void SelectChannelsTo(float** dst, float** src, long framesNum, const std::vector<int>& selection)
         {
             int chan = 0;

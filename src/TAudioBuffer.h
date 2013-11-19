@@ -146,9 +146,9 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
         }
 };
 
-//-------------------------------
+//----------------------------------
 // Class TNonInterleavedAudioBuffer
-//-------------------------------
+//----------------------------------
 /*!
 \brief Template based class for non-interleaved buffers.
 */
@@ -306,10 +306,6 @@ class TSharedNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
         virtual ~TSharedNonInterleavedAudioBuffer()
         {}
 };
-
-
-//typedef TAudioBuffer<float>* FLOAT_BUFFER;
-//typedef TAudioBuffer<short>* SHORT_BUFFER;
 
 typedef TNonInterleavedAudioBuffer<float>* FLOAT_BUFFER;
 

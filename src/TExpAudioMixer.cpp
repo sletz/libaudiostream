@@ -38,7 +38,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Real-time input
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
  
-    // Mix all Streams
+    // Mix all streams
 	list<TRTRendererAudioStreamPtr>::iterator iter = fStreamSeq.begin();
 	while (iter != fStreamSeq.end()) {
 		TRTRendererAudioStreamPtr stream = *iter;

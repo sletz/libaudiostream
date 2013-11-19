@@ -24,9 +24,8 @@ research@grame.fr
 #include "TAudioRendererFactory.h"
 #include "TAudioStreamFactory.h"
 #include "TFaustAudioEffect.h"
-
-//#include "TWrapperAudioEffect.h"
 #include "TBufferedInputAudioStream.h"
+//#include "TWrapperAudioEffect.h"
 
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
@@ -133,7 +132,7 @@ extern "C"
 	//AUDIOAPI void DeleteEffectListPtr(AudioEffectListPtr list_effect);
 	//AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect);
 
-	  // Open/Close
+    // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
     AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan, 
                                             long outChan, 

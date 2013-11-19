@@ -40,8 +40,6 @@ TAudioStreamPtr TEffectAudioStream::CutBegin(long frames)
     return new TEffectAudioStream(fStream->CutBegin(frames), fEffect->Copy(), fFadeIn, fFadeOut);
 }
 
-// TODO distribute effect
-
 long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     float* temp1[fBufferIn->GetChannels()];

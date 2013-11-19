@@ -147,6 +147,28 @@ class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_s
 
 typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
+
+class TAudioClient
+{
+
+    public:
+
+        TAudioClient()
+        {}
+        virtual ~TAudioClient()
+        {}
+
+		/*!
+		\brief Audio callback called by the AudioManager.
+		\param inputBuffer The input buffer as a array of interleaved float samples (stereo here).
+		\param outputBuffer The output buffer as a array of interleaved float samples (stereo here).
+		\param frames The input/output buffer number of frames.
+		\return true if success, false otherwise.
+		*/
+        virtual bool AudioCallback(float** inputs, float** outputs, long frames) = 0;
+};
+
+
 // Opaque pointers
 typedef void* AudioPlayerPtr;
 typedef void* AudioRendererPtr;

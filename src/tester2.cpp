@@ -29,6 +29,24 @@ static AudioEffect faust_effect2 = MakeFaustAudioEffect(LLVM_EFFECT2, "", "");
 static AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@10000,_@10000,_@10000;", "", "");
 static AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
 static AudioEffect faust_effect5 = MakeFaustAudioEffect("process = _*vslider(\"Volume\", 1, 0, 1, 0.1);", "", "");
+
+typedef TAudioClient * TAudioClientPtr;
+
+class TAudioLASClient : public TAudioClient {
+
+
+    public:
+
+        TAudioLASClient()
+        {}
+        virtual ~TAudioLASClient()
+        {}
+
+	    virtual bool AudioCallback(float** inputs, float** outputs, long frames)
+        {
+            printf("AudioCallback frames = %d\n", frames);
+        }
+};
     
 static void printControls(AudioEffect faust_effect)
 {
@@ -174,6 +192,11 @@ int main(int argc, char* argv[])
         printf("Cannot OpenAudioPlayer\n");
         return 0;
     } 
+    
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    
+    TAudioClient* audio_client = new TAudioLASClient();
+    AddAudioClient(renderer, audio_client); 
 
     SetControlValueEffect(faust_effect1, 0, 0.99);
     SetControlValueEffect(faust_effect1, 1, 0.99);
@@ -231,5 +254,8 @@ int main(int argc, char* argv[])
         }
         sleep(0.01);
     }
+    
+    RemoveAudioClient(renderer, audio_client);
+    CloseAudioPlayer(gAudioPlayer);
     
 }
