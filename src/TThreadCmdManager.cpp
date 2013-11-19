@@ -196,5 +196,3 @@ void TThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long arg3, 
     }
 }
 
-
-

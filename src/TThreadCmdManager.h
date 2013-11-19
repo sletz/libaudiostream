@@ -173,8 +173,8 @@ class TThreadCmdManager : public TCmdManager
 {
 
     private:
-
-	    lifo fFreeCmd __attribute__ ((aligned (16)));      // Commands free list
+    
+        lifo fFreeCmd __attribute__ ((aligned (16)));      // Commands free list
         fifo fRunningCmd __attribute__ ((aligned (16)));   // Running commands
         bool fRunning;
 

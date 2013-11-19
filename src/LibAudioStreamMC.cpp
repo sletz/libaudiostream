@@ -23,11 +23,6 @@ research@grame.fr
 #include "TExpAudioEngine.h"
 #include "TAudioRendererFactory.h"
 #include "TAudioStreamFactory.h"
-
-//#include "TVolAudioEffect.h"
-//#include "TPitchShiftAudioEffect.h"
-//#include "TPanAudioEffect.h"
-
 #include "TFaustAudioEffect.h"
 
 //#include "TWrapperAudioEffect.h"
@@ -100,8 +95,8 @@ extern "C"
 
     AUDIOAPI long GetLengthSoundPtr(AudioStreamPtr s);
     AUDIOAPI long GetChannelsSoundPtr(AudioStreamPtr s);
-    //AUDIOAPI long ReadSoundPtr(AudioStreamPtr stream, float* buffer, long buffer_size, long channels);
-	AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
+    AUDIOAPI long ReadSoundPtr(AudioStreamPtr stream, float** buffer, long buffer_size);
+    AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
 
     /*
 	AUDIOAPI AudioEffectListPtr MakeAudioEffectListPtr();
@@ -164,6 +159,7 @@ extern "C"
 	AUDIOAPI void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
     */
     
+    // Add a sound in the player
     AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound);
     AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound);
 
@@ -243,7 +239,7 @@ AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
 
 AUDIOAPI long GetLengthSound(AudioStream s);
 AUDIOAPI long GetChannelsSound(AudioStream s);
-//AUDIOAPI long ReadSound(AudioStream stream, float* buffer, long buffer_size, long channels);
+AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
 AUDIOAPI void ResetSound(AudioStream sound);
 
 // Effect management (using smartptr)
@@ -392,18 +388,17 @@ AUDIOAPI long GetChannelsSound(AudioStream s)
     return (s) ? (static_cast<TAudioStreamPtr>(s))->Channels() : 0;
 }
 
-/*
-AUDIOAPI long ReadSound(AudioStream sound, float* buffer, long buffer_size, long channels)
+AUDIOAPI long ReadSound(AudioStream sound, float** buffer, long buffer_size)
 {
     if (sound && buffer) {
-        TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
-		UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
-        return static_cast<TAudioStreamPtr>(sound)->Read(&process, buffer_size, 0, channels);
+        TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(sound);
+        TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
+        UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
+        return stream->Read(&process, buffer_size, 0);
     } else {
         return 0;
     }
 }
-*/
 
 AUDIOAPI void ResetSound(AudioStream sound)
 {
@@ -547,18 +542,17 @@ AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound)
 	static_cast<TAudioStreamPtr>(*sound)->Reset();
 }
 
-/*
-AUDIOAPI long ReadSoundPtr(AudioStreamPtr sound, float* buffer, long buffer_size, long channels)
+AUDIOAPI long ReadSoundPtr(AudioStreamPtr sound, float** buffer, long buffer_size)
 {
     if (sound && buffer) {
-        TSharedAudioBuffer<float> process(buffer, buffer_size, channels);
-		UAudioTools::ZeroFloatBlk(buffer, buffer_size, channels);
-        return static_cast<TAudioStreamPtr>(*sound)->Read(&process, buffer_size, 0, channels);
+        TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(*sound);
+        TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
+        UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
+        return stream->Read(&process, buffer_size, 0);
     } else {
         return 0;
     }
 }
-*/
 
 // Effect management
 /*
