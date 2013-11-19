@@ -218,7 +218,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeTransformSound(TAudioStreamPtr s1, TAud
 TAudioStreamPtr TAudioStreamFactory::MakeRubberBandSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech)
 {
     TRY_CALL
-    return (s1) ? new TRubberBandAudioStream(s1, pitch_shift, time_strech) : 0;
+    //return (s1) ? new TRubberBandAudioStream(s1, pitch_shift, time_strech) : 0;
     CATCH_EXCEPTION
 }
 

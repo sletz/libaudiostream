@@ -1,21 +1,12 @@
 /*
+  MidiShare Project
+  Copyright (C) Grame 1999-2005
 
-  Copyright © Grame 1999-2007
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  This library is free software; you can redistribute it and modify it under 
-  the terms of the GNU Library General Public License as published by the 
-  Free Software Foundation version 2 of the License, or any later version.
-
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public 
-  License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
   research@grame.fr
 
 */
@@ -26,6 +17,12 @@
 /* by default, compiles for SMP architecture */
 #define __SMP__
 
+#ifdef __x86_64__
+typedef long long	atomic_long;
+#else
+typedef long atomic_long;
+#endif
+
 #if defined(powerpc) || defined(__ppc__) || defined(__MWERKS__)
 	typedef struct {
 		long value;
@@ -33,7 +30,7 @@
 	} TAtomic;
 #else
 	typedef struct {
-		long value;
+		atomic_long value;
 	} TAtomic;
 #endif
 
@@ -54,18 +51,18 @@
 # error "msAtomic.h : target compiler and processor undefined"
 #endif
 
-static inline long msAtomicInc (volatile TAtomic * val)
+static inline atomic_long msAtomicInc (volatile TAtomic * val)
 {
-    volatile long actual;
+    atomic_long actual;
     do {
         actual = val->value;
     } while (!CAS(val, (void *)actual, (void *)(actual+1)));
 	return actual;
 }
 
-static inline long msAtomicDec (volatile TAtomic * val)
+static inline atomic_long msAtomicDec (volatile TAtomic * val)
 {
-    volatile long actual;
+    atomic_long actual;
     do {
         actual = val->value;
     } while (!CAS(val, (void *)actual, (void *)(actual-1)));

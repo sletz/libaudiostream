@@ -21,54 +21,33 @@ research@grame.fr
 */
 
 // ===========================================================================
-//	 UTools.h
+//	 TAudioDate.h
 // ===========================================================================
-//
-//	Utilities functions
-//
 
-#ifndef __UTools__
-#define __UTools__
+#ifndef __TAudioDate__
+#define __TAudioDate__
 
-//--------------
-// Class UTools
-//--------------
+#include <stdint.h>
+
+typedef uint64_t audio_frames_t;
+
+//------------------
+// Class TAudioDate
+//------------------
 /*!
 \brief Utility methods
 */
 
-class UTools
+struct TAudioDate
 {
-
-    public:
-
-        static void SendVal(long val);
-        static void MidiPrintText(char * s);
-        inline static long Min(long a, long b)
-        {
-            return (a < b) ? a : b;
-        }
-        inline static float Min(float a, float b)
-        {
-            return (a < b) ? a : b;
-        }
-        inline static double Min(double a, double b)
-        {
-            return (a < b) ? a : b;
-        }
-        inline static long Max(long a, long b)
-        {
-            return (a >= b) ? a : b;
-        }
-        inline static float Max(float a, float b)
-        {
-            return (a >= b) ? a : b;
-        }
-        inline static double Max(double a, double b)
-        {
-            return (a >= b) ? a : b;
-        }
-
+    long fBlockNum;
+    long fSampleInblock;
+        
+    static void Convert(audio_frames_t date_sample, int buffer_size, TAudioDate& date)
+    {
+        date.fBlockNum = date_sample / buffer_size;
+        date.fSampleInblock = date_sample % buffer_size;
+    }
 };
 
 #endif

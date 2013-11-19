@@ -1,21 +1,12 @@
 /*
+  MidiShare Project
+  Copyright (C) Grame 1999-2005
 
-  Copyright © Grame 1999-2007
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  This library is free software; you can redistribute it and modify it under 
-  the terms of the GNU Library General Public License as published by the 
-  Free Software Foundation version 2 of the License, or any later version.
-
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public 
-  License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
   research@grame.fr
 
 */
@@ -46,14 +37,15 @@ static inline char CAS (volatile void * addr, volatile void * value, void * newv
 	return ret;
 }
 
-#ifdef __APPLE__ 
+#if (defined(__APPLE__) && !defined(__x86_64__))
 
 /*
-On MacIntel, version 4.0.1 of the gcc compiler gives the following error: can't find a register in class 'BREG' while reloading 'asm'
+On MacIntel, version 4.0.1 of the gcc compiler gives the following error:
+can't find a register in class 'BREG' while reloading 'asm'
 To solve that, %%ebx register has to be saved and restored.
 */
 
-static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
+static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2)
 {
 	register char ret;
 	__asm__ __volatile__ (
@@ -61,22 +53,26 @@ static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long
 		"xchgl %%esi, %%ebx \n\t"
 		LOCK "cmpxchg8b (%1) \n\t"
 		"sete %0             \n\t"
-		"xchgl %%ebx, %%esi \n\t" /* Restore %ebx.  */
+		"xchgl %%ebx, %%esi \n\t"  /* Restore %ebx.  */
 		:"=a" (ret)
 		:"D" (addr), "d" (v2), "a" (v1), "S" (n1), "c" (n2)
-		
 	);
 	return ret;
 }
 
 #else
 
-static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
+static inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2)
 {
 	register char ret;
+
 	__asm__ __volatile__ (
 		"# CAS2 \n\t"
+#ifdef __x86_64__
+		LOCK "cmpxchg16b (%1) \n\t"
+#else
 		LOCK "cmpxchg8b (%1) \n\t"
+#endif
 		"sete %0               \n\t"
 		:"=a" (ret)
 		:"D" (addr), "d" (v2), "a" (v1), "b" (n1), "c" (n2)

@@ -57,7 +57,7 @@ typedef struct TCmd
     long arg3;
     long arg4;
     long arg5;
-}TCmd;
+} TCmd;
 
 #define MAXCOMMAND 256
 
@@ -174,8 +174,8 @@ class TThreadCmdManager : public TCmdManager
 
     private:
 
-	    lifo fFreeCmd;      // Commands free list
-        fifo fRunningCmd;   // Running commands
+	    lifo fFreeCmd __attribute__ ((aligned (16)));      // Commands free list
+        fifo fRunningCmd __attribute__ ((aligned (16)));   // Running commands
         bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
