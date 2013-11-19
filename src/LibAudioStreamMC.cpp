@@ -25,6 +25,7 @@ research@grame.fr
 #include "TAudioStreamFactory.h"
 #include "TFaustAudioEffect.h"
 #include "TBufferedInputAudioStream.h"
+#include "TAudioDate.h"
 //#include "TWrapperAudioEffect.h"
 
 #ifdef WIN32
@@ -161,6 +162,9 @@ extern "C"
     // Add a sound in the player
     AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound);
     AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound);
+    
+    AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+    AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
 
     // Transport
     AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -1038,6 +1042,29 @@ AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound)
             return NO_ERR;
         }
     }
+    
+    return LOAD_ERR;
+}
+
+AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        if (sound->Channels() < MAX_OUTPUT_CHAN) {
+            player->fMixer->ScheduleStream(sound, date);
+            return NO_ERR;
+        }
+    } 
+        
+    return LOAD_ERR;
+}    
+    
+AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        if (player->fMixer->UnScheduleStream(sound, date)) {
+            return NO_ERR;
+        }
+     }
     
     return LOAD_ERR;
 }

@@ -1228,9 +1228,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio */ = {
+		4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio+Jack */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio" */;
+			buildConfigurationList = 4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio+Jack" */;
 			buildPhases = (
 				4B0060111112ED0300B6A836 /* Headers */,
 				4B0060451112ED0300B6A836 /* Resources */,
@@ -1242,7 +1242,7 @@
 			);
 			dependencies = (
 			);
-			name = "LibAudioStream CoreAudio";
+			name = "LibAudioStream CoreAudio+Jack";
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = AudioEngineFramework;
 			productReference = 4B0060721112ED0300B6A836 /* LibAudioStream.framework */;
@@ -1428,7 +1428,7 @@
 				4BCB2B0E0D12ACE500AB3F6D /* LibAudioStream PortAudio Intel */,
 				4BEA6192095806CD001F733A /* LibAudioStream PortAudio */,
 				4BEA61E7095806CD001F733A /* LibAudioStream PortAudio+CoreAudio+Jack */,
-				4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio */,
+				4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio+Jack */,
 				4BEA623D095806CD001F733A /* testPlayer */,
 				4BCB2BDC0D12B71300AB3F6D /* testPlayer Intel */,
 				4BBBF3A6172A7E210019A47E /* LAStester */,
@@ -2940,7 +2940,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio" */ = {
+		4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio+Jack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B00606F1112ED0300B6A836 /* Development */,

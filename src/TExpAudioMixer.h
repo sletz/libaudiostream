@@ -26,6 +26,7 @@ research@grame.fr
 #include "TAudioClient.h"
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
+#include "TAudioDate.h"
 #include <list>
 
 //----------------------
@@ -40,7 +41,9 @@ class TExpAudioMixer : public TAudioClient
 
     private:
 
-        list<TRTRendererAudioStreamPtr> fStreamSeq;	// List of running sound streams
+        list<TRTRendererAudioStreamPtr> fStreamSeq;             // List of running sound streams
+        
+        list<TRTRendererAudioStreamPtr> fScheduledStreamSeq;	// List of scheduled sound streams
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
@@ -54,6 +57,8 @@ class TExpAudioMixer : public TAudioClient
                 return fFound; 
             }
         };
+        
+        // TODO : prepare sorter
 
     public:
 
@@ -71,6 +76,17 @@ class TExpAudioMixer : public TAudioClient
             is_stream comparator(stream);
             fStreamSeq.remove_if(comparator); 
             return comparator.fFound;
+        }
+        
+        void ScheduleStream(TAudioStreamPtr stream, audio_frames_t date)
+        {
+            TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
+            renderer_stream->Reset();
+        }
+        
+        bool UnScheduleStream(TAudioStreamPtr stream, audio_frames_t date)
+        {
+            return false;
         }
     
 };

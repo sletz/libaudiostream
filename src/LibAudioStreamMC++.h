@@ -168,6 +168,7 @@ class TAudioClient
         virtual bool AudioCallback(float** inputs, float** outputs, long frames) = 0;
 };
 
+typedef TAudioClient * TAudioClientPtr;
 
 // Opaque pointers
 typedef void* AudioPlayerPtr;
@@ -556,6 +557,10 @@ void CloseAudioClient(AudioPlayerPtr player);
 
 long AddSound(AudioPlayerPtr player, AudioStream sound);
 long RemoveSound(AudioPlayerPtr player, AudioStream sound);
+
+long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+
 
 // Transport
 /*!

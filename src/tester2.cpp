@@ -30,8 +30,6 @@ static AudioEffect faust_effect3 = MakeFaustAudioEffect("process = _@10000,_@100
 static AudioEffect faust_effect4 = MakeFaustAudioEffect(LLVM_EFFECT3, "", "");
 static AudioEffect faust_effect5 = MakeFaustAudioEffect("process = _*vslider(\"Volume\", 1, 0, 1, 0.1);", "", "");
 
-typedef TAudioClient * TAudioClientPtr;
-
 class TAudioLASClient : public TAudioClient {
 
 

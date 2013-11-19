@@ -37,6 +37,8 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
    
     // Real-time input
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
+    
+    // Get all ready scheduled streams
  
     // Mix all streams
 	list<TRTRendererAudioStreamPtr>::iterator iter = fStreamSeq.begin();
