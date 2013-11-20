@@ -160,9 +160,6 @@ extern "C"
     */
     
     // Add a sound in the player
-    AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound);
-    AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound);
-    
     AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
     AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
 

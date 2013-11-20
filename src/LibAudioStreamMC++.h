@@ -558,9 +558,6 @@ void CloseAudioClient(AudioPlayerPtr player);
 */
 //void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
 
-long AddSound(AudioPlayerPtr player, AudioStream sound);
-long RemoveSound(AudioPlayerPtr player, AudioStream sound);
-
 long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
 long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
 
