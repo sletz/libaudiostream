@@ -61,16 +61,15 @@ class TExpAudioMixer : public TAudioClient
         }; 
   
         list<ScheduledStream>   fRunningStreamSeq;      // List of running sound streams
-        audio_frames_t          fCurDate;
+        audio_frames_t          fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
       
     public:
 
-        TExpAudioMixer():fCurDate(0) {}
+        TExpAudioMixer():fCurFrame(0) {}
         virtual ~TExpAudioMixer() {}
       
-          
         void StartStream(TAudioStreamPtr stream, audio_frames_t date)
         {
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
@@ -99,7 +98,5 @@ class TExpAudioMixer : public TAudioClient
 typedef TExpAudioMixer * TExpAudioMixerPtr;
 
 #endif
-
-
 
 
