@@ -71,11 +71,11 @@ class TExpAudioEngine
         
         void AddStream(TAudioStreamPtr stream)      
         { 
-            fMixer->AddStream(stream); 
+            fMixer->StartStream(stream, 0); 
         }
         void RemoveStream(TAudioStreamPtr stream)   
         { 
-            fMixer->RemoveStream(stream); 
+            fMixer->StopStream(stream, 0); 
         }
 
 };

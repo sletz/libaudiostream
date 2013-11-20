@@ -64,7 +64,8 @@ static void printControls(AudioEffect faust_effect)
 static void test0()
 {
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
-    AddSound(gAudioPlayer, stream1);
+    StartSound(gAudioPlayer, stream1, 0);
+    StopSound(gAudioPlayer, stream1, tmpSampleRate * 4);
 }
 
 

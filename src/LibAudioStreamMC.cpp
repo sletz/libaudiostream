@@ -1027,7 +1027,7 @@ AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound)
 {
     if (player && player->fMixer && player->fRenderer) {
         if (sound->Channels() < MAX_OUTPUT_CHAN) {
-            player->fMixer->AddStream(sound);
+            player->fMixer->StartStream(sound, 0);
             return NO_ERR;
         }
     } 
@@ -1038,7 +1038,7 @@ AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound)
 AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound)
 {
     if (player && player->fMixer && player->fRenderer) {
-        if (player->fMixer->RemoveStream(sound)) {
+        if (player->fMixer->StopStream(sound, 0)) {
             return NO_ERR;
         }
     }
@@ -1050,7 +1050,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_
 {
     if (player && player->fMixer && player->fRenderer) {
         if (sound->Channels() < MAX_OUTPUT_CHAN) {
-            player->fMixer->ScheduleStream(sound, date);
+            player->fMixer->StartStream(sound, date);
             return NO_ERR;
         }
     } 
@@ -1061,7 +1061,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_
 AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        if (player->fMixer->UnScheduleStream(sound, date)) {
+        if (player->fMixer->StopStream(sound, date)) {
             return NO_ERR;
         }
      }

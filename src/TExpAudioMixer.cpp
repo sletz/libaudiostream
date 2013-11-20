@@ -39,29 +39,30 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
    
     // Mix all streams
-     list<ScheduledStream>::iterator iter = fRunningStreamSeq.begin();
+    list<ScheduledStream>::iterator iter = fRunningStreamSeq.begin();
     
 	while (iter != fRunningStreamSeq.end()) {
     
 		ScheduledStream sc_stream = *iter;
-        audio_frames_t date = sc_stream.fDate;
+        audio_frames_t start_date = sc_stream.fStartDate;
+        audio_frames_t stop_date = sc_stream.fStopDate;
         SAudioStream stream = sc_stream.fStream;
         
         long offset_in_buffer = 0;
         bool to_play = false;
         
-        if (date >= fCurDate && date <= fCurDate + frames) {
+        if (start_date >= fCurDate && start_date <= fCurDate + frames) {
             // New stream to play
-            offset_in_buffer = date - fCurDate;
+            offset_in_buffer = start_date - fCurDate;
             to_play = true;
             printf("Start stream fCurDate = %lld offset = %d\n", fCurDate, offset_in_buffer);
-        } else if (fCurDate > date) {
+        } else if (fCurDate > start_date) {
             // Stream currently playing...
             to_play = true;
         }
         
         // Play it...
-        if (to_play && stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, offset_in_buffer) < TAudioGlobals::fBufferSize) {
+        if (to_play && (stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, offset_in_buffer) < TAudioGlobals::fBufferSize || fCurDate > stop_date)) {
             // End of stream
             printf("Stop stream\n");
             iter = fRunningStreamSeq.erase(iter);
