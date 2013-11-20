@@ -201,6 +201,37 @@ class TThreadCmdManager : public TCmdManager
 
 typedef TThreadCmdManager * TThreadCmdManagerPtr;
 
+class TWaitThreadCmdManager : public TCmdManager
+{
+
+    private:
+    
+        lifo fFreeCmd __attribute__ ((aligned (16)));      // Commands free list
+        fifo fRunningCmd __attribute__ ((aligned (16)));   // Running commands
+        bool fRunning;
+
+	#if defined(__APPLE__) || defined(linux)
+		std::vector<pthread_t> fThreadList; // Execution thread
+		static void* CmdHandler(void* arg);
+	#elif WIN32
+		std::vector<HANDLE> fThreadList; // Execution thread
+  		static DWORD WINAPI CmdHandler(void* arg);
+	#endif
+       
+    public:
+
+        TWaitThreadCmdManager(long thread);
+        ~TWaitThreadCmdManager();
+
+        void ExecCmdAux(CmdPtr fun, long a1, long a2, long a3, long a4, long a5);
+        void RunAux();
+        void FlushCmds();
+};
+
+typedef TThreadCmdManager * TThreadCmdManagerPtr;
+
+typedef TWaitThreadCmdManager * TWaitThreadCmdManagerPtr;
+
 //Utilisation
 /*
 TCmdManager::Open();

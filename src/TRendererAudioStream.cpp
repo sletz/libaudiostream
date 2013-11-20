@@ -54,7 +54,8 @@ void TDTRendererAudioStream::Flush()
 
 void TRTRendererAudioStream::Init(long thread_num)
 {
-    fManager = new TThreadCmdManager(thread_num);
+    //fManager = new TThreadCmdManager(thread_num);
+    fManager = new TWaitThreadCmdManager(thread_num);
 }
 void TRTRendererAudioStream::Destroy()
 {

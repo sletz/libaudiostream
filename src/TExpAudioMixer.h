@@ -36,6 +36,8 @@ research@grame.fr
 \brief A mixer contains several TAudioStream objects.
 */
 
+typedef class LA_SMARTP<TAudioStream> SAudioStream;
+
 class TExpAudioMixer : public TAudioClient
 {
 
@@ -43,7 +45,7 @@ class TExpAudioMixer : public TAudioClient
     
         struct ScheduledStream {
             
-            TRTRendererAudioStreamPtr fStream;
+            SAudioStream fStream;  // SmartPtr here...
             audio_frames_t fDate;
             
             ScheduledStream(TRTRendererAudioStreamPtr stream, audio_frames_t date)
@@ -63,17 +65,11 @@ class TExpAudioMixer : public TAudioClient
             bool fFound;
             
             IsStream(TAudioStreamPtr stream):fStream(stream),fFound(false) {}
-            
-            /*
-            bool operator() (TRTRendererAudioStreamPtr stream) 
-            { 
-                fFound = (fStream == stream->GetBranch1());
-                return fFound; 
-            }
-            */
+    
             bool operator() (ScheduledStream stream) 
             { 
-                fFound = (fStream == stream.fStream->GetBranch1());
+                TRTRendererAudioStreamPtr s1 = dynamic_cast<TRTRendererAudioStreamPtr>(static_cast<TAudioStream*>(stream.fStream));
+                fFound = (fStream == s1->GetBranch1());
                 return fFound; 
             }
         };
@@ -88,15 +84,6 @@ class TExpAudioMixer : public TAudioClient
         TExpAudioMixer():fCurDate(0) {}
         virtual ~TExpAudioMixer() {}
       
-        /*
-        bool RemoveStream(TAudioStreamPtr stream)   
-        { 
-            IsStream comparator(stream);
-            fRunningStreamSeq.remove_if(comparator); 
-            return comparator.fFound;
-        }
-        */
-        
         void AddStream(TAudioStreamPtr stream)
         {
             ScheduleStream(stream, fCurDate);
@@ -114,7 +101,7 @@ class TExpAudioMixer : public TAudioClient
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
             fRunningStreamSeq.push_back(ScheduledStream(renderer_stream, date));
-            fRunningStreamSeq.sort();
+            //fRunningStreamSeq.sort();
         }
         
         bool UnScheduleStream(TAudioStreamPtr stream, audio_frames_t date)

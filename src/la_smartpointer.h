@@ -79,7 +79,7 @@ class la_smartable1 : public la_smartable {
 	private:
 		
 		static void removeReferenceAux(la_smartable1* obj,long u1, long u2, long u3);
-		static TCmdManager* fManager;
+		static TCmdManager* fDeleteManager;
 
 	public:
 	

@@ -41,7 +41,8 @@ typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 \brief The base class for all streams.
 */ 
 
-class TAudioStream : public la_smartable
+//class TAudioStream : public la_smartable
+class TAudioStream : public la_smartable1
 {
 
     public:

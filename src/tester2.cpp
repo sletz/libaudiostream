@@ -63,7 +63,7 @@ static void printControls(AudioEffect faust_effect)
 
 static void test0()
 {
-    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
     AddSound(gAudioPlayer, stream1);
 }
 
@@ -210,6 +210,44 @@ static void test14()
     
     StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
     StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
+    
+    sleep(1);
+     
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 11*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 11*tmpSampleRate);
+    
+    sleep(1);
+     
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 13*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 13*tmpSampleRate);
+}
+
+static void test15()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 7);
+    
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    //AddSound(gAudioPlayer, stream1);
+    
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 13*tmpSampleRate);
+    
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 12*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 12*tmpSampleRate);
+    
+    sleep(1);
+     
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
+    
+    sleep(1);
+     
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 3*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 3*tmpSampleRate);
 }
 
 int main(int argc, char* argv[])
@@ -240,7 +278,7 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
-    //test0();
+    test0();
     
     //test1();
     /*
@@ -259,7 +297,7 @@ int main(int argc, char* argv[])
     //test12();
     //test13();
     
-    test14();
+    //test14();
        
     //StartAudioPlayer(gAudioPlayer);
     
@@ -289,6 +327,20 @@ int main(int argc, char* argv[])
              case 'o':
                 AddSound(gAudioPlayer, MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 13), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100));
                 break;
+                
+            case 'n':
+                 
+                AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+                RendererInfo info;
+                GetAudioRendererInfo(renderer, &info);
+                printf("info.Frames %lld\n", info.fCurFrame);
+                
+                //AddSound(gAudioPlayer, stream1);
+                
+                StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame+ 1*tmpSampleRate);
+                StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 2*tmpSampleRate);
+                break;
+                
         
         }
         sleep(0.01);

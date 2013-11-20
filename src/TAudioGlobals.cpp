@@ -40,7 +40,7 @@ float** TSharedBuffers::fOutBuffer = NULL;
 float TPanTable::fPanTable[128];
 float TPanTable::fVolTable[128];
 
-TCmdManagerPtr la_smartable1::fManager = NULL;
+TCmdManagerPtr la_smartable1::fDeleteManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
 long TAudioGlobals::fClientCount = 0;

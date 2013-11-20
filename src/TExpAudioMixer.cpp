@@ -42,9 +42,10 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
      list<ScheduledStream>::iterator iter = fRunningStreamSeq.begin();
     
 	while (iter != fRunningStreamSeq.end()) {
+    
 		ScheduledStream sc_stream = *iter;
         audio_frames_t date = sc_stream.fDate;
-        TRTRendererAudioStreamPtr stream = sc_stream.fStream;
+        SAudioStream stream = sc_stream.fStream;
         
         long offset_in_buffer = 0;
         bool to_play = false;
@@ -53,7 +54,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
             // New stream to play
             offset_in_buffer = date - fCurDate;
             to_play = true;
-            printf("Start stream offet = %d\n", offset_in_buffer);
+            printf("Start stream fCurDate = %lld offset = %d\n", fCurDate, offset_in_buffer);
         } else if (fCurDate > date) {
             // Stream currently playing...
             to_play = true;
