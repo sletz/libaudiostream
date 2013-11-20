@@ -138,7 +138,7 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
     // Signal waiting start function...
     fState = true;
     
-    if (GetInputs() > 0) {
+    if (fInput > 0) {
         AudioUnitRender(fAUHAL, ioActionFlags, inTimeStamp, 1, inNumberFrames, fInputData);
     }
     
