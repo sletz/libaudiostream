@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2006-2007
+Copyright (C) Grame 2002-2013
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -106,7 +106,7 @@ class TCoreAudioRenderer : public TAudioRenderer
         {}
 
         long Open(long inChan, long outChan, long bufferSize, long sampleRate);
-	  long Close();
+        long Close();
 
         long Start();
         long Stop();

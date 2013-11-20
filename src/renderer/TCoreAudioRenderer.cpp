@@ -162,7 +162,7 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
     
     for (int i = 0; i < fOutput; i++) {
         memset((float*)ioData->mBuffers[i].mData, 0, ioData->mBuffers[i].mDataByteSize); // Necessary since renderer does a *mix*
-        inputBuffers[i] = (float*)ioData->mBuffers[i].mData;
+        outputBuffers[i] = (float*)ioData->mBuffers[i].mData;
     }
   
     Run(inputBuffers, outputBuffers, inNumberFrames);

@@ -23,6 +23,7 @@ research@grame.fr
 #ifndef __LibAudioStreamMCPlusPlus__
 #define __LibAudioStreamMCPlusPlus__
 
+#include <stdint.h>
 #include "la_smartpointer.h"
 #include <list>
 #include <vector>
@@ -32,6 +33,8 @@ research@grame.fr
 #define CLOSE_ERR -2
 #define LOAD_ERR -3
 #define FILE_NOT_FOUND_ERR -4
+
+typedef uint64_t audio_frames_t;
 
 enum {kPlayingChannel = 0, kIdleChannel};
 enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};

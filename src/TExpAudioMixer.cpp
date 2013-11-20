@@ -41,11 +41,11 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Get all ready scheduled streams
  
     // Mix all streams
-	list<TRTRendererAudioStreamPtr>::iterator iter = fStreamSeq.begin();
-	while (iter != fStreamSeq.end()) {
+	list<TRTRendererAudioStreamPtr>::iterator iter = fRunningStreamSeq.begin();
+	while (iter != fRunningStreamSeq.end()) {
 		TRTRendererAudioStreamPtr stream = *iter;
     	if (stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, 0) < TAudioGlobals::fBufferSize) { // End of stream
-            iter = fStreamSeq.erase(iter);
+            iter = fRunningStreamSeq.erase(iter);
 		} else {
 			iter++;
 		}

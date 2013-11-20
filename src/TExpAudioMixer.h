@@ -41,8 +41,7 @@ class TExpAudioMixer : public TAudioClient
 
     private:
 
-        list<TRTRendererAudioStreamPtr> fStreamSeq;             // List of running sound streams
-        
+        list<TRTRendererAudioStreamPtr> fRunningStreamSeq;      // List of running sound streams
         list<TRTRendererAudioStreamPtr> fScheduledStreamSeq;	// List of scheduled sound streams
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
@@ -58,7 +57,7 @@ class TExpAudioMixer : public TAudioClient
             }
         };
         
-        // TODO : prepare sorter
+        // TODO : preparer sorter
 
     public:
 
@@ -69,12 +68,12 @@ class TExpAudioMixer : public TAudioClient
         {   
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
-            fStreamSeq.push_back(renderer_stream); 
+            fRunningStreamSeq.push_back(renderer_stream); 
         }
         bool RemoveStream(TAudioStreamPtr stream)   
         { 
             is_stream comparator(stream);
-            fStreamSeq.remove_if(comparator); 
+            fRunningStreamSeq.remove_if(comparator); 
             return comparator.fFound;
         }
         

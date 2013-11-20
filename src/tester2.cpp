@@ -19,8 +19,12 @@ static long gBufferSize = 0;
 static AudioRendererPtr gAudioRenderer = 0;
 static AudioPlayerPtr gAudioPlayer = 0;
 
-static long tmpInChan = 4;
-static long tmpOutChan = 4;
+//static long tmpInChan = 4;
+//static long tmpOutChan = 4;
+
+static long tmpInChan = 2;
+static long tmpOutChan = 2;
+
 static long tmpBufferSize = 512;
 static long tmpSampleRate = 44100;
   
@@ -185,7 +189,8 @@ static void test13()
 
 int main(int argc, char* argv[])
 {
-    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
+    //gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kCoreAudioRenderer, 1);
     if (!gAudioPlayer) {
         printf("Cannot OpenAudioPlayer\n");
         return 0;
