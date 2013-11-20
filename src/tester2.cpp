@@ -46,7 +46,7 @@ class TAudioLASClient : public TAudioClient {
 
 	    virtual bool AudioCallback(float** inputs, float** outputs, long frames)
         {
-            printf("AudioCallback frames = %d\n", frames);
+            //printf("AudioCallback frames = %d\n", frames);
         }
 };
     
@@ -60,6 +60,13 @@ static void printControls(AudioEffect faust_effect)
         printf("Faust effect: param label = %s min = %f max = %f init = %f value = %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
     }
 }
+
+static void test0()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
+    AddSound(gAudioPlayer, stream1);
+}
+
 
 static void test1()
 {
@@ -187,6 +194,24 @@ static void test13()
     AddSound(gAudioPlayer, stream5);
 }
 
+static void test14()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 7);
+    
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    //AddSound(gAudioPlayer, stream1);
+    
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 5*tmpSampleRate);
+    
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
+}
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -196,7 +221,14 @@ int main(int argc, char* argv[])
         return 0;
     } 
     
+    StartAudioPlayer(gAudioPlayer);
+    
+    sleep(1);
+     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
     
     TAudioClient* audio_client = new TAudioLASClient();
     AddAudioClient(renderer, audio_client); 
@@ -208,7 +240,9 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
-    //test();
+    //test0();
+    
+    //test1();
     /*
     test2();
     test3();
@@ -223,9 +257,11 @@ int main(int argc, char* argv[])
     //test10();
     //test11();
     //test12();
-    test13();
+    //test13();
+    
+    test14();
        
-    StartAudioPlayer(gAudioPlayer);
+    //StartAudioPlayer(gAudioPlayer);
     
     SetControlValueEffect(faust_effect1, 0, 0.9);
     SetControlValueEffect(faust_effect1, 1, 0.9);

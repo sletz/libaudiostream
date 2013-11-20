@@ -40,39 +40,71 @@ class TExpAudioMixer : public TAudioClient
 {
 
     private:
-
-        list<TRTRendererAudioStreamPtr> fRunningStreamSeq;      // List of running sound streams
-        list<TRTRendererAudioStreamPtr> fScheduledStreamSeq;	// List of scheduled sound streams
-   
-        bool AudioCallback(float** inputs, float** outputs, long frames);
+    
+        struct ScheduledStream {
+            
+            TRTRendererAudioStreamPtr fStream;
+            audio_frames_t fDate;
+            
+            ScheduledStream(TRTRendererAudioStreamPtr stream, audio_frames_t date)
+                :fStream(stream), fDate(date)
+            {}
+            
+            bool operator< (ScheduledStream stream) 
+            { 
+                return fDate < stream.fDate; 
+            }
+            
+        }; 
         
-        struct is_stream {
+        struct IsStream {
+        
             TAudioStreamPtr fStream;
             bool fFound;
-            is_stream(TAudioStreamPtr stream):fStream(stream),fFound(false) {}
+            
+            IsStream(TAudioStreamPtr stream):fStream(stream),fFound(false) {}
+            
+            /*
             bool operator() (TRTRendererAudioStreamPtr stream) 
             { 
                 fFound = (fStream == stream->GetBranch1());
                 return fFound; 
             }
+            */
+            bool operator() (ScheduledStream stream) 
+            { 
+                fFound = (fStream == stream.fStream->GetBranch1());
+                return fFound; 
+            }
         };
-        
-        // TODO : preparer sorter
 
+        list<ScheduledStream>   fRunningStreamSeq;      // List of running sound streams
+        audio_frames_t          fCurDate;
+   
+        bool AudioCallback(float** inputs, float** outputs, long frames);
+      
     public:
 
-        TExpAudioMixer() {}
+        TExpAudioMixer():fCurDate(0) {}
         virtual ~TExpAudioMixer() {}
       
-        void AddStream(TAudioStreamPtr stream)      
-        {   
-            TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
-            renderer_stream->Reset();
-            fRunningStreamSeq.push_back(renderer_stream); 
-        }
+        /*
         bool RemoveStream(TAudioStreamPtr stream)   
         { 
-            is_stream comparator(stream);
+            IsStream comparator(stream);
+            fRunningStreamSeq.remove_if(comparator); 
+            return comparator.fFound;
+        }
+        */
+        
+        void AddStream(TAudioStreamPtr stream)
+        {
+            ScheduleStream(stream, fCurDate);
+        }
+        
+        bool RemoveStream(TAudioStreamPtr stream) 
+        {
+            IsStream comparator(stream);
             fRunningStreamSeq.remove_if(comparator); 
             return comparator.fFound;
         }
@@ -81,6 +113,8 @@ class TExpAudioMixer : public TAudioClient
         {
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
+            fRunningStreamSeq.push_back(ScheduledStream(renderer_stream, date));
+            fRunningStreamSeq.sort();
         }
         
         bool UnScheduleStream(TAudioStreamPtr stream, audio_frames_t date)

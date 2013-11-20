@@ -44,8 +44,15 @@ int TJackAudioRenderer::ProcessAux(jack_nframes_t nframes)
     
     // Take time stamp of first call to Process 
     if (fAnchorFrameTime == 0) {
-        fAnchorFrameTime = jack_frame_time(fClient);
-        fAnchorUsecTime = jack_get_time();
+    
+        jack_nframes_t current_frames;
+        jack_time_t    current_usecs;
+        jack_time_t    next_usecs;
+        float          period_usecs;
+        jack_get_cycle_times(fClient, &current_frames, &current_usecs, &next_usecs, &period_usecs);
+        
+        fAnchorFrameTime = current_frames;
+        fAnchorUsecTime = current_usecs;
     }
 
     // Copy input buffers

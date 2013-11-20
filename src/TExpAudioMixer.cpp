@@ -34,25 +34,46 @@ research@grame.fr
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
     TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
-   
+  
     // Real-time input
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
-    
-    // Get all ready scheduled streams
- 
+   
     // Mix all streams
-	list<TRTRendererAudioStreamPtr>::iterator iter = fRunningStreamSeq.begin();
-	while (iter != fRunningStreamSeq.end()) {
-		TRTRendererAudioStreamPtr stream = *iter;
-    	if (stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, 0) < TAudioGlobals::fBufferSize) { // End of stream
-            iter = fRunningStreamSeq.erase(iter);
-		} else {
-			iter++;
-		}
-	}
+     list<ScheduledStream>::iterator iter = fRunningStreamSeq.begin();
     
+	while (iter != fRunningStreamSeq.end()) {
+		ScheduledStream sc_stream = *iter;
+        audio_frames_t date = sc_stream.fDate;
+        TRTRendererAudioStreamPtr stream = sc_stream.fStream;
+        
+        long offset_in_buffer = 0;
+        bool to_play = false;
+        
+        if (date >= fCurDate && date <= fCurDate + frames) {
+            // New stream to play
+            offset_in_buffer = date - fCurDate;
+            to_play = true;
+            printf("Start stream offet = %d\n", offset_in_buffer);
+        } else if (fCurDate > date) {
+            // Stream currently playing...
+            to_play = true;
+        }
+        
+        // Play it...
+        if (to_play && stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, offset_in_buffer) < TAudioGlobals::fBufferSize) {
+            // End of stream
+            printf("Stop stream\n");
+            iter = fRunningStreamSeq.erase(iter);
+        } else {
+            iter++;
+        }
+    }
+    
+    // Update curdate
+    fCurDate += frames;
     return true;
 }
+
 
 
 
