@@ -26,7 +26,6 @@ research@grame.fr
 #include "TFaustAudioEffect.h"
 #include "TBufferedInputAudioStream.h"
 #include "TAudioDate.h"
-//#include "TWrapperAudioEffect.h"
 
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
@@ -98,26 +97,12 @@ extern "C"
     AUDIOAPI long ReadSoundPtr(AudioStreamPtr stream, float** buffer, long buffer_size);
     AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
 
-    /*
-	AUDIOAPI AudioEffectListPtr MakeAudioEffectListPtr();
-    AUDIOAPI AudioEffectListPtr AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-    AUDIOAPI AudioEffectListPtr RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect);
-	AUDIOAPI AudioEffectListPtr ClearAudioEffectListPtr(AudioEffectListPtr list_effect);
-    */
-
-    /*
-    AUDIOAPI AudioEffectPtr MakeVolAudioEffectPtr(float vol);
-	AUDIOAPI AudioEffectPtr MakeMonoPanAudioEffectPtr(float pan);
-	AUDIOAPI AudioEffectPtr MakeStereoPanAudioEffectPtr(float panLeft, float panRight);
-	AUDIOAPI AudioEffectPtr MakePitchShiftAudioEffectPtr(float pitch);
-    */
     AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 #ifdef __APPLE__
     // To be used from LispWorks
     AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 #endif
-	//AUDIOAPI AudioEffectPtr MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect);
-
+	
 	AUDIOAPI long GetControlCountEffectPtr(AudioEffectPtr effect);
 	AUDIOAPI void GetControlParamEffectPtr(AudioEffectPtr effect, long param, char* label, float* min, float* max, float* init);
 	AUDIOAPI void SetControlValueEffectPtr(AudioEffectPtr effect, long param, float f);
@@ -129,9 +114,6 @@ extern "C"
 
     AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum);
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
-	
-	//AUDIOAPI void DeleteEffectListPtr(AudioEffectListPtr list_effect);
-	//AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect);
 
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
@@ -148,17 +130,7 @@ extern "C"
 									
     AUDIOAPI void CloseAudioPlayer(AudioPlayerPtr player);
 	AUDIOAPI void CloseAudioClient(AudioPlayerPtr player);
-
-    // Load a sound in a channel
-    /*
-    AUDIOAPI long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight);
-	AUDIOAPI long LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight);
-    AUDIOAPI void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
-    AUDIOAPI void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
-    AUDIOAPI void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
-	AUDIOAPI void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
-    */
-    
+  
     // Add a sound in the player
     AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
     AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
@@ -167,26 +139,6 @@ extern "C"
     AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
     AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
 
-    /*
-    AUDIOAPI void StartChannel(AudioPlayerPtr player, long chan);	// Start a sound region from the beginning
-    AUDIOAPI void ContChannel(AudioPlayerPtr player, long chan);	// Play a sound region from the current location
-    AUDIOAPI void StopChannel(AudioPlayerPtr player, long chan);	// Stop playing
-	AUDIOAPI void AbortChannel(AudioPlayerPtr player, long chan);	// Stop playing
-    */
-
-    // Params
-    /*
-    AUDIOAPI void SetVolChannel(AudioPlayerPtr player, long chan, float vol);
-    AUDIOAPI void SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight);
-	AUDIOAPI void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut);
-	AUDIOAPI void SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-
-    // Master
-    AUDIOAPI void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
-    AUDIOAPI void SetVolAudioPlayer(AudioPlayerPtr player, float vol);
-	AUDIOAPI void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
-	AUDIOAPI void SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
-    */
     AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player);
    
 	// Renderer
@@ -229,7 +181,6 @@ AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade
 AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
 AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
-//AUDIOAPI AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
 AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
 AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
 AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
@@ -243,19 +194,6 @@ AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
 AUDIOAPI void ResetSound(AudioStream sound);
 
 // Effect management (using smartptr)
-/*
-AUDIOAPI AudioEffectList MakeAudioEffectList();
-AUDIOAPI AudioEffectList AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-AUDIOAPI AudioEffectList RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-AUDIOAPI AudioEffectList ClearAudioEffectList(AudioEffectList list_effect);
-*/
-
-/*
-AUDIOAPI AudioEffect MakeVolAudioEffect(float vol);
-AUDIOAPI AudioEffect MakeMonoPanAudioEffect(float pan);
-AUDIOAPI AudioEffect MakeStereoPanAudioEffect(float panLeft, float panRight);
-AUDIOAPI AudioEffect MakePitchShiftAudioEffect(float pitch);
-*/
 AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
 
 AUDIOAPI long GetControlCountEffect(AudioEffect effect);
@@ -495,15 +433,6 @@ AUDIOAPI AudioStreamPtr MakeEffectSoundPtr(AudioStreamPtr sound, AudioEffectPtr 
 }
 
 /*
-AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr list_effect, long fadeIn, long fadeOut)
-{
-    return (sound && list_effect) 
-		? MakeSoundPtr(TAudioStreamFactory::MakeTransformSound(static_cast<TAudioStreamPtr>(*sound), static_cast<TAudioEffectListPtr>(*list_effect), fadeIn, fadeOut))
-		: 0;
-}
-*/
-
-/*
 AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech)
 {
     return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeRubberBandSound(static_cast<TAudioStreamPtr>(*sound), pitch_shift, time_strech)) : 0;
@@ -555,58 +484,6 @@ AUDIOAPI long ReadSoundPtr(AudioStreamPtr sound, float** buffer, long buffer_siz
 }
 
 // Effect management
-/*
-AudioEffectList AUDIOAPI MakeAudioEffectList()
-{
-    return new TAudioEffectList();
-}
-
-AudioEffectList AUDIOAPI AddAudioEffect(AudioEffectList list_effect, AudioEffect effect)
-{
-    if (list_effect && effect) {
-       static_cast<TAudioEffectListPtr>(list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(effect));
-    }
-    return list_effect;
-}
-
-AudioEffectList AUDIOAPI RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect)
-{
-    if (list_effect && effect) {
-        static_cast<TAudioEffectListPtr>(list_effect)->remove(static_cast<TAudioEffectInterfacePtr>(effect));
-    }
-    return list_effect;
-}
-
-AudioEffectList AUDIOAPI ClearAudioEffectList(AudioEffectList list_effect)
-{
-	if (list_effect) {
-        static_cast<TAudioEffectListPtr>(list_effect)->clear();
-    }
-    return list_effect;
-}
-*/
-
-/*
-AudioEffect AUDIOAPI MakeVolAudioEffect(float vol)
-{
-    return new TVolAudioEffect(vol);
-}
-
-AudioEffect AUDIOAPI MakeMonoPanAudioEffect(float pan)
-{
-    return new TMonoPanAudioEffect(pan);
-}
-
-AudioEffect AUDIOAPI MakeStereoPanAudioEffect(float panLeft, float panRight)
-{
-    return new TStereoPanAudioEffect(panLeft, panRight);
-}
-
-AudioEffect AUDIOAPI MakePitchShiftAudioEffect(float pitch)
-{
-    return new TPitchShiftAudioEffect(pitch);
-}
-*/
 
 AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path)
 {
@@ -675,68 +552,6 @@ AUDIOAPI const char* GetJsonEffect(AudioEffect effect)
 }
 
 // Effect management with pointer
-/*
-AUDIOAPI void DeleteEffectListPtr(AudioEffectListPtr list_effect) 
-{
-	delete list_effect;
-}
-
-AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect) 
-{
-	delete effect;
-}
-
-AUDIOAPI AudioEffectListPtr MakeAudioEffectListPtr()
-{
-    return new LA_SMARTP<TAudioEffectList>(new TAudioEffectList());
-}
-
-AUDIOAPI AudioEffectListPtr AddAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
-{
-    if (list_effect && effect) {
-        static_cast<TAudioEffectListPtr>(*list_effect)->push_back(static_cast<TAudioEffectInterfacePtr>(*effect));
-    }
-    return list_effect;
-}
-
-AUDIOAPI AudioEffectListPtr RemoveAudioEffectPtr(AudioEffectListPtr list_effect, AudioEffectPtr effect)
-{
-    if (list_effect && effect) {
-        static_cast<TAudioEffectListPtr>(*list_effect)->remove(static_cast<TAudioEffectInterfacePtr>(*effect));
-    }
-    return list_effect;
-}
-
-AUDIOAPI AudioEffectListPtr ClearAudioEffectListPtr(AudioEffectListPtr list_effect)
-{
-	if (list_effect) {
-        static_cast<TAudioEffectListPtr>(*list_effect)->clear();
-    }
-    return list_effect;
-}
-*/
-
-/*
-AUDIOAPI AudioEffectPtr MakeVolAudioEffectPtr(float vol)
-{
-    return new LA_SMARTP<TAudioEffectInterface>(new TVolAudioEffect(vol));
-}
-
-AUDIOAPI AudioEffectPtr MakeMonoPanAudioEffectPtr(float pan)
-{
-    return new LA_SMARTP<TAudioEffectInterface>(new TMonoPanAudioEffect(pan));
-}
-
-AUDIOAPI AudioEffectPtr MakeStereoPanAudioEffectPtr(float panLeft, float panRight)
-{
-    return new LA_SMARTP<TAudioEffectInterface>(new TStereoPanAudioEffect(panLeft, panRight));
-}
-
-AUDIOAPI AudioEffectPtr MakePitchShiftAudioEffectPtr(float pitch)
-{
-    return new LA_SMARTP<TAudioEffectInterface>(new TPitchShiftAudioEffect(pitch));
-}
-*/
 
 AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
 {
@@ -776,13 +591,6 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const 
     }
 }
 #endif
-
-/*
-AUDIOAPI AudioEffectPtr MakeWrapperAudioEffectPtr(AudioEffectInterfacePtr effect)
-{
-    return new LA_SMARTP<TAudioEffectInterface>(new TWrapperAudioEffect(static_cast<TAudioEffectInterface*>(effect)));
-}
-*/
 
 AUDIOAPI long GetControlCountEffectPtr(AudioEffectPtr effect) 
 {
@@ -949,100 +757,6 @@ AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
     free(player);
 }
 
-/*
-// SoundFile management
-AUDIOAPI long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight)
-{
-    if (player && player->fMixer && sound) {
-        return player->fMixer->Load(static_cast<TAudioStreamPtr>(sound), chan, vol, panLeft, panRight);
-    } else {
-        return LOAD_ERR;
-    }
-}
-
-AUDIOAPI long LoadChannelPtr(AudioPlayerPtr player, AudioStreamPtr sound, long chan, float vol, float panLeft, float panRight)
-{
-    if (player && player->fMixer && sound) {
-        return player->fMixer->Load(static_cast<TAudioStreamPtr>(*sound), chan, vol, panLeft, panRight);
-    } else {
-        return LOAD_ERR;
-    }
-}
-
-AUDIOAPI void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfo* info)
-{
-    if (player && player->fMixer && info) {
-        player->fMixer->GetInfo(chan, info);
-    }
-}
-
-AUDIOAPI void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfo* info)
-{
-    if (player && player->fMixer && info) {
-        player->fMixer->GetInfo(chan, info);
-    }
-}
-
-AUDIOAPI void SetStopCallbackChannel(AudioPlayerPtr player,long chan, StopCallback callback, void* context)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetStopCallback(chan, callback, context);
-    }
-}
-
-// Transport
-AUDIOAPI void StartChannel(AudioPlayerPtr player, long chan)
-{
-    if (player && player->fMixer) {
-        player->fMixer->Start(chan);
-    }
-}
-
-AUDIOAPI void ContChannel(AudioPlayerPtr player, long chan)
-{
-    if (player && player->fMixer) {
-        player->fMixer->Play(chan);
-    }
-}
-
-AUDIOAPI void StopChannel(AudioPlayerPtr player, long chan)
-{
-    if (player && player->fMixer) {
-        player->fMixer->Stop(chan);
-    }
-}
-
-AUDIOAPI void AbortChannel(AudioPlayerPtr player, long chan)
-{
-    if (player && player->fMixer) {
-        player->fMixer->Abort(chan);
-    }
-}
-*/
-
-AUDIOAPI long AddSound(AudioPlayerPtr player, AudioStream sound)
-{
-    if (player && player->fMixer && player->fRenderer) {
-        if (sound->Channels() < MAX_OUTPUT_CHAN) {
-            player->fMixer->StartStream(sound, 0);
-            return NO_ERR;
-        }
-    } 
-        
-    return LOAD_ERR;
-}
-
-AUDIOAPI long RemoveSound(AudioPlayerPtr player, AudioStream sound)
-{
-    if (player && player->fMixer && player->fRenderer) {
-        if (player->fMixer->StopStream(sound, 0)) {
-            return NO_ERR;
-        }
-    }
-    
-    return LOAD_ERR;
-}
-
 AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date)
 {
     if (player && player->fMixer && player->fRenderer) {
@@ -1083,64 +797,6 @@ AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player)
     }
 }
 
-/*
-// Params
-AUDIOAPI void SetVolChannel(AudioPlayerPtr player, long chan, float vol)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetVol(chan, vol);
-    }
-}
-
-AUDIOAPI void SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetPan(chan, panLeft, panRight);
-    }
-}
-
-AUDIOAPI void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetEffectList(chan, effect_list, fadeIn, fadeOut);
-    }
-}
-
-AUDIOAPI void SetEffectListChannelPtr(AudioPlayerPtr player, long chan, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetEffectList(chan, *effect_list, fadeIn, fadeOut);
-    }
-}
-
-// Master
-AUDIOAPI void SetVolAudioPlayer(AudioPlayerPtr player, float vol)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetVol(vol);
-    }
-}
-
-AUDIOAPI void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight)
-{
-    if (player && player->fMixer)
-        player->fMixer->SetPan(panLeft, panRight);
-}
-
-AUDIOAPI void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetEffectList(effect_list, fadeIn, fadeOut);
-    }
-}
-
-AUDIOAPI void SetEffectListAudioPlayerPtr(AudioPlayerPtr player, AudioEffectListPtr effect_list, long fadeIn, long fadeOut)
-{
-    if (player && player->fMixer) {
-        player->fMixer->SetEffectList(*effect_list, fadeIn, fadeOut);
-    }
-}
-*/
 
 AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player)
 {

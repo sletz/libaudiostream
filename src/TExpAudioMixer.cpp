@@ -51,7 +51,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
         long offset_in_buffer = 0;
         bool to_play = false;
         
-        if (start_date >= fCurFrame && start_date <= fCurFrame + frames) {
+        if (start_date >= fCurFrame && start_date < fCurFrame + frames) {
             // New stream to play
             offset_in_buffer = start_date - fCurFrame;
             to_play = true;
