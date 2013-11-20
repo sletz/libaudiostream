@@ -175,6 +175,7 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 	protected:
 	
 		vector<UIObject*> fUITable;
+        vector<const char*> fControlsLevel;
         
         TFaustAudioEffectBase* CopyState(TFaustAudioEffectBase* src)
         {
@@ -183,6 +184,18 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
                 SetControlValue(i, src->GetControlValue(i));
             }
             return this;
+        }
+        
+        string buildLabel(const char* label) 
+        {
+            string res = "/";
+            
+            for (size_t i = 0; i < fControlsLevel.size(); i++) {
+                res = res + string(fControlsLevel[i]);
+                res = res + "/";
+            }
+            res = res + string(label);
+            return res;
         }
 
     public:
@@ -195,12 +208,12 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 				delete *iter;
             }
  		}
+           
+        void openTabBox(const char* label) { fControlsLevel.push_back(label); }
+		void openHorizontalBox(const char* label) { fControlsLevel.push_back(label); }
+		void openVerticalBox(const char* label) { fControlsLevel.push_back(label); }
+		void closeBox() { fControlsLevel.pop_back(); }
         
-        void openTabBox(const char* label) {}
-		void openHorizontalBox(const char* label) {}
-		void openVerticalBox(const char* label) {}
-		void closeBox() {}
-
 		void addButton(const char* label, FAUSTFLOAT* zone) {fUITable.push_back(new Button(label, zone));}
 		
 		void addCheckButton(const char* label, FAUSTFLOAT* zone) {fUITable.push_back(new CheckButton(label, zone));}
@@ -535,6 +548,21 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 		llvm_dsp* fDsp;
         TCodeFaustAudioEffectFactory* fFactory;
         
+        struct Name_Meta : public Meta
+        {
+            string fName;
+            
+            Name_Meta():fName("")
+            {}
+            
+            void declare(const char* key, const char* value)
+            {   
+                if (strcmp("name", key) == 0) {
+                    fName = key;
+                }
+            }
+        };
+
     public:
 
         TCodeFaustAudioEffect(TCodeFaustAudioEffectFactory* factory):TFaustAudioEffectBase()
@@ -593,6 +621,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         string GetLibraryPath() { return fFactory->GetLibraryPath(); }
         string GetDrawPath() { return fFactory->GetDrawPath(); }
         string GetCode() { return fFactory->GetCode(); }
+        
+        string GetName()
+        {
+            Name_Meta meta;
+            metadataDSPFactory(fFactory->GetFactory(), &meta);
+            return meta.fName;
+        }
+        
         TCodeFaustAudioEffectFactory* GetFactory() { return fFactory; }
 		
 };

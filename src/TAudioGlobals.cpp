@@ -22,7 +22,6 @@ research@grame.fr
 
 #include "TAudioGlobals.h"
 #include "TAudioConstants.h"
-#include "TPanTable.h"
 #include "TRendererAudioStream.h"
 #include "TBufferedInputAudioStream.h"
 #include "TSharedBuffers.h"
@@ -37,9 +36,6 @@ research@grame.fr
 float** TSharedBuffers::fInBuffer = NULL;
 float** TSharedBuffers::fOutBuffer = NULL;
 
-float TPanTable::fPanTable[128];
-float TPanTable::fVolTable[128];
-
 TCmdManagerPtr la_smartable1::fDeleteManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
@@ -47,7 +43,6 @@ long TAudioGlobals::fClientCount = 0;
 
 long TAudioGlobals::fInput = 0;
 long TAudioGlobals::fOutput = 0;
-//long TAudioGlobals::fChannels = 0;
 
 long TAudioGlobals::fBufferSize = 0;
 long TAudioGlobals::fStreamBufferSize = 0;
@@ -112,7 +107,6 @@ void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_r
 		TDTRendererAudioStream::Init();
 		TRTRendererAudioStream::Init(thread_num);
 		la_smartable1::Init();
-		TPanTable::FillTable();
 		GetMaximumFiles(&fFileMax);
 		SetMaximumFiles(1024);
 	}
@@ -135,7 +129,6 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
 {
     fInput = inChan;
     fOutput = outChan;
-    //fChannels = channels;
     fBufferSize = buffer_size;
     fStreamBufferSize = stream_buffer_size;
     fSampleRate = sample_rate;
