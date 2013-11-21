@@ -48,21 +48,21 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
         audio_frames_t stop_date = sc_stream.fStopDate;
         SAudioStream stream = sc_stream.fStream;
         
-        long offset_in_buffer = 0;
+        long offset = 0;
         bool to_play = false;
         
         if (start_date >= fCurFrame && start_date < fCurFrame + frames) {
             // New stream to play
-            offset_in_buffer = start_date - fCurFrame;
+            offset = start_date - fCurFrame;
             to_play = true;
-            printf("Start stream fCurFrame = %lld offset = %d\n", fCurFrame, offset_in_buffer);
+            printf("Start stream fCurFrame = %lld offset = %d\n", fCurFrame, offset);
         } else if (fCurFrame > start_date) {
             // Stream currently playing...
             to_play = true;
         }
         
         // Play it...
-        if (to_play && (stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, offset_in_buffer) < TAudioGlobals::fBufferSize || fCurFrame > stop_date)) {
+        if (to_play && (stream->Read(&shared_buffer, TAudioGlobals::fBufferSize, offset) < TAudioGlobals::fBufferSize || fCurFrame > stop_date)) {
             // End of stream
             printf("Stop stream\n");
             iter = fRunningStreamSeq.erase(iter);

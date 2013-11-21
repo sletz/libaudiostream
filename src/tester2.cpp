@@ -313,6 +313,12 @@ int main(int argc, char* argv[])
     SetControlValueEffect(faust_effect4, 2, 0.9);
     
     SetControlValueEffect(faust_effect5, 0, 0.9);
+    
+    printf("faust_effect1 %s\n", GetNameEffect(faust_effect1));
+    printf("faust_effect2 %s\n", GetNameEffect(faust_effect2));
+    printf("faust_effect4 %s\n", GetNameEffect(faust_effect4));
+    printf("faust_effect5 %s\n", GetNameEffect(faust_effect5));
+    
      
     char c;
     printf("Type 'q' to quit\n");

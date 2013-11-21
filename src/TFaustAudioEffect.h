@@ -270,6 +270,7 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 		}
         
         virtual const char* GetJson() { return ""; }
+        virtual const char* GetName() { return ""; }
 };
 
 typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
@@ -547,6 +548,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 	
 		llvm_dsp* fDsp;
         TCodeFaustAudioEffectFactory* fFactory;
+        string fName;
         
         struct Name_Meta : public Meta
         {
@@ -558,10 +560,14 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             void declare(const char* key, const char* value)
             {   
                 if (strcmp("name", key) == 0) {
-                    fName = key;
+                    fName = value;
                 }
             }
         };
+        
+        string GetLibraryPath() { return fFactory->GetLibraryPath(); }
+        string GetDrawPath() { return fFactory->GetDrawPath(); }
+        string GetCode() { return fFactory->GetCode(); }
 
     public:
 
@@ -579,6 +585,10 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             
             fDsp->init(TAudioGlobals::fSampleRate);
             fDsp->buildUserInterface(this);
+            
+            Name_Meta meta;
+            metadataDSPFactory(fFactory->GetFactory(), &meta);
+            fName = meta.fName;
         }
         virtual ~TCodeFaustAudioEffect()
         {
@@ -617,16 +627,10 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             json.numOutput(fDsp->getNumOutputs());
             return json.json();
         }
-        
-        string GetLibraryPath() { return fFactory->GetLibraryPath(); }
-        string GetDrawPath() { return fFactory->GetDrawPath(); }
-        string GetCode() { return fFactory->GetCode(); }
-        
-        string GetName()
+              
+        const char* GetName()
         {
-            Name_Meta meta;
-            metadataDSPFactory(fFactory->GetFactory(), &meta);
-            return meta.fName;
+            return fName.c_str();
         }
         
         TCodeFaustAudioEffectFactory* GetFactory() { return fFactory; }

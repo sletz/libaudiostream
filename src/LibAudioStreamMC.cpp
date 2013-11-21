@@ -114,6 +114,7 @@ extern "C"
 
     AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum);
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
+    AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
 
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
@@ -206,6 +207,8 @@ AUDIOAPI long GetStateEffect(AudioEffect effect);
 AUDIOAPI void ResetEffect(AudioEffect effect);
 
 AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum);
+AUDIOAPI const char* GetJsonEffect(AudioEffectPtr effect);
+AUDIOAPI const char* GetNameEffect(AudioEffectPtr effect);
 
 AUDIOAPI long LibVersion()
 {
@@ -551,6 +554,17 @@ AUDIOAPI const char* GetJsonEffect(AudioEffect effect)
     }
 }
 
+AUDIOAPI const char* GetNameEffect(AudioEffect effect) 
+{ 
+    TAudioEffectInterface* effect_tmp = static_cast<TAudioEffectInterface*>(effect);
+    TFaustAudioEffectBase* faust_effect;
+    if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
+        return faust_effect->GetName();
+    } else {
+        return "";
+    }
+}
+
 // Effect management with pointer
 
 AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
@@ -638,6 +652,17 @@ AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect)
     TFaustAudioEffectBase* faust_effect;
     if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
         return faust_effect->GetJson();
+    } else {
+        return "";
+    }
+}
+
+AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect) 
+{ 
+    TAudioEffectInterface* effect_tmp = static_cast<TAudioEffectInterface*>(*effect);
+    TFaustAudioEffectBase* faust_effect;
+    if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
+        return faust_effect->GetName();
     } else {
         return "";
     }

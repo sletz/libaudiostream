@@ -466,6 +466,8 @@ void ProcessEffect(AudioEffect effect, float** input, float** output, long frame
 
 const char* GetJsonEffect(AudioEffect effect);
 
+const char* GetNameEffect(AudioEffect effect);
+
 #ifdef __cplusplus
 extern "C"
 {
