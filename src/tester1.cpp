@@ -56,7 +56,7 @@ static void printControls(AudioEffect faust_effect)
     printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
     for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
         float min, max, init;
-        char label[32];
+        char label[512];
         GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
         printf("Faust effect: param label = %s min = %f max = %f init = %f value = %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
     }

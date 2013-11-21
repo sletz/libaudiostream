@@ -57,5 +57,8 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const string& 
     } else {
         factory = new TStringCodeFaustAudioEffectFactory(name, library_path, draw_path);
     }
-    return new TCodeFaustAudioEffect(factory);
+    TCodeFaustAudioEffect* effect = new TCodeFaustAudioEffect(factory);
+    // Keep effect name
+    factory->SetName(effect->GetName());
+    return effect;
 }
