@@ -91,6 +91,7 @@ TAudioStreamPtr TReadFileAudioStream::CutBegin(long frames)
 void TReadFileAudioStream::ReadEndBufferAux(TReadFileAudioStreamPtr obj, long framesNum, long framePos)
 {
     obj->ReadEndBuffer(framesNum, framePos);
+    obj->removeReference();
 }
 
 // Use the end of the copy buffer
@@ -114,7 +115,7 @@ void TReadFileAudioStream::Reset()
             printf("Error : stream rendered without command manager\n");
         }
         assert(fManager);
-        fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)this, TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
+        fManager->ExecCmd((CmdPtr)ReadEndBufferAux, (long)addReference(), TAudioGlobals::fStreamBufferSize - copySize, copySize, 0, 0);
     } else {
         TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, TAudioGlobals::fStreamBufferSize);
     }
@@ -126,6 +127,7 @@ void TReadFileAudioStream::Reset()
 long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
+    printf("TReadFileAudioStream::ReadImp\n");
     float* temp[buffer->GetChannels()];
     int res = sf_readf_float(fFile, fFileBuffer, framesNum); // In frames
     UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp), fFileBuffer, framesNum, fChannels);

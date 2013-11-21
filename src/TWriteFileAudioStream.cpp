@@ -93,8 +93,8 @@ long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long frame
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
-		assert(fManager);
-		fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
+        assert(fManager);
+        fManager->ExecCmd((CmdPtr)CloseAux, (long)addReference(), 0, 0, 0, 0);
 	}
     return res;
 }
@@ -135,5 +135,6 @@ void TWriteFileAudioStream::CloseAux(TWriteFileAudioStreamPtr obj, long u1, long
 {
     obj->Flush();
 	obj->Close();
+    obj->removeReference();
 }
 

@@ -48,6 +48,8 @@ Warning : the fifocell data structure size (see lffifo.h) MUST match the TCmd da
 \brief A command structure
 */
 
+#define MAXCOMMAND 256
+
 typedef struct TCmd
 {
     TCmd* link;
@@ -58,8 +60,6 @@ typedef struct TCmd
     long arg4;
     long arg5;
 } TCmd;
-
-#define MAXCOMMAND 256
 
 //-------------------------
 // Class TThreadCmdManager

@@ -30,17 +30,20 @@ research@grame.fr
 // Class TEffectAudioStream
 //-----------------------------
 /*!
-\brief  A TEffectAudioStream object will apply a list of sound effects on a stream.
+\brief  A TEffectAudioStream object will apply an effect on a stream.
 */
 
 class TEffectAudioStream : public TDecoratedAudioStream
 {
 
     private:
+        
+        typedef class LA_SMARTP<TAudioEffectInterface> SAudioEffect;
 
-        TAudioEffectInterfacePtr fEffect;  	// Effect
-		long fFadeIn;	// FadeIn time
-        long fFadeOut;	// FadeOut time
+        //TAudioEffectInterfacePtr fEffect;  	// Effect
+        SAudioEffect fEffect;   // Effect
+		long fFadeIn;           // FadeIn time
+        long fFadeOut;          // FadeOut time
 		FLOAT_BUFFER fBufferIn;
         FLOAT_BUFFER fBufferOut;
 

@@ -59,7 +59,7 @@ class LA_EXPORT la_smartable {
 		//! gives the reference count of the object
 		unsigned refs() const         { return refCount; }
 		//! addReference increments the ref count and checks for refCount overflow
-		void addReference()           { refCount++; assert(refCount != 0); }
+        la_smartable* addReference()           { refCount++; assert(refCount != 0); return this; }
 		//! removeReference delete the object when refCount is zero		
 		virtual void removeReference();
 		
@@ -78,7 +78,7 @@ class la_smartable1 : public la_smartable {
 
 	private:
 		
-		static void removeReferenceAux(la_smartable1* obj,long u1, long u2, long u3);
+		static void removeReferenceAux(la_smartable1* obj, long u1, long u2, long u3);
 		static TCmdManager* fDeleteManager;
 
 	public:

@@ -349,7 +349,7 @@ AudioStream test10bis()
     faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
     list_effect = AddAudioEffect(list_effect, faust_effect);
     
-	printControls(faust_effect);
+    printControls(faust_effect);
         
     SetControlValueEffect(faust_effect, 0, 1.0);
     SetControlValueEffect(faust_effect, 1, 1.0);

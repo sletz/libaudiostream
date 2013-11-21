@@ -36,12 +36,12 @@ research@grame.fr
 \brief A mixer contains several TAudioStream objects.
 */
 
-typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
-
 class TExpAudioMixer : public TAudioClient
 {
 
     private:
+    
+        typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
     
         struct ScheduledStream {
             

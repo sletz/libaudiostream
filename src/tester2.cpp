@@ -47,6 +47,7 @@ class TAudioLASClient : public TAudioClient {
 	    virtual bool AudioCallback(float** inputs, float** outputs, long frames)
         {
             //printf("AudioCallback frames = %d\n", frames);
+            return true;
         }
 };
     
