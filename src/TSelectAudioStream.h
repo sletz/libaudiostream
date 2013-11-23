@@ -31,7 +31,7 @@ research@grame.fr
 // Class TSelectAudioStream
 //--------------------------
 /*!
-\brief  A TSelectAudioStream object keeps a selection of audio channels
+\brief A TSelectAudioStream object keeps a selection of audio channels.
 */
 
 class TSelectAudioStream : public TDecoratedAudioStream

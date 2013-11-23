@@ -216,42 +216,35 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         
 		void addButton(const char* label, FAUSTFLOAT* zone) 
         {
-            //fUITable.push_back(new Button(label, zone));
             fUITable.push_back(new Button(buildLabel(label), zone));
         }
 		
 		void addCheckButton(const char* label, FAUSTFLOAT* zone) 
         {
-            //fUITable.push_back(new CheckButton(label, zone));
             fUITable.push_back(new CheckButton(buildLabel(label), zone));
         }
 		
 		void addVerticalSlider(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step) 
 		{ 	
-            //fUITable.push_back(new Slider(label, zone, init, min, max, step));
             fUITable.push_back(new Slider(buildLabel(label), zone, init, min, max, step));
 		}
 		
 		void addHorizontalSlider(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step) 
 		{
-            //fUITable.push_back(new Slider(label, zone, init, min, max, step));
             fUITable.push_back(new Slider(buildLabel(label), zone, init, min, max, step));
 		}
 		
         void addNumEntry(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
         {
-            //fUITable.push_back(new Slider(label, zone, init, min, max, step));
             fUITable.push_back(new Slider(buildLabel(label), zone, init, min, max, step));
         }
 		
 		virtual void addHorizontalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max) 
 		{
-            //fUITable.push_back(new Bargraph(label, zone, min, max));
             fUITable.push_back(new Bargraph(buildLabel(label), zone, min, max));
 		}
 		virtual void addVerticalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max)
 		{
-            //fUITable.push_back(new Bargraph(label, zone, min, max));
             fUITable.push_back(new Bargraph(buildLabel(label), zone, min, max));
 		}
 	

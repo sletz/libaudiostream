@@ -266,7 +266,7 @@ static void test16()
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
-    //gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kCoreAudioRenderer, 1);
+    //gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChanmake build ARCH=x86-64, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kCoreAudioRenderer, 1);
     if (!gAudioPlayer) {
         printf("Cannot OpenAudioPlayer\n");
         return 0;

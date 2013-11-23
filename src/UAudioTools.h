@@ -38,9 +38,9 @@ research@grame.fr
 #include <Accelerate/Accelerate.h>
 #endif
 
-//--------------------
+//-------------------
 // Class UAudioTools
-//--------------------
+//-------------------
 /*!
 \brief An utility calls for common mixing functions.
 */
@@ -511,7 +511,7 @@ class UAudioTools
 
         static inline void MultFrame(float* frame, float val, long size)
         {
-            // A optimiser
+            // To optimize
             for (int i = 0 ; i < size; i++) {
                 frame[i] *= val;
             }
@@ -519,7 +519,7 @@ class UAudioTools
         
         static inline void MultFrame(float** frame, float val, long channels)
         {
-            // A optimiser
+            // To optimize
             for (int i = 0 ; i < channels; i++) {
                 frame[i][0] *= val;
             }

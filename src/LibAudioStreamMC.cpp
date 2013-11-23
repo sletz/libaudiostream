@@ -685,7 +685,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
 {
     int res;
   
-   TAudioGlobals::ClearLibError();
+    TAudioGlobals::ClearLibError();
 	
 	if (thread_num < 1) {
 		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");
@@ -704,7 +704,6 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
         goto error;
     }
 
-	//player->fMixer = new TAudioMixer();
     player->fMixer = new TExpAudioMixer();
     if (!player->fMixer) {
         goto error;
@@ -797,7 +796,7 @@ AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t
         if (player->fMixer->StopStream(sound, date)) {
             return NO_ERR;
         }
-     }
+    }
     
     return LOAD_ERR;
 }
