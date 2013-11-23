@@ -26,9 +26,9 @@ research@grame.fr
 #include "TFadeAudioStream.h"
 #include "TAudioEffect.h"
 
-//-----------------------------
+//--------------------------
 // Class TEffectAudioStream
-//-----------------------------
+//--------------------------
 /*!
 \brief  A TEffectAudioStream object will apply an effect on a stream.
 */

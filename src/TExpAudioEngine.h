@@ -27,11 +27,11 @@ research@grame.fr
 #include "TAudioRenderer.h"
 #include "TExpAudioMixer.h"
 
-//--------------------
+//-----------------------
 // Class TExpAudioEngine
-//--------------------
+//-----------------------
 /*!
-\brief An Audio Engine with a mixer that handles several separated channels.
+\brief An Audio Engine that can play an arbitrary number au audio expression.
 */
 
 class TExpAudioEngine

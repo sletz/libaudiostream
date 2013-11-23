@@ -27,9 +27,9 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include <vector>
 
-//---------------------------
+//--------------------------
 // Class TSelectAudioStream
-//---------------------------
+//--------------------------
 /*!
 \brief  A TSelectAudioStream object keeps a selection of audio channels
 */

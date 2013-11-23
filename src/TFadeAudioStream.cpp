@@ -25,18 +25,6 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
-/*
-TFadeAudioStream::TFadeAudioStream():TDecoratedAudioStream(0)
-{
-    fStatus = kIdle;
-    fFadeInFrames = 0;
-    fFadeOutFrames = 0;
-    fCurFrame = 0;
-    fFramesNum = 0;
-    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
-}
-*/
-
 TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut): TDecoratedAudioStream(stream)
 {
     fStatus = kFadeIn; // Starting state for the stream with a fade

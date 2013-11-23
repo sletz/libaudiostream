@@ -57,7 +57,6 @@ class TFadeAudioStream : public TDecoratedAudioStream
 
         enum {kIdle = 0, kFadeIn, kPlaying, kFadeOut};
 
-        //TFadeAudioStream();
         TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut);
         virtual ~TFadeAudioStream()
         {
@@ -92,10 +91,6 @@ class TChannelFadeAudioStream : public TFadeAudioStream
 
     public:
 
-        /*
-        TChannelFadeAudioStream(): TFadeAudioStream()
-        {}
-        */
         virtual ~TChannelFadeAudioStream()
         {}
 
