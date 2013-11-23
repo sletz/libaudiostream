@@ -6,8 +6,6 @@
 #define LLVM_EFFECT2 "/Documents/faust-sf/examples/zita_rev1.dsp"
 #define LLVM_EFFECT3 "/Documents/faust-sf/examples/freeverb4.dsp"
 
-#define CHANNELS 4
-
 #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
@@ -251,9 +249,23 @@ static void test15()
     StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 3*tmpSampleRate);
 }
 
+static void test16()
+{
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 4000);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 6000);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 8000);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 10000);
+}
+
 int main(int argc, char* argv[])
 {
-    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
     //gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, CHANNELS, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kCoreAudioRenderer, 1);
     if (!gAudioPlayer) {
         printf("Cannot OpenAudioPlayer\n");
@@ -279,7 +291,7 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
-    test0();
+    //test0();
     
     //test1();
     /*
@@ -299,6 +311,8 @@ int main(int argc, char* argv[])
     //test13();
     
     //test14();
+    
+    test16();
        
     //StartAudioPlayer(gAudioPlayer);
     

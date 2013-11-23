@@ -498,7 +498,6 @@ void SetAudioLatencies(long inputLatency, long outputLatency);
 \brief Open the audio player.
 \param inChan The number of input channels. 
 \param outChan The number of output channels.
-\param channels The number of stream channels.
 \param sample_rate The sampling rate.
 \param buffer_size The audio player internal buffer size.
 \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
@@ -509,7 +508,6 @@ void SetAudioLatencies(long inputLatency, long outputLatency);
 */
 AudioPlayerPtr OpenAudioPlayer(long inChan,
 							   long outChan,
-							   long channels,
 							   long sample_rate,
 							   long buffer_size,
 							   long stream_buffer_size,
@@ -747,7 +745,6 @@ void RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client);
 \brief Init the global audio context. There is <B> unique </B> to be accessed by all components that need it.
 \param inChan The number of input channels. <B>Only stereo players are currently supported </b>
 \param outChan The number of output channels.
-\param channels The number of stream channels.
 \param sample_rate The sampling rate.
 \param buffer_size The audio player internal buffer size.
 \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
@@ -756,7 +753,6 @@ void RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client);
 */
 void AudioGlobalsInit(long inChan, 
 					long outChan, 
-					long channels, 
 					long sample_rate,
 					long buffer_size, 
 					long stream_buffer_size, 

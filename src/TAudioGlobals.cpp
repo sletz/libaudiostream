@@ -98,11 +98,11 @@ static bool GetMaximumFiles(long* filecount)
 }
 #endif
 
-void TAudioGlobals::Init(long inChan, long outChan, long channels, long sample_rate,
+void TAudioGlobals::Init(long inChan, long outChan, long sample_rate,
                          long buffer_size, long stream_buffer_size, long rtstream_buffer_size, long thread_num)
 {
 	if (fClientCount++ == 0 && !fInstance) {
-		fInstance = new TAudioGlobals(inChan, outChan, channels, sample_rate,
+		fInstance = new TAudioGlobals(inChan, outChan, sample_rate,
 									  buffer_size, stream_buffer_size, rtstream_buffer_size);
 		TDTRendererAudioStream::Init();
 		TRTRendererAudioStream::Init(thread_num);
@@ -124,7 +124,7 @@ void TAudioGlobals::Destroy()
 	}
 }
 
-TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
+TAudioGlobals::TAudioGlobals(long inChan, long outChan, long sample_rate,
                              long buffer_size, long stream_buffer_size, long rtstream_duration)
 {
     fInput = inChan;

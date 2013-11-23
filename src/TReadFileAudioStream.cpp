@@ -127,7 +127,6 @@ void TReadFileAudioStream::Reset()
 long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    printf("TReadFileAudioStream::ReadImp\n");
     float* temp[buffer->GetChannels()];
     int res = sf_readf_float(fFile, fFileBuffer, framesNum); // In frames
     UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp), fFileBuffer, framesNum, fChannels);

@@ -25,7 +25,7 @@ research@grame.fr
 
 static bool CheckEnding(const string& name, const string& end)
 {
-    int match = name.rfind(end);
+    unsigned int match = name.rfind(end);
     return ((match != string::npos) && (name.size() - end.size() == match));
 }
     

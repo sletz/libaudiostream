@@ -63,11 +63,11 @@ class AUDIO_EXPORTS TAudioGlobals
     
         static TBufferedAudioStream* fSharedInput;  // Shared real-time input
  
-        TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
+        TAudioGlobals(long inChan, long outChan, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
         virtual ~TAudioGlobals();
 
-        static void Init(long inChan, long outChan, long channels,
+        static void Init(long inChan, long outChan,
                          long sample_rate, long buffer_size, long stream_buffer_size, 
                          long rtstream_buffer_size, long thread_num);
 

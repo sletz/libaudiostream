@@ -120,7 +120,6 @@ extern "C"
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
     AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan, 
                                             long outChan, 
-                                            long channels, 
                                             long sample_rate, 
                                             long buffer_size, 
                                             long stream_buffer_size, 
@@ -158,7 +157,6 @@ extern "C"
 	// Globals
 	AUDIOAPI void AudioGlobalsInit(long inChan, 
 									long outChan, 
-									long channels, 
 									long sample_rate,
 									long buffer_size, 
 									long stream_buffer_size, 
@@ -678,7 +676,6 @@ AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency)
 
 AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan, 
                                         long outChan, 
-                                        long channels, 
                                         long sample_rate, 
                                         long buffer_size, 
                                         long stream_buffer_size, 
@@ -695,7 +692,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
         TAudioGlobals::AddLibError("OpenAudioPlayer error: thread_num parameter should be at least one !!");
     }
 
-    TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
+    TAudioGlobals::Init(inChan, outChan, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
 
     AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
     if (!player) {
@@ -877,14 +874,13 @@ AUDIOAPI void RemoveAudioClient(AudioRendererPtr renderer, AudioClientPtr client
 
 AUDIOAPI void AudioGlobalsInit(long inChan, 
 								long outChan, 
-								long channels, 
 								long sample_rate,
 								long buffer_size, 
 								long stream_buffer_size, 
 								long rtstream_duration,
 								long thread_num)
 {
-	TAudioGlobals::Init(inChan, outChan, channels, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
+	TAudioGlobals::Init(inChan, outChan, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
 }
 
 AUDIOAPI void AudioGlobalsDestroy()
