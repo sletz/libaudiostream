@@ -276,15 +276,13 @@ AudioStream MakeParSound(AudioStream s1, AudioStream s2);
 AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
 
 /*!
-\brief Apply a list of effects on a stream.
+\brief Apply an effect on a stream.
 \param sound The stream to be transformed.
 \param effect The effect to be used.
 \param fadeIn A fadein section frames before the effect is fully applied.
 \param fadeOut A fadeout section frames before the effect is fully removed.
 \return A pointer to new stream object.
 */
-//AudioStream MakeTransformSound(AudioStream sound, AudioEffectList effect_list, long fadeIn, long fadeOut);
-
 AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
 
 /*!
@@ -346,57 +344,6 @@ long ReadSound(AudioStream sound, float* buffer, long buffer_size, long channels
 void ResetSound(AudioStream sound);
 
 /* Effect management */
-
-/*!
-\brief Create an effect list.
-\return A pointer to new effect list.
-*/
-//AudioEffectList MakeAudioEffectList();
-/*!
-\brief Add an effect in an effect list.
-\param list The effect list where the effect is added.
-\param effect The effect to be added.
-\return A pointer to the modified effect list.
-*/
-//AudioEffectList AddAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-/*!
-\brief Remove an effect from an effect list.
-\param list The effect list where the effect is removed.
-\param effect The effect to be removed.
-\return A pointer to the modified effect list.
-*/
-//AudioEffectList RemoveAudioEffect(AudioEffectList list_effect, AudioEffect effect);
-/*!
-\brief Clear all effects from the list.
-\param list The effect list to be cleared.
-\return A pointer to the modified effect list.
-*/
-//AudioEffectList ClearAudioEffectList(AudioEffectList list_effect);
-/*!
-\brief Create a volume effect.
-\param vol The volume between 0 and 1.
-\return A pointer to new volume object.
-*/
-//AudioEffect MakeVolAudioEffect(float vol);
-/*!
-\brief Create a mono pan effect.
-\param pan The pan between 0 and 1.
-\return A pointer to new mono pan object.
-*/
-//AudioEffect MakeMonoPanAudioEffect(float pan);
-/*!
-\brief Create a stereo pan effect.
-\param panLeft The left pan between 0 and 1.
-\param rightPan The right pan between 0 and 1.
-\return A pointer to new stereo pan object.
-*/
-//AudioEffect MakeStereoPanAudioEffect(float panLeft, float rightPan);
-/*!
-\brief Create a pitch shift effect.
-\param gain The pitch shift between 0.5 and 2.
-\return A pointer to new pitch shift object.
-*/
-//AudioEffect MakePitchShiftAudioEffect(float pitch);
 /*!
 \brief Create an effect described in the Faust DSP language.
 \param name The code of the Faust effect, as a DSP filename or DSP string.
@@ -405,12 +352,6 @@ void ResetSound(AudioStream sound);
 \return A pointer to new effect object or NULL if the effect cannot be located or created.
 */
 AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
-/*!
-\brief Create an effect by "wrapping" an externally built effect.
-\param effect The effect to be wrapped.
-\return A pointer to new effect object or NULL if the effect cannot be located or created.
-*/
-//AudioEffect MakeWrapperAudioEffect(AudioEffectInterface effect);
 
 /*!
 \brief Return the number of effect controls.
@@ -461,7 +402,6 @@ void ResetEffect(AudioEffect effect);
 \param output The output audio buffer.
 \param framesNum The number of frame of input/output buffers.
 */
-//void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum, long channels);
 void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);
 
 const char* GetJsonEffect(AudioEffect effect);
@@ -532,36 +472,22 @@ void CloseAudioPlayer(AudioPlayerPtr player);
 void CloseAudioClient(AudioPlayerPtr player);
 
 /*!
-\brief Load a sound in a channel.
+\brief Start a sound at a specific date.
 \param player The audio player.
-\param sound The stream to be inserted in the channel.
-\param chan The audio channel number to be used.
-\param vol The volume between 0 and 1.
-\param pan The panning between 0 and 1.
+\param sound The stream to be started.
+\param date The date in frames.
 \return An error code.
 */
-//long LoadChannel(AudioPlayerPtr player, AudioStream sound, long chan, float vol, float panLeft, float panRight);
-/*!
-\brief Retrieve information about a sound channel.
-\param player The audio player.
-\param chan The audio channel number to be used.
-\param info The channel info structure to be filled.
-*/
-//void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
-//void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
-/*!
-\brief Set a callback to be called when the channel stops.
-\param player The audio player.
-\param chan The audio channel number to be used.
-\param callback The callback to be used.
-\param context A pointer to data to be given to the callback.
-*/
-//void SetStopCallbackChannel(AudioPlayerPtr player, long chan, StopCallback callback, void* context);
-
 long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
 
+/*!
+\brief Stop a sound at a specific date.
+\param player The audio player.
+\param sound The stream to be stopped.
+\param date The date in frames.
+\return An error code.
+*/
 long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
-
 
 // Transport
 /*!
@@ -574,77 +500,6 @@ void StartAudioPlayer(AudioPlayerPtr player);
 \param player The audio player.
 */
 void StopAudioPlayer(AudioPlayerPtr player);
-/*!
-\brief Start a sound channel from the beginning.
-\param player The audio player.
-\param chan The audio channel number to be used.
-*/
-//void StartChannel(AudioPlayerPtr player, long chan);
-/*!
-\brief Play a sound channel from the current location.
-\param player The audio player.
-\param chan The audio channel number to be used.
-*/
-//void ContChannel(AudioPlayerPtr player, long chan);
-/*!
-\brief Stop playing a channel, waiting for the stop fadeout to finish.
-\param player The audio player.
-\param chan The audio channel number to be used.
-*/
-//void StopChannel(AudioPlayerPtr player, long chan);
-/*!
-\brief Stop playing a channel, immediately returning without waiting for the stop fadeout to finish.
-\param player The audio player.
-\param chan The audio channel number to be used.
-*/
-//void AbortChannel(AudioPlayerPtr player, long chan);
-
-// Params
-/*!
-\brief Set the channel volume [0...1]
-\param player The audio player.
-\param chan The audio channel number to be used.
-\param vol The new volume value.
-*/
-//void SetVolChannel(AudioPlayerPtr player, long chan, float vol);
-/*!
-\brief Set the channel panning [0...1]
-\param player The audio player.
-\param chan The audio channel number to be used.
-\param pan The new panning value.
-*/
-//void SetPanChannel(AudioPlayerPtr player, long chan, float panLeft, float panRight);
-/*!
-\brief Set the channel audio effect list.
-\param player The audio player.
-\param chan The audio channel number to be used.
-\param effect_list A list of audio effects.
-\param fadeIn The fadein length in frames to be used when starting the effect chain.
-\param fadeOut The fadeout length in frames to be used when stopping the effect chain.
-*/
-//void SetEffectListChannel(AudioPlayerPtr player, long chan, AudioEffectList effect_list, long fadeIn, long fadeOut);
-
-// Master
-/*!
-\brief Set the audio player volume [0...1]
-\param player The audio player.
-\param vol The new volume value.
-*/
-//void SetVolAudioPlayer(AudioPlayerPtr player, float vol);
-/*!
-\brief Set the audio player panning [0...1]
-\param player The audio player.
-\param pan The new panning value.
-*/
-//void SetPanAudioPlayer(AudioPlayerPtr player, float panLeft, float panRight);
-/*!
-\brief Set the master audio effect list.
-\param player The audio player.
-\param effect_list A list of audio effects.
-\param fadeIn The fadein length in frames to be used when stopping the effect chain.
-\param fadeOut The fadeout length in frames to be used when stopping the effect chain.
-*/
-//void SetEffectListAudioPlayer(AudioPlayerPtr player, AudioEffectList effect_list, long fadeIn, long fadeOut);
 
 /*!
 \brief Get the audio player internal renderer.
