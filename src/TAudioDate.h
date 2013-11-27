@@ -28,6 +28,7 @@ research@grame.fr
 #define __TAudioDate__
 
 #include <stdint.h>
+#include "la_smartpointer.h"
 
 typedef uint64_t audio_frames_t;
 
@@ -47,16 +48,31 @@ struct TAudioDate
     }
 };
 
-struct TSymbolicDate 
+class TSymbolicDate : public la_smartable1
 {
-    audio_frames_t fRealDate;
-    int fIndex;
+    private:
     
-    TSymbolicDate():fRealDate(0),fIndex(0)
-    {}
+        audio_frames_t fRealDate;
+   
+    public : 
+        TSymbolicDate():fRealDate(UINT64_MAX)
+        {}
+        TSymbolicDate(audio_frames_t date):fRealDate(date)
+        {}
+        
+        audio_frames_t getDate() { return fRealDate; }
+        void setDate(audio_frames_t date) { fRealDate = date; }
+        
+        bool operator< (TSymbolicDate date) 
+        { 
+            return fRealDate < date.fRealDate; 
+        }
     
-    static int fSymbolIndex;
 };
+
+typedef LA_SMARTP<TSymbolicDate> TSymbolicDatePtr;
+
+typedef TSymbolicDatePtr SymbolicDate;
 
 #endif
 

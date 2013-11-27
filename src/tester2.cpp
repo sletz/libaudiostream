@@ -63,8 +63,9 @@ static void printControls(AudioEffect faust_effect)
 static void test0()
 {
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
-    StartSound(gAudioPlayer, stream1, 0);
-    StopSound(gAudioPlayer, stream1, tmpSampleRate * 4);
+    //StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
+    StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
 }
 
 static void test1()
@@ -81,7 +82,7 @@ static void test2()
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
     AudioStream stream3 = MakeParSound(stream1, stream2);
-    StartSound(gAudioPlayer, stream3, 0);
+    StartSound(gAudioPlayer, stream3, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test3()
@@ -91,16 +92,16 @@ static void test3()
     
     AudioStream stream3 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
     AudioStream stream4 = MakeParSound(stream1, MakeParSound(stream2, stream3));
-    StartSound(gAudioPlayer, stream4, 0);
+    StartSound(gAudioPlayer, stream4, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test4()
 {
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
-    StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     
     AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
-    StartSound(gAudioPlayer, stream2, 0);
+    StartSound(gAudioPlayer, stream2, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test5()
@@ -108,13 +109,13 @@ static void test5()
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
     AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
     AudioStream stream3 = MakeParSound(stream1, stream2);
-    StartSound(gAudioPlayer, stream3, 0);
+    StartSound(gAudioPlayer, stream3, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test6()
 {
     AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100); 
-    StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test7()
@@ -122,7 +123,7 @@ static void test7()
     AudioStream stream1 = MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 10*tmpSampleRate),
                             MakeLoopSound(MakeCutSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), 0*tmpSampleRate, 10*tmpSampleRate), 4), 0);
      
-    StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
 }
 
 double pitch_shift = 1.0;
@@ -131,7 +132,7 @@ double time_strech = 0.5;
 static void test8()
 {
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
-    StartSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream2, &pitch_shift, &time_strech), 0);
+    StartSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream2, &pitch_shift, &time_strech), GenRealDate(gAudioPlayer, 0));
 }
 
 static void test9()
@@ -139,7 +140,7 @@ static void test9()
     AudioStream stream1 = MakeRegionSound(FILENAME1, 0, tmpSampleRate * 25);
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
     AudioStream stream3 = MakeParSound(stream1, stream2);
-    StartSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream3, &pitch_shift, &time_strech), 0);
+    StartSound(gAudioPlayer, MakePitchSchiftTimeStretchSound(stream3, &pitch_shift, &time_strech), GenRealDate(gAudioPlayer, 0));
 }
 
 static void test10()
@@ -149,7 +150,7 @@ static void test10()
     AudioStream stream1 = MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100); 
     
     printf("Error %s\n", GetLastLibError()); 
-    StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test11()
@@ -163,7 +164,7 @@ static void test11()
     AudioStream stream1 = MakeSelectSound(MakeEffectSound(MakeSharedInputSound(), faust_effect4, 100, 100), selection); 
     
     printf("Error %s\n", GetLastLibError()); 
-    StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test12()
@@ -174,7 +175,7 @@ static void test12()
     selection.push_back(1);
     selection.push_back(2);
     AudioStream stream3 = MakeSelectSound(MakeParSound(stream1, stream2), selection);
-    StartSound(gAudioPlayer, stream3, 0);
+    StartSound(gAudioPlayer, stream3, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test13()
@@ -190,7 +191,7 @@ static void test13()
         MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50)), selection2);
         
     AudioStream stream5 = MakeParSound(stream3, stream4);
-    StartSound(gAudioPlayer, stream5, 0);
+    StartSound(gAudioPlayer, stream5, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test14()
@@ -204,21 +205,21 @@ static void test14()
     
     //AddSound(gAudioPlayer, stream1);
     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 5*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 5*tmpSampleRate));
     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
-    
-    sleep(1);
-     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 11*tmpSampleRate);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 11*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 6*tmpSampleRate));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 6*tmpSampleRate));
     
     sleep(1);
      
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 13*tmpSampleRate);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 13*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 11*tmpSampleRate));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 11*tmpSampleRate));
+    
+    sleep(1);
+     
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 13*tmpSampleRate));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 13*tmpSampleRate));
 }
 
 static void test15()
@@ -232,21 +233,21 @@ static void test15()
     
     //AddSound(gAudioPlayer, stream1);
     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 13*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 13*tmpSampleRate));
     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 12*tmpSampleRate);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 12*tmpSampleRate);
-    
-    sleep(1);
-     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 6*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 12*tmpSampleRate));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 12*tmpSampleRate));
     
     sleep(1);
      
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 3*tmpSampleRate);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 3*tmpSampleRate);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 6*tmpSampleRate));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 6*tmpSampleRate));
+    
+    sleep(1);
+     
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 3*tmpSampleRate));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + 3*tmpSampleRate));
 }
 
 static void test16()
@@ -256,12 +257,44 @@ static void test16()
     GetAudioRendererInfo(renderer, &info);
     printf("info.Frames %lld\n", info.fCurFrame);
     
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 4000);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 6000);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 8000);
-    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), info.fCurFrame + tmpSampleRate*2 + 10000);
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + tmpSampleRate*2));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + tmpSampleRate*2 + 4000));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + tmpSampleRate*2 + 6000));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + tmpSampleRate*2 + 8000));
+    StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), GenRealDate(gAudioPlayer,info.fCurFrame + tmpSampleRate*2 + 10000));
 }
+
+SymbolicDate symb1 = GenSymbolicDate(gAudioPlayer);
+
+static void test17()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
+    StartSound(gAudioPlayer, stream1, symb1);
+}
+
+SymbolicDate symb2 = GenSymbolicDate(gAudioPlayer);
+
+static void test18()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 20);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
+    StopSound(gAudioPlayer, stream1, symb2);
+    StartSound(gAudioPlayer, stream2, symb2);
+}
+
+SymbolicDate symb3 = GenSymbolicDate(gAudioPlayer);
+SymbolicDate symb4 = GenSymbolicDate(gAudioPlayer);
+
+static void test19()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 20);
+    StartSound(gAudioPlayer, stream1, symb3);
+    StopSound(gAudioPlayer, stream1, symb4);
+    StartSound(gAudioPlayer, stream2, symb4);
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -312,7 +345,11 @@ int main(int argc, char* argv[])
     
     //test14();
     
-    test16();
+    //test16();
+    
+    //test17();
+    //test18();
+    test19();
        
     //StartAudioPlayer(gAudioPlayer);
     
@@ -349,17 +386,30 @@ int main(int argc, char* argv[])
                 StartSound(gAudioPlayer, MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 13), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100), 0);
                 break;
                 
-            case 'n':
+            case 'n': {
                  
                 AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
                 RendererInfo info;
                 GetAudioRendererInfo(renderer, &info);
                 printf("info.Frames %lld\n", info.fCurFrame);
                 
-                StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame+ 1*tmpSampleRate);
-                StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), info.fCurFrame + 2*tmpSampleRate);
+                StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame+ 1*tmpSampleRate));
+                StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, info.fCurFrame + 2*tmpSampleRate));
                 break;
+            }
                 
+            case 's': {
+                  
+                AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+                RendererInfo info;
+                GetAudioRendererInfo(renderer, &info);
+                printf("info.Frames %lld\n", info.fCurFrame);
+                SetSymbolicDate(gAudioPlayer, symb1, info.fCurFrame + 1*tmpSampleRate);
+                SetSymbolicDate(gAudioPlayer, symb2, info.fCurFrame);
+                SetSymbolicDate(gAudioPlayer, symb3, info.fCurFrame);
+                SetSymbolicDate(gAudioPlayer, symb4, info.fCurFrame+ 10*tmpSampleRate);
+                break;
+            }
         
         }
         sleep(0.01);

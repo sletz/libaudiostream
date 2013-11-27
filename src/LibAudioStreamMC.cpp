@@ -132,8 +132,13 @@ extern "C"
 	AUDIOAPI void CloseAudioClient(AudioPlayerPtr player);
   
     // Add a sound in the player
-    AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
-    AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+    AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
+    AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
+    
+    AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
+    AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
+    AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t read_date);
+
 
     // Transport
     AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -778,7 +783,7 @@ AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
     free(player);
 }
 
-AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date)
+AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
         if (sound->Channels() < MAX_OUTPUT_CHAN) {
@@ -790,7 +795,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_
     return LOAD_ERR;
 }    
     
-AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date)
+AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
         if (player->fMixer->StopStream(sound, date)) {
@@ -799,6 +804,19 @@ AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t
     }
     
     return LOAD_ERR;
+}
+
+AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player)
+{
+    return new TSymbolicDate();
+}
+AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date)
+{
+    return new TSymbolicDate(date);
+}
+AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t real_date)
+{
+    symbolic_date->setDate(real_date);
 }
 
 AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
@@ -817,7 +835,6 @@ AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player)
         player->fRenderer->Stop();
     }
 }
-
 
 AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player)
 {

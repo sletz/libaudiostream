@@ -28,6 +28,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "TAudioDate.h"
 #include <list>
+#include <map>
 
 //----------------------
 // Class TExpAudioMixer
@@ -46,13 +47,14 @@ class TExpAudioMixer : public TAudioClient
         struct ScheduledStream {
             
             SAudioStream fStream;  // SmartPtr here...
-            audio_frames_t fStartDate;
-            audio_frames_t fStopDate;
             
-            ScheduledStream(TRTRendererAudioStreamPtr stream, audio_frames_t date)
-                :fStream(stream), fStartDate(date), fStopDate(UINT64_MAX)
+            SymbolicDate fStartDate;
+            SymbolicDate fStopDate;
+            
+            ScheduledStream(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
+                :fStream(stream), fStartDate(start_date), fStopDate(stop_date)
             {}
-            
+    
             bool operator< (ScheduledStream stream) 
             { 
                 return fStartDate < stream.fStartDate; 
@@ -60,8 +62,8 @@ class TExpAudioMixer : public TAudioClient
             
         }; 
   
-        list<ScheduledStream>   fRunningStreamSeq;      // List of running sound streams
-        audio_frames_t          fCurFrame;
+        list<ScheduledStream>   fRunningStreamSeq;   // List of running sound streams
+        audio_frames_t  fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
       
@@ -70,19 +72,17 @@ class TExpAudioMixer : public TAudioClient
         TExpAudioMixer():fCurFrame(0) {}
         virtual ~TExpAudioMixer() {}
       
-        void StartStream(TAudioStreamPtr stream, audio_frames_t date)
+        void StartStream(TAudioStreamPtr stream, SymbolicDate date)
         {
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
-            fRunningStreamSeq.push_back(ScheduledStream(renderer_stream, date));
-            printf("StartStream date = %lld\n", date);
+            fRunningStreamSeq.push_back(ScheduledStream(renderer_stream, date, new TSymbolicDate()));
             //fRunningStreamSeq.sort();
         }
         
-        bool StopStream(TAudioStreamPtr stream2, audio_frames_t date)
+        bool StopStream(TAudioStreamPtr stream2, SymbolicDate date)
         {
             list<ScheduledStream>::iterator it;
-            
             for (it = fRunningStreamSeq.begin(); it != fRunningStreamSeq.end(); it++) {
                 TRTRendererAudioStreamPtr stream1 = static_cast<TRTRendererAudioStreamPtr>((*it).fStream);
                 if (stream1->GetBranch1() == stream2) {
@@ -90,10 +90,9 @@ class TExpAudioMixer : public TAudioClient
                     return true;
                 }
             }
-    
             return false;
         }
-    
+            
 };
 
 typedef TExpAudioMixer * TExpAudioMixerPtr;

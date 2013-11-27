@@ -44,8 +44,8 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 	while (iter != fRunningStreamSeq.end()) {
     
 		ScheduledStream sc_stream = *iter;
-        audio_frames_t start_date = sc_stream.fStartDate;
-        audio_frames_t stop_date = sc_stream.fStopDate;
+        audio_frames_t start_date = sc_stream.fStartDate->getDate();
+        audio_frames_t stop_date = sc_stream.fStopDate->getDate();
         SAudioStream stream = sc_stream.fStream;
         
         long offset = 0;

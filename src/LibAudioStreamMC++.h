@@ -150,7 +150,6 @@ class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_s
 
 typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
-
 class TAudioClient
 {
 
@@ -173,6 +172,10 @@ class TAudioClient
 
 typedef TAudioClient * TAudioClientPtr;
 
+class TSymbolicDate : public la_smartable {}; 
+
+typedef LA_SMARTP<TSymbolicDate> TSymbolicDatePtr;
+
 // Opaque pointers
 typedef void* AudioPlayerPtr;
 typedef void* AudioRendererPtr;
@@ -181,7 +184,8 @@ typedef void* AudioClientPtr;
 typedef TAudioStreamPtr AudioStream;
 typedef TAudioEffectListPtr AudioEffectList;
 typedef TAudioEffectInterfacePtr AudioEffect;
-typedef TAudioEffectInterfacePtr AudioEffectInterface;		
+typedef TAudioEffectInterfacePtr AudioEffectInterface;	
+typedef TSymbolicDatePtr SymbolicDate;		
 
 typedef void (*StopCallback)(void* context);
 
@@ -478,7 +482,9 @@ void CloseAudioClient(AudioPlayerPtr player);
 \param date The date in frames.
 \return An error code.
 */
-long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+//long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+
+long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
 
 /*!
 \brief Stop a sound at a specific date.
@@ -487,7 +493,13 @@ long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
 \param date The date in frames.
 \return An error code.
 */
-long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+//long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
+
+long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
+
+SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
+SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
+void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate date, audio_frames_t date);
 
 // Transport
 /*!
