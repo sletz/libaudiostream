@@ -32,21 +32,9 @@ research@grame.fr
 
 typedef uint64_t audio_frames_t;
 
-//------------------
-// Class TAudioDate
-//------------------
-
-struct TAudioDate
-{
-    long fBlockNum;
-    long fSampleInblock;
-        
-    static void Convert(audio_frames_t date_sample, int buffer_size, TAudioDate& date)
-    {
-        date.fBlockNum = date_sample / buffer_size;
-        date.fSampleInblock = date_sample % buffer_size;
-    }
-};
+//---------------------
+// Class TSymbolicDate
+//---------------------
 
 class TSymbolicDate : public la_smartable1
 {

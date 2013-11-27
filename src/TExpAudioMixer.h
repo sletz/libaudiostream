@@ -62,8 +62,8 @@ class TExpAudioMixer : public TAudioClient
             
         }; 
   
-        list<ScheduledStream>   fRunningStreamSeq;   // List of running sound streams
-        audio_frames_t  fCurFrame;
+        list<ScheduledStream> fRunningStreamSeq;   // List of running sound streams
+        audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
       

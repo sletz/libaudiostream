@@ -295,6 +295,20 @@ static void test19()
     StartSound(gAudioPlayer, stream2, symb4);
 }
 
+SymbolicDate symb5 = GenSymbolicDate(gAudioPlayer);
+SymbolicDate symb6 = GenSymbolicDate(gAudioPlayer);
+
+static void test20()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 20);
+    
+    StartSound(gAudioPlayer, stream1, symb5);
+    StartSound(gAudioPlayer, stream2, symb5);
+    
+    StopSound(gAudioPlayer, stream1, symb6);
+    StopSound(gAudioPlayer, stream2, symb6);
+}
 
 int main(int argc, char* argv[])
 {
@@ -349,7 +363,8 @@ int main(int argc, char* argv[])
     
     //test17();
     //test18();
-    test19();
+    //test19();
+    test20();
        
     //StartAudioPlayer(gAudioPlayer);
     
@@ -408,6 +423,10 @@ int main(int argc, char* argv[])
                 SetSymbolicDate(gAudioPlayer, symb2, info.fCurFrame);
                 SetSymbolicDate(gAudioPlayer, symb3, info.fCurFrame);
                 SetSymbolicDate(gAudioPlayer, symb4, info.fCurFrame+ 10*tmpSampleRate);
+                
+                SetSymbolicDate(gAudioPlayer, symb5, info.fCurFrame);
+                SetSymbolicDate(gAudioPlayer, symb6, info.fCurFrame+ 5*tmpSampleRate);
+                 
                 break;
             }
         

@@ -479,27 +479,42 @@ void CloseAudioClient(AudioPlayerPtr player);
 \brief Start a sound at a specific date.
 \param player The audio player.
 \param sound The stream to be started.
-\param date The date in frames.
+\param date The date which can be a symbolic one (see <B> GenSymbolicDate </B> to be set later on) or a real one  (see <B> GenRealDate </B>).
 \return An error code.
 */
-//long StartSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
-
 long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
 
 /*!
 \brief Stop a sound at a specific date.
 \param player The audio player.
 \param sound The stream to be stopped.
-\param date The date in frames.
+\param date The date which can be a symbolic one (see <B> GenSymbolicDate </B> to be set later on) or a real one  (see <B> GenRealDate </B>).
 \return An error code.
 */
-//long StopSound(AudioPlayerPtr player, AudioStream sound, audio_frames_t date);
-
 long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
 
+/*!
+\brief Generate a new symbolic date, to be set later on with <B> SetSymbolicDate </B>. 
+\param player The audio player.
+\return The new symbolic date.
+*/
 SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
+
+/*!
+\brief Generate a new real date 
+\param player The audio player.
+param sound The real date in frames.
+\return The new real date.
+*/
 SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
-void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate date, audio_frames_t date);
+
+/*!
+\brief Set the symboloc date with a real date.
+\param player The audio player.
+param date The symbolic date.
+param date The real date in frames.
+*/
+void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
 
 // Transport
 /*!
