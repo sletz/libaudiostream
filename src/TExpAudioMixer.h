@@ -70,7 +70,7 @@ class TExpAudioMixer : public TAudioClient
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
-        inline audio_frames_t GetSnapshotDate(map<SymbolicDate, audio_frames_t>& date_snapshot, SymbolicDate date);
+        inline audio_frames_t GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date);
       
     public:
 
