@@ -27,7 +27,6 @@ research@grame.fr
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
 #include "TAudioDate.h"
-#include "TMutex.h"
 #include <list>
 #include <map>
 
@@ -38,7 +37,7 @@ research@grame.fr
 \brief A mixer contains several TAudioStream objects.
 */
 
-class TExpAudioMixer : public TAudioClient, public TLockAble
+class TExpAudioMixer : public TAudioClient
 {
 
     private:
@@ -70,6 +69,8 @@ class TExpAudioMixer : public TAudioClient, public TLockAble
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
+        
+        inline audio_frames_t GetSnapshotDate(map<SymbolicDate, audio_frames_t>& date_snapshot, SymbolicDate date);
       
     public:
 

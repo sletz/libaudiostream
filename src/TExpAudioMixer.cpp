@@ -31,6 +31,14 @@ research@grame.fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
+inline audio_frames_t TExpAudioMixer::GetSnapshotDate(map<SymbolicDate, audio_frames_t>& date_snapshot, SymbolicDate date)
+{
+    if (date_snapshot.find(date) == date_snapshot.end()) {
+        date_snapshot[date] = date->getDate();
+    }
+    return date_snapshot[date];
+}
+
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
     TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
@@ -40,12 +48,14 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
    
     // Mix all streams
     list<ScheduledStream>::iterator iter = fRunningStreamSeq.begin();
+    map<SymbolicDate, audio_frames_t> date_snapshot;
     
 	while (iter != fRunningStreamSeq.end()) {
     
 		ScheduledStream sc_stream = *iter;
-        audio_frames_t start_date = sc_stream.getStartDate();
-        audio_frames_t stop_date = sc_stream.getStopDate();
+        // Keeps the same value for the entire audio cycle
+        audio_frames_t start_date = GetSnapshotDate(date_snapshot, sc_stream.fStartDate);
+        audio_frames_t stop_date = GetSnapshotDate(date_snapshot, sc_stream.fStopDate);
         SAudioStream stream = sc_stream.fStream;
         
         long offset = 0;
