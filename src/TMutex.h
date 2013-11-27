@@ -58,12 +58,12 @@ class TMutex
 		
 		void Lock()
 		{	
-			 DWORD dwWaitResult = WaitForSingleObject(fMutex, INFINITE);
+			 return (WaitForSingleObject(fMutex, INFINITE) == WAIT_OBJECT_0);
 		}
 		
-		int TryLock()
+		bool TryLock()
 		{	
-			 return WaitForSingleObject(fMutex, 0) == WAIT_TIMEOUT;
+			 return (WaitForSingleObject(fMutex, 0) == WAIT_TIMEOUT);
 		}
 
 		void Unlock()
@@ -86,14 +86,14 @@ class TMutex
 			pthread_mutex_destroy(&fMutex);
 		}
 		
-		void Lock()
+		bool Lock()
 		{
-			pthread_mutex_lock(&fMutex);
+            return (pthread_mutex_lock(&fMutex) == 0);
 		}
 		
-		int TryLock()
+		bool TryLock()
 		{
-			return pthread_mutex_trylock(&fMutex);
+			return (pthread_mutex_trylock(&fMutex) == 0);
 		}
 
 		void Unlock()
@@ -116,14 +116,19 @@ class TLockAble
 		TLockAble() {}
 		virtual ~TLockAble() {}
 
-		void Lock()
+		bool Lock()
 		{	
-			fMutex.Lock();
+			return fMutex.Lock();
 		}
 
 		void Unlock()
 		{	
 			fMutex.Unlock();
+		}
+        
+        bool TryLock()
+		{	
+			return fMutex.TryLock();
 		}
 		
 };
