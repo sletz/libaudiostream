@@ -82,7 +82,6 @@ class TExpAudioMixer : public TAudioClient
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
             fRunningStreamSeq.push_back(ScheduledStream(renderer_stream, date, new TSymbolicDate()));
-            //fRunningStreamSeq.sort();
         }
         
         bool StopStream(TAudioStreamPtr stream2, SymbolicDate date)

@@ -501,9 +501,9 @@ long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
 SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
 
 /*!
-\brief Generate a new real date 
+\brief Generate a new real date.
 \param player The audio player.
-param sound The real date in frames.
+\param sound The real date in frames.
 \return The new real date.
 */
 SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
@@ -511,8 +511,8 @@ SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
 /*!
 \brief Set the symboloc date with a real date.
 \param player The audio player.
-param date The symbolic date.
-param date The real date in frames.
+\param date The symbolic date.
+\param date The real date in frames.
 */
 void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
 

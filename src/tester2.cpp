@@ -298,6 +298,15 @@ static void test19()
 SymbolicDate symb5 = GenSymbolicDate(gAudioPlayer);
 SymbolicDate symb6 = GenSymbolicDate(gAudioPlayer);
 
+static SymbolicDate SeqWithEvent(AudioStream s1, AudioStream s2)
+{
+    SymbolicDate symb = GenSymbolicDate(gAudioPlayer);
+    StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, 0));
+    StopSound(gAudioPlayer, s1, symb);
+    StartSound(gAudioPlayer, s2, symb);
+    return symb;
+}
+
 static void test20()
 {
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
