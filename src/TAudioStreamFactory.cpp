@@ -64,6 +64,10 @@ research@grame.fr
         printf("LAS error = %s", e.Message().c_str());      \
         TAudioGlobals::AddLibError(e.Message());            \
         return 0;                                           \
+    } catch (...) {                                         \
+        printf("LAS runtime error");                        \
+        TAudioGlobals::AddLibError("LAS runtime error");    \
+        return 0;                                           \
     }                                                       \
     
 TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
@@ -192,14 +196,16 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
     TRY_CALL
     if (s1 && effect) {
         // If stream and effect are compatible...
-        if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
+        if (s1->Channels() == effect->Inputs()) {
+            return new TEffectAudioStream(s1, effect, fadeIn, fadeOut);
+        } else if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
         } else {
-             stringstream error;
-             error << "Stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";
-             TAudioGlobals::AddLibError(error.str());
+            stringstream error;
+            error << "Stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";
+            TAudioGlobals::AddLibError(error.str());
         }
     }
     return 0;

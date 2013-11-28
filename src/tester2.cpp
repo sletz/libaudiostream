@@ -98,6 +98,11 @@ static void test3()
 static void test4()
 {
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect1, 100, 100);
+    
+    printf("stream1 chan %d\n", GetChannelsSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50)));
+    printf("stream1 chan %d\n", GetChannelsSound(stream1));
+    
+    
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     
     AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 5 * tmpSampleRate, tmpSampleRate * 50), faust_effect2, 100, 100);
@@ -319,6 +324,29 @@ static void test20()
     StopSound(gAudioPlayer, stream2, symb6);
 }
 
+static void test21()
+{
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+                
+    for (int i = 0; i < 10; i++) {
+         StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 10 + i), GenRealDate(gAudioPlayer, info.fCurFrame + i*tmpSampleRate));
+    }
+    
+    for (int i = 0; i < 10; i++) {
+         StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 10 + i), GenRealDate(gAudioPlayer, info.fCurFrame + i*tmpSampleRate));
+    }
+    
+    for (int i = 0; i < 10; i++) {
+         StartSound(gAudioPlayer, 
+            MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 11 + i), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100),
+            GenRealDate(gAudioPlayer, info.fCurFrame + i*tmpSampleRate));
+    }
+    
+}
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -350,14 +378,14 @@ int main(int argc, char* argv[])
     //test0();
     
     //test1();
-    /*
-    test2();
-    test3();
-    test4();
-    test5();
-    test6();
-    test7();
-    */
+    
+    //test2();
+    //test3();
+    //test4();
+    //test5();
+    //test6();
+    //test7();
+    
     //test8();
     //test9();
     
@@ -373,7 +401,8 @@ int main(int argc, char* argv[])
     //test17();
     //test18();
     //test19();
-    test20();
+    //test20();
+    test21();
        
     //StartAudioPlayer(gAudioPlayer);
     
@@ -438,6 +467,11 @@ int main(int argc, char* argv[])
                  
                 break;
             }
+            
+             case 'a': {
+                test21();
+                break;
+             }
         
         }
         sleep(0.01);
