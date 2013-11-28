@@ -52,4 +52,27 @@ class TLASException : public std::runtime_error {
         }
 };
 
+#define TRY_CALL                    \
+    TAudioGlobals::ClearLibError(); \
+    try {                           \
+    
+#define CATCH_EXCEPTION                                     \
+    } catch (TLASException& e) {                            \
+        printf("LAS error = %s", e.Message().c_str());      \
+        TAudioGlobals::AddLibError(e.Message());            \
+    } catch (...) {                                         \
+        printf("LAS runtime error");                        \
+        TAudioGlobals::AddLibError("LAS runtime error");    \
+    }                                                       \
+    
+#define CATCH_EXCEPTION_RETURN                              \
+    } catch (TLASException& e) {                            \
+        printf("LAS error = %s", e.Message().c_str());      \
+        TAudioGlobals::AddLibError(e.Message());            \
+        return 0;                                           \
+    } catch (...) {                                         \
+        printf("LAS runtime error");                        \
+        TAudioGlobals::AddLibError("LAS runtime error");    \
+        return 0;                                           \
+    }     
 #endif
