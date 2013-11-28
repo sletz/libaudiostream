@@ -412,6 +412,8 @@ const char* GetJsonEffect(AudioEffect effect);
 
 const char* GetNameEffect(AudioEffect effect);
 
+void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+
 #ifdef __cplusplus
 extern "C"
 {

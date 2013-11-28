@@ -31,6 +31,7 @@ research@grame.fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
+/*
 inline audio_frames_t TExpAudioMixer::GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date)
 {
     if (date_map.find(date) == date_map.end()) {
@@ -38,6 +39,7 @@ inline audio_frames_t TExpAudioMixer::GetDate(map<SymbolicDate, audio_frames_t>&
     }
     return date_map[date];
 }
+*/
 
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
@@ -46,40 +48,16 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Real-time input
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
    
-    // Mix all streams
-    list<ScheduledStream>::iterator iter = fRunningStreamSeq.begin();
+    // Excute all commands
+    list<SCommand>::iterator iter = fRunningCommands.begin();
     map<SymbolicDate, audio_frames_t> date_map;
     
-	while (iter != fRunningStreamSeq.end()) {
-    
-		ScheduledStream sc_stream = *iter;
-        // Keeps the same value for the entire audio cycle
-        audio_frames_t start_date = GetDate(date_map, sc_stream.fStartDate);
-        audio_frames_t stop_date = GetDate(date_map, sc_stream.fStopDate);
-        SAudioStream stream = sc_stream.fStream;
-        
-        long buffer_offset = 0;
-        long frame_num = std::min((unsigned long)TAudioGlobals::fBufferSize, (unsigned long)(stop_date - fCurFrame));
-        bool to_play = false;
-        long res = 0;
-        
-        if (start_date >= fCurFrame && start_date < fCurFrame + frames) {
-            // New stream to play
-            buffer_offset = start_date - fCurFrame;
-            to_play = true;
-            printf("Start stream fCurFrame = %lld offset = %d\n", fCurFrame, buffer_offset);
-        } else if (fCurFrame > start_date) {
-            // Stream currently playing...
-            to_play = true;
-        }
-        
-        // Play it...
-        if (to_play && ((res = stream->Read(&shared_buffer, frame_num, buffer_offset)) < TAudioGlobals::fBufferSize)) {
-            // End of stream
-            printf("Stop stream frame_num = %d res = %d\n", frame_num, res);
-            iter = fRunningStreamSeq.erase(iter);
-        } else {
+	while (iter != fRunningCommands.end()) {
+        SCommand command = *iter;
+        if (command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
             iter++;
+        } else {
+            iter = fRunningCommands.erase(iter);
         }
     }
     

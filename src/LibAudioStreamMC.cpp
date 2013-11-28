@@ -115,6 +115,8 @@ extern "C"
     AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum);
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
     AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
+    
+    AUDIOAPI void SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
@@ -212,6 +214,8 @@ AUDIOAPI void ResetEffect(AudioEffect effect);
 AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum);
 AUDIOAPI const char* GetJsonEffect(AudioEffectPtr effect);
 AUDIOAPI const char* GetNameEffect(AudioEffectPtr effect);
+
+AUDIOAPI void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 AUDIOAPI long LibVersion()
 {
@@ -566,6 +570,13 @@ AUDIOAPI const char* GetNameEffect(AudioEffect effect)
     } else {
         return "";
     }
+}
+
+AUDIOAPI void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
+{
+    if (player &&  player->fMixer && player->fRenderer) {
+        player->fMixer->AddCommand(new TControlCommand(date));
+    } 
 }
 
 // Effect management with pointer

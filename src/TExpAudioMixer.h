@@ -27,8 +27,116 @@ research@grame.fr
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
 #include "TAudioDate.h"
+#include "la_smartpointer.h"
+
 #include <list>
 #include <map>
+
+
+//----------------
+// Class TCommand
+//----------------
+
+struct TCommand : public la_smartable1 {
+  
+        inline audio_frames_t GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date)
+        {
+            if (date_map.find(date) == date_map.end()) {
+                date_map[date] = date->getDate();
+            }
+            return date_map[date];
+        }
+        
+        TCommand() 
+        {}
+        virtual ~TCommand() 
+        {}
+         
+        virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                            map<SymbolicDate, audio_frames_t>& date_map, 
+                            audio_frames_t cur_frame, 
+                            long frames) = 0;
+        
+};
+
+typedef class LA_SMARTP<TCommand> SCommand;
+
+struct TControlCommand : public TCommand {
+    
+        string fEffectName;
+        string fPath;
+        float fValue;
+        SymbolicDate fDate;
+    
+        TControlCommand() 
+        {}
+        TControlCommand(SymbolicDate date) : fDate(date)
+        {}
+        virtual ~TControlCommand() 
+        {}
+         
+        virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                            map<SymbolicDate, audio_frames_t>& date_map, 
+                            audio_frames_t cur_frame, 
+                            long frames)
+        {
+            if (cur_frame > fDate->getDate()) {
+                printf("TControlCommand OK\n");
+            }
+            return true;
+        }
+};
+
+typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
+    
+struct TStreamCommand : public TCommand {
+        
+        SAudioStream fStream;  // SmartPtr here...
+            
+        SymbolicDate fStartDate;
+        SymbolicDate fStopDate;
+ 
+        TStreamCommand(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
+                :fStream(stream), fStartDate(start_date), fStopDate(stop_date)
+        {}
+        virtual ~TStreamCommand() 
+        {}
+         
+        virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                            map<SymbolicDate, audio_frames_t>& date_map, 
+                            audio_frames_t cur_frame, 
+                            long frames)
+        {
+            // Keeps the same value for the entire audio cycle
+            audio_frames_t start_date = GetDate(date_map, fStartDate);
+            audio_frames_t stop_date = GetDate(date_map, fStopDate);
+            
+            long buffer_offset = 0;
+            long frame_num = std::min((unsigned long)TAudioGlobals::fBufferSize, (unsigned long)(stop_date - cur_frame));
+            bool to_play = false;
+            long res = 0;
+            
+            if (start_date >= cur_frame && start_date < cur_frame + frames) {
+                // New stream to play
+                buffer_offset = start_date - cur_frame;
+                to_play = true;
+                printf("Start stream fCurFrame = %lld offset = %d\n", cur_frame, buffer_offset);
+            } else if (cur_frame > start_date) {
+                // Stream currently playing...
+                to_play = true;
+            }
+            
+            // Play it...
+            if (to_play && ((res = fStream->Read(&shared_buffer, frame_num, buffer_offset)) < TAudioGlobals::fBufferSize)) {
+                // End of stream
+                printf("Stop stream frame_num = %d res = %d\n", frame_num, res);
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+};
 
 //----------------------
 // Class TExpAudioMixer
@@ -42,56 +150,37 @@ class TExpAudioMixer : public TAudioClient
 
     private:
     
-        typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
-    
-        struct ScheduledStream {
-            
-            SAudioStream fStream;  // SmartPtr here...
-            
-            SymbolicDate fStartDate;
-            SymbolicDate fStopDate;
-            
-            ScheduledStream(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
-                :fStream(stream), fStartDate(start_date), fStopDate(stop_date)
-            {}
-    
-            bool operator< (ScheduledStream stream) 
-            { 
-                return fStartDate < stream.fStartDate; 
-            }
-            
-            audio_frames_t getStartDate() { return fStartDate->getDate(); }
-            audio_frames_t getStopDate() { return fStopDate->getDate(); }
-            
-        }; 
-  
-        list<ScheduledStream> fRunningStreamSeq;   // List of running sound streams
+        list<SCommand> fRunningCommands;   // List of running sound streams
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
-        
-        inline audio_frames_t GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date);
       
     public:
 
         TExpAudioMixer():fCurFrame(0) {}
         virtual ~TExpAudioMixer() {}
+        
+        void AddCommand(SCommand command) { fRunningCommands.push_back(command); }
       
         void StartStream(TAudioStreamPtr stream, SymbolicDate date)
         {
             TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
             renderer_stream->Reset();
-            fRunningStreamSeq.push_back(ScheduledStream(renderer_stream, date, new TSymbolicDate()));
+            fRunningCommands.push_back(new TStreamCommand(renderer_stream, date, new TSymbolicDate()));
         }
         
         bool StopStream(TAudioStreamPtr stream2, SymbolicDate date)
         {
-            list<ScheduledStream>::iterator it;
-            for (it = fRunningStreamSeq.begin(); it != fRunningStreamSeq.end(); it++) {
-                TRTRendererAudioStreamPtr stream1 = static_cast<TRTRendererAudioStreamPtr>((*it).fStream);
-                if (stream1->GetBranch1() == stream2) {
-                    (*it).fStopDate = date;
-                    return true;
+            list<SCommand>::iterator it;
+            for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
+                TCommand* command = (*it);
+                TStreamCommand* stream_command =  dynamic_cast<TStreamCommand*>(command);
+                if (stream_command) {
+                    TRTRendererAudioStreamPtr stream1 = static_cast<TRTRendererAudioStreamPtr>(stream_command->fStream);
+                    if (stream1->GetBranch1() == stream2) {
+                        stream_command->fStopDate = date;
+                        return true;
+                    }
                 }
             }
             return false;

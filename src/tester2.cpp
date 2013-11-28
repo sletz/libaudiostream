@@ -347,6 +347,17 @@ static void test21()
     
 }
 
+static void test22()
+{
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
+    //StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
+    StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
+    
+    //SetTimedControlValueEffect(gAudioPlayer, "", "", 1.0,  GenRealDate(gAudioPlayer, 0));
+}
+
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -403,6 +414,7 @@ int main(int argc, char* argv[])
     //test19();
     //test20();
     test21();
+    //test22();
        
     //StartAudioPlayer(gAudioPlayer);
     
