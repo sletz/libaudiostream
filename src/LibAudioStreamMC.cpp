@@ -798,7 +798,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate 
 {
     if (player && player->fMixer && player->fRenderer) {
         if (sound->Channels() < MAX_OUTPUT_CHAN) {
-            player->fMixer->StartStream(sound, date);
+            player->fMixer->AddCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
             return NO_ERR;
         }
     } 
@@ -809,9 +809,11 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate 
 AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        if (player->fMixer->StopStream(sound, date)) {
+        SStreamCommand command = player->fMixer->GetStreamCommand(sound);
+        if (command) {
+            command->SetStopDate(date);
             return NO_ERR;
-        }
+        } 
     }
     
     return LOAD_ERR;

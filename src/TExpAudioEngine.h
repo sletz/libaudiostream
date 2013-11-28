@@ -68,15 +68,6 @@ class TExpAudioEngine
         {
             return fRenderer->Stop();
         }
-        
-        void AddStream(TAudioStreamPtr stream)      
-        { 
-            fMixer->StartStream(stream, 0); 
-        }
-        void RemoveStream(TAudioStreamPtr stream)   
-        { 
-            fMixer->StopStream(stream, 0); 
-        }
 
 };
 

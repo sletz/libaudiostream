@@ -386,7 +386,7 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
-    //test0();
+    test0();
     
     //test1();
     
@@ -413,7 +413,7 @@ int main(int argc, char* argv[])
     //test18();
     //test19();
     //test20();
-    test21();
+    //test21();
     //test22();
        
     //StartAudioPlayer(gAudioPlayer);

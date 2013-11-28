@@ -101,6 +101,9 @@ struct TStreamCommand : public TCommand {
         {}
         virtual ~TStreamCommand() 
         {}
+        
+        void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
+        void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
          
         virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                             map<SymbolicDate, audio_frames_t>& date_map, 
@@ -138,6 +141,8 @@ struct TStreamCommand : public TCommand {
 
 };
 
+typedef class LA_SMARTP<TStreamCommand> SStreamCommand;
+
 //----------------------
 // Class TExpAudioMixer
 //----------------------
@@ -162,28 +167,20 @@ class TExpAudioMixer : public TAudioClient
         
         void AddCommand(SCommand command) { fRunningCommands.push_back(command); }
       
-        void StartStream(TAudioStreamPtr stream, SymbolicDate date)
-        {
-            TRTRendererAudioStreamPtr renderer_stream = new TRTRendererAudioStream(stream);
-            renderer_stream->Reset();
-            fRunningCommands.push_back(new TStreamCommand(renderer_stream, date, new TSymbolicDate()));
-        }
-        
-        bool StopStream(TAudioStreamPtr stream2, SymbolicDate date)
+        SStreamCommand GetStreamCommand(TAudioStreamPtr stream)
         {
             list<SCommand>::iterator it;
             for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
                 TCommand* command = (*it);
-                TStreamCommand* stream_command =  dynamic_cast<TStreamCommand*>(command);
+                TStreamCommand* stream_command = dynamic_cast<TStreamCommand*>(command);
                 if (stream_command) {
                     TRTRendererAudioStreamPtr stream1 = static_cast<TRTRendererAudioStreamPtr>(stream_command->fStream);
-                    if (stream1->GetBranch1() == stream2) {
-                        stream_command->fStopDate = date;
-                        return true;
+                    if (stream1->GetBranch1() == stream) {
+                        return stream_command;
                     }
                 }
             }
-            return false;
+            return 0;
         }
             
 };
