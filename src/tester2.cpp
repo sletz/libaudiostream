@@ -468,10 +468,10 @@ int main(int argc, char* argv[])
                 break;
             }
             
-             case 'a': {
+            case 'a': {
                 test21();
                 break;
-             }
+            }
         
         }
         sleep(0.01);

@@ -26,9 +26,9 @@ research@grame.fr
 #include <stdexcept>
 #include <iostream>
 
-//-----------------------------
-// Class LasException
-//-----------------------------
+//---------------------
+// Class TLASException
+//---------------------
 
 class TLASException : public std::runtime_error {
 

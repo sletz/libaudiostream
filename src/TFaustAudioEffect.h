@@ -377,10 +377,6 @@ class TCodeFaustAudioEffectFactory
 
     protected:
 	
-        // Global DSP factory table
-        static std::map<string, TCodeFaustAudioEffectFactory*> fFactoryTable;
-        static int fFactoryNumber;
-        
         string fLibraryPath;
         string fDrawPath;
         string fCode;
@@ -444,8 +440,8 @@ class TFileCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
          
             fFactory = createDSPFactory(argc, argv, library_path, draw_path, "", "", GetTarget(), error_msg, 3);
             if (fFactory) {
-                fFactoryTable[code] = this;
-                fFactoryNumber++;
+                TAudioGlobals::fFactoryTable[code] = this;
+                TAudioGlobals::fFactoryNumber++;
             }  else {
                 printf("error_lib %s\n", error_msg);
                 snprintf(error_lib, 512, "createDSPFactory error from DSP file %s\n", error_msg);
@@ -482,13 +478,13 @@ class TStringCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
                 argc = 0;
             }
             
-            sprintf(input_name, "LAS-faustfx-%d", fFactoryNumber);
+            sprintf(input_name, "LAS-faustfx-%d", TAudioGlobals::fFactoryNumber);
    
             // Try DSP code...
             fFactory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, GetTarget(), error_msg, 3);
             if (fFactory) {
-                fFactoryTable[code] = this;
-                fFactoryNumber++;
+                TAudioGlobals::fFactoryTable[code] = this;
+                TAudioGlobals::fFactoryNumber++;
             } else {
                 snprintf(error_lib, 512, "createDSPFactory error from DSP code %s\n", error_msg);
             }
@@ -545,8 +541,8 @@ class TIRCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
             
         end:
         
-            fFactoryTable[code] = this;
-            fFactoryNumber++;
+            TAudioGlobals::fFactoryTable[code] = this;
+            TAudioGlobals::fFactoryNumber++;
         }
 
 };

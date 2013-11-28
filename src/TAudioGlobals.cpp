@@ -61,8 +61,9 @@ char* TAudioGlobals::fLastLibError = NULL;
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 
-std::map<string, TCodeFaustAudioEffectFactory*> TCodeFaustAudioEffectFactory::fFactoryTable;
-int TCodeFaustAudioEffectFactory::fFactoryNumber = 0;
+/// Effect factory
+std::map<string, TCodeFaustAudioEffectFactory*> TAudioGlobals::fFactoryTable;
+int TAudioGlobals::fFactoryNumber = 0;
 
 #ifdef WIN32
 static int SetMaximumFiles(long filecount)

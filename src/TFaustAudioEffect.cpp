@@ -47,11 +47,10 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInt
 
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::CreateEffect(const string& name, const string& library_path, const string& draw_path)
 {
-    printf("CreateEffect = %s\n", name.c_str());
     TCodeFaustAudioEffectFactory* factory = 0;
-    if (fFactoryTable.find(name) != fFactoryTable.end()) {
+    if (TAudioGlobals::fFactoryTable.find(name) != TAudioGlobals::fFactoryTable.end()) {
         printf("DSP factory already created...\n");
-        factory = fFactoryTable[name];
+        factory = TAudioGlobals::fFactoryTable[name];
     } else if (CheckEnding(name, ".dsp")) {  // Here we assume only 'file' or 'string' are used (not IR stuff...)
         factory = new TFileCodeFaustAudioEffectFactory(name, library_path, draw_path);
     } else {
