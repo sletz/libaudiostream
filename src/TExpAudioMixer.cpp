@@ -66,6 +66,20 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     return true;
 }
 
-
+SStreamCommand TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
+{
+    list<SCommand>::iterator it;
+    for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
+        TCommand* command = (*it);
+        TStreamCommand* stream_command = dynamic_cast<TStreamCommand*>(command);
+        if (stream_command) {
+            TRTRendererAudioStreamPtr stream1 = static_cast<TRTRendererAudioStreamPtr>(stream_command->fStream);
+            if (stream1->GetBranch1() == stream) {
+                return stream_command;
+            }
+        }
+    }
+    return 0;
+}
 
 

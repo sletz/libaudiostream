@@ -146,9 +146,6 @@ typedef class LA_SMARTP<TStreamCommand> SStreamCommand;
 //----------------------
 // Class TExpAudioMixer
 //----------------------
-/*!
-\brief A mixer contains several TAudioStream objects.
-*/
 
 class TExpAudioMixer : public TAudioClient
 {
@@ -166,23 +163,10 @@ class TExpAudioMixer : public TAudioClient
         virtual ~TExpAudioMixer() {}
         
         void AddCommand(SCommand command) { fRunningCommands.push_back(command); }
+        void RemoveCommand(SCommand command) { fRunningCommands.remove(command); }
       
-        SStreamCommand GetStreamCommand(TAudioStreamPtr stream)
-        {
-            list<SCommand>::iterator it;
-            for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
-                TCommand* command = (*it);
-                TStreamCommand* stream_command = dynamic_cast<TStreamCommand*>(command);
-                if (stream_command) {
-                    TRTRendererAudioStreamPtr stream1 = static_cast<TRTRendererAudioStreamPtr>(stream_command->fStream);
-                    if (stream1->GetBranch1() == stream) {
-                        return stream_command;
-                    }
-                }
-            }
-            return 0;
-        }
-            
+        SStreamCommand GetStreamCommand(TAudioStreamPtr stream);
+    
 };
 
 typedef TExpAudioMixer * TExpAudioMixerPtr;
