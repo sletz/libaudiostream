@@ -32,7 +32,6 @@ research@grame.fr
 #include <list>
 #include <map>
 
-
 //----------------
 // Class TCommand
 //----------------
@@ -61,6 +60,10 @@ struct TCommand : public la_smartable1 {
 
 typedef class LA_SMARTP<TCommand> SCommand;
 
+//--------------------------------------------------------------
+// Class TControlCommand : a command to set Faust control value
+//--------------------------------------------------------------
+
 struct TControlCommand : public TCommand {
     
         string fEffectName;
@@ -75,10 +78,10 @@ struct TControlCommand : public TCommand {
         virtual ~TControlCommand() 
         {}
          
-        virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                            map<SymbolicDate, audio_frames_t>& date_map, 
-                            audio_frames_t cur_frame, 
-                            long frames)
+        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                    map<SymbolicDate, audio_frames_t>& date_map, 
+                    audio_frames_t cur_frame, 
+                    long frames)
         {
             if (cur_frame > fDate->getDate()) {
                 printf("TControlCommand OK\n");
@@ -86,6 +89,12 @@ struct TControlCommand : public TCommand {
             return true;
         }
 };
+
+typedef class LA_SMARTP<TControlCommand> SControlCommand;
+
+//---------------------------------------------------------
+// Class TStreamCommand : a command to start/stop strreams
+//---------------------------------------------------------
 
 typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
     
@@ -105,10 +114,10 @@ struct TStreamCommand : public TCommand {
         void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
          
-        virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                            map<SymbolicDate, audio_frames_t>& date_map, 
-                            audio_frames_t cur_frame, 
-                            long frames)
+        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                    map<SymbolicDate, audio_frames_t>& date_map, 
+                    audio_frames_t cur_frame, 
+                    long frames)
         {
             // Keeps the same value for the entire audio cycle
             audio_frames_t start_date = GetDate(date_map, fStartDate);
