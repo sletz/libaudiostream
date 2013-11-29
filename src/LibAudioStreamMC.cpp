@@ -767,7 +767,6 @@ AUDIOAPI AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer)
 		
 	player->fRenderer = renderer;
 		
-	//player->fMixer = new TAudioMixer();
     player->fMixer = new TExpAudioMixer();
     if (!player->fMixer) {
         goto error;
@@ -844,10 +843,12 @@ AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player)
 {
     return new TSymbolicDate();
 }
+
 AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date)
 {
     return new TSymbolicDate(date);
 }
+
 AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t real_date)
 {
     symbolic_date->setDate(real_date);
@@ -858,6 +859,8 @@ AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
     if (player && player->fMixer && player->fRenderer) {
         // Reset real-time input
         TAudioGlobals::fSharedInput->Reset();
+        // Reset effect table
+        TAudioGlobals::fEffectTable.clear();
         // Start player
         player->fRenderer->Start();
     }

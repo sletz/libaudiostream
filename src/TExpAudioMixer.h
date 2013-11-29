@@ -47,6 +47,11 @@ struct TCommand : public la_smartable1 {
             return date_map[date];
         }
         
+        bool IsInBuffer(audio_frames_t date, audio_frames_t cur_frame, long frames)
+        {
+            return (date >= cur_frame && date < cur_frame + frames);
+        }
+        
         TCommand() 
         {}
         virtual ~TCommand() 
@@ -56,15 +61,10 @@ struct TCommand : public la_smartable1 {
                             map<SymbolicDate, audio_frames_t>& date_map, 
                             audio_frames_t cur_frame, 
                             long frames) = 0;
-                            
-        bool IsInBuffer(audio_frames_t date, audio_frames_t cur_frame, long frames)
-        {
-            return (date >= cur_frame && date < cur_frame + frames);
-        }
         
 };
 
-typedef class LA_SMARTP<TCommand> TCommandPtr;
+typedef LA_SMARTP<TCommand> TCommandPtr;
 
 //--------------------------------------------------------------
 // Class TControlCommand : a command to set Faust control value
@@ -99,17 +99,16 @@ struct TControlCommand : public TCommand {
         }
 };
 
-//typedef class LA_SMARTP<TControlCommand> SControlCommand;
+typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
 
 //---------------------------------------------------------
-// Class TStreamCommand : a command to start/stop strreams
+// Class TStreamCommand : a command to start/stop streams
 //---------------------------------------------------------
 
 typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
     
 struct TStreamCommand : public TCommand {
         
-        //SAudioStream fStream;  // SmartPtr here...
         TRTRendererAudioStreamPtr fStream; // SmartPtr here...
             
         SymbolicDate fStartDate;
@@ -160,7 +159,7 @@ struct TStreamCommand : public TCommand {
 
 };
 
-typedef class LA_SMARTP<TStreamCommand> TStreamCommandPtr;
+typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 
 //----------------------
 // Class TExpAudioMixer
