@@ -128,7 +128,8 @@ class TRTRendererAudioStream : public TRendererAudioStream
         static void Flush();
 };
 
-typedef TRTRendererAudioStream * TRTRendererAudioStreamPtr;
+//typedef TRTRendererAudioStream * TRTRendererAudioStreamPtr;
+typedef LA_SMARTP<TRTRendererAudioStream>  TRTRendererAudioStreamPtr;
 
 //----------------------
 // Class TGCAudioStream

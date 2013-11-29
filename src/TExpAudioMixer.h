@@ -56,10 +56,15 @@ struct TCommand : public la_smartable1 {
                             map<SymbolicDate, audio_frames_t>& date_map, 
                             audio_frames_t cur_frame, 
                             long frames) = 0;
+                            
+        bool IsInBuffer(audio_frames_t date, audio_frames_t cur_frame, long frames)
+        {
+            return (date >= cur_frame && date < cur_frame + frames);
+        }
         
 };
 
-typedef class LA_SMARTP<TCommand> SCommand;
+typedef class LA_SMARTP<TCommand> TCommandPtr;
 
 //--------------------------------------------------------------
 // Class TControlCommand : a command to set Faust control value
@@ -67,17 +72,14 @@ typedef class LA_SMARTP<TCommand> SCommand;
 
 struct TControlCommand : public TCommand {
     
-        /*
-        string fEffectName;
-        */
-        TCodeFaustAudioEffect* fEffect;
+        TAudioEffectInterfacePtr fEffect;
         string fPath;
         float fValue;
         SymbolicDate fDate;
     
         TControlCommand() 
         {}
-        TControlCommand(TCodeFaustAudioEffect* effect, const string& path, float value, SymbolicDate date) 
+        TControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date) 
             : fEffect(effect), fPath(path), fValue(value), fDate(date)
         {}
         virtual ~TControlCommand() 
@@ -88,16 +90,16 @@ struct TControlCommand : public TCommand {
                     audio_frames_t cur_frame, 
                     long frames)
         {
-            if (fDate->getDate() >= cur_frame && fDate->getDate() < cur_frame + frames) {
-                printf("TControlCommand OK %s\n", fEffect->GetName());
+            if (IsInBuffer(fDate->getDate(), cur_frame, frames)) {
                 fEffect->SetControlValue(fPath.c_str(), fValue);
                 return false;
+            } else {
+                return true;
             }
-            return true;
         }
 };
 
-typedef class LA_SMARTP<TControlCommand> SControlCommand;
+//typedef class LA_SMARTP<TControlCommand> SControlCommand;
 
 //---------------------------------------------------------
 // Class TStreamCommand : a command to start/stop strreams
@@ -107,7 +109,8 @@ typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
     
 struct TStreamCommand : public TCommand {
         
-        SAudioStream fStream;  // SmartPtr here...
+        //SAudioStream fStream;  // SmartPtr here...
+        TRTRendererAudioStreamPtr fStream; // SmartPtr here...
             
         SymbolicDate fStartDate;
         SymbolicDate fStopDate;
@@ -135,7 +138,7 @@ struct TStreamCommand : public TCommand {
             bool to_play = false;
             long res = 0;
             
-            if (start_date >= cur_frame && start_date < cur_frame + frames) {
+            if (IsInBuffer(start_date, cur_frame, frames)) {
                 // New stream to play
                 buffer_offset = start_date - cur_frame;
                 to_play = true;
@@ -157,7 +160,7 @@ struct TStreamCommand : public TCommand {
 
 };
 
-typedef class LA_SMARTP<TStreamCommand> SStreamCommand;
+typedef class LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 
 //----------------------
 // Class TExpAudioMixer
@@ -168,7 +171,7 @@ class TExpAudioMixer : public TAudioClient
 
     private:
     
-        list<SCommand> fRunningCommands;   // List of running sound streams
+        list<TCommandPtr> fRunningCommands;   // List of running sound streams
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
@@ -178,14 +181,14 @@ class TExpAudioMixer : public TAudioClient
         TExpAudioMixer():fCurFrame(0) {}
         virtual ~TExpAudioMixer() {}
         
-        void AddCommand(SCommand command)
+        void AddCommand(TCommandPtr command)
         { 
             fRunningCommands.push_back(command);
             //fRunningCommands.sort(); 
         }
-        void RemoveCommand(SCommand command) { fRunningCommands.remove(command); }
+        void RemoveCommand(TCommandPtr command) { fRunningCommands.remove(command); }
       
-        SStreamCommand GetStreamCommand(TAudioStreamPtr stream);
+        TStreamCommandPtr GetStreamCommand(TAudioStreamPtr stream);
     
 };
 

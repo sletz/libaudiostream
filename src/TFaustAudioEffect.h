@@ -274,11 +274,8 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         
         void SetControlValue(const char* label, FAUSTFLOAT value) 
         {
-            printf("SetControlValue %s %f\n", label, value);
             for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-                printf("SetControlValue GetLabel %s %s\n", (*iter)->GetLabel().c_str(), label);
-				if (strcmp((*iter)->GetLabel().c_str(), label) == 0) {
-                     printf("SetControlValue OK\n");
+          		if (strcmp((*iter)->GetLabel().c_str(), label) == 0) {
                     (*iter)->SetControlValue(value);
                     return;
                 }

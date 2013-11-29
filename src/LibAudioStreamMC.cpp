@@ -830,7 +830,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate 
 AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        SStreamCommand command = player->fMixer->GetStreamCommand(sound);
+        TStreamCommandPtr command = player->fMixer->GetStreamCommand(sound);
         if (command) {
             command->SetStopDate(date);
             return NO_ERR;

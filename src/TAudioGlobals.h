@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "AudioExports.h"
 #include "TAudioBuffer.h"
+#include "TAudioEffectInterface.h"
 #include <string>
 #include <map>
 
@@ -68,7 +69,7 @@ class AUDIO_EXPORTS TAudioGlobals
         
         static std::map<std::string, TCodeFaustAudioEffectFactory*> fFactoryTable;  // Effect factory 
         static int fFactoryNumber;
-        static std::map<std::string, TCodeFaustAudioEffect*>        fEffectTable;   // Effect table 
+        static std::map<std::string, TAudioEffectInterfacePtr>      fEffectTable;   // Effect table 
    
         TAudioGlobals(long inChan, long outChan, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);

@@ -39,11 +39,11 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
    
     // Excute all commands
-    list<SCommand>::iterator iter = fRunningCommands.begin();
+    list<TCommandPtr>::iterator iter = fRunningCommands.begin();
     map<SymbolicDate, audio_frames_t> date_map;
     
 	while (iter != fRunningCommands.end()) {
-        SCommand command = *iter;
+        TCommandPtr command = *iter;
         if (command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
             iter++;
         } else {
@@ -56,9 +56,9 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     return true;
 }
 
-SStreamCommand TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
+TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 {
-    list<SCommand>::iterator it;
+    list<TCommandPtr>::iterator it;
     for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
         TCommand* command = (*it);
         TStreamCommand* stream_command = dynamic_cast<TStreamCommand*>(command);
