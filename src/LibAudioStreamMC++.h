@@ -417,12 +417,7 @@ const char* GetJsonEffect(AudioEffect effect);
 
 const char* GetNameEffect(AudioEffect effect);
 
-/*
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-*/
+void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 /*!
 \brief Gives the library version number.
@@ -522,8 +517,6 @@ SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
 \param date The real date in frames.
 */
 void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
-
-void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 
 // Transport
@@ -655,11 +648,9 @@ void AudioGlobalsInit(long inChan,
 */
 void AudioGlobalsDestroy();
 
-
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif
 
