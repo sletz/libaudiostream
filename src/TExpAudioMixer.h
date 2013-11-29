@@ -171,7 +171,11 @@ class TExpAudioMixer : public TAudioClient
         TExpAudioMixer():fCurFrame(0) {}
         virtual ~TExpAudioMixer() {}
         
-        void AddCommand(SCommand command) { fRunningCommands.push_back(command); }
+        void AddCommand(SCommand command)
+        { 
+            fRunningCommands.push_back(command);
+            //fRunningCommands.sort(); 
+        }
         void RemoveCommand(SCommand command) { fRunningCommands.remove(command); }
       
         SStreamCommand GetStreamCommand(TAudioStreamPtr stream);

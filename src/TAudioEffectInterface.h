@@ -94,8 +94,10 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable
 		
 		virtual long GetControlCount() = 0;
 		virtual void GetControlParam(long param, char* label, float* min, float* max, float* init) = 0;
-		virtual void SetControlValue(long param, float value) = 0; 
-		virtual float GetControlValue(long param) = 0;
+        virtual void SetControlValue(long param, float value) = 0; 
+        virtual void SetControlValue(const char* label, float value) = 0; 
+        virtual float GetControlValue(long param) = 0;
+        virtual float GetControlValue(const char* labe) = 0;
 
 };
 

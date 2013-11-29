@@ -31,16 +31,6 @@ research@grame.fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
-/*
-inline audio_frames_t TExpAudioMixer::GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date)
-{
-    if (date_map.find(date) == date_map.end()) {
-        date_map[date] = date->getDate();
-    }
-    return date_map[date];
-}
-*/
-
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
     TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);

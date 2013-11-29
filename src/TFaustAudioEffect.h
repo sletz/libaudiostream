@@ -89,6 +89,8 @@ class UIObject {
 			*max = 0;
 			*init = 0;
 		}
+        string GetLabel() { return fLabel; }
+        
 };
 
 class CheckButton : public UIObject {
@@ -269,10 +271,30 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 				fUITable[param]->SetControlValue(value);
             }
 		}
+        
+        void SetControlValue(const char* label, FAUSTFLOAT value) 
+        {
+            for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
+				if ((*iter)->GetLabel() == string(label)) {
+                    (*iter)->SetControlValue(value);
+                    return;
+                }
+            }
+        }
 		
 		FAUSTFLOAT GetControlValue(long param) 
 		{
 			return (param < long(fUITable.size())) ? fUITable[param]->GetControlValue() : 0.0f;
+		}
+        
+        FAUSTFLOAT GetControlValue(const char* label) 
+		{
+			 for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
+				if ((*iter)->GetLabel() == string(label)) {
+                    return (*iter)->GetControlValue();
+                }
+            }
+            return 0.0f;
 		}
         
         virtual const char* GetJson() { return ""; }
