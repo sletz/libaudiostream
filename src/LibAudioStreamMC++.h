@@ -417,7 +417,7 @@ const char* GetJsonEffect(AudioEffect effect);
 
 const char* GetNameEffect(AudioEffect effect);
 
-void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 /*!
 \brief Gives the library version number.

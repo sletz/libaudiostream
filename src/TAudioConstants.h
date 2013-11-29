@@ -65,6 +65,8 @@ typedef unsigned char Boolean;
 #define CLOSE_ERR -2
 #define LOAD_ERR -3
 #define FILE_NOT_FOUND_ERR -4
+#define EFFECT_NOT_FOUND_ERR -5
+#define PLAYER_ERR -6
 
 #endif
 

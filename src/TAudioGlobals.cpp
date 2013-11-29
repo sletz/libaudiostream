@@ -65,6 +65,9 @@ TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 std::map<string, TCodeFaustAudioEffectFactory*> TAudioGlobals::fFactoryTable;
 int TAudioGlobals::fFactoryNumber = 0;
 
+// Effect table
+std::map<std::string, TCodeFaustAudioEffect*> TAudioGlobals::fEffectTable;
+
 #ifdef WIN32
 static int SetMaximumFiles(long filecount)
 {

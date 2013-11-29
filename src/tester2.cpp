@@ -349,12 +349,20 @@ static void test21()
 
 static void test22()
 {
-    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 20), faust_effect1, 100, 100);
     //StartSound(gAudioPlayer, stream1, 0);
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
-    StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
+    //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
-    SetTimedControlValueEffect(gAudioPlayer, "", "", 1.0,  GenRealDate(gAudioPlayer, 0));
+    for (int i = 0; i < 10; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.f - float(i)*0.1f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+    }
+    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
 
 int main(int argc, char* argv[])
@@ -416,7 +424,7 @@ int main(int argc, char* argv[])
     test22();
        
     //StartAudioPlayer(gAudioPlayer);
-    
+    /*
     SetControlValueEffect(faust_effect1, 0, 0.9);
     SetControlValueEffect(faust_effect1, 1, 0.9);
     SetControlValueEffect(faust_effect1, 2, 0.9);
@@ -429,6 +437,7 @@ int main(int argc, char* argv[])
     SetControlValueEffect(faust_effect4, 2, 0.9);
     
     SetControlValueEffect(faust_effect5, 0, 0.9);
+    */
     
     printf("faust_effect1 %s\n", GetNameEffect(faust_effect1));
     printf("faust_effect2 %s\n", GetNameEffect(faust_effect2));

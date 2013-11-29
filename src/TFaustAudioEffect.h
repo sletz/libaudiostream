@@ -274,8 +274,11 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         
         void SetControlValue(const char* label, FAUSTFLOAT value) 
         {
+            printf("SetControlValue %s %f\n", label, value);
             for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-				if ((*iter)->GetLabel() == string(label)) {
+                printf("SetControlValue GetLabel %s %s\n", (*iter)->GetLabel().c_str(), label);
+				if (strcmp((*iter)->GetLabel().c_str(), label) == 0) {
+                     printf("SetControlValue OK\n");
                     (*iter)->SetControlValue(value);
                     return;
                 }
@@ -288,14 +291,14 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 		}
         
         FAUSTFLOAT GetControlValue(const char* label) 
-		{
-			 for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-				if ((*iter)->GetLabel() == string(label)) {
+        {
+            for (vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
+                if ((*iter)->GetLabel() == string(label)) {
                     return (*iter)->GetControlValue();
                 }
             }
             return 0.0f;
-		}
+        }
         
         virtual const char* GetJson() { return ""; }
         virtual const char* GetName() { return ""; }

@@ -27,6 +27,7 @@ research@grame.fr
 #include "TAudioChannel.h"
 #include "TAudioGlobals.h"
 #include "TAudioDate.h"
+#include "TFaustAudioEffect.h"
 #include "la_smartpointer.h"
 
 #include <list>
@@ -66,14 +67,18 @@ typedef class LA_SMARTP<TCommand> SCommand;
 
 struct TControlCommand : public TCommand {
     
+        /*
         string fEffectName;
+        */
+        TCodeFaustAudioEffect* fEffect;
         string fPath;
         float fValue;
         SymbolicDate fDate;
     
         TControlCommand() 
         {}
-        TControlCommand(SymbolicDate date) : fDate(date)
+        TControlCommand(TCodeFaustAudioEffect* effect, const string& path, float value, SymbolicDate date) 
+            : fEffect(effect), fPath(path), fValue(value), fDate(date)
         {}
         virtual ~TControlCommand() 
         {}
@@ -83,8 +88,10 @@ struct TControlCommand : public TCommand {
                     audio_frames_t cur_frame, 
                     long frames)
         {
-            if (cur_frame > fDate->getDate()) {
-                printf("TControlCommand OK\n");
+            if (fDate->getDate() >= cur_frame && fDate->getDate() < cur_frame + frames) {
+                printf("TControlCommand OK %s\n", fEffect->GetName());
+                fEffect->SetControlValue(fPath.c_str(), fValue);
+                return false;
             }
             return true;
         }

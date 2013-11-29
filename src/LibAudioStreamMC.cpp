@@ -116,7 +116,7 @@ extern "C"
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
     AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
     
-    AUDIOAPI void SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+    AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
  
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
@@ -212,7 +212,7 @@ extern "C"
     AUDIOAPI const char* GetJsonEffect(AudioEffect effect);
     AUDIOAPI const char* GetNameEffect(AudioEffect effect);
 
-    AUDIOAPI void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+    AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 #ifdef __cplusplus
 }
@@ -573,11 +573,17 @@ AUDIOAPI const char* GetNameEffect(AudioEffect effect)
     }
 }
 
-AUDIOAPI void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
+AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        player->fMixer->AddCommand(new TControlCommand(date));
+        if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
+            player->fMixer->AddCommand(new TControlCommand(TAudioGlobals::fEffectTable[effect], path, value, date));
+            return NO_ERR;
+        } else {
+            return EFFECT_NOT_FOUND_ERR;
+        }
     } 
+    return PLAYER_ERR;
 }
 
 // Effect management with pointer
@@ -683,11 +689,17 @@ AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect)
     }
 }
 
-AUDIOAPI void SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
+AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        player->fMixer->AddCommand(new TControlCommand(date));
+        if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
+            player->fMixer->AddCommand(new TControlCommand(TAudioGlobals::fEffectTable[effect], path, value, date));
+            return NO_ERR;
+        } else {
+            return EFFECT_NOT_FOUND_ERR;
+        }
     } 
+    return PLAYER_ERR;
 }
 
 
