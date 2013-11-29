@@ -27,6 +27,11 @@ research@grame.fr
 #include "TBufferedInputAudioStream.h"
 #include "TAudioDate.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
 #else
@@ -55,10 +60,12 @@ research@grame.fr
 	
 	typedef void (*StopCallback)(void* context);
 
+/*
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+*/
 
     AUDIOAPI long LibVersion();
     AUDIOAPI const char* GetLastLibError();
@@ -117,7 +124,7 @@ extern "C"
     AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
     
     AUDIOAPI void SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
-
+ 
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
     AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan, 
@@ -171,9 +178,11 @@ extern "C"
 									long thread_num);
 	AUDIOAPI void AudioGlobalsDestroy();
 
+/*
 #ifdef __cplusplus
 }
 #endif
+*/
 
 // Build sound (using smartptr)
 AUDIOAPI AudioStream MakeNullSound(long lengthFrame);
@@ -193,6 +202,7 @@ AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
 AUDIOAPI AudioStream MakeInputSound();
 AUDIOAPI AudioStream MakeSharedInputSound();
 AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
+AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s, double* pitch_shift, double* time_strech);
 
 AUDIOAPI long GetLengthSound(AudioStream s);
 AUDIOAPI long GetChannelsSound(AudioStream s);
@@ -211,11 +221,16 @@ AUDIOAPI void SetStateEffect(AudioEffect effect, long state);
 AUDIOAPI long GetStateEffect(AudioEffect effect);
 AUDIOAPI void ResetEffect(AudioEffect effect);
 
-AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output, long framesNum);
-AUDIOAPI const char* GetJsonEffect(AudioEffectPtr effect);
-AUDIOAPI const char* GetNameEffect(AudioEffectPtr effect);
+AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);
+AUDIOAPI const char* GetJsonEffect(AudioEffect effect);
+AUDIOAPI const char* GetNameEffect(AudioEffect effect);
 
 AUDIOAPI void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 AUDIOAPI long LibVersion()
 {
@@ -574,7 +589,7 @@ AUDIOAPI const char* GetNameEffect(AudioEffect effect)
 
 AUDIOAPI void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
 {
-    if (player &&  player->fMixer && player->fRenderer) {
+    if (player && player->fMixer && player->fRenderer) {
         player->fMixer->AddCommand(new TControlCommand(date));
     } 
 }
@@ -681,6 +696,14 @@ AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect)
         return "";
     }
 }
+
+AUDIOAPI void SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        player->fMixer->AddCommand(new TControlCommand(date));
+    } 
+}
+
 
 // Open/Close
 

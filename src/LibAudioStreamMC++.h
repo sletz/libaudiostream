@@ -34,6 +34,11 @@ research@grame.fr
 #define LOAD_ERR -3
 #define FILE_NOT_FOUND_ERR -4
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef uint64_t audio_frames_t;
 
 enum {kPlayingChannel = 0, kIdleChannel};
@@ -412,12 +417,12 @@ const char* GetJsonEffect(AudioEffect effect);
 
 const char* GetNameEffect(AudioEffect effect);
 
-void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
-
+/*
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+*/
 
 /*!
 \brief Gives the library version number.
@@ -517,6 +522,9 @@ SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
 \param date The real date in frames.
 */
 void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
+
+void SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+
 
 // Transport
 /*!
@@ -647,9 +655,11 @@ void AudioGlobalsInit(long inChan,
 */
 void AudioGlobalsDestroy();
 
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif
 

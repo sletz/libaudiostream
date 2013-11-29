@@ -354,9 +354,8 @@ static void test22()
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
-    //SetTimedControlValueEffect(gAudioPlayer, "", "", 1.0,  GenRealDate(gAudioPlayer, 0));
+    SetTimedControlValueEffect(gAudioPlayer, "", "", 1.0,  GenRealDate(gAudioPlayer, 0));
 }
-
 
 int main(int argc, char* argv[])
 {
@@ -386,7 +385,7 @@ int main(int argc, char* argv[])
     printControls(faust_effect1);
     printControls(faust_effect2);
     
-    test0();
+    //test0();
     
     //test1();
     
@@ -414,7 +413,7 @@ int main(int argc, char* argv[])
     //test19();
     //test20();
     //test21();
-    //test22();
+    test22();
        
     //StartAudioPlayer(gAudioPlayer);
     
