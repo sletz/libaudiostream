@@ -357,7 +357,6 @@ static void test22()
     printf("info.Frames %lld\n", info.fCurFrame);
     
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 20), faust_effect1, 100, 100);
-    //StartSound(gAudioPlayer, stream1, 0);
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
@@ -365,9 +364,7 @@ static void test22()
     
     for (int i = 0; i < 100; i++) {
         long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
-        //printf("res = %d\n", res);
     }
-    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
 
 static void test23()
@@ -378,7 +375,6 @@ static void test23()
     printf("info.Frames %lld\n", info.fCurFrame);
     
     AudioStream stream1 = MakeCutSound(MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 20), faust_effect1, 100, 100), 0, tmpSampleRate * 21);
-    //StartSound(gAudioPlayer, stream1, 0);
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
@@ -386,9 +382,7 @@ static void test23()
     
     for (int i = 0; i < 100; i++) {
         long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
-        //printf("res = %d\n", res);
     }
-    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
 
 static void test24()
@@ -409,9 +403,7 @@ static void test24()
     
     for (int i = 0; i < 100; i++) {
         long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
-        //printf("res = %d\n", res);
     }
-    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
 
 static void test25()
@@ -432,12 +424,9 @@ static void test25()
     
     for (int i = 0; i < 100; i++) {
         long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
-        //printf("res = %d\n", res);
     }
-    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
 
-    
 
 int main(int argc, char* argv[])
 {

@@ -32,12 +32,15 @@ research@grame.fr
 
 #include <list>
 #include <map>
+#include <set>
 
 //----------------
 // Class TCommand
 //----------------
 
 struct TCommand : public la_smartable1 {
+
+        SymbolicDate fStartDate;
   
         inline audio_frames_t GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date)
         {
@@ -54,6 +57,8 @@ struct TCommand : public la_smartable1 {
         
         TCommand() 
         {}
+        TCommand(SymbolicDate date):fStartDate(date)
+        {}
         virtual ~TCommand() 
         {}
          
@@ -61,6 +66,11 @@ struct TCommand : public la_smartable1 {
                             map<SymbolicDate, audio_frames_t>& date_map, 
                             audio_frames_t cur_frame, 
                             long frames) = 0;
+                            
+        bool operator< (TCommand& command) 
+        {
+            return fStartDate->getDate() < command.fStartDate->getDate();
+        }
         
 };
 
@@ -75,12 +85,11 @@ struct TControlCommand : public TCommand {
         TAudioEffectInterfacePtr fEffect;
         string fPath;
         float fValue;
-        SymbolicDate fDate;
     
         TControlCommand() 
         {}
         TControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date) 
-            : fEffect(effect), fPath(path), fValue(value), fDate(date)
+            : TCommand(date), fEffect(effect), fPath(path), fValue(value)
         {}
         virtual ~TControlCommand() 
         {}
@@ -90,7 +99,7 @@ struct TControlCommand : public TCommand {
                     audio_frames_t cur_frame, 
                     long frames)
         {
-            if (IsInBuffer(fDate->getDate(), cur_frame, frames)) {
+            if (IsInBuffer(fStartDate->getDate(), cur_frame, frames)) {
                 fEffect->SetControlValue(fPath.c_str(), fValue);
                 return false;
             } else {
@@ -111,11 +120,10 @@ struct TStreamCommand : public TCommand {
         
         TRTRendererAudioStreamPtr fStream; // SmartPtr here...
             
-        SymbolicDate fStartDate;
         SymbolicDate fStopDate;
  
         TStreamCommand(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
-                :fStream(stream), fStartDate(start_date), fStopDate(stop_date)
+                :TCommand(start_date), fStream(stream), fStopDate(stop_date)
         {}
         virtual ~TStreamCommand() 
         {}
@@ -171,6 +179,7 @@ class TExpAudioMixer : public TAudioClient
     private:
     
         list<TCommandPtr> fRunningCommands;   // List of running sound streams
+        //set<TCommandPtr> fRunningCommands;   // List of running sound streams
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
@@ -183,9 +192,14 @@ class TExpAudioMixer : public TAudioClient
         void AddCommand(TCommandPtr command)
         { 
             fRunningCommands.push_back(command);
+            //fRunningCommands.insert(command);
             //fRunningCommands.sort(); 
         }
-        void RemoveCommand(TCommandPtr command) { fRunningCommands.remove(command); }
+        void RemoveCommand(TCommandPtr command) 
+        { 
+            fRunningCommands.remove(command);
+            //fRunningCommands.erase(command); 
+        }
       
         TStreamCommandPtr GetStreamCommand(TAudioStreamPtr stream);
     

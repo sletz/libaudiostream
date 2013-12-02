@@ -708,7 +708,6 @@ AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* e
     return PLAYER_ERR;
 }
 
-
 // Open/Close
 
 AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency)

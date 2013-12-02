@@ -51,7 +51,7 @@ class TSymbolicDate : public la_smartable1
         audio_frames_t getDate() { return fRealDate; }
         void setDate(audio_frames_t date) { fRealDate = date; }
         
-        bool operator< (TSymbolicDate date) 
+        bool operator< (TSymbolicDate& date) 
         { 
             return fRealDate < date.fRealDate; 
         }

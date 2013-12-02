@@ -40,6 +40,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
    
     // Excute all commands
     list<TCommandPtr>::iterator iter = fRunningCommands.begin();
+    //set<TCommandPtr>::iterator iter = fRunningCommands.begin();
     map<SymbolicDate, audio_frames_t> date_map;
     
 	while (iter != fRunningCommands.end()) {
@@ -48,6 +49,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
             iter++;
         } else {
             iter = fRunningCommands.erase(iter);
+            //fRunningCommands.erase(iter);
         }
     }
     
@@ -59,6 +61,8 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 {
     list<TCommandPtr>::iterator it;
+    //set<TCommandPtr>::iterator it;
+    
     for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
         TCommand* command = (*it);
         TStreamCommand* stream_command = dynamic_cast<TStreamCommand*>(command);
