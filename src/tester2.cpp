@@ -427,9 +427,9 @@ static void test26()
     
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 200);
     
-    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate + tmpSampleRate));
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate));
     StopSound(gAudioPlayer, stream1, symb7);
-    //StartSound(gAudioPlayer, MakeCutSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 200), 0, GetSymbolicDate(gAudioPlayer, symb7)), symb7);
+    
 }
 
 int main(int argc, char* argv[])
@@ -484,7 +484,7 @@ int main(int argc, char* argv[])
     //test16();
     
     //test17();
-    test18();
+    //test18();
     //test19();
     //test20();
     //test21();
@@ -492,7 +492,7 @@ int main(int argc, char* argv[])
     //test23();
     //test24();
     //test25();
-    //test26();
+    test26();
        
     //StartAudioPlayer(gAudioPlayer);
     /*
@@ -565,6 +565,7 @@ int main(int argc, char* argv[])
                 audio_frames_t curdate = getCurDate();
                 printf("info.Frames %lld\n", curdate);
                 SetSymbolicDate(gAudioPlayer, symb7, curdate);
+                StartSound(gAudioPlayer, MakeCutSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 200), 0, GetSymbolicDate(gAudioPlayer, symb7)), symb7);
                 break;
             }
         

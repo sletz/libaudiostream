@@ -140,23 +140,25 @@ struct TStreamCommand : public TCommand {
             audio_frames_t start_date = GetDate(date_map, fStartDate);
             audio_frames_t stop_date = GetDate(date_map, fStopDate);
             
-            long buffer_offset = 0;
-            long frame_num = std::min((unsigned long)TAudioGlobals::fBufferSize, (unsigned long)(stop_date - cur_frame));
+            long start_offset;
+            long stop_offset = std::abs(long(cur_frame - stop_date));
+            long frame_num = std::min(TAudioGlobals::fBufferSize, stop_offset);
             bool to_play = false;
             long res = 0;
             
             if (IsInBuffer(start_date, cur_frame, frames)) {
                 // New stream to play
-                buffer_offset = start_date - cur_frame;
+                start_offset = start_date - cur_frame;
                 to_play = true;
-                printf("Start stream fCurFrame = %lld offset = %d\n", cur_frame, buffer_offset);
+                printf("Start stream fCurFrame = %lld offset = %d\n", cur_frame, start_offset);
             } else if (cur_frame > start_date) {
                 // Stream currently playing...
+                start_offset = 0
                 to_play = true;
             }
             
             // Play it...
-            if (to_play && ((res = fStream->Read(&shared_buffer, frame_num, buffer_offset)) < TAudioGlobals::fBufferSize)) {
+            if (to_play && (((res = fStream->Read(&shared_buffer, frame_num, start_offset)) < TAudioGlobals::fBufferSize))) {
                 // End of stream
                 printf("Stop stream frame_num = %d res = %d\n", frame_num, res);
                 return false;

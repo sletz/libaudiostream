@@ -39,7 +39,7 @@ extern "C"
 {
 #endif
 
-typedef uint64_t audio_frames_t;
+typedef int64_t audio_frames_t;
 
 enum {kPlayingChannel = 0, kIdleChannel};
 enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
