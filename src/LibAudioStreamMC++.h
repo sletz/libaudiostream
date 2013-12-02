@@ -529,13 +529,15 @@ audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date);
 /*!
 \brief Start the audio player.
 \param player The audio player.
+\return An error code.
 */
-void StartAudioPlayer(AudioPlayerPtr player);
+long StartAudioPlayer(AudioPlayerPtr player);
 /*!
 \brief Stop the audio player.
 \param player The audio player.
+\return An error code.
 */
-void StopAudioPlayer(AudioPlayerPtr player);
+long StopAudioPlayer(AudioPlayerPtr player);
 
 /*!
 \brief Get the audio player internal renderer.

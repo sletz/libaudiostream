@@ -143,8 +143,8 @@ extern "C"
     AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
 
     // Transport
-    AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
-    AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
+    AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
+    AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
 
     AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player);
    
@@ -154,8 +154,8 @@ extern "C"
 	
 	AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 	AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer); 
-	AUDIOAPI void StartAudioRenderer(AudioRendererPtr renderer); 
-    AUDIOAPI void StopAudioRenderer(AudioRendererPtr renderer); 
+	AUDIOAPI long StartAudioRenderer(AudioRendererPtr renderer); 
+    AUDIOAPI long StopAudioRenderer(AudioRendererPtr renderer); 
     AUDIOAPI void GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info); 
 	
 	AUDIOAPI void AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
@@ -864,7 +864,7 @@ AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate 
     return symbolic_date->getDate();
 }
 
-AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player)
 {
     if (player && player->fMixer && player->fRenderer) {
         // Reset real-time input
@@ -873,13 +873,19 @@ AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
         //TAudioGlobals::fEffectTable.clear();
         // Start player
         player->fRenderer->Start();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
     }
 }
 
-AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player)
 {
     if (player && player->fMixer && player->fRenderer) {
         player->fRenderer->Stop();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
     }
 }
 
@@ -910,14 +916,14 @@ AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer)
 	static_cast<TAudioRendererPtr>(renderer)->Close();
 }
 
-AUDIOAPI void StartAudioRenderer(AudioRendererPtr renderer)
+AUDIOAPI long StartAudioRenderer(AudioRendererPtr renderer)
 {
-	static_cast<TAudioRendererPtr>(renderer)->Start();
+	return static_cast<TAudioRendererPtr>(renderer)->Start();
 }
 
-AUDIOAPI void StopAudioRenderer(AudioRendererPtr renderer)
+AUDIOAPI long StopAudioRenderer(AudioRendererPtr renderer)
 {
-	static_cast<TAudioRendererPtr>(renderer)->Stop();
+	return static_cast<TAudioRendererPtr>(renderer)->Stop();
 }
 
 AUDIOAPI void GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info)
