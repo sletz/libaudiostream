@@ -345,6 +345,9 @@ static void test21()
             GenRealDate(gAudioPlayer, info.fCurFrame + i*tmpSampleRate));
     }
     
+     for (int i = 0; i < 100; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+    }
 }
 
 static void test22()
@@ -359,8 +362,32 @@ static void test22()
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
+    printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
+    
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+        //printf("res = %d\n", res);
+    }
+    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
+}
+
+static void test23()
+{
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    AudioStream stream1 = MakeCutSound(MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 20), faust_effect1, 100, 100), 0, tmpSampleRate * 21);
+    //StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
+    //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
+    
+    printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
+    
+    for (int i = 0; i < 100; i++) {
+        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+        //printf("res = %d\n", res);
     }
     //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
@@ -421,7 +448,8 @@ int main(int argc, char* argv[])
     //test19();
     //test20();
     //test21();
-    test22();
+    //test22();
+    test23();
        
     //StartAudioPlayer(gAudioPlayer);
     /*

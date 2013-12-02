@@ -66,7 +66,7 @@ std::map<string, TCodeFaustAudioEffectFactory*> TAudioGlobals::fFactoryTable;
 int TAudioGlobals::fFactoryNumber = 0;
 
 // Effect table
-std::map<std::string, TAudioEffectInterfacePtr> TAudioGlobals::fEffectTable;
+std::map<std::string, list <TAudioEffectInterfacePtr> > TAudioGlobals::fEffectTable;
 
 #ifdef WIN32
 static int SetMaximumFiles(long filecount)

@@ -28,6 +28,7 @@ research@grame.fr
 #include "TAudioEffectInterface.h"
 #include <string>
 #include <map>
+#include <list>
 
 #define MAX_OUTPUT_CHAN 64 // Used in TExpAudioMixer
 
@@ -67,9 +68,9 @@ class AUDIO_EXPORTS TAudioGlobals
     
         static TBufferedAudioStream* fSharedInput;  // Shared real-time input
         
-        static std::map<std::string, TCodeFaustAudioEffectFactory*> fFactoryTable;  // Effect factory 
+        static std::map<std::string, TCodeFaustAudioEffectFactory*> fFactoryTable;          // Effect factory 
         static int fFactoryNumber;
-        static std::map<std::string, TAudioEffectInterfacePtr>      fEffectTable;   // Effect table 
+        static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;    // Effect table 
    
         TAudioGlobals(long inChan, long outChan, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);

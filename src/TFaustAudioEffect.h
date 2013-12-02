@@ -617,6 +617,11 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             Name_Meta meta;
             metadataDSPFactory(fFactory->GetFactory(), &meta);
             fName = meta.fName;
+            
+             // Keep effect name 
+            factory->SetName(fName);
+            // Keep the effect in global table
+            TAudioGlobals::fEffectTable[fName].push_back(this);
         }
         virtual ~TCodeFaustAudioEffect()
         {

@@ -577,7 +577,10 @@ AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effe
 {
     if (player && player->fMixer && player->fRenderer) {
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
-            player->fMixer->AddCommand(new TControlCommand(TAudioGlobals::fEffectTable[effect], path, value, date));
+            list<TAudioEffectInterfacePtr>::iterator it;
+            for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
+                player->fMixer->AddCommand(new TControlCommand((*it), path, value, date));
+            }
             return NO_ERR;
         } else {
             return EFFECT_NOT_FOUND_ERR;
@@ -693,7 +696,10 @@ AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* e
 {
     if (player && player->fMixer && player->fRenderer) {
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
-            player->fMixer->AddCommand(new TControlCommand(TAudioGlobals::fEffectTable[effect], path, value, date));
+            list<TAudioEffectInterfacePtr>::iterator it;
+            for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
+                player->fMixer->AddCommand(new TControlCommand((*it), path, value, date));
+            }
             return NO_ERR;
         } else {
             return EFFECT_NOT_FOUND_ERR;
@@ -860,7 +866,7 @@ AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
         // Reset real-time input
         TAudioGlobals::fSharedInput->Reset();
         // Reset effect table
-        TAudioGlobals::fEffectTable.clear();
+        //TAudioGlobals::fEffectTable.clear();
         // Start player
         player->fRenderer->Start();
     }
