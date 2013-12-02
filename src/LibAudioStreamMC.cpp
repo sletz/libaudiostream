@@ -142,7 +142,6 @@ extern "C"
     AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t read_date);
     AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
 
-
     // Transport
     AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
     AUDIOAPI void StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
@@ -845,22 +844,22 @@ AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate d
     return LOAD_ERR;
 }
 
-AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player)
+AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr /*player*/)
 {
     return new TSymbolicDate();
 }
 
-AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date)
+AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frames_t date)
 {
     return new TSymbolicDate(date);
 }
 
-AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t real_date)
+AUDIOAPI void SetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date, audio_frames_t real_date)
 {
     symbolic_date->setDate(real_date);
 }
 
-AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date)
+AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
 {
     return symbolic_date->getDate();
 }

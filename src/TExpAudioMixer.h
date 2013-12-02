@@ -147,7 +147,7 @@ struct TStreamCommand : public TCommand {
             long res = 0;
             
             if (IsInBuffer(start_date, cur_frame, frames)) {
-                // New stream to play
+                // New stream to play...
                 start_offset = start_date - cur_frame;
                 to_play = true;
                 printf("Start stream fCurFrame = %lld offset = %d\n", cur_frame, start_offset);
