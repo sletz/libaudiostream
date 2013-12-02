@@ -413,10 +413,29 @@ void ResetEffect(AudioEffect effect);
 */
 void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);
 
+/*!
+\brief Get the JSON description of the effect.
+\param effect The effect to be used.
+\return state The JSON decription as a string.
+*/
 const char* GetJsonEffect(AudioEffect effect);
 
+/*!
+\brief Get the effect name.
+\param effect The effect to be used.
+\return state The effect name as a string.
+*/
 const char* GetNameEffect(AudioEffect effect);
 
+/*!
+\brief Set the effect control value at a specific date in frames.
+\param player The audio player.
+\param effect The effect to be used.
+\param path The effect label path as a string.
+\param value The effect control value.
+\param date The symbolic date.
+\return An error code.
+*/
 long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 /*!
