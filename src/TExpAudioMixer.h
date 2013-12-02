@@ -140,7 +140,7 @@ struct TStreamCommand : public TCommand {
             audio_frames_t start_date = GetDate(date_map, fStartDate);
             audio_frames_t stop_date = GetDate(date_map, fStopDate);
             
-            long start_offset;
+            long start_offset = 0;
             long stop_offset = std::abs(long(cur_frame - stop_date));
             long frame_num = std::min(TAudioGlobals::fBufferSize, stop_offset);
             bool to_play = false;
@@ -153,7 +153,6 @@ struct TStreamCommand : public TCommand {
                 printf("Start stream fCurFrame = %lld offset = %d\n", cur_frame, start_offset);
             } else if (cur_frame > start_date) {
                 // Stream currently playing...
-                start_offset = 0
                 to_play = true;
             }
             
