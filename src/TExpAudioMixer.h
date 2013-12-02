@@ -50,7 +50,7 @@ struct TCommand : public la_smartable1 {
             return date_map[date];
         }
         
-        bool IsInBuffer(audio_frames_t date, audio_frames_t cur_frame, long frames)
+        bool InBuffer(audio_frames_t date, audio_frames_t cur_frame, long frames)
         {
             return (date >= cur_frame && date < cur_frame + frames);
         }
@@ -99,7 +99,7 @@ struct TControlCommand : public TCommand {
                     audio_frames_t cur_frame, 
                     long frames)
         {
-            if (IsInBuffer(fStartDate->getDate(), cur_frame, frames)) {
+            if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
                 fEffect->SetControlValue(fPath.c_str(), fValue);
                 return false;
             } else {
@@ -113,8 +113,6 @@ typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
 //---------------------------------------------------------
 // Class TStreamCommand : a command to start/stop streams
 //---------------------------------------------------------
-
-typedef class LA_SMARTP<TRTRendererAudioStream> SAudioStream;
     
 struct TStreamCommand : public TCommand {
         
@@ -146,7 +144,7 @@ struct TStreamCommand : public TCommand {
             bool to_play = false;
             long res = 0;
             
-            if (IsInBuffer(start_date, cur_frame, frames)) {
+            if (InBuffer(start_date, cur_frame, frames)) {
                 // New stream to play...
                 start_offset = start_date - cur_frame;
                 to_play = true;

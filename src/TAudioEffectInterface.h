@@ -102,7 +102,6 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable1
         
         virtual void SetName(const std::string& name) = 0;
         virtual std::string GetName() = 0;
-      
 
 };
 
