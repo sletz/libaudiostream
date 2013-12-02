@@ -140,6 +140,7 @@ extern "C"
     AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
     AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
     AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t read_date);
+    AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
 
 
     // Transport
@@ -857,6 +858,11 @@ AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date)
 AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t real_date)
 {
     symbolic_date->setDate(real_date);
+}
+
+AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date)
+{
+    return symbolic_date->getDate();
 }
 
 AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)

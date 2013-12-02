@@ -518,6 +518,8 @@ SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
 */
 void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
 
+audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date);
+
 
 // Transport
 /*!
