@@ -298,7 +298,8 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         }
         
         virtual const char* GetJson() { return ""; }
-        virtual const char* GetName() { return ""; }
+        virtual std::string GetName() { return ""; }
+        virtual void SetName(const std::string& name) {}
 };
 
 typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
@@ -618,9 +619,9 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             metadataDSPFactory(fFactory->GetFactory(), &meta);
             fName = meta.fName;
             
-             // Keep effect name 
+            // Keep effect name in effect factory
             factory->SetName(fName);
-            // Keep the effect in global table
+            // Keep the effect in effect global table
             TAudioGlobals::fEffectTable[fName].push_back(this);
         }
         virtual ~TCodeFaustAudioEffect()
@@ -661,9 +662,9 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             return json.json();
         }
               
-        const char* GetName()
+        string GetName()
         {
-            return fName.c_str();
+            return fName;
         }
         
         TCodeFaustAudioEffectFactory* GetFactory() { return fFactory; }

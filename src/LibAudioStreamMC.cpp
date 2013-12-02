@@ -567,7 +567,7 @@ AUDIOAPI const char* GetNameEffect(AudioEffect effect)
     TAudioEffectInterface* effect_tmp = static_cast<TAudioEffectInterface*>(effect);
     TFaustAudioEffectBase* faust_effect;
     if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
-        return faust_effect->GetName();
+        return faust_effect->GetName().c_str();
     } else {
         return "";
     }
@@ -686,7 +686,7 @@ AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect)
     TAudioEffectInterface* effect_tmp = static_cast<TAudioEffectInterface*>(*effect);
     TFaustAudioEffectBase* faust_effect;
     if ((faust_effect = dynamic_cast<TFaustAudioEffectBasePtr>(effect_tmp))) {
-        return faust_effect->GetName();
+        return faust_effect->GetName().c_str();
     } else {
         return "";
     }

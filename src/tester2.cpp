@@ -79,8 +79,8 @@ static void test1()
 
 static void test2()
 {
-    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
-    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 70);
     AudioStream stream3 = MakeParSound(stream1, stream2);
     StartSound(gAudioPlayer, stream3, GenRealDate(gAudioPlayer, 0));
 }
@@ -101,7 +101,6 @@ static void test4()
     
     printf("stream1 chan %d\n", GetChannelsSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 50)));
     printf("stream1 chan %d\n", GetChannelsSound(stream1));
-    
     
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
     
@@ -392,6 +391,54 @@ static void test23()
     //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
 }
 
+static void test24()
+{
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
+    AudioStream stream2 = MakeEffectSound(MakeRegionSound(FILENAME2, 0, tmpSampleRate * 70), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
+    AudioStream stream3 = MakeParSound(stream1, stream2);
+    
+    StartSound(gAudioPlayer, stream3, GenRealDate(gAudioPlayer, 0));
+    
+    printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
+    printf("faust_effect2 NAME %s\n", GetNameEffect(faust_effect2));
+    
+    for (int i = 0; i < 100; i++) {
+        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+        //printf("res = %d\n", res);
+    }
+    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
+}
+
+static void test25()
+{
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    printf("info.Frames %lld\n", info.fCurFrame);
+    
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70);
+    AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 70);
+    AudioStream stream3 = MakeEffectSound(MakeParSound(stream1, stream2), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
+    
+    StartSound(gAudioPlayer, stream3, GenRealDate(gAudioPlayer, 0));
+    
+    printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
+    printf("faust_effect2 NAME %s\n", GetNameEffect(faust_effect2));
+    
+    for (int i = 0; i < 100; i++) {
+        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*5+i*4410));
+        //printf("res = %d\n", res);
+    }
+    //SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 0.0,  GenRealDate(gAudioPlayer, info.fCurFrame + tmpSampleRate*6));
+}
+
+    
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -449,7 +496,9 @@ int main(int argc, char* argv[])
     //test20();
     //test21();
     //test22();
-    test23();
+    //test23();
+    //test24();
+    test25();
        
     //StartAudioPlayer(gAudioPlayer);
     /*

@@ -33,7 +33,7 @@ static bool CheckEnding(const string& name, const string& end)
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
-    faust_code_stream << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "; };";
+    faust_code_stream << "declare name \"" << effect->GetName() << "\";" << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "; };";
     return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
@@ -41,7 +41,7 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffec
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterfacePtr effect, int num) 
 {
     stringstream faust_code_stream;
-    faust_code_stream << "process = par(i," << num << ",_)<:" << effect->GetCode() << ";";
+    faust_code_stream << "declare name \"" << effect->GetName() << "\";" << "process = par(i," << num << ",_)<:" << effect->GetCode() << ";";
     return CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
