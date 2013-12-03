@@ -73,6 +73,8 @@ struct TCommand : public la_smartable1 {
             return fStartDate->getDate() < command.fStartDate->getDate();
         }
         
+        virtual long GetOffset(audio_frames_t cur_frame, long frames) { return -1; }
+        
 };
 
 typedef LA_SMARTP<TCommand> TCommandPtr;
@@ -101,10 +103,20 @@ struct TControlCommand : public TCommand {
                     long frames)
         {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
+                printf("SetControlValue %s %f\n", fPath.c_str(), fValue);
                 fEffect->SetControlValue(fPath.c_str(), fValue);
                 return false;
             } else {
                 return true;
+            }
+        }
+        
+        virtual long GetOffset(audio_frames_t cur_frame, long frames) 
+        { 
+            if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
+                return fStartDate->getDate() - cur_frame;
+            } else {
+                return 0;
             }
         }
 };
@@ -169,56 +181,129 @@ struct TStreamCommand : public TCommand {
 
 typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 
+//--------------------
+// Class TCommandList
+//--------------------
+
+class TCommandList : public list<TCommandPtr> 
+{
+
+    private:
+    
+        static bool compare_command_date (TCommandPtr first, TCommandPtr second)
+        {
+            return first->GetDate() < second->GetDate();
+        }
+    
+        volatile bool fNeedSort;
+    
+    public:
+    
+        TCommandList():fNeedSort(false)
+        {}
+        virtual ~TCommandList() {}
+    
+        void AddCommand(TCommandPtr command)
+        { 
+            push_back(command);
+            fNeedSort = true;
+        }
+
+        void RemoveCommand(TCommandPtr command) 
+        { 
+            remove(command);
+            fNeedSort = true;
+        }
+        
+        void PossiblySort()
+        {
+            if (fNeedSort) {
+                sort(compare_command_date); 
+                fNeedSort = false;
+                printf("SORT\n");
+            }
+        }
+        
+        void NeedSort()
+        {
+            fNeedSort = true;
+        }
+        
+        void Print() 
+        {
+            TCommandList::iterator it;
+            for (it = begin(); it != end(); it++) {
+                TCommandPtr command = *it;
+                printf("Command date %lld\n", command->GetDate());
+              
+            }
+        }
+
+};
+
+typedef TCommandList COMMANDS;
+typedef TCommandList::iterator COMMANDS_ITERATOR;
+
 //----------------------
 // Class TExpAudioMixer
 //----------------------
-
-typedef list<TCommandPtr> COMMANDS;
-typedef list<TCommandPtr>::iterator COMMANDS_ITERATOR;
 
 class TExpAudioMixer : public TAudioClient
 {
 
     private:
     
-        COMMANDS fRunningCommands;   // List of running sound streams
+        COMMANDS fStreamCommands;     // List of stream commands
+        COMMANDS fControlCommands;    // List of control commands
+        
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
-        volatile bool fNeedSort;
+        
+        COMMANDS_ITERATOR ExecuteControlSlice(COMMANDS_ITERATOR it, 
+                                TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                                map<SymbolicDate, audio_frames_t>& date_map, 
+                                audio_frames_t cur_frame, 
+                                long frames, long& offset);
+
+        void ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                                map<SymbolicDate, audio_frames_t>& date_map, 
+                                audio_frames_t cur_frame, 
+                                long frames);
+
       
     public:
 
-        TExpAudioMixer():fCurFrame(0),fNeedSort(false) {}
+        TExpAudioMixer():fCurFrame(0) {}
         virtual ~TExpAudioMixer() {}
         
-        void AddCommand(TCommandPtr command)
+        void AddStreamCommand(TCommandPtr command)
         { 
-            fRunningCommands.push_back(command);
-            fNeedSort = true;
+            fStreamCommands.AddCommand(command);
         }
-        void RemoveCommand(TCommandPtr command) 
+        void RemoveStreamCommand(TCommandPtr command) 
         { 
-            fRunningCommands.remove(command);
-            fNeedSort = true;
+            fStreamCommands.RemoveCommand(command);
+        }
+        
+        void AddControlCommand(TCommandPtr command)
+        { 
+            fControlCommands.AddCommand(command);
+        }
+        void RemoveControlCommand(TCommandPtr command) 
+        { 
+            fControlCommands.RemoveCommand(command);
         }
       
         TStreamCommandPtr GetStreamCommand(TAudioStreamPtr stream);
         
-        int GetCommandSize() { return fRunningCommands.size(); }
+        int GetCommandSize() { return fStreamCommands.size(); }
         
-        void Print() 
+        void NeedSort()
         {
-            COMMANDS_ITERATOR it;
-            
-             printf("Print size %ld\n", fRunningCommands.size());
-            
-            for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
-                TCommandPtr command = *it;
-                printf("command date %lld\n", command->GetDate());
-              
-            }
+            fControlCommands.NeedSort();
+            fStreamCommands.NeedSort();
         }
     
 };

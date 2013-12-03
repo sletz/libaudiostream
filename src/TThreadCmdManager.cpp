@@ -25,6 +25,7 @@ research@grame.fr
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <assert.h>
 
 #if defined(__APPLE__) || defined(linux)
 
@@ -320,7 +321,7 @@ void TWaitThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long ar
     // Get a command structure from the free command list
     // fills it and push it on the running list
     TCmd* cmd = (TCmd*)lfpop(&fFreeCmd);
-
+   
     if (cmd) {
         cmd->fun = fun;
         cmd->arg1 = arg1;

@@ -139,7 +139,7 @@ extern "C"
     
     AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
     AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
-    AUDIOAPI void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t read_date);
+    AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t read_date);
     AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
 
     // Transport
@@ -581,7 +581,7 @@ AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effe
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
-                player->fMixer->AddCommand(new TControlCommand((*it), path, value, date));
+                player->fMixer->AddControlCommand(new TControlCommand((*it), path, value, date));
                 //printf("GetCommandSize %d\n",   player->fMixer->GetCommandSize());
             }
             return NO_ERR;
@@ -701,7 +701,7 @@ AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* e
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
-                player->fMixer->AddCommand(new TControlCommand((*it), path, value, date));
+                player->fMixer->AddControlCommand(new TControlCommand((*it), path, value, date));
                 //printf("GetCommandSize %d\n",   player->fMixer->GetCommandSize());
             }
             return NO_ERR;
@@ -827,7 +827,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate 
 {
     if (player && player->fMixer && player->fRenderer) {
         if (sound->Channels() < MAX_OUTPUT_CHAN) {
-            player->fMixer->AddCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
+            player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
             return NO_ERR;
         }
     } 
@@ -858,10 +858,15 @@ AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frames_t date
     return new TSymbolicDate(date);
 }
 
-AUDIOAPI void SetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date, audio_frames_t real_date)
+AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t real_date)
 {
-    symbolic_date->setDate(real_date);
-}
+    if (player && player->fMixer) {
+        symbolic_date->setDate(real_date);
+        player->fMixer->NeedSort();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
+    }}
 
 AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
 {
@@ -870,7 +875,7 @@ AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate 
 
 AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player)
 {
-     if (player) {
+    if (player) {
         // Reset effect table
         TAudioGlobals::fEffectTable.clear();
         return NO_ERR;

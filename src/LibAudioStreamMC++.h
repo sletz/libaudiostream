@@ -536,8 +536,9 @@ SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
 \param player The audio player.
 \param date The symbolic date.
 \param date The real date in frames.
+\return An error code.
 */
-void SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
+long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
 
 /*!
 \brief Get the symbolic date internal date.

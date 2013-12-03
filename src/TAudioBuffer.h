@@ -144,6 +144,8 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
             assert(b1->GetChannels() == b2->GetChannels());
             memcpy(b1->GetFrame(f1), b2->GetFrame(f2), frames * sizeof(T) * b1->GetChannels());
         }
+        
+        T* GetBuffer() { return fBuffer; }
 };
 
 //----------------------------------
@@ -212,6 +214,8 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
                 memcpy(dst[i], src[i], frames * sizeof(T));
             }
         }
+        
+        T** GetBuffer() { return fBuffer; }
 };
 
 
