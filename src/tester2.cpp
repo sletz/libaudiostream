@@ -342,14 +342,13 @@ static void test21()
          StartSound(gAudioPlayer, MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 10 + i), GenRealDate(gAudioPlayer, curdate + i*tmpSampleRate));
     }
     
-    
     for (int i = 0; i < 10; i++) {
          StartSound(gAudioPlayer, 
             MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 11 + i), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100),
             GenRealDate(gAudioPlayer, curdate + i*tmpSampleRate));
     }
     
-    for (int i = 0; i < 100; i++) {
+    for (int i = 100; i > 0; i--) {
         SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*5+i*4410));
     }
     sleep(5);
@@ -367,7 +366,7 @@ static void test22()
     
     printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
     
-    for (int i = 100; i > 0; i++) {
+    for (int i = 100; i > 0; i--) {
         long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*5+i*4410));
     }
 }

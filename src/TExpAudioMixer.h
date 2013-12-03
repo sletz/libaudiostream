@@ -71,7 +71,6 @@ struct TCommand : public la_smartable1 {
                             
         bool operator< (const TCommand& command) const
         {
-            printf("operator< \n");
             return fStartDate->getDate() < command.fStartDate->getDate();
         }
         
@@ -190,25 +189,27 @@ class TExpAudioMixer : public TAudioClient
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
+        
+        volatile bool fNeedSort;
       
     public:
 
-        TExpAudioMixer():fCurFrame(0) {}
+        TExpAudioMixer():fCurFrame(0),fNeedSort(false) {}
         virtual ~TExpAudioMixer() {}
         
         void AddCommand(TCommandPtr command)
         { 
-             fRunningCommands.push_back(command);
+            fRunningCommands.push_back(command);
+            fNeedSort = true;
             //printf("AddCommand size %d\n", fRunningCommands.size());
             //fRunningCommands.insert(command);
             //fRunningCommands.sort(compare_command_date); 
-            
-            //Print();
         }
         void RemoveCommand(TCommandPtr command) 
         { 
             fRunningCommands.remove(command);
-           // fRunningCommands.erase(command); 
+            // fRunningCommands.erase(command); 
+            fNeedSort = true;
         }
       
         TStreamCommandPtr GetStreamCommand(TAudioStreamPtr stream);

@@ -62,7 +62,11 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     }
     */
 
-    fRunningCommands.sort(compare_command_date); 
+    if (fNeedSort) {
+        fRunningCommands.sort(compare_command_date); 
+        fNeedSort = false;
+        printf("SORT\n");
+    }
 	while (it != fRunningCommands.end()) {
         TCommandPtr command = *it;
         if (command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
