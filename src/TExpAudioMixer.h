@@ -32,7 +32,6 @@ research@grame.fr
 
 #include <list>
 #include <map>
-#include <set>
 
 //----------------
 // Class TCommand
@@ -177,9 +176,6 @@ typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 typedef list<TCommandPtr> COMMANDS;
 typedef list<TCommandPtr>::iterator COMMANDS_ITERATOR;
 
-//typedef set<TCommandPtr> COMMANDS;
-//typedef set<TCommandPtr>::iterator COMMANDS_ITERATOR;
-
 class TExpAudioMixer : public TAudioClient
 {
 
@@ -201,14 +197,10 @@ class TExpAudioMixer : public TAudioClient
         { 
             fRunningCommands.push_back(command);
             fNeedSort = true;
-            //printf("AddCommand size %d\n", fRunningCommands.size());
-            //fRunningCommands.insert(command);
-            //fRunningCommands.sort(compare_command_date); 
         }
         void RemoveCommand(TCommandPtr command) 
         { 
             fRunningCommands.remove(command);
-            // fRunningCommands.erase(command); 
             fNeedSort = true;
         }
       

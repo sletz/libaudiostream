@@ -46,22 +46,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Excute all commands
     COMMANDS_ITERATOR it = fRunningCommands.begin();
     map<SymbolicDate, audio_frames_t> date_map;
-   
-    /*
-    vector<COMMANDS_ITERATOR> to_erase;
-    for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
-        TCommandPtr command = *it;
-        if (!command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
-            to_erase.push_back(it);
-        } 
-    }
-    
-    // Erase 
-    for (int i = 0; i < to_erase.size(); i++) {
-        fRunningCommands.erase(to_erase[i]);
-    }
-    */
-
+  
     if (fNeedSort) {
         fRunningCommands.sort(compare_command_date); 
         fNeedSort = false;
