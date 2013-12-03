@@ -55,6 +55,8 @@ struct TCommand : public la_smartable1 {
             return (date >= cur_frame && date < cur_frame + frames);
         }
         
+        audio_frames_t GetDate() { return fStartDate->GetDate(); }
+        
         TCommand() 
         {}
         TCommand(SymbolicDate date):fStartDate(date)
@@ -67,8 +69,9 @@ struct TCommand : public la_smartable1 {
                             audio_frames_t cur_frame, 
                             long frames) = 0;
                             
-        bool operator< (TCommand& command) 
+        bool operator< (const TCommand& command) const
         {
+            printf("operator< \n");
             return fStartDate->getDate() < command.fStartDate->getDate();
         }
         
@@ -172,13 +175,18 @@ typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 // Class TExpAudioMixer
 //----------------------
 
+typedef list<TCommandPtr> COMMANDS;
+typedef list<TCommandPtr>::iterator COMMANDS_ITERATOR;
+
+//typedef set<TCommandPtr> COMMANDS;
+//typedef set<TCommandPtr>::iterator COMMANDS_ITERATOR;
+
 class TExpAudioMixer : public TAudioClient
 {
 
     private:
     
-        list<TCommandPtr> fRunningCommands;   // List of running sound streams
-        //set<TCommandPtr> fRunningCommands;   // List of running sound streams
+        COMMANDS fRunningCommands;   // List of running sound streams
         audio_frames_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
@@ -190,17 +198,35 @@ class TExpAudioMixer : public TAudioClient
         
         void AddCommand(TCommandPtr command)
         { 
-            fRunningCommands.push_back(command);
+             fRunningCommands.push_back(command);
+            //printf("AddCommand size %d\n", fRunningCommands.size());
             //fRunningCommands.insert(command);
-            //fRunningCommands.sort(); 
+            //fRunningCommands.sort(compare_command_date); 
+            
+            //Print();
         }
         void RemoveCommand(TCommandPtr command) 
         { 
             fRunningCommands.remove(command);
-            //fRunningCommands.erase(command); 
+           // fRunningCommands.erase(command); 
         }
       
         TStreamCommandPtr GetStreamCommand(TAudioStreamPtr stream);
+        
+        int GetCommandSize() { return fRunningCommands.size(); }
+        
+        void Print() 
+        {
+            COMMANDS_ITERATOR it;
+            
+             printf("Print size %ld\n", fRunningCommands.size());
+            
+            for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
+                TCommandPtr command = *it;
+                printf("command date %lld\n", command->GetDate());
+              
+            }
+        }
     
 };
 

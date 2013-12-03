@@ -31,6 +31,11 @@ research@grame.fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
+static bool compare_command_date (TCommandPtr first, TCommandPtr second)
+{
+    return first->GetDate() < second->GetDate();
+}
+
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
     TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
@@ -39,17 +44,31 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
    
     // Excute all commands
-    list<TCommandPtr>::iterator iter = fRunningCommands.begin();
-    //set<TCommandPtr>::iterator iter = fRunningCommands.begin();
+    COMMANDS_ITERATOR it = fRunningCommands.begin();
     map<SymbolicDate, audio_frames_t> date_map;
+   
+    /*
+    vector<COMMANDS_ITERATOR> to_erase;
+    for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
+        TCommandPtr command = *it;
+        if (!command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
+            to_erase.push_back(it);
+        } 
+    }
     
-	while (iter != fRunningCommands.end()) {
-        TCommandPtr command = *iter;
+    // Erase 
+    for (int i = 0; i < to_erase.size(); i++) {
+        fRunningCommands.erase(to_erase[i]);
+    }
+    */
+
+    fRunningCommands.sort(compare_command_date); 
+	while (it != fRunningCommands.end()) {
+        TCommandPtr command = *it;
         if (command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
-            iter++;
+            it++;
         } else {
-            iter = fRunningCommands.erase(iter);
-            //fRunningCommands.erase(iter);
+            it = fRunningCommands.erase(it);
         }
     }
     
@@ -60,8 +79,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 
 TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 {
-    list<TCommandPtr>::iterator it;
-    //set<TCommandPtr>::iterator it;
+    COMMANDS_ITERATOR it;
     
     for (it = fRunningCommands.begin(); it != fRunningCommands.end(); it++) {
         TCommand* command = (*it);

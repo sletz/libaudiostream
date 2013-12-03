@@ -55,6 +55,8 @@ class TSymbolicDate : public la_smartable1
         { 
             return fRealDate < date.fRealDate; 
         }
+        
+        audio_frames_t GetDate() { return fRealDate; }
     
 };
 

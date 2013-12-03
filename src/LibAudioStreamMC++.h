@@ -560,6 +560,8 @@ long StartAudioPlayer(AudioPlayerPtr player);
 */
 long StopAudioPlayer(AudioPlayerPtr player);
 
+long ClearAudioPlayer(AudioPlayerPtr player);
+
 /*!
 \brief Get the audio player internal renderer.
 \param player The audio player.

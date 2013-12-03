@@ -145,6 +145,8 @@ extern "C"
     // Transport
     AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
     AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
+    
+    AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player);
 
     AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player);
    
@@ -580,6 +582,7 @@ AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effe
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
                 player->fMixer->AddCommand(new TControlCommand((*it), path, value, date));
+                //printf("GetCommandSize %d\n",   player->fMixer->GetCommandSize());
             }
             return NO_ERR;
         } else {
@@ -699,6 +702,7 @@ AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* e
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
                 player->fMixer->AddCommand(new TControlCommand((*it), path, value, date));
+                //printf("GetCommandSize %d\n",   player->fMixer->GetCommandSize());
             }
             return NO_ERR;
         } else {
@@ -862,6 +866,17 @@ AUDIOAPI void SetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_d
 AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
 {
     return symbolic_date->getDate();
+}
+
+AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player)
+{
+     if (player) {
+        // Reset effect table
+        TAudioGlobals::fEffectTable.clear();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
+    }
 }
 
 AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player)
