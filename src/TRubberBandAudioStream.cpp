@@ -68,7 +68,7 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
     while (fRubberBand->available() < framesNum) {
         int needFrames = std::min((int)framesNum, (int)fRubberBand->getSamplesRequired());
         if (needFrames > 0) {
-            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), framesNum, fStream->Channels());
             fStream->Read(fBuffer, needFrames, 0);
             fRubberBand->process(fBuffer->GetFrame(0, temp1), needFrames, false);
         }

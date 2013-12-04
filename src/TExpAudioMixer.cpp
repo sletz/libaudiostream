@@ -95,8 +95,7 @@ void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>
 long TExpAudioMixer::GetNextControlOffset(audio_frames_t cur_frame, long frames)
 {
     if (fControlCommands.begin() != fControlCommands.end()) {
-        TCommandPtr command = *fControlCommands.begin();
-        return command->GetOffset(cur_frame, frames);
+        return (*fControlCommands.begin())->GetOffset(cur_frame, frames);
     } else {
         return frames;
     }
