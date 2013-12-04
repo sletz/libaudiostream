@@ -69,19 +69,18 @@ static void printControls(AudioEffect faust_effect)
 
 static void test0()
 {
-    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 20);
-    //StartSound(gAudioPlayer, stream1, 0);
+    AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 200);
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
-    StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
+    //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 5));
 }
 
 static void test1()
 {
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 15);
-    StartSound(gAudioPlayer, stream1, 0);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, 0));
 
     AudioStream stream2 = MakeRegionSound(FILENAME2, 0, tmpSampleRate * 25);
-    StartSound(gAudioPlayer, stream2, 0);
+    StartSound(gAudioPlayer, stream2, GenRealDate(gAudioPlayer, 0));
 }
 
 static void test2()
@@ -361,14 +360,14 @@ static void test22()
      // Clear effect
     ClearAudioPlayer(gAudioPlayer);
     
-    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 20), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
-    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate +  tmpSampleRate*5));
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 3 * tmpSampleRate, tmpSampleRate * 20), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate +  tmpSampleRate*2));
     //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
     printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
     
-    for (int i = 0; i < 20; i++) {
-        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.05f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*7+i*4410));
+    for (int i = 0; i < 2000; i++) {
+        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*3+i*2*44));
     }
 }
 

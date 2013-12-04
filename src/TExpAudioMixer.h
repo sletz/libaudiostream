@@ -111,12 +111,15 @@ struct TControlCommand : public TCommand {
             }
         }
         
+        /* 
+            Returns the offset in buffer, or frames if not in buffer.
+        */
         virtual long GetOffset(audio_frames_t cur_frame, long frames) 
         { 
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
                 return fStartDate->getDate() - cur_frame;
             } else {
-                return 0;
+                return frames;
             }
         }
 };
@@ -153,7 +156,7 @@ struct TStreamCommand : public TCommand {
             
             long start_offset = 0;
             long stop_offset = std::abs(long(cur_frame - stop_date));
-            long frame_num = std::min(TAudioGlobals::fBufferSize, stop_offset);
+            long frame_num = std::min(frames, stop_offset);
             bool to_play = false;
             long res = 0;
             
@@ -167,8 +170,11 @@ struct TStreamCommand : public TCommand {
                 to_play = true;
             }
             
+            //printf("start_date %lld cur_frame %lld frames %ld to_play %d\n", start_date, cur_frame, frames, to_play);
+            //printf("frame_num %ld start_offset %ld\n", frame_num, start_offset);
+            
             // Play it...
-            if (to_play && (((res = fStream->Read(&shared_buffer, frame_num, start_offset)) < TAudioGlobals::fBufferSize))) {
+            if (to_play && (((res = fStream->Read(&shared_buffer, frame_num, start_offset)) < frames))) {
                 // End of stream
                 printf("Stop stream frame_num = %d res = %d\n", frame_num, res);
                 return false;
@@ -261,17 +267,19 @@ class TExpAudioMixer : public TAudioClient
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
         
-        COMMANDS_ITERATOR ExecuteControlSlice(COMMANDS_ITERATOR it, 
-                                TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                map<SymbolicDate, audio_frames_t>& date_map, 
-                                audio_frames_t cur_frame, 
-                                long frames, long& offset);
+        void ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                                        map<SymbolicDate, audio_frames_t>& date_map, 
+                                        audio_frames_t cur_frame, 
+                                        long frames,
+                                        long offset);
 
         void ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                 map<SymbolicDate, audio_frames_t>& date_map, 
                                 audio_frames_t cur_frame, 
-                                long frames);
+                                long offset,
+                                long slice);
 
+        long GetNextControlOffset(audio_frames_t cur_frame, long frames);
       
     public:
 

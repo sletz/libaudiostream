@@ -64,8 +64,10 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 */
 
 /*
-Execute all control commands that have the same date, and return the date of those controls as on "offset" in the buffer.
+Execute all control commands that have the same date, erase them from the control commands list, 
+returns the date of those controls as on "offset" in the buffer, or -1 if end of buffer.
 */
+/*
 COMMANDS_ITERATOR TExpAudioMixer::ExecuteControlSlice(COMMANDS_ITERATOR it, 
                                         TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
@@ -78,7 +80,11 @@ COMMANDS_ITERATOR TExpAudioMixer::ExecuteControlSlice(COMMANDS_ITERATOR it,
         TCommandPtr command = *it;
         long command_offset = command->GetOffset(cur_frame, frames);
         
-        if (offset == 0) {
+        if (command_offset == -1) {
+            // End of buffer...
+            //offset = -1;
+            break;
+        } else if (offset == 0) {
             // Keep current offset
             offset = command_offset;
         } else if (command_offset != offset)  {
@@ -90,32 +96,75 @@ COMMANDS_ITERATOR TExpAudioMixer::ExecuteControlSlice(COMMANDS_ITERATOR it,
         if (command->Execute(shared_buffer, date_map, cur_frame, frames)) {
             it++;
         } else {
-            printf("fControlCommands.erase \n");
+            printf("fControlCommands.erase  offset %ld\n", offset);
             it = fControlCommands.erase(it);
         }
         
     } 
     
-    printf("ExecuteControlSlice offset %d\n", offset);
+    printf("ExecuteControlSlice offset %ld\n", offset);
     return it;
+}
+*/
+
+void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                                        map<SymbolicDate, audio_frames_t>& date_map, 
+                                        audio_frames_t cur_frame, 
+                                        long frames,
+                                        long offset)
+{
+    COMMANDS_ITERATOR it = fControlCommands.begin();
+    
+    while (it != fControlCommands.end()) {
+     
+        TCommandPtr command = *it;
+        long command_offset = command->GetOffset(cur_frame, frames);
+        
+        if (command_offset == offset) {
+            if (command->Execute(shared_buffer, date_map, cur_frame, frames)) {
+                it++;
+            } else {
+                printf("fControlCommands.erase offset %ld\n", offset);
+                it = fControlCommands.erase(it);
+            }
+        } else if (command_offset > offset || command_offset == -1) {
+            break;
+        }
+    }
+}
+
+/* 
+    Returns the offset if next control if in buffer, or frames if not in buffer.
+*/
+long TExpAudioMixer::GetNextControlOffset(audio_frames_t cur_frame, long frames)
+{
+    if (fControlCommands.begin() != fControlCommands.end()) {
+        TCommandPtr command = *fControlCommands.begin();
+        return command->GetOffset(cur_frame, frames);
+    } else {
+        return frames;
+    }
 }
 
 /*
-
-
+Render all stream inside a "slice" inside a buffer.
 */
 void TExpAudioMixer::ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
                                         audio_frames_t cur_frame, 
-                                        long frames)
+                                        long offset,
+                                        long slice)
 {
+    //printf("ExecuteStreamsSlice cur_frame %lld offset %ld slice %ld\n", cur_frame, offset, slice);
     
-    printf("ExecuteStreamsSlice cur_frame %lld  frames %d\n", cur_frame, frames);
+    float* temp[shared_buffer.GetChannels()];
+    shared_buffer.GetFrame(offset, temp);
+    TSharedNonInterleavedAudioBuffer<float> shared_buffer_imp(temp, slice, TAudioGlobals::fOutput);
     
     COMMANDS_ITERATOR it = fStreamCommands.begin();
     while (it != fStreamCommands.end()) {
         TCommandPtr command = *it;
-        if (command->Execute(shared_buffer, date_map, cur_frame, frames)) {
+        if (command->Execute(shared_buffer_imp, date_map, cur_frame + offset, slice)) {
             it++;
         } else {
             it = fStreamCommands.erase(it);
@@ -135,35 +184,40 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     fControlCommands.PossiblySort();
     fStreamCommands.PossiblySort();
     
-    printf("AudioCallback %ld \n", frames);
-    //ExecuteStreamsSlice(0, shared_buffer, date_map, fCurFrame, frames);
+    //printf("AudioCallback %ld \n", frames);
+     
+    long offset_in_control = GetNextControlOffset(fCurFrame, frames);
+    long offset_in_stream = 0;
+    long slice_in_buffer = 0;
+   
+     if (offset_in_control < frames) {
     
-    COMMANDS_ITERATOR it = fControlCommands.begin();
-    
-    long previous_offset = 0;
-    
-    do {
-    
-        long offset = 0;
+        do {
         
-        // Execute all controls at the same date, return the offset in buffer
-        it = ExecuteControlSlice(it, shared_buffer, date_map, fCurFrame, frames, offset);
-        
-        // Render all streams inside this slice
-        float* temp[shared_buffer.GetChannels()];
-        shared_buffer.GetFrame(offset, temp);
-        TSharedNonInterleavedAudioBuffer<float> shared_buffer_imp(temp, frames - offset, TAudioGlobals::fOutput);
-        ExecuteStreamsSlice(shared_buffer_imp, date_map, fCurFrame + offset, (offset - previous_offset));
-        
-        previous_offset += offset;
+            // Render all streams inside this slice
+            slice_in_buffer = offset_in_control - offset_in_stream;
+            ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice_in_buffer);
+            
+            // Execute all controls at the same date
+            ExecuteControlSlice(shared_buffer, date_map, fCurFrame, frames, offset_in_control);
+            
+            // Move to next slice
+            offset_in_stream += slice_in_buffer;
+            
+        } while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames);
+   
+    } else {
+        printf("No control \n"); 
+    }
     
-    } while (it != fControlCommands.end());
-       
+    // Render all streams inside last slice
+    slice_in_buffer = offset_in_control - offset_in_stream;
+    ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice_in_buffer);
+         
     // Update date
     fCurFrame += frames;
     return true;
 }
-
 
 TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 {

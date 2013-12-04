@@ -48,7 +48,7 @@ Warning : the fifocell data structure size (see lffifo.h) MUST match the TCmd da
 \brief A command structure
 */
 
-#define MAXCOMMAND 256
+#define MAXCOMMAND 4096
 
 typedef struct TCmd
 {
