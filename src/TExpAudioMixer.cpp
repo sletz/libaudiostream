@@ -63,50 +63,6 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 }
 */
 
-/*
-Execute all control commands that have the same date, erase them from the control commands list, 
-returns the date of those controls as on "offset" in the buffer, or -1 if end of buffer.
-*/
-/*
-COMMANDS_ITERATOR TExpAudioMixer::ExecuteControlSlice(COMMANDS_ITERATOR it, 
-                                        TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                        map<SymbolicDate, audio_frames_t>& date_map, 
-                                        audio_frames_t cur_frame, 
-                                        long frames,
-                                        long& offset)
-{
-    while (it != fControlCommands.end()) {
-    
-        TCommandPtr command = *it;
-        long command_offset = command->GetOffset(cur_frame, frames);
-        
-        if (command_offset == -1) {
-            // End of buffer...
-            //offset = -1;
-            break;
-        } else if (offset == 0) {
-            // Keep current offset
-            offset = command_offset;
-        } else if (command_offset != offset)  {
-            // New offset, so break here
-            break;
-        }
-        
-        // Execute comand at the same offset
-        if (command->Execute(shared_buffer, date_map, cur_frame, frames)) {
-            it++;
-        } else {
-            printf("fControlCommands.erase  offset %ld\n", offset);
-            it = fControlCommands.erase(it);
-        }
-        
-    } 
-    
-    printf("ExecuteControlSlice offset %ld\n", offset);
-    return it;
-}
-*/
-
 void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
                                         audio_frames_t cur_frame, 
