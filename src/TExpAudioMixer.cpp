@@ -31,56 +31,23 @@ research@grame.fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
-/*
-bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
-{
-    TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
-  
-    // Real-time input
-    TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
-   
-    // Excute all commands
-    COMMANDS_ITERATOR it;
-    map<SymbolicDate, audio_frames_t> date_map;
-  
-    fControlCommands.PossiblySort();
-    fStreamCommands.PossiblySort();
- 
-    it = fStreamCommands.begin();
-    while (it != fStreamCommands.end()) {
-        TCommandPtr command = *it;
-        if (command->Execute(shared_buffer, date_map, fCurFrame, frames)) {
-            it++;
-        } else {
-            it = fStreamCommands.erase(it);
-            //printf("fStreamCommands size %d\n", fStreamCommands.size());
-        }
-    }
-    
-    // Update date
-    fCurFrame += frames;
-    return true;
-}
-*/
-
 void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
                                         audio_frames_t cur_frame, 
-                                        long frames,
-                                        long offset)
+                                        long offset,
+                                        long slice)
 {
     COMMANDS_ITERATOR it = fControlCommands.begin();
-    
     while (it != fControlCommands.end()) {
      
         TCommandPtr command = *it;
-        long command_offset = command->GetOffset(cur_frame, frames);
+        long command_offset = command->GetOffset(cur_frame, slice);
         
         if (command_offset == offset) {
-            if (command->Execute(shared_buffer, date_map, cur_frame, frames)) {
+            if (command->Execute(shared_buffer, date_map, cur_frame, slice)) {
                 it++;
             } else {
-                printf("fControlCommands.erase offset %ld\n", offset);
+                printf("fControlCommands.erase \n");
                 it = fControlCommands.erase(it);
             }
         } else if (command_offset > offset || command_offset == -1) {
@@ -122,6 +89,7 @@ void TExpAudioMixer::ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>
         if (command->Execute(shared_buffer_imp, date_map, cur_frame + offset, slice)) {
             it++;
         } else {
+            printf("fStreamCommands.erase\n");
             it = fStreamCommands.erase(it);
         }
     }
@@ -134,42 +102,34 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Real-time input
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
    
-    map<SymbolicDate, audio_frames_t> date_map;
-  
+    // Possibly sort commands and streams sequences
     fControlCommands.PossiblySort();
     fStreamCommands.PossiblySort();
-    
-    //printf("AudioCallback %ld \n", frames);
      
-    long offset_in_control = GetNextControlOffset(fCurFrame, frames);
+    long offset_in_control = 0;
     long offset_in_stream = 0;
-    long slice_in_buffer = 0;
-   
-     if (offset_in_control < frames) {
+    long slice = 0;
+    map<SymbolicDate, audio_frames_t> date_map;
     
-        do {
+    // Possibly render slices in presence of control
+    while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames) {
+    
+        // Render all streams inside this slice
+        slice = offset_in_control - offset_in_stream;
+        ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice);
         
-            // Render all streams inside this slice
-            slice_in_buffer = offset_in_control - offset_in_stream;
-            ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice_in_buffer);
-            
-            // Execute all controls at the same date
-            ExecuteControlSlice(shared_buffer, date_map, fCurFrame, frames, offset_in_control);
-            
-            // Move to next slice
-            offset_in_stream += slice_in_buffer;
-            
-        } while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames);
-   
-    } else {
-        printf("No control \n"); 
+        // Execute all controls at the same date
+        ExecuteControlSlice(shared_buffer, date_map, fCurFrame, offset_in_control, frames);
+        
+        // Move to next slice
+        offset_in_stream += slice;
     }
-    
-    // Render all streams inside last slice
-    slice_in_buffer = offset_in_control - offset_in_stream;
-    ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice_in_buffer);
+     
+    // Render all streams inside last slice, which can be global buffer is no control
+    slice = offset_in_control - offset_in_stream;
+    ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice);
          
-    // Update date
+    // Update date in frames
     fCurFrame += frames;
     return true;
 }

@@ -266,8 +266,8 @@ class TExpAudioMixer : public TAudioClient
         void ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
                                         audio_frames_t cur_frame, 
-                                        long frames,
-                                        long offset);
+                                        long offset,
+                                        long slice);
 
         void ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                 map<SymbolicDate, audio_frames_t>& date_map, 
