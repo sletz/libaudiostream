@@ -79,22 +79,52 @@ struct TCommand : public la_smartable1 {
 
 typedef LA_SMARTP<TCommand> TCommandPtr;
 
-//--------------------------------------------------------------
-// Class TControlCommand : a command to set Faust control value
-//--------------------------------------------------------------
+
+//--------------------------------------------
+// Class TControlCommand : a control command
+//--------------------------------------------
 
 struct TControlCommand : public TCommand {
+   
+        TControlCommand()
+        {}
+        TControlCommand(SymbolicDate date):TCommand(date)
+        {}
+        virtual ~TControlCommand() 
+        {}
+         
+        /* 
+            Returns the offset in buffer, or frames if not in buffer.
+        */
+        virtual long GetOffset(audio_frames_t cur_frame, long frames) 
+        { 
+            if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
+                return fStartDate->getDate() - cur_frame;
+            } else {
+                return frames;
+            }
+        }
+
+};
+
+typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
+
+//---------------------------------------------------------------------------
+// Class TEffectControlCommand : a command to set Faust effect control value
+//---------------------------------------------------------------------------
+
+struct TEffectControlCommand : public TControlCommand {
     
         TAudioEffectInterfacePtr fEffect;
         string fPath;
         float fValue;
     
-        TControlCommand() 
+        TEffectControlCommand() 
         {}
-        TControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date) 
-            : TCommand(date), fEffect(effect), fPath(path), fValue(value)
+        TEffectControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date) 
+            : TControlCommand(date), fEffect(effect), fPath(path), fValue(value)
         {}
-        virtual ~TControlCommand() 
+        virtual ~TEffectControlCommand() 
         {}
          
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
@@ -110,21 +140,41 @@ struct TControlCommand : public TCommand {
                 return true;
             }
         }
-        
-        /* 
-            Returns the offset in buffer, or frames if not in buffer.
-        */
-        virtual long GetOffset(audio_frames_t cur_frame, long frames) 
-        { 
-            if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
-                return fStartDate->getDate() - cur_frame;
-            } else {
-                return frames;
-            }
-        }
+    
 };
 
-typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
+//-------------------------------------------------------------------------
+// Class TExternalControlCommand : a command to call an user given callback
+//-------------------------------------------------------------------------
+
+typedef void (*AudioControlCallback) (audio_frames_t date, float value, void *arg);
+
+struct TExternalControlCommand : public TCommand {
+
+        AudioControlCallback fCallback;
+        void* fArg;
+        float fValue;
+    
+        TExternalControlCommand(AudioControlCallback callback, float value, void* arg)
+            :fCallback(callback), fArg(arg), fValue(value)
+        {}
+        virtual ~TExternalControlCommand() 
+        {}
+         
+        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                    map<SymbolicDate, audio_frames_t>& date_map, 
+                    audio_frames_t cur_frame, 
+                    long frames)
+        {
+            if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
+                fCallback(fStartDate->getDate(), fValue, fArg); 
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+};
 
 //---------------------------------------------------------
 // Class TStreamCommand : a command to start/stop streams

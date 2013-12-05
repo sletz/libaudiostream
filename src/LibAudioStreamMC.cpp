@@ -581,7 +581,7 @@ AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effe
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
-                player->fMixer->AddControlCommand(new TControlCommand((*it), path, value, date));
+                player->fMixer->AddControlCommand(new TEffectControlCommand((*it), path, value, date));
                 //printf("GetCommandSize %d\n",   player->fMixer->GetCommandSize());
             }
             return NO_ERR;
@@ -701,7 +701,7 @@ AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* e
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
-                player->fMixer->AddControlCommand(new TControlCommand((*it), path, value, date));
+                player->fMixer->AddControlCommand(new TEffectControlCommand((*it), path, value, date));
                 //printf("GetCommandSize %d\n",   player->fMixer->GetCommandSize());
             }
             return NO_ERR;
