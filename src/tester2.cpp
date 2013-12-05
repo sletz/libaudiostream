@@ -360,15 +360,32 @@ static void test22()
      // Clear effect
     ClearAudioPlayer(gAudioPlayer);
     
-    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 3 * tmpSampleRate, tmpSampleRate * 20), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
-    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate +  tmpSampleRate*2));
+    AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 3 * tmpSampleRate, tmpSampleRate * 200), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*2));
     //StopSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, tmpSampleRate * 4));
     
     printf("faust_effect1 NAME %s\n", GetNameEffect(faust_effect1));
     
     for (int i = 0; i < 2000; i++) {
-        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*3+i*2*44));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*3+i*2*44));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*3+i*2*44));
     }
+    
+    for (int i = 0; i < 2000; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.f-float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*13+i*2*44));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 1.f-float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*13+i*2*44));
+    }
+    
+    for (int i = 0; i < 2000; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*23+i*2*44));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*23+i*2*44));
+    }
+    
+    for (int i = 0; i < 2000; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.f-float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*33+i*2*44));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/RoomSize", 1.f-float(i)*0.0005f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*33+i*2*44));
+    }
+
 }
 
 static void test23()

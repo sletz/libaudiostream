@@ -103,7 +103,7 @@ struct TControlCommand : public TCommand {
                     long frames)
         {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
-                printf("SetControlValue %s %f\n", fPath.c_str(), fValue);
+                //printf("SetControlValue %s %f\n", fPath.c_str(), fValue);
                 fEffect->SetControlValue(fPath.c_str(), fValue);
                 return false;
             } else {

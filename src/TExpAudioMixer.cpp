@@ -47,7 +47,7 @@ void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>
             if (command->Execute(shared_buffer, date_map, cur_frame, slice)) {
                 it++;
             } else {
-                printf("fControlCommands.erase \n");
+                //printf("fControlCommands.erase offset = %ld\n", command_offset);
                 it = fControlCommands.erase(it);
             }
         } else if (command_offset > offset || command_offset == -1) {
