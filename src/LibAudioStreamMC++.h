@@ -502,7 +502,7 @@ void CloseAudioClient(AudioPlayerPtr player);
 \brief Start a sound at a specific date.
 \param player The audio player.
 \param sound The stream to be started.
-\param date The date which can be a symbolic one (see <B> GenSymbolicDate </B> to be set later on) or a real one  (see <B> GenRealDate </B>).
+\param date The date which can be a symbolic one (see <B> GenSymbolicDate </B> to be set later on) or a real one (see <B> GenRealDate </B>).
 \return An error code.
 */
 long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
@@ -511,7 +511,7 @@ long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
 \brief Stop a sound at a specific date.
 \param player The audio player.
 \param sound The stream to be stopped.
-\param date The date which can be a symbolic one (see <B> GenSymbolicDate </B> to be set later on) or a real one  (see <B> GenRealDate </B>).
+\param date The date which can be a symbolic one (see <B> GenSymbolicDate </B> to be set later on) or a real one (see <B> GenRealDate </B>).
 \return An error code.
 */
 long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
@@ -543,7 +543,7 @@ long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames
 /*!
 \brief Get the symbolic date internal date.
 \param player The audio player.
-\return Theymbolic date internal date.
+\return The symbolic date internal date in frames.
 */
 audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date);
 
