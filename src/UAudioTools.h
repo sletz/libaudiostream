@@ -359,11 +359,16 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] = float(in[i]) * fGain;
                     out[i + 1] = float(in[i + 1]) * fGain;
                     out[i + 2] = float(in[i + 2]) * fGain;
                     out[i + 3] = float(in[i + 3]) * fGain;
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] = float(in[i]) * fGain;
                 }
             }
         }
@@ -399,11 +404,16 @@ class UAudioTools
 				vDSP_vflt16(in, 1, buffer, 1, framesNum * channelsOut);
 				vDSP_vsma(buffer, 1, &fGain, out, 1, out, 1, framesNum * channelsOut);
 			#else
+                /*
 				for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += float(in[i]) * fGain;
                     out[i + 1] += float(in[i + 1]) * fGain;
                     out[i + 2] += float(in[i + 2]) * fGain;
                     out[i + 3] += float(in[i + 3]) * fGain;
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] += float(in[i]) * fGain;
                 }
 			#endif
 			
@@ -440,11 +450,16 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += (short)(ClipFloat(in[i]) * fGain);
                     out[i + 1] += (short)(ClipFloat(in[i + 1]) * fGain);
                     out[i + 2] += (short)(ClipFloat(in[i + 2]) * fGain);
                     out[i + 3] += (short)(ClipFloat(in[i + 3]) * fGain);
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] += (short)(ClipFloat(in[i]) * fGain);
                 }
             }
         }
@@ -458,11 +473,16 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += in[i];
                     out[i + 1] += in[i + 1];
                     out[i + 2] += in[i + 2];
                     out[i + 3] += in[i + 3];
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] += in[i];
                 }
             }
         }
@@ -470,11 +490,16 @@ class UAudioTools
         static inline void Float2FloatMix(float** in, float** out, long framesNum, long channels)
         {
             for (long i = 0; i < channels; i ++) {
+                /*
                 for (long j = 0; j < framesNum; j += 4) {
                     out[i][j] += in[i][j];
                     out[i][j + 1] += in[i][j + 1];
                     out[i][j + 2] += in[i][j + 2];
                     out[i][j + 3] += in[i][j + 3];
+                }
+                */
+                for (long j = 0; j < framesNum; j++) {
+                    out[i][j] += in[i][j];
                 }
             }
         }
@@ -488,11 +513,16 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] = in[i];
                     out[i + 1] = in[i + 1];
                     out[i + 2] = in[i + 2];
                     out[i + 3] = in[i + 3];
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] = in[i];
                 }
             }
         }
@@ -500,11 +530,16 @@ class UAudioTools
         static inline void Float2Float(float** in, float** out, long framesNum, long channels)
         {
             for (long i = 0; i < channels; i ++) {
+                /*
                 for (long j = 0; j < framesNum; j += 4) {
                     out[i][j] += in[i][j];
                     out[i][j + 1] += in[i][j + 1];
                     out[i][j + 2] += in[i][j + 2];
                     out[i][j + 3] += in[i][j + 3];
+                }
+                */
+                for (long j = 0; j < framesNum; j++) {
+                    out[i][j] += in[i][j];
                 }
             }        
         }

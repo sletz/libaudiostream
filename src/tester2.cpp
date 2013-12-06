@@ -332,7 +332,7 @@ static void test21()
     
     // Clear effect
     ClearAudioPlayer(gAudioPlayer);
-                        
+     
     for (int i = 0; i < 10; i++) {
          StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 10 + i), GenRealDate(gAudioPlayer, curdate + i*tmpSampleRate));
     }
@@ -350,6 +350,7 @@ static void test21()
     for (int i = 100; i > 0; i--) {
         SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*5+i*4410));
     }
+    
 }
 
 static void test22()
@@ -510,9 +511,9 @@ int main(int argc, char* argv[])
     //test17();
     //test18();
     //test19();
-    //test20();
+    ///test20();
     //test21();
-    test22();
+    //test22();
     //test23();
     //test24();
     //test25();
@@ -571,9 +572,12 @@ int main(int argc, char* argv[])
                 
                 SetSymbolicDate(gAudioPlayer, symb1, curdate + 1*tmpSampleRate);
                 SetSymbolicDate(gAudioPlayer, symb2, curdate);
+                
+                // Start and stop 10 seconds later
                 SetSymbolicDate(gAudioPlayer, symb3, curdate);
                 SetSymbolicDate(gAudioPlayer, symb4, curdate + 10*tmpSampleRate);
                 
+                // Start and stop 5 seconds later
                 SetSymbolicDate(gAudioPlayer, symb5, curdate);
                 SetSymbolicDate(gAudioPlayer, symb6, curdate + 5*tmpSampleRate);
                  

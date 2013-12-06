@@ -33,6 +33,7 @@ TCutEndAudioStream::TCutEndAudioStream(TAudioStreamPtr stream, long end) : TDeco
 
 long TCutEndAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert(fFramesNum - fCurFrame >= 0);
     int res = fStream->Read(buffer, UTools::Min(framesNum, fFramesNum - fCurFrame), framePos);
     fCurFrame += res;
     return res;
@@ -40,6 +41,7 @@ long TCutEndAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
 
 TAudioStreamPtr TCutEndAudioStream::CutBegin(long frames)
 {
+    assert(fFramesNum - frames >= 0);
     return new TCutEndAudioStream(fStream->CutBegin(frames), fFramesNum - frames);
 }
 
