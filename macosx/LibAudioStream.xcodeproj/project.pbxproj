@@ -134,6 +134,7 @@
 		4B8E50E70CAA86670070FDA9 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8E50E30CAA86670070FDA9 /* StringTools.h */; };
 		4B8E51790CAA86E70070FDA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
 		4B8E517A0CAA86E70070FDA9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8E51780CAA86E70070FDA9 /* Foundation.framework */; };
+		4B95A4E318525FF300141E37 /* LibAudioStreamMC++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9D8B618042D96001B620C /* LibAudioStreamMC++.h */; };
 		4B98A5C00D168B2D00A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
 		4B98A5C10D168B2D00A93365 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B98A5C50D168B4300A93365 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
@@ -168,7 +169,7 @@
 		4BB9AE8A17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BB9AE8B17170DB000A56C3A /* TLASException.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9AE8717170DB000A56C3A /* TLASException.h */; };
 		4BB9D88D18042A44001B620C /* tester2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB9D88C18042A44001B620C /* tester2.cpp */; };
-		4BB9D8B818042D96001B620C /* LibAudioStreamMC++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9D8B618042D96001B620C /* LibAudioStreamMC++.h */; };
+		4BB9D8B818042D96001B620C /* LibAudioStreamMC++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9D8B618042D96001B620C /* LibAudioStreamMC++.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BB9D8B918042D96001B620C /* LibAudioStreamMC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB9D8B518042D96001B620C /* LibAudioStreamMC.cpp */; };
 		4BB9D8BA18042D96001B620C /* LibAudioStreamMC++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9D8B618042D96001B620C /* LibAudioStreamMC++.h */; };
 		4BB9D8BB18042D96001B620C /* LibAudioStreamMC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB9D8B518042D96001B620C /* LibAudioStreamMC.cpp */; };
@@ -893,6 +894,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B95A4E318525FF300141E37 /* LibAudioStreamMC++.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

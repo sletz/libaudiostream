@@ -216,7 +216,7 @@ AudioStream MakeMultiNullSound(long channels, long lengthFrame);
 \param name The sound file pathname.
 \return A pointer to new stream object or NULL if the file cannot be opened.
 */
-//AudioStream MakeReadSound(char* name);
+//AudioStream MakeReadSound(const char* name);
 /*!
 \brief Create a file region reader stream. 
 \param name The sound file pathname.
@@ -224,7 +224,7 @@ AudioStream MakeMultiNullSound(long channels, long lengthFrame);
 \param endFrame The end frame of the region.
 \return A pointer to new stream object or NULL if the wanted region is not part of the file.
 */
-AudioStream MakeRegionSound(char* name, long beginFrame, long endFrame);
+AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
 /*!
 \brief Transform a stream in a stereo stream.
 \param sound The stream to be transformed.
@@ -311,7 +311,7 @@ AudioStream MakePitchSchiftTimeStretchSound(AudioStream sound, double* pitch_shi
 \param format A libsndfile format.
 \return A pointer to new stream object or NULL if the file cannot be opened.
 */
-AudioStream MakeWriteSound(char* name, AudioStream sound, long format);
+AudioStream MakeWriteSound(const char* name, AudioStream sound, long format);
 /*!
 \brief Create an input stream.
 \return A pointer to new stream object.

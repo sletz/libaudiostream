@@ -175,8 +175,8 @@ extern "C"
 
     // Build sound (using smartptr)
     AUDIOAPI AudioStream MakeNullSound(long lengthFrame);
-    AUDIOAPI AudioStream MakeReadSound(char* name);
-    AUDIOAPI AudioStream MakeRegionSound(char* name, long beginFrame, long endFrame);
+    AUDIOAPI AudioStream MakeReadSound(const char* name);
+    AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
     AUDIOAPI AudioStream MakeStereoSound(AudioStream sound);
     AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
     AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n);
@@ -187,7 +187,7 @@ extern "C"
     AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
     AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
-    AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format);
+    AUDIOAPI AudioStream MakeWriteSound(const char* name, AudioStream s, long format);
     AUDIOAPI AudioStream MakeInputSound();
     AUDIOAPI AudioStream MakeSharedInputSound();
     AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
@@ -235,12 +235,12 @@ AUDIOAPI AudioStream MakeNullSound(long lengthFrame)
 	return TAudioStreamFactory::MakeNullSound(lengthFrame);
 }
 
-AUDIOAPI AudioStream MakeReadSound(char* name)
+AUDIOAPI AudioStream MakeReadSound(const char* name)
 {
     return TAudioStreamFactory::MakeReadSound(name);
 }
 
-AUDIOAPI AudioStream MakeRegionSound(char* name, long beginFrame, long endFrame)
+AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame)
 {
     return TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 }
@@ -319,7 +319,7 @@ AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pit
     
 }
 
-AUDIOAPI AudioStream MakeWriteSound(char* name, AudioStream s, long format)
+AUDIOAPI AudioStream MakeWriteSound(const char* name, AudioStream s, long format)
 {
     return TAudioStreamFactory::MakeWriteSound(name, static_cast<TAudioStreamPtr>(s), format);
 }
