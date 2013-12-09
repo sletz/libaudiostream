@@ -443,7 +443,7 @@ class TFileCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
         {
             int argc;
             const char* argv[32];
-            char error_msg[256] = {0};
+            std::string error_msg;
             char error_lib[512] = {0};
             
             fCode = code;
@@ -466,8 +466,8 @@ class TFileCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
                 TAudioGlobals::fFactoryTable[code] = this;
                 TAudioGlobals::fFactoryNumber++;
             }  else {
-                printf("error_lib %s\n", error_msg);
-                snprintf(error_lib, 512, "createDSPFactory error from DSP file %s\n", error_msg);
+                printf("error_lib %s\n", error_msg.c_str());
+                snprintf(error_lib, 512, "createDSPFactory error from DSP file %s\n", error_msg.c_str());
             }
         }
 
@@ -485,7 +485,7 @@ class TStringCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
         {
             int argc;
             const char* argv[32];
-            char error_msg[256] = {0};
+            std::string error_msg;
             char error_lib[512] = {0};
             char input_name[64];
             
@@ -509,7 +509,7 @@ class TStringCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory {
                 TAudioGlobals::fFactoryTable[code] = this;
                 TAudioGlobals::fFactoryNumber++;
             } else {
-                snprintf(error_lib, 512, "createDSPFactory error from DSP code %s\n", error_msg);
+                snprintf(error_lib, 512, "createDSPFactory error from DSP code %s\n", error_msg.c_str());
             }
         }
         

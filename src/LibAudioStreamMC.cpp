@@ -84,7 +84,6 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     AUDIOAPI AudioStreamPtr MakeParSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     AUDIOAPI AudioStreamPtr MakeSelectSoundPtr(AudioStreamPtr s1, const std::vector<int>& selection);
-    //AUDIOAPI AudioStreamPtr MakeTransformSoundPtr(AudioStreamPtr sound, AudioEffectListPtr effect_list, long fadeIn, long fadeOut);
     AUDIOAPI AudioStreamPtr MakeEffectSoundPtr(AudioStreamPtr sound, AudioEffectPtr effect, long fadeIn, long fadeOut);
     AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
@@ -866,7 +865,8 @@ AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date,
         return NO_ERR;
     } else {
         return PLAYER_ERR;
-    }}
+    }
+}
 
 AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
 {
