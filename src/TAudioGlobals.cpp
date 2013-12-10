@@ -35,6 +35,8 @@ research@grame.fr
 // Globals
 float** TSharedBuffers::fInBuffer = NULL;
 float** TSharedBuffers::fOutBuffer = NULL;
+long TSharedBuffers::fInputOffset = 0;
+long TSharedBuffers::fOutputOffset = 0;
 
 TCmdManagerPtr la_smartable1::fDeleteManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;

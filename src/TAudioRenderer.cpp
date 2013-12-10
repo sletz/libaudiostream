@@ -38,7 +38,7 @@ void TAudioRenderer::Run(float** inputs, float** outputs, long frames)
     // Clear output buffer
     UAudioTools::ZeroFloatBlk(outputs, frames, fOutput);
     
-    // Setup in/out real-time buffers
+    // Setup in/out real-time buffers for the duration of the cycle
     TSharedBuffers::SetInBuffer(inputs);
     TSharedBuffers::SetOutBuffer(outputs);
 

@@ -47,10 +47,12 @@ class TInputAudioStream : public TAudioStream
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(TSharedBuffers::GetInBuffer());
-            float* temp[buffer->GetChannels()];
             
-            UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos, temp),
-                                             TSharedBuffers::GetInBuffer(),
+            float* temp1[buffer->GetChannels()];
+            float* temp2[TAudioGlobals::fInput];
+            
+            UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos, temp1),
+                                             TSharedBuffers::GetInBuffer(framesNum, TAudioGlobals::fInput, temp2),
                                              framesNum, TAudioGlobals::fInput);
             return framesNum;
         }

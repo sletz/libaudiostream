@@ -481,6 +481,27 @@ static void test26()
     StopSound(gAudioPlayer, stream1, symb7);
 }
 
+SymbolicDate symb8 = GenSymbolicDate(gAudioPlayer);
+
+static void test27()
+{
+    audio_frames_t curdate = GetCurDate();
+    printf("info.Frames %lld\n", curdate);
+    
+    AudioStream stream1 = MakeEffectSound(MakeInputSound(), faust_effect1, 100, 100); 
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate));
+    
+    for (int i = 0; i < 100; i++) {
+        long res = SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, curdate + tmpSampleRate*5 + tmpSampleRate*5+i*4410));
+    }
+    
+    StopSound(gAudioPlayer, stream1, symb8);
+    
+    AudioStream stream2 = MakeEffectSound(MakeInputSound(), faust_effect4, 100, 100);
+    StartSound(gAudioPlayer, stream2, symb8);
+}
+
+
 int main(int argc, char* argv[])
 {
     gAudioPlayer = OpenAudioPlayer(tmpInChan, tmpOutChan, tmpSampleRate, tmpBufferSize, 65536 * 4, tmpSampleRate * 60 * 10, kJackRenderer, 1);
@@ -538,8 +559,9 @@ int main(int argc, char* argv[])
     //test22();
     //test23();
     //test24();
-    test25();
+    //test25();
     //test26();
+    test27();
        
     //StartAudioPlayer(gAudioPlayer);
     /*
@@ -592,7 +614,7 @@ int main(int argc, char* argv[])
                 audio_frames_t curdate = GetCurDate();
                 printf("info.Frames %lld\n", curdate);
                 
-                 SetSymbolicDate(gAudioPlayer, symb0, curdate);
+                SetSymbolicDate(gAudioPlayer, symb0, curdate);
                 
                 SetSymbolicDate(gAudioPlayer, symb1, curdate + 1*tmpSampleRate);
                 SetSymbolicDate(gAudioPlayer, symb2, curdate);
@@ -604,6 +626,9 @@ int main(int argc, char* argv[])
                 // Start and stop 5 seconds later
                 SetSymbolicDate(gAudioPlayer, symb5, curdate);
                 SetSymbolicDate(gAudioPlayer, symb6, curdate + 5*tmpSampleRate);
+                
+                
+                SetSymbolicDate(gAudioPlayer, symb8, curdate);
                  
                 break;
             }

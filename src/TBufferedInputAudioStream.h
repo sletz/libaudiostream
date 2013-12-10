@@ -87,11 +87,14 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             */
                                              
             // Read input and write it to memory
-            float* temp[fTmpBuffer->GetChannels()];
-            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp), framesNum, TAudioGlobals::fInput);
-            UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos, temp),
-                                             TSharedBuffers::GetInBuffer(),
+            float* temp1[fTmpBuffer->GetChannels()];
+            float* temp2[TAudioGlobals::fInput];
+            
+            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp1), framesNum, TAudioGlobals::fInput);
+            UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos, temp1),
+                                             TSharedBuffers::GetInBuffer(framesNum, TAudioGlobals::fInput, temp2),
                                              framesNum, TAudioGlobals::fInput);
+                                             
             return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos); 
         }
 

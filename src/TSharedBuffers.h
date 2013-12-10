@@ -23,7 +23,7 @@ research@grame.fr
 #ifndef __TSharedBuffers_
 #define __TSharedBuffers_
 
-// Global Input/output buffers
+// Global input/output buffers
 
 //----------------------
 // Class TSharedBuffers
@@ -34,28 +34,53 @@ research@grame.fr
 
 class TSharedBuffers
 {
-
+  
     public:
 
         static float** fInBuffer;
         static float** fOutBuffer;
+        
+        static long fInputOffset;
+        static long fOutputOffset;
 
         static float** GetInBuffer()
         {
             return fInBuffer;
         }
+        
+        static float** GetInBuffer(long framesNum, long channels, float** res)
+        {
+            for (int i = 0; i < channels; i++) {
+                res[i] = &fInBuffer[i][fInputOffset];
+            }
+            fInputOffset += framesNum;
+            return res;
+        }
+        
         static float** GetOutBuffer()
         {
             return fOutBuffer;
+        }
+        
+        static float** GetOutBuffer(long framesNum, long channels, float** res)
+        {
+            for (int i = 0; i < channels; i++) {
+                res[i] = &fOutBuffer[i][fOutputOffset];
+            }
+            fOutputOffset += framesNum;
+            return res;
         }
 
         static void SetInBuffer(float** input)
         {
             fInBuffer = input;
+            fInputOffset = 0;
         }
+        
         static void SetOutBuffer(float** output)
         {
             fOutBuffer = output;
+            fOutputOffset = 0;
         }
 };
 
