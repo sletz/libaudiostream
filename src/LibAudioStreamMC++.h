@@ -147,15 +147,6 @@ class TAudioEffectInterface : public la_smartable
 
 typedef LA_SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
 
-class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_smartable {
-
-	public:
-    
-		virtual ~TAudioEffectList() {}
-        
-};
-
-typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 
 class TAudioClient
 {
@@ -189,9 +180,7 @@ typedef void* AudioRendererPtr;
 typedef void* AudioClientPtr;
 
 typedef TAudioStreamPtr AudioStream;
-typedef TAudioEffectListPtr AudioEffectList;
 typedef TAudioEffectInterfacePtr AudioEffect;
-typedef TAudioEffectInterfacePtr AudioEffectInterface;	
 typedef TSymbolicDatePtr SymbolicDate;		
 
 typedef void (*StopCallback)(void* context);
@@ -216,7 +205,7 @@ AudioStream MakeMultiNullSound(long channels, long lengthFrame);
 \param name The sound file pathname.
 \return A pointer to new stream object or NULL if the file cannot be opened.
 */
-//AudioStream MakeReadSound(const char* name);
+AudioStream MakeReadSound(const char* name);
 /*!
 \brief Create a file region reader stream. 
 \param name The sound file pathname.
@@ -354,6 +343,14 @@ long ReadSound(AudioStream sound, float* buffer, long buffer_size, long channels
 */
 void ResetSound(AudioStream sound);
 
+/*!
+\brief Create a copy of a stream.
+\param sound The stream to be copied.
+\return The copied stream.
+*/
+AudioStream MakeCopySound(AudioStream sound);
+
+
 /* Effect management */
 /*!
 \brief Create an effect described in the Faust DSP language.
@@ -418,16 +415,23 @@ void ProcessEffect(AudioEffect effect, float** input, float** output, long frame
 /*!
 \brief Get the JSON description of the effect.
 \param effect The effect to be used.
-\return state The JSON decription as a string.
+\return The JSON decription as a string.
 */
 const char* GetJsonEffect(AudioEffect effect);
 
 /*!
 \brief Get the effect name.
 \param effect The effect to be used.
-\return state The effect name as a string.
+\return The effect name as a string.
 */
 const char* GetNameEffect(AudioEffect effect);
+
+/*!
+\brief Copy the effect.
+\param effect The effect to be copied.
+\return The copied effect.
+*/
+AudioEffect MakeCopyEffect(AudioEffect effect);
 
 /*!
 \brief Set the effect control value at a specific date in frames.

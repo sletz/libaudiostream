@@ -501,6 +501,49 @@ static void test27()
     StartSound(gAudioPlayer, stream2, symb8);
 }
 
+static AudioStream echo(AudioStream stream)
+{
+    return MakeMixSound(MakeCopySound(stream),
+                        MakeMixSound(MakeSeqSound(MakeNullSound(5 * tmpSampleRate / 10), MakeCopySound(stream), 100),
+                                    MakeSeqSound(MakeNullSound(10 * tmpSampleRate / 10), MakeCopySound(stream), 100)));
+}
+
+static void test28()
+{
+    audio_frames_t curdate = GetCurDate();
+    StartSound(gAudioPlayer, echo(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70)), GenRealDate(gAudioPlayer, curdate));
+}
+
+static void test28bis()
+{
+    audio_frames_t curdate = GetCurDate();
+    StartSound(gAudioPlayer, echo(MakeSharedInputSound()), GenRealDate(gAudioPlayer, curdate));
+}
+
+
+SymbolicDate symb9 = GenSymbolicDate(gAudioPlayer);
+
+static void echo_effect(AudioStream stream)
+{
+    audio_frames_t curdate = GetCurDate();
+    
+    AudioStream stream1 = echo(stream);
+    AudioStream stream2 = MakeEffectSound(MakeCopySound(stream1), faust_effect4, 100, 100);
+                                             
+    StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate));
+    StopSound(gAudioPlayer, stream1, symb9);
+    StartSound(gAudioPlayer, stream2, symb9);
+}
+
+static void test29()
+{
+    echo_effect(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70));
+}
+
+static void test29bis()
+{
+    echo_effect(MakeSharedInputSound());
+}
 
 int main(int argc, char* argv[])
 {
@@ -561,7 +604,10 @@ int main(int argc, char* argv[])
     //test24();
     //test25();
     //test26();
-    test27();
+    //test27();
+    //test28();
+    //test28bis();
+    test29();
        
     //StartAudioPlayer(gAudioPlayer);
     /*
@@ -629,6 +675,7 @@ int main(int argc, char* argv[])
                 
                 
                 SetSymbolicDate(gAudioPlayer, symb8, curdate);
+                SetSymbolicDate(gAudioPlayer, symb9, curdate);
                  
                 break;
             }

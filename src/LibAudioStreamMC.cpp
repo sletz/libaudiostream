@@ -95,6 +95,7 @@ extern "C"
     AUDIOAPI long GetChannelsSoundPtr(AudioStreamPtr s);
     AUDIOAPI long ReadSoundPtr(AudioStreamPtr stream, float** buffer, long buffer_size);
     AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
+    AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound);
 
     AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 #ifdef __APPLE__
@@ -114,6 +115,7 @@ extern "C"
     AUDIOAPI void ProcessEffectPtr(AudioEffectPtr effect, float** input, float** output, long framesNum);
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
     AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
+    AUDIOAPI AudioEffectPtr MakeCopyEffectPtr(AudioEffectPtr effect);
     
     AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
  
@@ -196,6 +198,7 @@ extern "C"
     AUDIOAPI long GetChannelsSound(AudioStream s);
     AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
     AUDIOAPI void ResetSound(AudioStream sound);
+    AUDIOAPI AudioStream MakeCopySound(AudioStream sound);
 
     // Effect management (using smartptr)
     AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
@@ -212,6 +215,7 @@ extern "C"
     AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);
     AUDIOAPI const char* GetJsonEffect(AudioEffect effect);
     AUDIOAPI const char* GetNameEffect(AudioEffect effect);
+    AUDIOAPI AudioEffect MakeCopyEffect(AudioEffect effect);
 
     AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
@@ -338,10 +342,10 @@ AUDIOAPI long GetChannelsSound(AudioStream s)
     return (s) ? (static_cast<TAudioStreamPtr>(s))->Channels() : 0;
 }
 
-AUDIOAPI long ReadSound(AudioStream sound, float** buffer, long buffer_size)
+AUDIOAPI long ReadSound(AudioStream s, float** buffer, long buffer_size)
 {
-    if (sound && buffer) {
-        TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(sound);
+    if (s && buffer) {
+        TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
         TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
         UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
         return stream->Read(&process, buffer_size, 0);
@@ -350,9 +354,16 @@ AUDIOAPI long ReadSound(AudioStream sound, float** buffer, long buffer_size)
     }
 }
 
-AUDIOAPI void ResetSound(AudioStream sound)
+AUDIOAPI void ResetSound(AudioStream s)
 {
-	static_cast<TAudioStreamPtr>(sound)->Reset();
+    if (s) {
+        static_cast<TAudioStreamPtr>(s)->Reset();
+    }
+}
+
+AUDIOAPI AudioStream MakeCopySound(AudioStream s)
+{
+	return (s) ? static_cast<TAudioStreamPtr>(s)->Copy() : 0;
 }
 
 AUDIOAPI AudioStreamPtr MakeSoundPtr(AudioStream sound) 
@@ -480,7 +491,14 @@ AUDIOAPI long GetChannelsSoundPtr(AudioStreamPtr sound)
 
 AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound)
 {
-	static_cast<TAudioStreamPtr>(*sound)->Reset();
+    if (sound) {
+        static_cast<TAudioStreamPtr>(*sound)->Reset();
+    }
+}
+
+AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound)
+{
+	 return (sound) ? MakeSoundPtr(static_cast<TAudioStreamPtr>(*sound)->Copy()) : 0;
 }
 
 AUDIOAPI long ReadSoundPtr(AudioStreamPtr sound, float** buffer, long buffer_size)
@@ -572,6 +590,11 @@ AUDIOAPI const char* GetNameEffect(AudioEffect effect)
     } else {
         return "";
     }
+}
+
+AUDIOAPI AudioEffect MakeCopyEffect(AudioEffect effect)
+{
+    return (effect) ? static_cast<TAudioEffectInterfacePtr>(effect)->Copy(): 0;
 }
 
 AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
@@ -692,6 +715,11 @@ AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect)
     } else {
         return "";
     }
+}
+
+AUDIOAPI AudioEffectPtr MakeCopyEffectPtr(AudioEffectPtr effect)
+{
+    return (effect) ? new LA_SMARTP<TAudioEffectInterface>(static_cast<TAudioEffectInterface*>(*effect)->Copy()) : 0;
 }
 
 AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
