@@ -26,8 +26,6 @@ research@grame.fr
 #include "faust/gui/UI.h"
 #include "faust/llvm-dsp.h"
 #include "faust/gui/jsonfaustui.h"
-//#include "faust/gui/OSCUI.h"
-
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
 #include "TLASException.h"

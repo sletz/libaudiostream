@@ -39,6 +39,8 @@ class TPortAudioV19Renderer : public TAudioRenderer
     private:
 
         PaStream* fStream;
+        
+        PaTime fAnchorFrameTime;
 
         static int Process(const void* inputBuffer,
 							void* outputBuffer,

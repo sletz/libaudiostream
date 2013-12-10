@@ -31,6 +31,11 @@ int TPortAudioV19Renderer::Process(const void* inputBuffer, void* outputBuffer, 
 									const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData)
 {
     TPortAudioV19RendererPtr renderer = (TPortAudioV19RendererPtr)userData;
+    
+    // Take time stamp of first call to Process 
+    if (fAnchorFrameTime == 0) {
+        renderer->fAnchorFrameTime = timeInfo.currentTime;
+    }
     renderer->Run((float**)inputBuffer, (float**)outputBuffer, framesPerBuffer);
     return 0;
 }
@@ -104,6 +109,8 @@ TPortAudioV19Renderer::TPortAudioV19Renderer(): TAudioRenderer()
 		printf("Pa_Initialize error: %s\n", Pa_GetErrorText(err));
         throw new std::bad_alloc;
 	}
+    
+    fAnchorFrameTime = 0;
 }
 
 TPortAudioV19Renderer::~TPortAudioV19Renderer()
@@ -226,6 +233,9 @@ long TPortAudioV19Renderer::Close()
 
 long TPortAudioV19Renderer::Start()
 {
+    // Init timing here
+    fAnchorFrameTime = 0;
+    
     PaError err = Pa_StartStream(fStream);
 
     if (err != paNoError) {
@@ -254,8 +264,12 @@ void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    info->fCurFrame = long(Pa_GetStreamTime(fStream));
-    info->fCurUsec = ConvertSample2Usec(info->fCurFrame);
+    if (fAnchorFrameTime == 0) {
+        info->fCurFrame = info->fCurUsec = 0;
+    } else {
+        info->fCurFrame = long(Pa_GetStreamTime(fStream));
+        info->fCurUsec = ConvertSample2Usec(info->fCurFrame);
+    }
 #if defined(WIN32) && defined(IMUTUS)
     info->fOutputLatencyFrame = Pa_GetOutputLatency(fStream);
     info->fOutputLatencyUsec = ConvertSample2Usec(info->fOutputLatencyFrame);

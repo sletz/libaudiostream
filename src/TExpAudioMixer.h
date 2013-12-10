@@ -214,7 +214,7 @@ struct TStreamCommand : public TCommand {
                 // New stream to play...
                 start_offset = start_date - cur_frame;
                 to_play = true;
-                printf("Start stream fCurFrame = %lld offset = %ld\n", cur_frame, start_offset);
+                //printf("Start stream fCurFrame = %lld offset = %ld\n", cur_frame, start_offset);
             } else if (cur_frame > start_date) {
                 // Stream currently playing...
                 to_play = true;
@@ -223,7 +223,7 @@ struct TStreamCommand : public TCommand {
             // Play it...
             if (to_play && (((res = fStream->Read(&shared_buffer, frame_num, start_offset)) < frames))) {
                 // End of stream
-                printf("Stop stream frame_num = %ld res = %ld\n", frame_num, res);
+                //printf("Stop stream frame_num = %ld res = %ld\n", frame_num, res);
                 return false;
             } else {
                 return true;
@@ -273,7 +273,7 @@ class TCommandList : public list<TCommandPtr>
             if (fNeedSort) {
                 sort(compare_command_date); 
                 fNeedSort = false;
-                printf("SORT\n");
+                //printf("SORT\n");
             }
         }
         

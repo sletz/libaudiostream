@@ -44,16 +44,13 @@ int TJackAudioRenderer::ProcessAux(jack_nframes_t nframes)
     
     // Take time stamp of first call to Process 
     if (fAnchorFrameTime == 0) {
-    
-        jack_nframes_t current_frames;
-        jack_time_t    current_usecs;
         jack_time_t    next_usecs;
         float          period_usecs;
-        jack_get_cycle_times(fClient, &current_frames, &current_usecs, &next_usecs, &period_usecs);
-        
-        fAnchorFrameTime = current_frames;
-        fAnchorUsecTime = current_usecs;
-    }
+        jack_get_cycle_times(fClient, &fAnchorFrameTime, &fAnchorUsecTime, &next_usecs, &period_usecs);
+    
+        printf("fAnchorFrameTime %ld \n", int(fAnchorFrameTime));
+        printf("fAnchorUsecTime %ld \n", int(fAnchorUsecTime));
+   }
 
     // Copy input buffers
 	for (i = 0; i < fInput; i++) {
@@ -226,8 +223,12 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    info->fCurFrame = jack_frame_time(fClient) - fAnchorFrameTime;
-    info->fCurUsec = jack_get_time() - fAnchorUsecTime;
+    if (fAnchorFrameTime == 0) {
+        info->fCurFrame = info->fCurUsec = 0;
+    } else {
+        info->fCurFrame = jack_frame_time(fClient) - fAnchorFrameTime;
+        info->fCurUsec = jack_get_time() - fAnchorUsecTime;
+    }
 }
 
 long TJackAudioRenderer::GetDeviceCount()

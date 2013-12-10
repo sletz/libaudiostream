@@ -501,25 +501,30 @@ static void test27()
     StartSound(gAudioPlayer, stream2, symb8);
 }
 
-static AudioStream echo(AudioStream stream)
+static AudioStream ECHO(AudioStream stream)
 {
     return MakeMixSound(MakeCopySound(stream),
                         MakeMixSound(MakeSeqSound(MakeNullSound(5 * tmpSampleRate / 10), MakeCopySound(stream), 100),
-                                    MakeSeqSound(MakeNullSound(10 * tmpSampleRate / 10), MakeCopySound(stream), 100)));
+                                     MakeSeqSound(MakeNullSound(10 * tmpSampleRate / 10), MakeCopySound(stream), 100)));
 }
 
 static void test28()
 {
-    audio_frames_t curdate = GetCurDate();
-    StartSound(gAudioPlayer, echo(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70)), GenRealDate(gAudioPlayer, curdate));
+    StartSound(gAudioPlayer, ECHO(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70)), GenRealDate(gAudioPlayer, GetCurDate()));
 }
 
 static void test28bis()
 {
-    audio_frames_t curdate = GetCurDate();
-    StartSound(gAudioPlayer, echo(MakeSharedInputSound()), GenRealDate(gAudioPlayer, curdate));
+    StartSound(gAudioPlayer, ECHO(MakeSharedInputSound()), GenRealDate(gAudioPlayer, GetCurDate()));
 }
 
+
+static void test28ter()
+{
+    AudioStream s1 = MakeCutSound(MakeSharedInputSound(), 0, 10 * tmpSampleRate);
+    AudioStream s2 = MakeSeqSound(MakeCopySound(s1), MakeEffectSound(MakeCopySound(s1), faust_effect4, 100, 100), 100);
+    StartSound(gAudioPlayer, ECHO(s2), GenRealDate(gAudioPlayer, GetCurDate()));
+}
 
 SymbolicDate symb9 = GenSymbolicDate(gAudioPlayer);
 
@@ -527,8 +532,8 @@ static void echo_effect(AudioStream stream)
 {
     audio_frames_t curdate = GetCurDate();
     
-    AudioStream stream1 = echo(stream);
-    AudioStream stream2 = MakeEffectSound(MakeCopySound(stream1), faust_effect4, 100, 100);
+    AudioStream stream1 = ECHO(stream);
+    AudioStream stream2 = MakeEffectSound(ECHO(stream), faust_effect4, 100, 100);
                                              
     StartSound(gAudioPlayer, stream1, GenRealDate(gAudioPlayer, curdate));
     StopSound(gAudioPlayer, stream1, symb9);
@@ -607,7 +612,9 @@ int main(int argc, char* argv[])
     //test27();
     //test28();
     //test28bis();
-    test29();
+    test28ter();
+    //test29();
+    //test29bis();
        
     //StartAudioPlayer(gAudioPlayer);
     /*

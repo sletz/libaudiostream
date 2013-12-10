@@ -89,7 +89,7 @@ void TExpAudioMixer::ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>
         if (command->Execute(shared_buffer_imp, date_map, cur_frame + offset, slice)) {
             it++;
         } else {
-            printf("fStreamCommands.erase\n");
+            //printf("fStreamCommands.erase\n");
             it = fStreamCommands.erase(it);
         }
     }

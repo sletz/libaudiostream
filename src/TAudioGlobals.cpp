@@ -40,6 +40,7 @@ long TSharedBuffers::fOutputOffset = 0;
 
 TCmdManagerPtr la_smartable1::fDeleteManager = NULL;
 TCmdManagerPtr TCmdManager::fInstance = NULL;
+
 TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
 long TAudioGlobals::fClientCount = 0;
 

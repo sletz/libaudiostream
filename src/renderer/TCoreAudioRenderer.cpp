@@ -1186,12 +1186,12 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    if (fAnchorHostTime != 0) {
+    if (fAnchorHostTime == 0) {
+        info->fCurFrame = info->fCurUsec = 0;
+    } else {
         UInt64 cur_host_time = AudioGetCurrentHostTime();
         info->fCurFrame = uint64_t(fCallbackTime.mSampleTime + ConvertUsec2Sample(AudioConvertHostTimeToNanos(cur_host_time - fCallbackHostTime)/1000.) - fAnchorFrameTime);
         info->fCurUsec = (AudioConvertHostTimeToNanos(cur_host_time) - AudioConvertHostTimeToNanos(fAnchorHostTime))/1000.;
-    } else {
-        info->fCurFrame = info->fCurUsec = 0;
     }
 }
 
