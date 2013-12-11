@@ -53,6 +53,7 @@ class TSharedBuffers
             for (int i = 0; i < channels; i++) {
                 res[i] = &fInBuffer[i][fInputOffset];
             }
+            //printf("GetInBuffer  fInputOffset %ld\n", fInputOffset);
             fInputOffset += framesNum;
             return res;
         }

@@ -48,8 +48,8 @@ int TJackAudioRenderer::ProcessAux(jack_nframes_t nframes)
         float          period_usecs;
         jack_get_cycle_times(fClient, &fAnchorFrameTime, &fAnchorUsecTime, &next_usecs, &period_usecs);
     
-        printf("fAnchorFrameTime %ld \n", int(fAnchorFrameTime));
-        printf("fAnchorUsecTime %ld \n", int(fAnchorUsecTime));
+        //printf("fAnchorFrameTime %ld \n", int(fAnchorFrameTime));
+        //printf("fAnchorUsecTime %ld \n", int(fAnchorUsecTime));
    }
 
     // Copy input buffers
