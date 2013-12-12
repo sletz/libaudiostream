@@ -338,7 +338,18 @@ long GetChannelsSound(AudioStream sound);
 \param channels The number of channels in the buffer.
 \return The number of read frames.
 */
-long ReadSound(AudioStream sound, float* buffer, long buffer_size, long channels);
+long ReadSound(AudioStream sound, float** buffer, long buffer_size);
+
+/*!
+\brief Read a buffer of the stream.
+\param sound The stream.
+\param buffer A buffer to be filled with frames.
+\param buffer_size The buffer length.
+\param buffer_pos The position in buffer.
+\param channels The number of channels in the buffer.
+\return The number of read frames.
+*/
+long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long buffer_pos);
 /*!
 \brief Reset a stream.
 \param sound The stream to be reseted.
