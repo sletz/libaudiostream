@@ -49,13 +49,12 @@ long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
     float* temp3[buffer->GetChannels()];
     
     /* Cleanup temporary fBuffer */
-	//UAudioTools::ZeroFloatBlk(fBufferIn->GetFrame(0, temp1), framesNum, fEffect->Inputs());
     UAudioTools::ZeroFloatBlk(fBufferIn->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fEffect->Inputs());
     
-    /* Use temporary fBuffer from the beginning */
+    // Use temporary fBuffer from the beginning
     long res = fStream->Read(fBufferIn, framesNum, 0);
      
-    /* Use temporary fBuffer from the beginning */
+    // Use temporary fBuffer from the beginning
     fEffect->Process(fBufferIn->GetFrame(0, temp1), fBufferOut->GetFrame(0, temp2), framesNum);
     
     // Mix in buffer

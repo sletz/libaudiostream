@@ -50,6 +50,80 @@ date = GetCurDate();
 StopSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date)); 
 */
 
+#define RENDER_BUFFER BS
+
+static void RenderTest(AudioStream s1)
+{
+    AudioStream stream = MakeRendererSound(s1);
+    long length = GetLengthSound(stream);
+    long channels = GetChannelsSound(stream);
+    int res;
+    
+    float** buffer;
+    
+    bool render_ok = true;
+    bool render_last_ok = true;
+    
+    printf("RenderTest length = %ld channels = %ld\n", length, channels);
+    
+    buffer = new float*[channels];
+    for (int i = 0; i < channels; i++) {
+        buffer[i] = new float[RENDER_BUFFER];
+        memset(buffer[i], 0, RENDER_BUFFER*sizeof(float));
+    }
+     
+    // Render with complete buffers
+    
+    int buffer_num = length/RENDER_BUFFER;
+    int last_buffer = length%RENDER_BUFFER;
+    
+    printf("RenderTest buffer_num = %ld last_buffer = %ld\n", buffer_num, last_buffer);
+   
+    ResetSound(stream);
+    
+    for (int i = 0; i < buffer_num; i++) {
+        res = ReadSoundPos(stream, buffer, RENDER_BUFFER, 0);
+        if (res != RENDER_BUFFER) {
+            printf("Render1 res = %ld %d\n", res, i);
+            render_ok = false;
+        }
+    }
+    
+    res = ReadSoundPos(stream, buffer, last_buffer, 0);
+    if (res != last_buffer) {
+        printf("Render1 last_buffer res = %ld\n", res);
+        render_last_ok = false;
+    }
+    printf("RenderTest render_ok = %d render_last_ok = %d\n", render_ok, render_last_ok);
+    
+    // Render with incomplete buffers
+    
+    ResetSound(stream);
+    
+    for (int i = 0; i < buffer_num; i++) {
+        res = ReadSoundPos(stream, buffer, RENDER_BUFFER/2, 0);
+        if (res != RENDER_BUFFER/2) {
+            printf("Render2 res1 = %ld %d\n", res, i);
+            render_ok = false;
+        }
+        res = ReadSoundPos(stream, buffer, RENDER_BUFFER/2, RENDER_BUFFER/2);
+        if (res != RENDER_BUFFER/2) {
+            printf("Render2 res2 = %ld %d\n", res, i);
+            render_ok = false;
+        }
+    }
+    
+    res = ReadSoundPos(stream, buffer, last_buffer, 0);
+    if (res != last_buffer) {
+        printf("Render2 last_buffer  res = %ld\n", res);
+        render_last_ok = false;
+    }
+    
+    printf("RenderTest render_ok = %d render_last_ok = %d\n", render_ok, render_last_ok);
+    ResetSound(stream);
+}
+
+
 // Lit la date courante du Player en frames
 static audio_frames_t GetCurDate()
 {
@@ -124,8 +198,74 @@ int main(int argc, char* argv[])
     
     // Joue une région de 5 sec d'un fichier à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    RenderTest(s1);
+    StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+   
+    next();
+    
+    // Joue un fade d'une région de 5 sec d'un fichier à la date courante
+    s1 = MakeFadeSound(MakeRegionSound(FILENAME1, 5*SR, 10*SR), SR, SR);
+    RenderTest(s1);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
+    
+    next();
+    
+    // Joue une selection d'une région de 5 sec d'un fichier à la date courante (gauche)
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    std::vector <int> selection1;
+    selection1.push_back(0);
+    s2 = MakeSelectSound(s1, selection1);
+    RenderTest(s2);
+    StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
+     
+    next();
+    
+    // Joue une selection d'une région de 5 sec d'un fichier à la date courante (droite)
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    std::vector <int> selection2;
+    selection2.push_back(1);
+    s2 = MakeSelectSound(s1, selection2);
+    RenderTest(s2);
+    StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
+     
+    next();
+     
+    // Joue une selection d'une région de 5 sec + parallele d'un silence
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    std::vector <int> selection3;
+    selection3.push_back(0);
+    s2 = MakeSelectSound(s1, selection3);
+    s3 = MakeParSound(MakeNullSound(5*SR), s2);
+    StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
+    
+    next();
+     
+    // Joue une selection d'une région de 5 sec + parallele d'un silence
+    s1 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
+    std::vector <int> selection4;
+    selection4.push_back(0);
+    s2 = MakeSelectSound(s1, selection4);
+    s3 = MakeParSound(s2, MakeNullSound(5*SR));
+    StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
+     */
+    next();
+     
+    // Joue une selection d'une région de 5 sec d'un fichier à la date courante
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    std::vector <int> selection6;
+    selection6.push_back(0);
+    s2 = MakeSelectSound(s1, selection6);
+    
+    s3 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
+    std::vector <int> selection7;
+    selection7.push_back(0);
+    s4 = MakeSelectSound(s3, selection7);
+    
+    s5 = MakeParSound(s2, s4);
+    RenderTest(s5);
+    StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, GetCurDate()));
+  
     next();
     
     // Joue une région de 5 sec d'un fichier à la date courante, arrêt au bout de 3 sec
@@ -148,6 +288,7 @@ int main(int argc, char* argv[])
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     s2 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
     s3 = MakeMixSound(s1, s2);
+    RenderTest(s3);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
     
     next();
@@ -155,15 +296,16 @@ int main(int argc, char* argv[])
     // Joue la sequence de 2 régions à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     s2 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
-    s3 = MakeSeqSound(s1, s2, SR/2);
+    s3 = MakeSeqSound(s1, s2, 1024);
+    RenderTest(s3);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
-    */
     
     next();
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);
+    RenderTest(s2);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
     next();

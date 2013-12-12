@@ -92,7 +92,6 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             float* temp1[fTmpBuffer->GetChannels()];
             float* temp2[TAudioGlobals::fInput];
             
-            //UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp1), framesNum, TAudioGlobals::fInput);
             UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, TAudioGlobals::fInput);
             UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos, temp1),
                                              TSharedBuffers::GetInBuffer(framesNum, TAudioGlobals::fInput, temp2),

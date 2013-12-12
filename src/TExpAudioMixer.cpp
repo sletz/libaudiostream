@@ -111,6 +111,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     long slice = 0;
     map<SymbolicDate, audio_frames_t> date_map;
     
+    
     // Possibly render slices in presence of control
     while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames) {
     

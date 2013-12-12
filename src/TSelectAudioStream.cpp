@@ -29,15 +29,15 @@ long TSelectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
     float* temp1[fBuffer->GetChannels()];
     float* temp2[Channels()];
     
-    /* Cleanup temporary fBuffer */
-	//UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), framesNum, fStream->Channels());
+    // Cleanup temporary fBuffer 
     UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
     
-    /* Read stream */
-    long res = fStream->Read(fBuffer, framesNum, framePos);
+    // Use temporary fBuffer from the beginning
+    long res = fStream->Read(fBuffer, framesNum, 0);
     
-    /* Copy selection in output */
-    UAudioTools::SelectChannelsTo(buffer->GetFrame(0, temp2), fBuffer->GetFrame(0, temp1), framesNum, fSelection);
+    // Copy selection in output 
+    UAudioTools::SelectChannelsTo(buffer->GetFrame(framePos, temp2), fBuffer->GetFrame(0, temp1), framesNum, fSelection);
+ 
     return res;
 }
 
