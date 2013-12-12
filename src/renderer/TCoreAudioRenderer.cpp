@@ -37,7 +37,6 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define DEBUG 1
 
-
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
     printf("- - - - - - - - - - - - - - - - - - - -\n");
@@ -1186,7 +1185,7 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    if (fAnchorHostTime == 0) {
+    if (fAnchorHostTime == 0) { // Renderer is stopped...
         info->fCurFrame = info->fCurUsec = 0;
     } else {
         UInt64 cur_host_time = AudioGetCurrentHostTime();

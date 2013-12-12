@@ -28,13 +28,13 @@ research@grame.fr
 #include <list>
 #include <vector>
 
-#define NO_ERR 0
-#define OPEN_ERR -1
-#define CLOSE_ERR -2
-#define LOAD_ERR -3
-#define FILE_NOT_FOUND_ERR -4
-#define EFFECT_NOT_FOUND_ERR -5
-#define PLAYER_ERR -6
+#define NO_ERR                   0
+#define OPEN_ERR                -1
+#define CLOSE_ERR               -2
+#define LOAD_ERR                -3
+#define FILE_NOT_FOUND_ERR      -4
+#define EFFECT_NOT_FOUND_ERR    -5
+#define PLAYER_ERR              -6
 
 #ifdef __cplusplus
 extern "C"
@@ -43,13 +43,13 @@ extern "C"
 
 typedef int64_t audio_frames_t;
 
-enum {kPlayingChannel = 0, kIdleChannel};
 enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
 
 /*!
 \brief Sound channel info
 */
 typedef struct ChannelInfo* ChannelInfoPtr;
+
 typedef struct ChannelInfo {
 	long fStatus;  // 1 = playing , 0 = idle
 	long fCurFrame;
@@ -64,6 +64,7 @@ typedef struct ChannelInfo {
 \brief Audio device info.
 */
 typedef struct DeviceInfo* DeviceInfoPtr;
+
 typedef struct DeviceInfo {
 	char fName[64];      
 	long fMaxInputChannels;
@@ -76,17 +77,18 @@ typedef struct DeviceInfo {
 \brief Renderer state.
 */
 typedef struct RendererInfo* RendererInfoPtr;
+
 typedef struct RendererInfo {
     long fInput;   				// Number of input channels
     long fOutput;   			// Number of output channels
     long fSampleRate; 			// Sampling Rate
     long fBufferSize;			// I/O Buffer size
-    uint64_t fCurFrame;			// Currrent sample
-    uint64_t fCurUsec;			// Current microsecond
-    long fOutputLatencyFrame;	// Output latency in frames
-    long fOutputLatencyUsec;	// Output latency in microsecond
-    long fInputLatencyFrame;	// Input latency in frames
-    long fInputLatencyUsec;		// Input latency in microsecond
+    uint64_t fCurFrame;         // Currrent date in frames
+    uint64_t fCurUsec;          // Current date in microsecond
+    long fOutputLatencyFrame;   // Output latency in frames
+    long fOutputLatencyUsec;    // Output latency in microsecond
+    long fInputLatencyFrame;    // Input latency in frames
+    long fInputLatencyUsec;     // Input latency in microsecond
 } RendererInfo;
     
 class TAudioStream : public la_smartable {

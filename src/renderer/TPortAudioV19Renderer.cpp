@@ -264,7 +264,7 @@ void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    if (fAnchorFrameTime == 0) {
+    if (fAnchorFrameTime == 0) { // Renderer is stopped...
         info->fCurFrame = info->fCurUsec = 0;
     } else {
         info->fCurFrame = long(Pa_GetStreamTime(fStream));
@@ -292,7 +292,7 @@ void TPortAudioV19Renderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 	info->fMaxOutputChannels = pdi->maxOutputChannels;
 	strcpy(info->fName, pdi->name);
 	info->fDefaultBufferSize = 512;
-	info->fDefaultSampleRate = pdi->defaultSampleRate; // init value
+	info->fDefaultSampleRate = pdi->defaultSampleRate; // Init value
 }
 
 long TPortAudioV19Renderer::GetDefaultInputDevice()

@@ -223,7 +223,7 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    if (fAnchorFrameTime == 0) {
+    if (fAnchorFrameTime == 0) { // Renderer is stopped...
         info->fCurFrame = info->fCurUsec = 0;
     } else {
         info->fCurFrame = jack_frame_time(fClient) - fAnchorFrameTime;

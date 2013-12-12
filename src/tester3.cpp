@@ -60,6 +60,7 @@ static audio_frames_t GetCurDate()
     return info.fCurFrame;
 }
 
+// Avance au test suivant
 void next()
 {
     printf("\nTaper 'n' pour passer au test suivant ou 'q' pour quitter\n\n");
@@ -75,6 +76,7 @@ void next()
     }
 }
 
+// Affecte la date courante à la date symbolique passé en paramètre
 void set_symbolic_date(SymbolicDate symb)
 {
     printf("\nTaper 'n' pour instancier la date symbolique ou 'q' pour quitter\n\n");
@@ -91,6 +93,7 @@ void set_symbolic_date(SymbolicDate symb)
     }
 }
 
+/// Echo d'un flux
 static AudioStream MakeEcho(AudioStream stream)
 {
     return MakeMixSound(MakeCopySound(stream),
@@ -100,13 +103,12 @@ static AudioStream MakeEcho(AudioStream stream)
  
 int main(int argc, char* argv[])
 {
-    // Alloue un Player avec 4 entrées/sorties et le backend JACK
+    // Alloue un Player avec 4 entrées/sorties, une entrée TR d'au plus 10 min, et le backend JACK
     gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*10, kJackRenderer, 1);
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
-    /*
     next();
     
     // Lit la date courante en frames et usec/sec
@@ -130,7 +132,6 @@ int main(int argc, char* argv[])
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date));
     StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date+3*SR));
-    
     
     next();
      
@@ -165,13 +166,14 @@ int main(int argc, char* argv[])
      
     next();
     
-     // Application d'un effet Faust (chorus) sur l'entrée temps-réel *capturée à partir de 0* et pendant 6 sec
+     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
     date = GetCurDate();
     s1 = MakeSharedInputSound();
-    s2 = MakeCutSound(s1, date, date+6*SR);   // <=== ici on "enlève" la section entre 0 et la date courante
+    // On coupe la section entre 0 et la date courante, et on garde 6 sec à partir de la date courante
+    s2 = MakeCutSound(s1, date, date+6*SR);  
     s3 = MakeEffectSound(s2, MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, date));
-    */
+    
     next();
       
     // Echo sur une région d'un fichier
@@ -190,31 +192,33 @@ int main(int argc, char* argv[])
     
     next();
     
-    // Application d'un effet Faust (chorus)  sur l'entrée temps-réel *capturée à partir de 0* 
-    // et répétition de la même région avec un autre effet (freeverb), silence d'1 sec entre les 2 répétitions
+    // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
+    // et répétition de la même région avec un autre effet (freeverb), silence d'2 sec entre les 2 répétitions
     date = GetCurDate();
     s1 = MakeSharedInputSound();
-    s2 = MakeCutSound(s1, date, date+6*SR);   // <=== ici on "enlève" la section entre 0 et la date courante, on garde 6 sec
+    // On coupe la section entre 0 et la date courante, et on garde 6 sec à partir de la date courante
+    s2 = MakeCutSound(s1, date, date+6*SR);      
     
     s3 = MakeEffectSound(MakeCopySound(s2), MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);  // <== application d'un 1° effet
     s4 = MakeEffectSound(MakeCopySound(s2), MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);  // <== application d'un 2° effet
     
-    s5 = MakeSeqSound(s3, MakeSeqSound(MakeNullSound(SR), s4, SR/2), SR/2);
+    s5 = MakeSeqSound(s3, MakeSeqSound(MakeNullSound(SR*2), s4, SR/2), SR/2);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, date));
     
     next();
     
-    // Echo de : application d'un effet Faust (chorus)  sur l'entrée temps-réel *capturée à partir de 0* 
+    // Echo de : application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
     // et répétition de la même région avec un autre effet (freeverb), silence d'1 sec entre les 2 répétitions
     date = GetCurDate();
     s1 = MakeSharedInputSound();
-    s2 = MakeCutSound(s1, date, date+6*SR);   // <=== ici on "enlève" la section entre 0 et la date courante, on garde 6 sec
+    // On coupe la section entre 0 et la date courante, et on garde 6 sec à partir de la date courante
+    s2 = MakeCutSound(s1, date, date+6*SR);   
     
     s3 = MakeEffectSound(MakeCopySound(s2), MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);  // <== application d'un 1° effet
     s4 = MakeEffectSound(MakeCopySound(s2), MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);  // <== application d'un 2° effet
     
     s5 = MakeSeqSound(s3, MakeSeqSound(MakeNullSound(SR), s4, SR/2), SR/2);
-    s6 = MakeEcho(s5); /// <<== ECHO
+    s6 = MakeEcho(s5); // <<== ECHO
     StartSound(gAudioPlayer, s6, GenRealDate(gAudioPlayer, date));
     
     next();
