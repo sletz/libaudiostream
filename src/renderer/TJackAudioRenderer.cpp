@@ -178,18 +178,18 @@ long TJackAudioRenderer::Start()
         goto error;
     }
 
-    if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) == NULL) {
+    if ((ports = jack_get_ports(fClient, NULL, JACK_DEFAULT_AUDIO_TYPE, JackPortIsPhysical | JackPortIsOutput)) == NULL) {
         printf("Cannot find any physical capture ports\n");
     } else {
-		for (int i = 0; i < fInput && ports[i]; i++) {
-			if (jack_connect(fClient, ports[i], jack_port_name(fInput_ports[i])) != 0) {
+        for (int i = 0; i < fInput && ports[i]; i++) {
+            if (jack_connect(fClient, ports[i], jack_port_name(fInput_ports[i])) != 0) {
 				printf("Cannot connect input ports\n");
 			}
 		}
         jack_free(ports);
     }
 
-    if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) == NULL) {
+    if ((ports = jack_get_ports(fClient, NULL, JACK_DEFAULT_AUDIO_TYPE, JackPortIsPhysical | JackPortIsInput)) == NULL) {
         printf("Cannot find any physical playback ports");
     } else {
 		for (int i = 0; i < fOutput && ports[i]; i++) {
