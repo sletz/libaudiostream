@@ -87,6 +87,8 @@ void TWriteFileAudioStream::Close()
 
 long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     long res = fStream->Read(buffer, framesNum, framePos);
     TBufferedAudioStream::Write(buffer, framesNum, framePos); // Write on disk
 	if (res < framesNum) {

@@ -24,11 +24,14 @@ research@grame.fr
 
 long TSelectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     float* temp1[fBuffer->GetChannels()];
     float* temp2[Channels()];
     
     /* Cleanup temporary fBuffer */
-	UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), framesNum, fStream->Channels());
+	//UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), framesNum, fStream->Channels());
+    UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
     
     /* Read stream */
     long res = fStream->Read(fBuffer, framesNum, framePos);

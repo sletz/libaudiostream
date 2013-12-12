@@ -144,11 +144,15 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
 
 long TBufferedAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     return HandleBuffer(buffer, framesNum, framePos, true);
 }
 
 long TBufferedAudioStream::Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     return HandleBuffer(buffer, framesNum, framePos, false);
 }
 

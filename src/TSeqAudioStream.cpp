@@ -46,6 +46,8 @@ TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long cr
 long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fStream);
+    assert_stream(framesNum, framePos);
+     
     long res = fStream->Read(buffer, framesNum, framePos);
     fCurFrame += res;
 

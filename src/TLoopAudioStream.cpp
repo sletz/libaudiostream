@@ -32,6 +32,8 @@ TLoopAudioStream::TLoopAudioStream(TAudioStreamPtr stream, long loop): TDecorate
 
 long TLoopAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+     
     long res = fStream->Read(buffer, framesNum, framePos);
 
     if ((res < framesNum) && (++fCurLoop < fLoopNum)) { // Loop

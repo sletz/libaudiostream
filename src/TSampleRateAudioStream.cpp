@@ -79,6 +79,8 @@ TAudioStreamPtr TSampleRateAudioStream::CutBegin(long frames)
 
 long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     int written = 0;
     bool end = false;
     

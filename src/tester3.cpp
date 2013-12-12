@@ -104,11 +104,12 @@ static AudioStream MakeEcho(AudioStream stream)
 int main(int argc, char* argv[])
 {
     // Alloue un Player avec 4 entrées/sorties, une entrée TR d'au plus 10 min, et le backend JACK
-    gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*10, kJackRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
+    /*
     next();
     
     // Lit la date courante en frames et usec/sec
@@ -156,6 +157,7 @@ int main(int argc, char* argv[])
     s2 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
     s3 = MakeSeqSound(s1, s2, SR/2);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
+    */
     
     next();
     

@@ -54,6 +54,8 @@ TAudioStreamPtr TSoundTouchAudioStream::CutBegin(long frames)
 
 long TSoundTouchAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
 	long read, produced, written = 0;
 	int available;
 	

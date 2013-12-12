@@ -170,6 +170,8 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
         virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             // Read buffer from memory
+            assert_stream(framesNum, framePos);
+            
             return TBufferedAudioStream::Read(buffer, framesNum, framePos); 
         }
         

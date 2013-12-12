@@ -46,6 +46,7 @@ class TInputAudioStream : public TAudioStream
 
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
+            assert_stream(framesNum, framePos);
             assert(TSharedBuffers::GetInBuffer());
             
             //printf("TInputAudioStream::Read framesNum %ld\n", framesNum);

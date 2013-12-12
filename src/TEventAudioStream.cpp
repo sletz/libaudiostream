@@ -25,6 +25,8 @@ research@grame.fr
 long TEventSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fStream);
+    assert_stream(framesNum, framePos);
+    
     long res = fStream->Read(buffer, framesNum, framePos);
     fCurFrame += res;
 

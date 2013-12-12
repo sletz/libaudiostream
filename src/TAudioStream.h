@@ -26,6 +26,7 @@ research@grame.fr
 #include "TAudioConstants.h"
 #include "UAudioTools.h"
 #include "TAudioBuffer.h"
+#include "TAudioGlobals.h"
 #include "la_smartpointer.h"
 #include <stdio.h>
 
@@ -87,6 +88,14 @@ class TAudioStream : public la_smartable1
         virtual TAudioStreamPtr Copy()
         {
             return 0;
+        }
+        
+        void assert_stream(long framesNum, long framePos)
+        {   
+            if (framePos + framesNum > TAudioGlobals::fBufferSize) {
+                printf("assert_stream framesNum = %ld framePos = %ld\n", framesNum, framePos);
+                assert(false);
+            }
         }
 };
 

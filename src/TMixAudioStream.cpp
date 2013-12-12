@@ -26,6 +26,8 @@ research@grame.fr
 
 long TMixAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     if (fStream) { // One of the 2 stream is finished
         return fStream->Read(buffer, framesNum, framePos);
     } else {
