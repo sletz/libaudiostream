@@ -251,7 +251,7 @@ int main(int argc, char* argv[])
      */
     next();
      
-    // Joue une selection d'une région de 5 sec d'un fichier à la date courante
+    // Montage en parallele de 2 selections
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     std::vector <int> selection6;
     selection6.push_back(0);

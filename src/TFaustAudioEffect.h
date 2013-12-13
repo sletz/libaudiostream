@@ -186,15 +186,14 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
             return this;
         }
         
-        string buildLabel(const string& label) 
+        string buildPath(const std::string& label) 
         {
             string res = "/";
-            
             for (size_t i = 0; i < fControlsLevel.size(); i++) {
-                res = res + fControlsLevel[i];
-                res = res + "/";
+                res += fControlsLevel[i];
+                res += "/";
             }
-            res = res + label;
+            res += label;
             return res;
         }
 
@@ -216,36 +215,36 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         
 		void addButton(const char* label, FAUSTFLOAT* zone) 
         {
-            fUITable.push_back(new Button(buildLabel(label), zone));
+            fUITable.push_back(new Button(buildPath(label), zone));
         }
 		
 		void addCheckButton(const char* label, FAUSTFLOAT* zone) 
         {
-            fUITable.push_back(new CheckButton(buildLabel(label), zone));
+            fUITable.push_back(new CheckButton(buildPath(label), zone));
         }
 		
 		void addVerticalSlider(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step) 
 		{ 	
-            fUITable.push_back(new Slider(buildLabel(label), zone, init, min, max, step));
+            fUITable.push_back(new Slider(buildPath(label), zone, init, min, max, step));
 		}
 		
 		void addHorizontalSlider(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step) 
 		{
-            fUITable.push_back(new Slider(buildLabel(label), zone, init, min, max, step));
+            fUITable.push_back(new Slider(buildPath(label), zone, init, min, max, step));
 		}
 		
         void addNumEntry(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
         {
-            fUITable.push_back(new Slider(buildLabel(label), zone, init, min, max, step));
+            fUITable.push_back(new Slider(buildPath(label), zone, init, min, max, step));
         }
 		
 		virtual void addHorizontalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max) 
 		{
-            fUITable.push_back(new Bargraph(buildLabel(label), zone, min, max));
+            fUITable.push_back(new Bargraph(buildPath(label), zone, min, max));
 		}
 		virtual void addVerticalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max)
 		{
-            fUITable.push_back(new Bargraph(buildLabel(label), zone, min, max));
+            fUITable.push_back(new Bargraph(buildPath(label), zone, min, max));
 		}
 	
 		virtual void show() {}
@@ -576,6 +575,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
 		llvm_dsp* fDsp;
         TCodeFaustAudioEffectFactory* fFactory;
         string fName;
+        string fJSON;
         
         struct Name_Meta : public Meta
         {
@@ -657,7 +657,8 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             metadataDSPFactory(fFactory->GetFactory(), &json);
             json.numInput(fDsp->getNumInputs());
             json.numOutput(fDsp->getNumOutputs());
-            return json.json();
+            fJSON = json.json();
+            return fJSON.c_str();
         }
               
         string GetName()
