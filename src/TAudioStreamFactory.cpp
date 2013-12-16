@@ -93,7 +93,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
             return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         }
     } else {
-        TAudioGlobals::AddLibError("beginFrame < O or endFrame > sound length");
+        TAudioGlobals::AddLibError("MakeRegionSound : beginFrame < 0 or endFrame > sound length");
         return 0;
     }
     CATCH_EXCEPTION_RETURN
@@ -116,7 +116,14 @@ TAudioStreamPtr TAudioStreamFactory::MakeLoopSound(TAudioStreamPtr sound, long n
 TAudioStreamPtr TAudioStreamFactory::MakeFadeSound(TAudioStreamPtr sound, long fadeIn, long fadeOut)
 {
     TRY_CALL
-    return (sound) ? new TFadeAudioStream(sound, fadeIn, fadeOut) : 0;
+    if (sound) {
+        if (fadeIn + fadeOut > sound->Length()) {
+            TAudioGlobals::AddLibError("MakeFadeSound : fadeIn + fadeOut > sound length");
+        } else {
+            return new TFadeAudioStream(sound, fadeIn, fadeOut);
+        }
+    }
+    return 0;
     CATCH_EXCEPTION_RETURN
 }
 
@@ -125,23 +132,27 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
     TRY_CALL
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
 		if (beginFrame > sound->Length()) {
-            TAudioGlobals::AddLibError("beginFrame < O or endFrame > sound length");
-			return 0;
+            TAudioGlobals::AddLibError("MakeCutSound : beginFrame < 0 or endFrame > sound length");
 		} else {
 			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
-			assert(begin);
-            return new TCutEndAudioStream(begin, UTools::Min(endFrame - beginFrame, begin->Length()));
+            return new TCutEndAudioStream(sound->CutBegin(beginFrame), UTools::Min(endFrame - beginFrame, begin->Length()));
         }
-    } else {
-        return 0;
     }
+    return 0;
     CATCH_EXCEPTION_RETURN
 }
 
 TAudioStreamPtr TAudioStreamFactory::MakeSeqSound(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade)
 {
     TRY_CALL
-    return (s1 && s2) ? new TSeqAudioStream(s1, s2, crossFade) : 0;
+    if (s1 && s2) {
+        if (crossFade > s1->Length() + s2->Length()) {
+            TAudioGlobals::AddLibError("MakeSeqSound : crossFade > sound length");
+        } else {
+            return new TSeqAudioStream(s1, s2, crossFade);
+        }
+    }
+    return 0;
     CATCH_EXCEPTION_RETURN
 }
 
@@ -185,8 +196,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
 {
     TRY_CALL
     if (s1 && effect) {
+        if (fadeIn + fadeOut > s1->Length()) {
+            TAudioGlobals::AddLibError("MakeEffectSound : fadeIn + fadeOut> sound length");
         // If stream and effect are compatible...
-        if (s1->Channels() == effect->Inputs()) {
+        } else if (s1->Channels() == effect->Inputs()) {
             return new TEffectAudioStream(s1, effect, fadeIn, fadeOut);
         } else if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);

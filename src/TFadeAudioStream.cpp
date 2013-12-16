@@ -25,7 +25,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
-TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut): TDecoratedAudioStream(stream)
+TFadeAudioStream::TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut):TDecoratedAudioStream(stream)
 {
     fStatus = kFadeIn; // Starting state for the stream with a fade
     fFadeInFrames = fadeIn;

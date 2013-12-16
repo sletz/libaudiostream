@@ -9,6 +9,29 @@
 
 using namespace std;
 
+static void PrintBufferFrame(float** buffer, int channels, int render_slice, ofstream* dst, bool last)
+{
+    for (int frame = 0; frame < render_slice; frame++) {
+    
+        *dst << "[";
+        for (int i = 0; i < channels; i++) {
+            *dst << buffer[i][frame];
+            if (i < channels - 1) {
+                *dst << " ";
+            }
+        }
+        *dst << "]";
+        
+        if (last) {
+            if (frame < render_slice-1) {
+                *dst << ",";
+            } 
+        } else {
+            *dst << ",";
+        }
+    }
+}
+
 void FileRender(AudioStream s, int render_size, const char* filename)
 {
     AudioStream stream = MakeRendererSound(s);
@@ -41,17 +64,7 @@ void FileRender(AudioStream s, int render_size, const char* filename)
             printf("FileRender res = %ld %d\n", res, i);
             render_ok = false;
         }
-        
-        for (int frame = 0; frame < res; frame++) {
-            *dst << "[";
-            for (int i = 0; i < channels; i++) {
-                *dst << buffer[i][frame];
-                if (i < channels - 1) {
-                    *dst << " ";
-                }
-            }
-            *dst << "],";
-        }
+        PrintBufferFrame(buffer, channels, render_size, dst, (last_buffer == 0));
     }
     
     res = ReadSoundPos(stream, buffer, last_buffer, 0);
@@ -59,20 +72,10 @@ void FileRender(AudioStream s, int render_size, const char* filename)
         printf("FileRender last_buffer res = %ld\n", res);
         render_last_ok = false;
     }
-    for (int frame = 0; frame < res; frame++) {
-        *dst << "[";
-        for (int i = 0; i < channels; i++) {
-            *dst << buffer[i][frame];
-            if (i < channels - 1) {
-                *dst << " ";
-            }
-        }
-        *dst << "]";
-        if (frame < res-1) {
-            *dst << ",";
-        } 
-    }
     
+    // Last buffer
+    PrintBufferFrame(buffer, channels, res, dst, true);
+      
     printf("FileRender render_ok = %d render_last_ok = %d\n", render_ok, render_last_ok);
     dst->close();
     delete dst;
