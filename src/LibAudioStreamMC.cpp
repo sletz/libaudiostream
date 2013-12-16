@@ -73,7 +73,8 @@ extern "C"
 	AUDIOAPI void DeleteSoundPtr(AudioStreamPtr sound);
 	
 	// Build sound (using pointer on smartptr)
-	AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long lengthFrame);
+	AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long length);
+    AUDIOAPI AudioStreamPtr MakeConstantNullSoundPtr(long channels, long length, float value);
     AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name);
     AUDIOAPI AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
 	AUDIOAPI AudioStreamPtr	MakeStereoSoundPtr(AudioStreamPtr sound);
@@ -176,7 +177,8 @@ extern "C"
 	AUDIOAPI void AudioGlobalsDestroy();
 
     // Build sound (using smartptr)
-    AUDIOAPI AudioStream MakeNullSound(long lengthFrame);
+    AUDIOAPI AudioStream MakeNullSound(long length);
+    AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value);
     AUDIOAPI AudioStream MakeReadSound(const char* name);
     AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
     AUDIOAPI AudioStream MakeStereoSound(AudioStream sound);
@@ -235,9 +237,14 @@ AUDIOAPI const char* GetLastLibError()
     return TAudioGlobals::fLastLibError;
 }
 
-AUDIOAPI AudioStream MakeNullSound(long lengthFrame)
+AUDIOAPI AudioStream MakeNullSound(long length)
 {
-	return TAudioStreamFactory::MakeNullSound(lengthFrame);
+	return TAudioStreamFactory::MakeNullSound(length);
+}
+
+AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value)
+{
+	return TAudioStreamFactory::MakeConstantSound(channels, length, value);
 }
 
 AUDIOAPI AudioStream MakeReadSound(const char* name)
@@ -390,9 +397,9 @@ AUDIOAPI void DeleteSoundPtr(AudioStreamPtr sound)
 	delete sound;
 }
 
-AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long lengthFrame)
+AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long length)
 {
-	return MakeSoundPtr(TAudioStreamFactory::MakeNullSound(lengthFrame));
+	return MakeSoundPtr(TAudioStreamFactory::MakeNullSound(length));
 }
 
 AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name)

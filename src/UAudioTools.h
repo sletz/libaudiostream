@@ -559,6 +559,14 @@ class UAudioTools
                 frame[i][0] *= val;
             }
         }
+        
+        static inline void AddFrame(float** frame, float val, long channels)
+        {
+            // To optimize
+            for (int i = 0 ; i < channels; i++) {
+                frame[i][0] += val;
+            }
+        }
 	
         static void cTocCopy(char *dest, const char* src)
         {

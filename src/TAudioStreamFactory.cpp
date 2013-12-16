@@ -65,6 +65,11 @@ TAudioStreamPtr TAudioStreamFactory::MakeMultiNullSound(long channels, long leng
     return new TNullAudioStream(channels, length);
 }
 
+TAudioStreamPtr TAudioStreamFactory::MakeConstantSound(long channels, long length, float value)
+{
+    return new TConstantAudioStream(channels, length, value);
+}
+
 TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 {
     TRY_CALL

@@ -144,6 +144,10 @@
 		4B9A47D31648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
 		4B9A47D41648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B9A47CC1648104E000A1C0F /* TSampleRateAudioStream.cpp */; };
 		4B9A47D51648104E000A1C0F /* TSampleRateAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */; };
+		4BA49D2D185F01CE007749FB /* LAS-test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA49D2B185F01CE007749FB /* LAS-test.cpp */; };
+		4BA49DE6185F0D1E007749FB /* LibAudioStreamMC++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9D8B618042D96001B620C /* LibAudioStreamMC++.h */; };
+		4BA49DEA185F0D1E007749FB /* LAS-test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA49D2B185F01CE007749FB /* LAS-test.cpp */; };
+		4BA49DF8185F0D64007749FB /* LAS-tester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA49DF7185F0D64007749FB /* LAS-tester.cpp */; };
 		4BAC1F34182D2193003D6EFA /* TSelectAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BAC1F32182D2193003D6EFA /* TSelectAudioStream.cpp */; };
 		4BAC1F35182D2193003D6EFA /* TSelectAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BAC1F33182D2193003D6EFA /* TSelectAudioStream.h */; };
 		4BAC1F36182D2193003D6EFA /* TSelectAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BAC1F32182D2193003D6EFA /* TSelectAudioStream.cpp */; };
@@ -445,6 +449,9 @@
 		4B9A47CD1648104E000A1C0F /* TSampleRateAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSampleRateAudioStream.h; path = ../src/TSampleRateAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4BA0DEDE087FE455003B1CB3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/main.cpp; sourceTree = SOURCE_ROOT; };
 		4BA3E1780459506A00053105 /* TRendererAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TRendererAudioStream.h; path = ../src/TRendererAudioStream.h; sourceTree = SOURCE_ROOT; };
+		4BA49D2B185F01CE007749FB /* LAS-test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "LAS-test.cpp"; path = "../src/LAS-test.cpp"; sourceTree = SOURCE_ROOT; };
+		4BA49DF1185F0D1E007749FB /* LAS-lib-tester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "LAS-lib-tester"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BA49DF7185F0D64007749FB /* LAS-tester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "LAS-tester.cpp"; path = "../src/LAS-tester.cpp"; sourceTree = SOURCE_ROOT; };
 		4BAC1F32182D2193003D6EFA /* TSelectAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TSelectAudioStream.cpp; path = ../src/TSelectAudioStream.cpp; sourceTree = SOURCE_ROOT; };
 		4BAC1F33182D2193003D6EFA /* TSelectAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSelectAudioStream.h; path = ../src/TSelectAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4BAC541318448F6900EFA988 /* TAudioDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TAudioDate.h; path = ../src/TAudioDate.h; sourceTree = SOURCE_ROOT; };
@@ -546,6 +553,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4BA49DEB185F0D1E007749FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BBBF3AA172A7E210019A47E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -632,6 +646,8 @@
 				4B7AFCE417E9DFF9005FA935 /* tester1.cpp */,
 				4BB9D88C18042A44001B620C /* tester2.cpp */,
 				4BF819DC1857ADE3009CD184 /* tester3.cpp */,
+				4BA49D2B185F01CE007749FB /* LAS-test.cpp */,
+				4BA49DF7185F0D64007749FB /* LAS-tester.cpp */,
 				4B0A99071836697800F7D5A8 /* Sorter */,
 				F5EDBD21032F870801053105 /* Channel */,
 				F5D82C3D032DEAA101053105 /* Effect */,
@@ -664,6 +680,7 @@
 				4B7AFCC717E9DF61005FA935 /* LAStester1 */,
 				4B012950180415CC000735C7 /* LAStester2 */,
 				4BF819CC1857ADA6009CD184 /* LAStester3 */,
+				4BA49DF1185F0D1E007749FB /* LAS-lib-tester */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -915,6 +932,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA49DE5185F0D1E007749FB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BA49DE6185F0D1E007749FB /* LibAudioStreamMC++.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1182,6 +1207,25 @@
 			productReference = 4B7AFCC717E9DF61005FA935 /* LAStester1 */;
 			productType = "com.apple.product-type.tool";
 		};
+		4BA49DE4185F0D1E007749FB /* LAS-lib-tester */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BA49DED185F0D1E007749FB /* Build configuration list for PBXNativeTarget "LAS-lib-tester" */;
+			buildPhases = (
+				4BA49DE5185F0D1E007749FB /* Headers */,
+				4BA49DE8185F0D1E007749FB /* Sources */,
+				4BA49DEB185F0D1E007749FB /* Frameworks */,
+				4BA49DEC185F0D1E007749FB /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LAS-lib-tester";
+			productInstallPath = /usr/local/bin;
+			productName = testLibrary;
+			productReference = 4BA49DF1185F0D1E007749FB /* LAS-lib-tester */;
+			productType = "com.apple.product-type.tool";
+		};
 		4BBBF3A6172A7E210019A47E /* LAStester */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4BBBF3AC172A7E210019A47E /* Build configuration list for PBXNativeTarget "LAStester" */;
@@ -1350,6 +1394,7 @@
 				4B7AFCBD17E9DF61005FA935 /* LAStester1 */,
 				4B012946180415CC000735C7 /* LAStester2 */,
 				4BF819C11857ADA6009CD184 /* LAStester3 */,
+				4BA49DE4185F0D1E007749FB /* LAS-lib-tester */,
 			);
 		};
 /* End PBXProject section */
@@ -1405,6 +1450,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4B7AFCC217E9DF61005FA935 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA49DEC185F0D1E007749FB /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1516,6 +1568,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B7AFCE517E9DFF9005FA935 /* tester1.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BA49DE8185F0D1E007749FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BA49DEA185F0D1E007749FB /* LAS-test.cpp in Sources */,
+				4BA49DF8185F0D64007749FB /* LAS-tester.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1669,6 +1730,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BF819DD1857ADE3009CD184 /* tester3.cpp in Sources */,
+				4BA49D2D185F01CE007749FB /* LAS-test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2553,6 +2615,86 @@
 			};
 			name = Default;
 		};
+		4BA49DEE185F0D1E007749FB /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					LibAudioStream,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "LAS-lib-tester";
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4BA49DEF185F0D1E007749FB /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					LibAudioStream,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "LAS-lib-tester";
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4BA49DF0185F0D1E007749FB /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				FRAMEWORK_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					LibAudioStream,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = testPlayer;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
 		4BBBF3AD172A7E210019A47E /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2992,6 +3134,16 @@
 				4B95A74B0A39EF5C00916AF3 /* Development */,
 				4B95A74C0A39EF5C00916AF3 /* Deployment */,
 				4B95A74D0A39EF5C00916AF3 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4BA49DED185F0D1E007749FB /* Build configuration list for PBXNativeTarget "LAS-lib-tester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BA49DEE185F0D1E007749FB /* Development */,
+				4BA49DEF185F0D1E007749FB /* Deployment */,
+				4BA49DF0185F0D1E007749FB /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

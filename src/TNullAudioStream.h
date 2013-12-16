@@ -87,4 +87,71 @@ class TNullAudioStream : public TAudioStream
 
 typedef TNullAudioStream * TNullAudioStreamPtr;
 
+//----------------------------
+// Class TConstantAudioStream
+//----------------------------
+/*!
+\brief A TConstantAudioStream generates a constant value.
+*/
+
+class TConstantAudioStream : public TAudioStream
+{
+
+    private:
+
+        long fFramesNum;
+        long fCurFrame;
+        long fChannels;
+        float fValue;
+
+    public:
+
+        TConstantAudioStream(long lengthFrame, float value): fFramesNum(lengthFrame), fCurFrame(0), fChannels(1), fValue(value)
+        {}
+        TConstantAudioStream(long channels, long lengthFrame, float value): fFramesNum(lengthFrame), fCurFrame(0), fChannels(channels), fValue(value)
+        {}
+        virtual ~TConstantAudioStream()
+        {}
+
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        {
+            framesNum = UTools::Min(framesNum, fFramesNum - fCurFrame);
+            fCurFrame += framesNum;
+            
+            float* temp[buffer->GetChannels()];
+            for (int i = 0; i < framesNum; i++) {
+                UAudioTools::AddFrame(buffer->GetFrame(i, temp), fValue, buffer->GetChannels());
+            }
+            
+            return framesNum;
+        }
+
+        TAudioStreamPtr CutBegin(long frames)
+        {
+            return new TConstantAudioStream(fChannels, UTools::Max(0, fFramesNum - frames), fValue);
+        }
+        
+        long Length()
+        {
+            return fFramesNum;
+        }
+        
+        long Channels()
+        {
+            return fChannels;
+        }
+        
+        void Reset()
+        {
+            fCurFrame = 0;
+        }
+        
+        TAudioStreamPtr Copy()
+        {
+            return new TConstantAudioStream(fChannels, fFramesNum, fValue);
+        }
+};
+
+typedef TConstantAudioStream * TConstantAudioStreamPtr;
+
 #endif
