@@ -102,8 +102,41 @@ void test5()
     FileRender(s3, 100, "test5.txt");
 }
 
+// Test SELECTION
+void test6_1()
+{
+    AudioStream s1 = MakeConstantSound(1, 100, 0.5f);
+    AudioStream s2 = MakeConstantSound(1, 100, 1.f);
+    AudioStream s3 = MakeParSound(s1, s2);
+    
+    std::vector <int> selection1;
+    selection1.push_back(1);
+    selection1.push_back(2);
+    AudioStream s4 = MakeSelectSound(s3, selection1);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s4 %d\n", GetLengthSound(s4));
+    FileRender(s4, 100, "test6_1.txt");
+}
+
+void test6_2()
+{
+    AudioStream s1 = MakeConstantSound(2, 100, 0.5f);
+    AudioStream s2 = MakeConstantSound(2, 100, 1.f);
+    AudioStream s3 = MakeParSound(s1, s2);
+    
+    std::vector <int> selection1;
+    selection1.push_back(1);
+    selection1.push_back(2);
+    AudioStream s4 = MakeSelectSound(s3, selection1);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s4 %d\n", GetLengthSound(s4));
+    FileRender(s4, 100, "test6_2.txt");
+}
+
 // Test EFFECT
-void test6()
+void test7()
 {
     AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
@@ -111,19 +144,19 @@ void test6()
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
-    FileRender(s2, 100, "test6.txt");
+    FileRender(s2, 100, "test7.txt");
 }
-
-
 
 
 int main()
 {
     AudioGlobalsInit(2, 2, 44100, 512, 65536, 65536, 1);
+    /*
     test0();
     test1_1();
     test1_2();
     test1_3();
+    */
     /*
     test1();
     printf("error = %s\n", GetLastLibError());
@@ -144,6 +177,7 @@ int main()
     test5();
     printf("error = %s\n", GetLastLibError());
     */
-    test6();
+    test6_1();
+    test6_2();
     printf("error = %s\n", GetLastLibError());
 }

@@ -162,10 +162,22 @@ TAudioStreamPtr TAudioStreamFactory::MakeParSound(TAudioStreamPtr s1, TAudioStre
     CATCH_EXCEPTION_RETURN
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeSelectSound(TAudioStreamPtr s1, const std::vector<int>& selection)
+TAudioStreamPtr TAudioStreamFactory::MakeSelectSound(TAudioStreamPtr s, const std::vector<int>& selection)
 {
     TRY_CALL
-    return (s1) ? new TSelectAudioStream(s1, selection) : 0;
+    if (s) {   
+        // Check selection channels
+        for (unsigned int i = 0; i < selection.size(); i++) {
+            if (selection[i] >= s->Channels()) {
+                stringstream error;
+                error << "MakeSelectSound : channel " << selection[i] << " is out of stream channels";
+                TAudioGlobals::AddLibError(error.str());
+                return 0;
+            }
+        }
+        return new TSelectAudioStream(s, selection);
+    }
+    return 0;
     CATCH_EXCEPTION_RETURN
 }
 
@@ -199,7 +211,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
             return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
         } else {
             stringstream error;
-            error << "Stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";
+            error << "MakeEffectSound : stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";
             TAudioGlobals::AddLibError(error.str());
         }
     }
