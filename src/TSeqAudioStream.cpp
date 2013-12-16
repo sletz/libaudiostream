@@ -70,7 +70,7 @@ long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 
 /*
  CutBegin(Seq(s1, s2), n) ==> NullStream if n >= Length(Seq(s1, s2))
- CutBegin(Seq(s1, s2), n) ==> Seq(CutBegin (s1, n) s2) if n < Length(s1)
+ CutBegin(Seq(s1, s2), n) ==> Seq(CutBegin(s1, n) s2) if n < Length(s1)
  CutBegin(Seq(s1, s2), n) ==> CutBegin(s2, n - Length(s1)) if n >= Length(s1)
 */
 

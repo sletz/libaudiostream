@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
-    /*
+    
     next();
     
     // Lit la date courante en frames et usec/sec
@@ -126,14 +126,14 @@ int main(int argc, char* argv[])
     
     // Joue une région de 5 sec d'un fichier à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    RenderTest(s1);
+    MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
    
     next();
     
     // Joue un fade d'une région de 5 sec d'un fichier à la date courante
     s1 = MakeFadeSound(MakeRegionSound(FILENAME1, 5*SR, 10*SR), SR, SR);
-    RenderTest(s1);
+    MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
     
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
     std::vector <int> selection1;
     selection1.push_back(0);
     s2 = MakeSelectSound(s1, selection1);
-    RenderTest(s2);
+    MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
     next();
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
     std::vector <int> selection2;
     selection2.push_back(1);
     s2 = MakeSelectSound(s1, selection2);
-    RenderTest(s2);
+    MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
     next();
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
     s2 = MakeSelectSound(s1, selection4);
     s3 = MakeParSound(s2, MakeNullSound(5*SR));
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
-     */
+     
     next();
      
     // Montage en parallele de 2 selections

@@ -131,7 +131,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
 {
     TRY_CALL
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
-		if (beginFrame > sound->Length()) {
+		if (beginFrame >= sound->Length()) {
             TAudioGlobals::AddLibError("MakeCutSound : beginFrame < 0 or endFrame > sound length");
 		} else {
 			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
@@ -197,7 +197,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
     TRY_CALL
     if (s1 && effect) {
         if (fadeIn + fadeOut > s1->Length()) {
-            TAudioGlobals::AddLibError("MakeEffectSound : fadeIn + fadeOut> sound length");
+            TAudioGlobals::AddLibError("MakeEffectSound : fadeIn + fadeOut > sound length");
         // If stream and effect are compatible...
         } else if (s1->Channels() == effect->Inputs()) {
             return new TEffectAudioStream(s1, effect, fadeIn, fadeOut);

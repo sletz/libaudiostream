@@ -151,7 +151,6 @@ void MemoryRender(AudioStream s, int render_size)
     ResetSound(stream);
     
     // Free buffers
-    buffer = new float*[channels];
     for (int i = 0; i < channels; i++) {
         delete[] buffer[i];
     }

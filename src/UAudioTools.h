@@ -71,7 +71,6 @@ class UAudioTools
         
         static inline void MixChannelsTo(float** dst, float** src, long framesNum, long shift_channel, long channels)
         {
-            
             for (int i = 0; i < channels; i++) {
                 for (int j = 0; j < framesNum; j++) {
                     dst[shift_channel + i][j] += src[i][j];

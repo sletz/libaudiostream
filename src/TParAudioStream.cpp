@@ -47,11 +47,11 @@ long TParAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         if (res1 < framesNum) {
             fStream = fStream2; // Stream1 is finished, fStream variable is used as the remaining stream
             long res2 = fStream2->Read(fBuffer, framesNum, 0);
-            UAudioTools::MixChannelsTo(buffer->GetFrame(0, temp2), fBuffer->GetFrame(0, temp1), res2, fStream1->Channels(), fStream2->Channels());
+            UAudioTools::CopyChannelsTo(buffer->GetFrame(0, temp2), fBuffer->GetFrame(0, temp1), res2, fStream1->Channels(), fStream2->Channels());
             return res2;
         } else {
             long res2 = fStream2->Read(fBuffer, framesNum, 0);
-            UAudioTools::MixChannelsTo(buffer->GetFrame(0, temp2), fBuffer->GetFrame(0, temp1), res2, fStream1->Channels(), fStream2->Channels());
+            UAudioTools::CopyChannelsTo(buffer->GetFrame(0, temp2), fBuffer->GetFrame(0, temp1), res2, fStream1->Channels(), fStream2->Channels());
             if (res2 < framesNum) {
                 fStream = fStream1; // Stream2 is finished, fStream variable is used as the remaining stream
             }

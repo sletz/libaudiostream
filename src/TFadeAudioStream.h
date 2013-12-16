@@ -48,6 +48,9 @@ class TFadeAudioStream : public TDecoratedAudioStream
         FLOAT_BUFFER fMixBuffer;     // Used for mixing
 
         long ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        
+        long Fade(FLOAT_BUFFER buffer, long framesNum, long framePos, Envelope& fade);
+        
         long FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos);
         long FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos);
 

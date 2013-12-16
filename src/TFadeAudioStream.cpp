@@ -71,9 +71,7 @@ long TFadeAudioStream::ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePo
     return res;
 }
 
-// TODO : start FadeOut while doing FadeIn
-
-long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos)
+long TFadeAudioStream::Fade(FLOAT_BUFFER buffer, long framesNum, long framePos, Envelope& fade)
 {
     float* temp1[fStream->Channels()];
     float* temp2[buffer->GetChannels()];
@@ -84,14 +82,22 @@ long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos
     fCurFrame += res;
 
     for (int i = 0; i < framesNum; i++) {
-        UAudioTools::MultFrame(fMixBuffer->GetFrame(i, temp1), fFadeIn.tick(), fStream->Channels());
+        UAudioTools::MultFrame(fMixBuffer->GetFrame(i, temp1), fade.tick(), fStream->Channels());
     }
 
     UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos, temp2),
                                     fMixBuffer->GetFrame(0, temp1),
                                     framesNum, fStream->Channels());
 
+    return res;
+}
 
+// TODO : start FadeOut while doing FadeIn
+
+long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos)
+{
+    long res = Fade(buffer, framesNum, framePos, fFadeIn);
+    
     if (res < framesNum) {
         fStatus = kIdle;
     } else if (fFadeIn.lastOut() >= 1.0f) {
@@ -103,22 +109,7 @@ long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos
 
 long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    float* temp1[fStream->Channels()];
-    float* temp2[buffer->GetChannels()];
-    
-    UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
-    // Use temporary fBuffer from the beginning
-    long res = fStream->Read(fMixBuffer, framesNum, 0);
-    fCurFrame += res;
-
-    for (int i = 0; i < framesNum; i++) {
-        UAudioTools::MultFrame(fMixBuffer->GetFrame(i, temp1), fFadeOut.tick(), fStream->Channels());
-    }
-
-    UAudioTools::MixFrameToFrameBlk(buffer->GetFrame(framePos, temp2),
-                                    fMixBuffer->GetFrame(0, temp1),
-                                    framesNum, fStream->Channels());
-
+    long res = Fade(buffer, framesNum, framePos, fFadeOut);
     
     if ((res < framesNum) || (fFadeOut.lastOut() <= 0.0f)) {
         fStatus = kIdle;
@@ -139,7 +130,7 @@ void TFadeAudioStream::Init(float fade_in_val, float fade_in_time, float fade_ou
 }
 
 /*
-CutBegin(Fade (s, f1, f2), n)  ==> Fade (CutBegin (s, n) ,f1, f2) // A REVOIR
+CutBegin(Fade (s, f1, f2), n)  ==> Fade (CutBegin(s, n), f1, f2) // A REVOIR
 */
 
 TAudioStreamPtr TFadeAudioStream::CutBegin(long frames)
