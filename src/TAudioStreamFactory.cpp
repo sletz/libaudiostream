@@ -34,7 +34,6 @@ research@grame.fr
 #include "TReadFileAudioStream.h"
 #include "TInputAudioStream.h"
 #include "TBufferedInputAudioStream.h"
-#include "TTransformAudioStream.h"
 #include "TEffectAudioStream.h"
 #include "TEventAudioStream.h"
 #include "TRubberBandAudioStream.h"
@@ -96,13 +95,6 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
         TAudioGlobals::AddLibError("MakeRegionSound : beginFrame < 0 or endFrame > sound length");
         return 0;
     }
-    CATCH_EXCEPTION_RETURN
-}
-
-TAudioStreamPtr TAudioStreamFactory::MakeStereoSound(TAudioStreamPtr sound)
-{
-    TRY_CALL
-	return (sound && sound->Channels() == 1) ? new TChannelizerAudioStream(sound, 2) : sound;
     CATCH_EXCEPTION_RETURN
 }
 

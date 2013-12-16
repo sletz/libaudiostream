@@ -219,12 +219,6 @@ AudioStream MakeReadSound(const char* name);
 */
 AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
 /*!
-\brief Transform a stream in a stereo stream.
-\param sound The stream to be transformed.
-\return A pointer to new stream object.
-*/
-AudioStream MakeStereoSound(AudioStream sound);
-/*!
 \brief Create a fade on a stream.
 \param sound The stream to be "faded".
 \param fadeIn The fadein length in frames.

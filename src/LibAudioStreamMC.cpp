@@ -77,7 +77,6 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeConstantNullSoundPtr(long channels, long length, float value);
     AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name);
     AUDIOAPI AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
-	AUDIOAPI AudioStreamPtr	MakeStereoSoundPtr(AudioStreamPtr sound);
     AUDIOAPI AudioStreamPtr MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut);
     AUDIOAPI AudioStreamPtr MakeLoopSoundPtr(AudioStreamPtr sound, long n);
     AUDIOAPI AudioStreamPtr MakeCutSoundPtr(AudioStreamPtr sound, long beginFrame, long endFrame);
@@ -181,7 +180,6 @@ extern "C"
     AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value);
     AUDIOAPI AudioStream MakeReadSound(const char* name);
     AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
-    AUDIOAPI AudioStream MakeStereoSound(AudioStream sound);
     AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
     AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n);
     AUDIOAPI AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
@@ -257,11 +255,6 @@ AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long end
     return TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 }
 
-AUDIOAPI AudioStream MakeStereoSound(AudioStream sound)
-{
-	return TAudioStreamFactory::MakeStereoSound(sound);
-}
-
 AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut)
 {
     return TAudioStreamFactory::MakeFadeSound(static_cast<TAudioStreamPtr>(sound), fadeIn, fadeOut);
@@ -311,13 +304,6 @@ AUDIOAPI AudioStream MakeEffectSound(AudioStream s1, AudioEffect effect, long fa
 {
 	return TAudioStreamFactory::MakeEffectSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioEffectInterfacePtr>(effect), fadeIn, fadeOut);
 }
-
-/*
-AUDIOAPI AudioStream MakeTransformSound(AudioStream s1, AudioEffectList list_effect, long fadeIn, long fadeOut)
-{
-	return TAudioStreamFactory::MakeTransformSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioEffectListPtr>(list_effect), fadeIn, fadeOut);
-}
-*/
 
 AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pitch_shift, double* time_strech)
 {
@@ -412,11 +398,6 @@ AUDIOAPI AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long end
 {
 	AudioStream sound = TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 	return (sound) ? MakeSoundPtr(sound) : 0;
-}
-
-AUDIOAPI AudioStreamPtr MakeStereoSoundPtr(AudioStreamPtr sound)
-{
-	return (sound) ? MakeSoundPtr(TAudioStreamFactory::MakeStereoSound(static_cast<TAudioStreamPtr>(*sound))) : 0;
 }
 
 AUDIOAPI AudioStreamPtr MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut)
