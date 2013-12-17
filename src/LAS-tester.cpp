@@ -44,7 +44,7 @@ void test2_1()
 void test2_2()
 {
     AudioStream s = MakeFadeSound(MakeConstantSound(2, 300, 1.f), 100, 100);
-   // FileRender(s, 50, "test2_2_1.txt");
+    FileRender(s, 50, "test2_2_1.txt");
     FileRender(s, 50, "test2_2_2.txt", true);
 }
 
@@ -70,6 +70,29 @@ void test2_5()
     FileRender(s, 1000, "test2_5_2.txt", true);
 }
 
+void test2_6()  // FadeIn only
+{
+    AudioStream s = MakeFadeSound(MakeConstantSound(2, 300, 1.f), 100, 0);
+    printf("error = %s\n", GetLastLibError());
+    FileRender(s, 60, "test2_6_1.txt");
+    FileRender(s, 60, "test2_6_2.txt", true);
+}
+void test2_7()  // FadeOut only
+{
+    AudioStream s = MakeFadeSound(MakeConstantSound(2, 300, 1.f), 0, 100);
+    printf("error = %s\n", GetLastLibError());
+    FileRender(s, 60, "test2_7_1.txt");
+    FileRender(s, 60, "test2_7_2.txt", true);
+}
+
+void test2_8()  // No Play section
+{
+    AudioStream s = MakeFadeSound(MakeConstantSound(2, 200, 1.f), 100, 100);
+    printf("error = %s\n", GetLastLibError());
+    FileRender(s, 60, "test2_8_1.txt");
+    FileRender(s, 60, "test2_8_2.txt", true);
+}
+
 // Test SEQUENCE
 void test3()
 {
@@ -78,7 +101,7 @@ void test3()
     printf("len s1 %d\n", GetLengthSound(s1));
     printf("len s2 %d\n", GetLengthSound(s2));
     
-    AudioStream s3 = MakeSeqSound(s1, s2, 1000);
+    AudioStream s3 = MakeSeqSound(s1, s2, 100);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s3 %d\n", GetLengthSound(s3));
@@ -165,14 +188,12 @@ int main()
     test1();
     printf("error = %s\n", GetLastLibError());
      */
+     /*
     test2_1();
     printf("error = %s\n", GetLastLibError());
-   
     
-    //test2_2();
-    //printf("error = %s\n", GetLastLibError());
-    
-    /*
+    test2_2();
+    printf("error = %s\n", GetLastLibError());
     
     test2_3();
     printf("error = %s\n", GetLastLibError());
@@ -180,14 +201,24 @@ int main()
     printf("error = %s\n", GetLastLibError());
     test2_5();
     printf("error = %s\n", GetLastLibError());
-    /*
-    test3();
-    printf("error = %s\n", GetLastLibError());
-    test4();
-    printf("error = %s\n", GetLastLibError());
-    test5();
-    printf("error = %s\n", GetLastLibError());
     */
+    
+    test2_6();
+    
+    printf("error = %s\n", GetLastLibError());
+    test2_7();
+    printf("error = %s\n", GetLastLibError());
+    test2_8();
+    printf("error = %s\n", GetLastLibError());
+    
+    
+    //test3();
+    //printf("error = %s\n", GetLastLibError());
+    //test4();
+    //printf("error = %s\n", GetLastLibError());
+    //test5();
+    //printf("error = %s\n", GetLastLibError());
+    
     //test6_1();
     //test6_2();
     //printf("error = %s\n", GetLastLibError());

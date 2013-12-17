@@ -341,9 +341,9 @@ AUDIOAPI long ReadSound(AudioStream s, float** buffer, long buffer_size)
 {
     if (s && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
-        TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
+        TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
         UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
-        return stream->Read(&process, buffer_size, 0);
+        return stream->Read(&process_buffer, buffer_size, 0);
     } else {
         return 0;
     }
@@ -353,9 +353,11 @@ AUDIOAPI long ReadSoundPos(AudioStream s, float** buffer, long buffer_size, long
 {
     if (s && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
-        TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
-        UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
-        return stream->Read(&process, frames, pos);
+        float* temp[stream->Channels()];
+        TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
+        // Init part of the buffer
+        UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
+        return stream->Read(&process_buffer, frames, pos);
     } else {
         return 0;
     }
@@ -519,9 +521,11 @@ AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr sound, float** buffer, long buffer_
 {
     if (sound && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(*sound);
-        TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
-        UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
-        return stream->Read(&process, frames, pos);
+        float* temp[stream->Channels()];
+        TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
+        // Init part of the buffer
+        UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
+        return stream->Read(&process_buffer, frames, pos);
     } else {
         return 0;
     }

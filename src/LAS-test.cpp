@@ -34,9 +34,8 @@ static void PrintBufferFrame(float** buffer, int channels, int buffer_size, ofst
 
 void FileRender(AudioStream s, int buffer_size, const char* filename, bool cut)
 {
-    ResetSound(s);
-    
     AudioStream stream = MakeRendererSound(s);
+    ResetSound(stream);
     long length = GetLengthSound(stream);
     long channels = GetChannelsSound(stream);
     int res;
@@ -100,9 +99,8 @@ void FileRender(AudioStream s, int buffer_size, const char* filename, bool cut)
 
 void MemoryRender(AudioStream s, int buffer_size)
 {
-    ResetSound(s);
-    
     AudioStream stream = MakeRendererSound(s);
+    ResetSound(stream);
     long length = GetLengthSound(stream);
     long channels = GetChannelsSound(stream);
     int res;

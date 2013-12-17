@@ -64,7 +64,7 @@ long TFadeAudioStream::Play(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     long playingFrames = UTools::Min(framesNum, fFramesNum - fCurFrame);
     
-    printf("Play playingFrames %d\n", playingFrames);
+    printf("Play playingFrames %d fFramesNum %d fCurFrame %d\n", playingFrames, fFramesNum, fCurFrame);
     
     long res = fStream->Read(buffer, playingFrames, framePos);
     
