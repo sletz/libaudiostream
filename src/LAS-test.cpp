@@ -9,31 +9,33 @@
 
 using namespace std;
 
-static void PrintBufferFrame(float** buffer, int channels, int render_slice, ofstream* dst, bool last)
+static void PrintBufferFrame(float** buffer, int channels, int buffer_size, ofstream& dst, bool last)
 {
-    for (int frame = 0; frame < render_slice; frame++) {
+    for (int frame = 0; frame < buffer_size; frame++) {
     
-        *dst << "[";
+        dst << "[";
         for (int i = 0; i < channels; i++) {
-            *dst << buffer[i][frame];
+            dst << buffer[i][frame];
             if (i < channels - 1) {
-                *dst << " ";
+                dst << " ";
             }
         }
-        *dst << "]";
+        dst << "]";
         
         if (last) {
-            if (frame < render_slice-1) {
-                *dst << ",";
+            if (frame < buffer_size - 1) {
+                dst << ",";
             } 
         } else {
-            *dst << ",";
+            dst << ",";
         }
     }
 }
 
-void FileRender(AudioStream s, int render_size, const char* filename)
+void FileRender(AudioStream s, int buffer_size, const char* filename, bool cut)
 {
+    ResetSound(s);
+    
     AudioStream stream = MakeRendererSound(s);
     long length = GetLengthSound(stream);
     long channels = GetChannelsSound(stream);
@@ -41,33 +43,50 @@ void FileRender(AudioStream s, int render_size, const char* filename)
     
     bool render_ok = true;
     bool render_last_ok = true;
-    
-    ofstream* dst = new ofstream(filename);
+    ofstream dst(filename);
   
     // Allocate buffers
     float** buffer = new float*[channels];
     for (int i = 0; i < channels; i++) {
-        buffer[i] = new float[render_size];
-        memset(buffer[i], 0, render_size*sizeof(float));
+        buffer[i] = new float[buffer_size];
+        memset(buffer[i], 0, buffer_size*sizeof(float));
     }
     
     // Render with complete buffers
     
-    int buffer_num = length/render_size;
-    int last_buffer = length%render_size;
-   
-    ResetSound(stream);
+    int buffer_num = length/buffer_size;
+    int last_buffer = length%buffer_size;
     
-    for (int i = 0; i < buffer_num; i++) {
-        res = ReadSoundPos(stream, buffer, render_size, 0);
-        if (res != render_size) {
-            printf("FileRender res = %ld %d\n", res, i);
-            render_ok = false;
+    printf("FileRender buffer_num = %d last_buffer = %d\n", buffer_num, last_buffer);
+    
+    if (cut) {
+        for (int i = 0; i < buffer_num; i++) {
+            int render_size = buffer_size/2;
+            res = ReadSoundPos(stream, buffer, buffer_size, render_size, 0);
+            if (res != render_size) {
+                printf("Render2 res1 = %ld %d\n", res, i);
+                render_ok = false;
+            }
+            res = ReadSoundPos(stream, buffer, buffer_size, render_size, render_size);
+            if (res != render_size) {
+                printf("Render2 res2 = %ld %d\n", res, i);
+                render_ok = false;
+            }
+            PrintBufferFrame(buffer, channels, buffer_size, dst, (last_buffer == 0));
         }
-        PrintBufferFrame(buffer, channels, render_size, dst, (last_buffer == 0));
+    } else {
+        int render_size = buffer_size;
+        for (int i = 0; i < buffer_num; i++) {
+            res = ReadSoundPos(stream, buffer, buffer_size, render_size, 0);
+            if (res != render_size) {
+                printf("FileRender res = %ld %d\n", res, i);
+                render_ok = false;
+            }
+            PrintBufferFrame(buffer, channels, buffer_size, dst, (last_buffer == 0));
+        }
     }
     
-    res = ReadSoundPos(stream, buffer, last_buffer, 0);
+    res = ReadSoundPos(stream, buffer, buffer_size, last_buffer, 0);
     if (res != last_buffer) {
         printf("FileRender last_buffer res = %ld\n", res);
         render_last_ok = false;
@@ -77,12 +96,12 @@ void FileRender(AudioStream s, int render_size, const char* filename)
     PrintBufferFrame(buffer, channels, res, dst, true);
       
     printf("FileRender render_ok = %d render_last_ok = %d\n", render_ok, render_last_ok);
-    dst->close();
-    delete dst;
 }
 
-void MemoryRender(AudioStream s, int render_size)
+void MemoryRender(AudioStream s, int buffer_size)
 {
+    ResetSound(s);
+    
     AudioStream stream = MakeRendererSound(s);
     long length = GetLengthSound(stream);
     long channels = GetChannelsSound(stream);
@@ -96,28 +115,27 @@ void MemoryRender(AudioStream s, int render_size)
     // Allocate buffers
     float** buffer = new float*[channels];
     for (int i = 0; i < channels; i++) {
-        buffer[i] = new float[render_size];
-        memset(buffer[i], 0, render_size*sizeof(float));
+        buffer[i] = new float[buffer_size];
+        memset(buffer[i], 0, buffer_size*sizeof(float));
     }
      
     // Render with complete buffers
     
-    int buffer_num = length/render_size;
-    int last_buffer = length%render_size;
+    int buffer_num = length/buffer_size;
+    int last_buffer = length%buffer_size;
     
     printf("MemoryRender buffer_num = %ld last_buffer = %ld\n", buffer_num, last_buffer);
-   
-    ResetSound(stream);
     
     for (int i = 0; i < buffer_num; i++) {
-        res = ReadSoundPos(stream, buffer, render_size, 0);
+        int render_size = buffer_size;
+        res = ReadSoundPos(stream, buffer, buffer_size, render_size, 0);
         if (res != render_size) {
             printf("Render1 res = %ld %d\n", res, i);
             render_ok = false;
         }
     }
     
-    res = ReadSoundPos(stream, buffer, last_buffer, 0);
+    res = ReadSoundPos(stream, buffer, buffer_size, last_buffer, 0);
     if (res != last_buffer) {
         printf("Render1 last_buffer res = %ld\n", res);
         render_last_ok = false;
@@ -129,26 +147,26 @@ void MemoryRender(AudioStream s, int render_size)
     ResetSound(stream);
     
     for (int i = 0; i < buffer_num; i++) {
-        res = ReadSoundPos(stream, buffer, render_size/2, 0);
+        int render_size = buffer_size/2;
+        res = ReadSoundPos(stream, buffer, buffer_size, render_size, 0);
         if (res != render_size/2) {
             printf("Render2 res1 = %ld %d\n", res, i);
             render_ok = false;
         }
-        res = ReadSoundPos(stream, buffer, render_size/2, render_size/2);
+        res = ReadSoundPos(stream, buffer, buffer_size, render_size, render_size);
         if (res != render_size/2) {
             printf("Render2 res2 = %ld %d\n", res, i);
             render_ok = false;
         }
     }
     
-    res = ReadSoundPos(stream, buffer, last_buffer, 0);
+    res = ReadSoundPos(stream, buffer, buffer_size, last_buffer, 0);
     if (res != last_buffer) {
         printf("Render2 last_buffer  res = %ld\n", res);
         render_last_ok = false;
     }
     
     printf("MemoryRender render_ok = %d render_last_ok = %d\n", render_ok, render_last_ok);
-    ResetSound(stream);
     
     // Free buffers
     for (int i = 0; i < channels; i++) {

@@ -38,19 +38,20 @@ class TFadeAudioStream : public TDecoratedAudioStream
 
     protected:
 
-        Envelope fFadeIn;    	// FadeIn object
-        Envelope fFadeOut;   	// FadeOut object
-        long fFadeInFrames;		// Number of frames for FadeIn
-        long fFadeOutFrames;	// Number of frames for FadeOut
-        long fStatus;			// Channel state
-        long fCurFrame;			// Current frame
-        long fFramesNum;		// Frames number
-        FLOAT_BUFFER fMixBuffer;     // Used for mixing
+        Envelope fFadeIn;           // FadeIn object
+        Envelope fFadeOut;          // FadeOut object
+        long fFadeInFrames;         // Number of frames for FadeIn
+        long fCurFadeInFrames;      // Number of frames for FadeIn during fade
+        long fFadeOutFrames;        // Number of frames for FadeOut
+        long fCurFadeOutFrames;     // Number of frames for FadeOut during fade
+        long fStatus;               // Channel state
+        long fCurFrame;             // Current frame
+        long fFramesNum;            // Frames number
+        FLOAT_BUFFER fMixBuffer;    // Used for mixing
 
-        long ReadAux(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        long Play(FLOAT_BUFFER buffer, long framesNum, long framePos);
         
         long Fade(FLOAT_BUFFER buffer, long framesNum, long framePos, Envelope& fade);
-        
         long FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos);
         long FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
@@ -58,7 +59,7 @@ class TFadeAudioStream : public TDecoratedAudioStream
 
     public:
 
-        enum {kIdle = 0, kFadeIn, kPlaying, kFadeOut};
+        enum { kIdle = 0, kFadeIn, kPlaying, kFadeOut };
 
         TFadeAudioStream(TAudioStreamPtr stream, long fadeIn, long fadeOut);
         virtual ~TFadeAudioStream()

@@ -94,7 +94,7 @@ extern "C"
     AUDIOAPI long GetLengthSoundPtr(AudioStreamPtr s);
     AUDIOAPI long GetChannelsSoundPtr(AudioStreamPtr s);
     AUDIOAPI long ReadSoundPtr(AudioStreamPtr stream, float** buffer, long buffer_size);
-    AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr stream, float** buffer, long buffer_size, long buffer_pos);
+    AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr stream, float** buffer, long buffer_size, long frames, long pos);
     AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
     AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound);
 
@@ -198,7 +198,7 @@ extern "C"
     AUDIOAPI long GetLengthSound(AudioStream s);
     AUDIOAPI long GetChannelsSound(AudioStream s);
     AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
-    AUDIOAPI long ReadSoundPos(AudioStream stream, float** buffer, long buffer_size, long buffer_pos);
+    AUDIOAPI long ReadSoundPos(AudioStream stream, float** buffer, long buffer_size, long frames, long pos);
     AUDIOAPI void ResetSound(AudioStream sound);
     AUDIOAPI AudioStream MakeCopySound(AudioStream sound);
 
@@ -349,13 +349,13 @@ AUDIOAPI long ReadSound(AudioStream s, float** buffer, long buffer_size)
     }
 }
 
-AUDIOAPI long ReadSoundPos(AudioStream s, float** buffer, long buffer_size, long buffer_pos)
+AUDIOAPI long ReadSoundPos(AudioStream s, float** buffer, long buffer_size, long frames, long pos)
 {
     if (s && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
         TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
         UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
-        return stream->Read(&process, buffer_size, buffer_pos);
+        return stream->Read(&process, frames, pos);
     } else {
         return 0;
     }
@@ -515,13 +515,13 @@ AUDIOAPI long ReadSoundPtr(AudioStreamPtr sound, float** buffer, long buffer_siz
     }
 }
 
-AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr sound, float** buffer, long buffer_size, long buffer_pos)
+AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr sound, float** buffer, long buffer_size, long frames, long pos)
 {
     if (sound && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(*sound);
         TSharedNonInterleavedAudioBuffer<float> process(buffer, buffer_size, stream->Channels());
         UAudioTools::ZeroFloatBlk(buffer, buffer_size, stream->Channels());
-        return stream->Read(&process, buffer_size, buffer_pos);
+        return stream->Read(&process, frames, pos);
     } else {
         return 0;
     }

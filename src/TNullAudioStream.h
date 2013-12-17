@@ -120,7 +120,7 @@ class TConstantAudioStream : public TAudioStream
             
             float* temp[buffer->GetChannels()];
             for (int i = 0; i < framesNum; i++) {
-                UAudioTools::AddFrame(buffer->GetFrame(i, temp), fValue, buffer->GetChannels());
+                UAudioTools::AddFrame(buffer->GetFrame(i + framePos, temp), fValue, buffer->GetChannels());
             }
             
             return framesNum;

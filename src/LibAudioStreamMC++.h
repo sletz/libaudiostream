@@ -341,11 +341,12 @@ long ReadSound(AudioStream sound, float** buffer, long buffer_size);
 \param sound The stream.
 \param buffer A buffer to be filled with frames.
 \param buffer_size The buffer length.
-\param buffer_pos The position in buffer.
+\param frames The number of frames to render length.
+\param pos The position in buffer.
 \param channels The number of channels in the buffer.
 \return The number of read frames.
 */
-long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long buffer_pos);
+long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long frames, long pos);
 /*!
 \brief Reset a stream.
 \param sound The stream to be reseted.
