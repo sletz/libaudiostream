@@ -85,7 +85,7 @@ void test2_7()  // FadeOut only
     FileRender(s, 60, "test2_7_2.txt", true);
 }
 
-void test2_8()  // No Play section
+void test2_8()  // No midle section
 {
     AudioStream s = MakeFadeSound(MakeConstantSound(2, 200, 1.f), 100, 100);
     printf("error = %s\n", GetLastLibError());
@@ -120,17 +120,15 @@ void test2_11()  // Cut in fadeOut part
     FileRender(s2, 60, "test2_11_2.txt", true);
 }
 
-
-
 // Test SEQUENCE
 void test3_1()
 {
-    AudioStream s1 = MakeConstantSound(2, 50, 0.5f);
-    AudioStream s2 = MakeConstantSound(2, 50, 1.f);
+    AudioStream s1 = MakeConstantSound(2, 100, 0.5f);
+    AudioStream s2 = MakeConstantSound(2, 100, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
     printf("len s2 %d\n", GetLengthSound(s2));
     
-    AudioStream s3 = MakeSeqSound(s1, s2, 20);
+    AudioStream s3 = MakeSeqSound(s1, s2, 40);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s3 %d\n", GetLengthSound(s3));
@@ -140,8 +138,8 @@ void test3_1()
 
 void test3_2()
 {
-    AudioStream s1 = MakeConstantSound(2, 50, 0.5f);
-    AudioStream s2 = MakeConstantSound(2, 50, 1.f);
+    AudioStream s1 = MakeConstantSound(2, 100, 0.5f);
+    AudioStream s2 = MakeConstantSound(2, 100, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
     printf("len s2 %d\n", GetLengthSound(s2));
     
@@ -151,6 +149,22 @@ void test3_2()
     printf("len s3 %d\n", GetLengthSound(s3));
     FileRender(s3, 4, "test3_2_1.txt");
     FileRender(s3, 4, "test3_2_2.txt", true);
+}
+
+// Cut
+void test3_3()
+{
+    AudioStream s1 = MakeConstantSound(2, 100, 0.5f);
+    AudioStream s2 = MakeConstantSound(2, 100, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    printf("len s2 %d\n", GetLengthSound(s2));
+    
+    AudioStream s3 = MakeSeqSound(s1, s2, 40);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s3 %d\n", GetLengthSound(s3));
+    FileRender(s3, 100, "test3_1_1.txt");
+    FileRender(s3, 100, "test3_1_2.txt", true);
 }
 
 // Test MIX
@@ -209,7 +223,7 @@ void test6_2()
 }
 
 // Test EFFECT
-void test7()
+void test7_1()
 {
     AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
@@ -217,9 +231,67 @@ void test7()
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
-    FileRender(s2, 100, "test7.txt");
+    FileRender(s2, 100, "test7_1.txt");
 }
 
+// Effect duplication
+void test7_2()
+{
+    AudioStream s1 = MakeConstantSound(4, 1000, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s2 %d\n", GetLengthSound(s2));
+    FileRender(s2, 100, "test7_2.txt");
+}
+
+// Signal duplication
+void test7_3()
+{
+    AudioStream s1 = MakeConstantSound(1, 1000, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s2 %d\n", GetLengthSound(s2));
+    FileRender(s2, 100, "test7_3.txt");
+}
+
+void test7_4()
+{
+    AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s2 %d\n", GetLengthSound(s2));
+    FileRender(s2, 100, "test7_4.txt");
+}
+
+// Effect duplication
+void test7_5()
+{
+    AudioStream s1 = MakeConstantSound(4, 1000, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s2 %d\n", GetLengthSound(s2));
+    FileRender(s2, 100, "test7_5.txt");
+}
+
+// Signal duplication
+void test7_6()
+{
+    AudioStream s1 = MakeConstantSound(1, 1000, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s2 %d\n", GetLengthSound(s2));
+    FileRender(s2, 100, "test7_6.txt");
+}
 
 int main()
 {
@@ -258,12 +330,12 @@ int main()
     printf("error = %s\n", GetLastLibError());
     */
     
-    test2_9();
-    test2_10();
-    test2_11();
+    //test2_9();
+    //test2_10();
+    //test2_11();
     
-    //test3_1();
-    //test3_2();
+    test3_1();
+    test3_2();
     //printf("error = %s\n", GetLastLibError());
     //test4();
     //printf("error = %s\n", GetLastLibError());

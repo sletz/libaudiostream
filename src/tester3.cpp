@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
     
     // Joue une région de 5 sec d'un fichier à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    MemoryRender(s1, 512);
+    //MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
    
    
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
     
     // Joue un fade d'une région de 5 sec d'un fichier à la date courante
     s1 = MakeFadeSound(MakeRegionSound(FILENAME1, 5*SR, 10*SR), SR, SR);
-    MemoryRender(s1, 512);
+    //MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
     next();
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
     std::vector <int> selection1;
     selection1.push_back(0);
     s2 = MakeSelectSound(s1, selection1);
-    MemoryRender(s2, 512);
+    //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
     next();
@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
     std::vector <int> selection2;
     selection2.push_back(1);
     s2 = MakeSelectSound(s1, selection2);
-    MemoryRender(s2, 512);
+    //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
     next();
@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
     s4 = MakeSelectSound(s3, selection7);
     
     s5 = MakeParSound(s2, s4);
-    MemoryRender(s5, 512);
+    //MemoryRender(s5, 512);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, GetCurDate()));
   
     next();
@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     s2 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
     s3 = MakeMixSound(s1, s2);
-    MemoryRender(s3, 512);
+    //MemoryRender(s3, 512);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
     
     next();
@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     s2 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
     s3 = MakeSeqSound(s1, s2, 1024);
-    MemoryRender(s3, 512);
+    //MemoryRender(s3, 512);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
    
     

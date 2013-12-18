@@ -119,18 +119,6 @@ long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos
         fCurFadeInFrames -= framesNum;
         return res;
     }
-    
-    /*
-    long res = Fade(buffer, framesNum, framePos, fFadeIn);
-    
-    if (res < framesNum) {
-        fStatus = kPlaying;
-    } else if (fFadeIn.lastOut() >= 1.0f) {
-        fStatus = kPlaying;
-    }
-
-    return res;
-    */
 }
 
 long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePos)
@@ -152,16 +140,6 @@ long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePo
     }
     
     return res;
-
-    /*
-    long res = Fade(buffer, framesNum, framePos, fFadeOut);
-    
-    if ((res < framesNum) || (fFadeOut.lastOut() <= 0.0f)) {
-        fStatus = kIdle;
-    }
-
-    return res;
-    */
 }
 
 void TFadeAudioStream::Init(float fade_in_val, float fade_in_time, float fade_out_val, float fade_out_time)
@@ -192,6 +170,8 @@ TAudioStreamPtr TFadeAudioStream::CutBegin(long frames)
         return new TFadeAudioStream(fStream->CutBegin(frames), 0, fFadeOutFrames);
     }
     */
+    
+    // A REVOIR : mettre le stream dans le bon Žtat (kFadeOn, kPlaying, kFadeOut...)
     
     // if in fadeIn part
     if (frames < fFadeInFrames) {
