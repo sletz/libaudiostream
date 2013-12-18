@@ -370,6 +370,7 @@ AudioStream MakeCopySound(AudioStream sound);
 \return A pointer to new effect object or NULL if the effect cannot be located or created.
 */
 AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
 
 /*!
 \brief Return the number of effect controls.

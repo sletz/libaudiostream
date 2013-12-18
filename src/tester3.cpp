@@ -1,6 +1,9 @@
 
 #include <stdio.h>
+#include <string>
 #include <LibAudioStream/LibAudioStreamMC++.h>
+#include <iostream>
+#include <fstream>
 
 #include "LAS-test.h"
 
@@ -13,6 +16,24 @@
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
 #define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
+
+std::string pathToContent(const char* path)
+{
+    std::ifstream f(path);
+    std::string line;
+    std::string result;
+    
+    while (f.good()) {
+        f >> line;
+        result += line;
+        //result += "\n";
+        //printf("content %s\n", result.c_str());
+    }
+    
+    f.close();
+
+    return result;
+}
 
 // Global context
 static long gSampleRate = 0;
@@ -128,7 +149,7 @@ int main(int argc, char* argv[])
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
-    */
+   
    
     next();
     
@@ -227,15 +248,33 @@ int main(int argc, char* argv[])
     s3 = MakeSeqSound(s1, s2, 1024);
     MemoryRender(s3, 512);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
+     
+     
+   
     
     next();
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);
-    MemoryRender(s2, 512);
+    //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
-     
+    
+    */
+    next();
+    
+    //std::string effect = pathToContent(LLVM_EFFECT3);
+    //std::cout << effect;
+    
+    std::string effect = "process = _,_;";
+    
+    // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(effect.c_str(), "", ""), SR/2, SR/2);
+    //MemoryRender(s2, 512);
+    StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
+
+    /*
     next();
     
      // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
@@ -347,6 +386,7 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
       
     next();
+    */
   
     // Arrète le Player
     StopAudioPlayer(gAudioPlayer);

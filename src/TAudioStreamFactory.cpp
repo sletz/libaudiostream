@@ -206,9 +206,9 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
         } else if (s1->Channels() == effect->Inputs()) {
             return new TEffectAudioStream(s1, effect, fadeIn, fadeOut);
         } else if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
-            return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
+            return new TEffectAudioStream(s1, TLocalCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
-            return new TEffectAudioStream(s1, TCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
+            return new TEffectAudioStream(s1, TLocalCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
         } else {
             stringstream error;
             error << "MakeEffectSound : stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";

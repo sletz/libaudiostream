@@ -65,8 +65,11 @@ TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 
 /// Effect factory
-std::map<string, TCodeFaustAudioEffectFactory*> TAudioGlobals::fFactoryTable;
-int TAudioGlobals::fFactoryNumber = 0;
+std::map<string, TLocalCodeFaustAudioEffectFactory*> TAudioGlobals::fLocalFactoryTable;
+int TAudioGlobals::fLocalFactoryNumber = 0;
+
+std::map<string, TRemoteCodeFaustAudioEffectFactory*> TAudioGlobals::fRemoteFactoryTable;
+int TAudioGlobals::fRemoteFactoryNumber = 0;
 
 // Effect table
 std::map<std::string, list <TAudioEffectInterfacePtr> > TAudioGlobals::fEffectTable;

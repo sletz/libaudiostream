@@ -99,6 +99,7 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound);
 
     AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 #ifdef __APPLE__
     // To be used from LispWorks
     AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
@@ -204,6 +205,7 @@ extern "C"
 
     // Effect management (using smartptr)
     AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
 
     AUDIOAPI long GetControlCountEffect(AudioEffect effect);
     AUDIOAPI void GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
@@ -353,9 +355,9 @@ AUDIOAPI long ReadSoundPos(AudioStream s, float** buffer, long buffer_size, long
 {
     if (s && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
-        float* temp[stream->Channels()];
         TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
-        // Init part of the buffer
+        // Init the correct part of the buffer...
+        float* temp[stream->Channels()];
         UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
         return stream->Read(&process_buffer, frames, pos);
     } else {
@@ -521,9 +523,9 @@ AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr sound, float** buffer, long buffer_
 {
     if (sound && buffer) {
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(*sound);
-        float* temp[stream->Channels()];
         TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
-        // Init part of the buffer
+        // Init the correct part of the buffer...
+        float* temp[stream->Channels()];
         UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
         return stream->Read(&process_buffer, frames, pos);
     } else {
@@ -540,7 +542,22 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_
 		return new TModuleFaustAudioEffect(name);
 	} catch (TLASException& e) {
         try {
-            return TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
+            return TLocalCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
+        } catch (TLASException& e) {
+            TAudioGlobals::AddLibError(e.Message());
+            return 0;
+        }
+	}
+}
+
+AudioEffect AUDIOAPI MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path)
+{
+    TAudioGlobals::ClearLibError();
+    try {
+		return new TModuleFaustAudioEffect(name);
+	} catch (TLASException& e) {
+        try {
+            return TRemoteCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
         } catch (TLASException& e) {
             TAudioGlobals::AddLibError(e.Message());
             return 0;
@@ -640,7 +657,22 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* li
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
     } catch (TLASException& e) {
         try {
-            return new LA_SMARTP<TAudioEffectInterface>(TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
+            return new LA_SMARTP<TAudioEffectInterface>(TLocalCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
+        } catch (TLASException& e) {
+            TAudioGlobals::AddLibError(e.Message());
+            return 0;
+        }
+    }
+}
+
+AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
+{
+    TAudioGlobals::ClearLibError();
+    try {
+        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+    } catch (TLASException& e) {
+        try {
+            return new LA_SMARTP<TAudioEffectInterface>(TRemoteCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
         } catch (TLASException& e) {
             TAudioGlobals::AddLibError(e.Message());
             return 0;
@@ -661,7 +693,7 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const 
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
-                gDSP = TCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
+                gDSP = TLocalCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
             } catch (TLASException& e) {
                 TAudioGlobals::AddLibError(e.Message());
                 gDSP = NULL;

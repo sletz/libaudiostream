@@ -40,8 +40,9 @@ research@grame.fr
 */
 
 class TBufferedAudioStream;
-class TCodeFaustAudioEffectFactory;
-class TCodeFaustAudioEffect;
+
+class TLocalCodeFaustAudioEffectFactory;
+class TRemoteCodeFaustAudioEffectFactory;
 
 class AUDIO_EXPORTS TAudioGlobals
 {
@@ -68,8 +69,12 @@ class AUDIO_EXPORTS TAudioGlobals
     
         static TBufferedAudioStream* fSharedInput;  // Shared real-time input
         
-        static std::map<std::string, TCodeFaustAudioEffectFactory*> fFactoryTable;          // Effect factory 
-        static int fFactoryNumber;
+        static std::map<std::string, TLocalCodeFaustAudioEffectFactory*> fLocalFactoryTable;     // Local effect factory 
+        static int fLocalFactoryNumber;
+         
+        static std::map<std::string, TRemoteCodeFaustAudioEffectFactory*> fRemoteFactoryTable;   // Remote effect factory 
+        static int fRemoteFactoryNumber;
+       
         static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;    // Effect table 
    
         TAudioGlobals(long inChan, long outChan, long sample_rate,
