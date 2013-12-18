@@ -171,4 +171,6 @@ void MemoryRender(AudioStream s, int buffer_size)
         delete[] buffer[i];
     }
     delete[] buffer;
+     
+    ResetSound(stream);
 }

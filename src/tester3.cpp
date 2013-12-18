@@ -132,8 +132,7 @@ int main(int argc, char* argv[])
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
-    /*
-    next();
+     next();
     
     // Lit la date courante en frames et usec/sec
     GetCurDate();
@@ -248,8 +247,6 @@ int main(int argc, char* argv[])
     s3 = MakeSeqSound(s1, s2, 1024);
     MemoryRender(s3, 512);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
-     
-     
    
     
     next();
@@ -260,9 +257,9 @@ int main(int argc, char* argv[])
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
     
-    */
     next();
     
+    /*
     std::string effect = pathToContent(LLVM_EFFECT3);
     //std::cout << effect;
     
@@ -273,11 +270,11 @@ int main(int argc, char* argv[])
     s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(effect.c_str(), "", ""), SR/2, SR/2);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
+    */
 
-    /*
     next();
     
-     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
+    // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
     date = GetCurDate();
     s1 = MakeSharedInputSound();
     // On coupe la section entre 0 et la date courante, et on garde 6 sec à partir de la date courante
@@ -386,7 +383,7 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
       
     next();
-    */
+    
   
     // Arrète le Player
     StopAudioPlayer(gAudioPlayer);

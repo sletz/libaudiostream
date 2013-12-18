@@ -93,6 +93,35 @@ void test2_8()  // No Play section
     FileRender(s, 60, "test2_8_2.txt", true);
 }
 
+void test2_9()  // Cut in fadeIn
+{
+    AudioStream s1 = MakeFadeSound(MakeConstantSound(2, 400, 1.f), 100, 100);
+    AudioStream s2 = MakeCutSound(s1, 50, INT_MAX);
+    printf("error = %s\n", GetLastLibError());
+    FileRender(s2, 60, "test2_9_1.txt");
+    FileRender(s2, 60, "test2_9_2.txt", true);
+}
+
+void test2_10()  // Cut in midle part
+{
+    AudioStream s1 = MakeFadeSound(MakeConstantSound(2, 400, 1.f), 100, 100);
+    AudioStream s2 = MakeCutSound(s1, 200, INT_MAX);
+    printf("error = %s\n", GetLastLibError());
+    FileRender(s2, 60, "test2_10_1.txt");
+    FileRender(s2, 60, "test2_10_2.txt", true);
+}
+
+void test2_11()  // Cut in fadeOut part
+{
+    AudioStream s1 = MakeFadeSound(MakeConstantSound(2, 400, 1.f), 100, 100);
+    AudioStream s2 = MakeCutSound(s1, 350, INT_MAX);
+    printf("error = %s\n", GetLastLibError());
+    FileRender(s2, 60, "test2_11_1.txt");
+    FileRender(s2, 60, "test2_11_2.txt", true);
+}
+
+
+
 // Test SEQUENCE
 void test3_1()
 {
@@ -229,9 +258,12 @@ int main()
     printf("error = %s\n", GetLastLibError());
     */
     
+    test2_9();
+    test2_10();
+    test2_11();
     
-    test3_1();
-    test3_2();
+    //test3_1();
+    //test3_2();
     //printf("error = %s\n", GetLastLibError());
     //test4();
     //printf("error = %s\n", GetLastLibError());
