@@ -505,9 +505,8 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
     
         TRemoteCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
-            int argc = 4;
-            //const char* argv[32];
-            char* argv[32];
+            int argc = 2;
+            const char* argv[32];
             std::string error_msg;
             
             fCode = code;
@@ -515,9 +514,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             fDrawPath = draw_path;
             
             argv[0] = "dummy";
-            argv[1] = "--NJ_latency";
-            argv[2] = "2";
-            argv[3] = 0;
+            argv[1] = 0;
             
             
             /*
@@ -534,7 +531,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             }
             */
          
-            fFactory = createRemoteDSPFactory(argc, argv, "http://localhost:7777", code, 3, error_msg);
+            //fFactory = createRemoteDSPFactory(argc, argv, "http://localhost:7777", 19000, code, error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fRemoteFactoryTable[code] = this;
                 TAudioGlobals::fRemoteFactoryNumber++;
@@ -814,7 +811,20 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             assert(factory);
             fFactory = factory;
             string error;
-            fDsp = createRemoteDSPInstance(fFactory->GetFactory(), TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
+            
+            int argc = 4;
+            const char* argv[32];
+            std::string error_msg;
+            
+            
+            argv[0] = "dummy";
+            argv[1] = "--NJ_latency";
+            argv[2] = "2";
+            argv[3] = 0;
+            
+            //fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
+            
+            //printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
             
             if (!fDsp) {
                 throw TLASException(error.c_str());
@@ -836,7 +846,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         }
         virtual ~TRemoteCodeFaustAudioEffect()
         {
-            deleteRemoteDSPInstance(fDsp);
+            //deleteRemoteDSPInstance(fDsp);
         }
         void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum)
         {

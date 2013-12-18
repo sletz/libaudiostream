@@ -24,25 +24,63 @@ research@grame.fr
 #include "TFadeAudioStream.h"
 #include "TNullAudioStream.h"
 #include "TAudioGlobals.h"
+#include "TCutEndAudioStream.h"
+#include "TMixAudioStream.h"
 
+
+TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2): TBinaryAudioStream(s1, s2, s1)
+{}
+
+/*
 TSeqAudioStream::TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade): TBinaryAudioStream(s1, s2, s1)
 {
     // A FINIR : aligner le crossFade sur des multiples de la taille des buffers
 
+    
+    //if (crossFade > 0) {
+    //    fStream1 = new TFadeAudioStream(s1, TAudioGlobals::fBufferSize, crossFade);
+    //    fStream2 = new TFadeAudioStream(s2, crossFade, TAudioGlobals::fBufferSize);
+    //} else {
+    //    fStream1 = s1;
+    //    fStream2 = s2;
+    //}
+	
+    //fFramesNum = UTools::Max(0, s1->Length() - crossFade); 
+    
+    
     if (crossFade > 0) {
-        fStream1 = new TFadeAudioStream(s1, TAudioGlobals::fBufferSize, crossFade);
-        fStream2 = new TFadeAudioStream(s2, crossFade, TAudioGlobals::fBufferSize);
+        printf("crossFade = %d\n", crossFade);
+        printf("s1->Length() - crossFade = %d\n", s1->Length() - crossFade);
+        
+        fStream1 = new TCutEndAudioStream(s1, s1->Length() - crossFade);
+        
+        
+        TAudioStream* crossFadeStream = new TMixAudioStream(new TFadeAudioStream(s1->CutBegin(s1->Length() - crossFade), 0, crossFade),   
+                                                            new TFadeAudioStream(new TCutEndAudioStream(s2, crossFade), crossFade, 0));
+        
+        
+                                                                                               
+        fStream2 = new TSeqAudioStream(crossFadeStream, s2->CutBegin(crossFade), 0);  
+        
+        
+        printf("fStream1 len %d\n", fStream1->Length());
+        printf("crossFadeStream len %d\n", crossFadeStream->Length());
+        printf("fStream2 len %d\n", fStream2->Length());
+        //fStream2 = s2->CutBegin(crossFade);
+        //fStream2 = s2;
+       
     } else {
         fStream1 = s1;
         fStream2 = s2;
     }
-	
-    fFramesNum = UTools::Max(0, s1->Length() - crossFade); 
-    fCrossFade = crossFade;
+
+    //fCrossFade = crossFade;
     fStream = fStream1;
     fCurFrame = 0;
 }
+*/
 
+/*
 long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fStream);
@@ -67,6 +105,25 @@ long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 
     return res;
 }
+*/
+
+long TSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+{
+    assert(fStream);
+    assert_stream(framesNum, framePos);
+     
+    long res = fStream->Read(buffer, framesNum, framePos);
+    //fCurFrame += res;
+
+    if (fStream == fStream1) {
+        if (res < framesNum) { // End of fStream1
+            fStream = fStream2;
+            return res + Read(buffer, framesNum - res, framePos + res); // Read the end of the buffer
+        }
+    }
+
+    return res;
+}
 
 /*
  CutBegin(Seq(s1, s2), n) ==> NullStream if n >= Length(Seq(s1, s2))
@@ -80,7 +137,8 @@ TAudioStreamPtr TSeqAudioStream::CutBegin(long frames)
 	long length2 = fStream2->Length();
 
 	if (frames < length1) {						// in first stream
-        return new TSeqAudioStream(fStream1->CutBegin(frames), fStream2->Copy(), fCrossFade);
+        //return new TSeqAudioStream(fStream1->CutBegin(frames), fStream2->Copy(), fCrossFade);
+        return new TSeqAudioStream(fStream1->CutBegin(frames), fStream2->Copy());
     } else if (frames < length1 + length2) {	// in second stream
         return fStream2->CutBegin(frames - length1);
     } else {
@@ -92,7 +150,7 @@ void TSeqAudioStream::Reset()
 {
     TBinaryAudioStream::Reset();
     fStream = fStream1;
-    fCurFrame = 0;
+    //fCurFrame = 0;
 }
 
 

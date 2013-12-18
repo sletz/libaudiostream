@@ -1775,7 +1775,6 @@
 					"-ljacknet",
 					"-ljack",
 					/usr/local/lib/faust/libHTTPDFaust.a,
-					/usr/local/lib/faust/libfaustremote.a,
 					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,

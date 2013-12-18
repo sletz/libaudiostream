@@ -39,12 +39,13 @@ class TSeqAudioStream : public TBinaryAudioStream
     protected:
 
         long fCurFrame;
-        long fFramesNum;
-        long fCrossFade;
+        //long fFramesNum;
+        //long fCrossFade;
 
     public:
 
-        TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade);
+        //TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade);
+        TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2);
         virtual ~TSeqAudioStream()
         {}
 
@@ -54,7 +55,8 @@ class TSeqAudioStream : public TBinaryAudioStream
         TAudioStreamPtr CutBegin(long frames);
         long Length()
         {
-            return fStream1->Length() + fStream2->Length() - fCrossFade;
+            //return fStream1->Length() + fStream2->Length() - fCrossFade;
+            return fStream1->Length() + fStream2->Length();
         }
         long Channels()
         {
@@ -62,7 +64,8 @@ class TSeqAudioStream : public TBinaryAudioStream
         }
         TAudioStreamPtr Copy()
         {
-            return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy(), fCrossFade);
+            //return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy(), fCrossFade);
+            return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy());
         }
 };
 

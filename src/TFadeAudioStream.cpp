@@ -181,8 +181,29 @@ CutBegin(Fade(s, f1, f2), n)  ==> Fade(CutBegin(s, n), f1, f2) // A REVOIR
 
 TAudioStreamPtr TFadeAudioStream::CutBegin(long frames)
 {
+    //long len = fStream->Length();
+    
+    /*
     // A FINIR
-    return new TFadeAudioStream(fStream->CutBegin(frames), fFadeInFrames, fFadeOutFrames);
+    long newFadeInFrames = UTools::Min(frames, fFadeInFrames); 
+    if (frames < fFadeInFrames) {
+        return new TFadeAudioStream(fStream->CutBegin(frames), fFadeInFrames - frames, fFadeOutFrames);
+    } else {
+        return new TFadeAudioStream(fStream->CutBegin(frames), 0, fFadeOutFrames);
+    }
+    */
+    
+    // if in fadeIn part
+    if (frames < fFadeInFrames) {
+        return new TFadeAudioStream(fStream->CutBegin(frames), fFadeInFrames - frames, fFadeOutFrames);
+    // else if before fadeOut part
+    } else if (frames < fFramesNum) {
+        return new TFadeAudioStream(fStream->CutBegin(frames), 0, fFadeOutFrames);
+    // else in fadeOut part
+    } else {
+        return new TFadeAudioStream(fStream->CutBegin(frames), 0, UTools::Max(0, fFadeOutFrames - (frames - fFramesNum)));
+    }
+    
 }
 
 void TFadeAudioStream::Reset()

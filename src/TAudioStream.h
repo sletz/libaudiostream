@@ -92,7 +92,7 @@ class TAudioStream : public la_smartable1
         
         void assert_stream(long framesNum, long framePos)
         {   
-            if (framePos + framesNum > TAudioGlobals::fBufferSize) {
+            if ((framesNum < 0) || (framePos + framesNum > TAudioGlobals::fBufferSize)) {
                 printf("assert_stream framesNum = %ld framePos = %ld\n", framesNum, framePos);
                 assert(false);
             }

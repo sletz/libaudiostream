@@ -22,6 +22,7 @@ research@grame.fr
 
 #include "TEventAudioStream.h"
 
+/*
 long TEventSeqAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fStream);
@@ -52,3 +53,5 @@ void TEventSeqAudioStream::Reset()
     fFired = false;
     TSeqAudioStream::Reset();
 }
+
+*/

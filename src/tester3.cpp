@@ -263,10 +263,10 @@ int main(int argc, char* argv[])
     */
     next();
     
-    //std::string effect = pathToContent(LLVM_EFFECT3);
+    std::string effect = pathToContent(LLVM_EFFECT3);
     //std::cout << effect;
     
-    std::string effect = "process = _,_;";
+    //std::string effect = "process = _,_;";
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);

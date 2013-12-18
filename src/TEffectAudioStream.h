@@ -42,14 +42,15 @@ class TEffectAudioStream : public TDecoratedAudioStream
 
         //TAudioEffectInterfacePtr fEffect;  	// Effect
         SAudioEffect fEffect;   // Effect
-		long fFadeIn;           // FadeIn time
-        long fFadeOut;          // FadeOut time
+		//long fFadeIn;           // FadeIn time
+        //long fFadeOut;          // FadeOut time
 		FLOAT_BUFFER fBufferIn;
         FLOAT_BUFFER fBufferOut;
 
     public:
 
-        TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut);
+        //TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut);
+        TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect);
         virtual ~TEffectAudioStream()
         {
     		delete fBufferIn;

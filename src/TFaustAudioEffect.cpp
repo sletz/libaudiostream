@@ -66,7 +66,6 @@ TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const str
 TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const string& name, const string& library_path, const string& draw_path)
 {
     TRemoteCodeFaustAudioEffectFactory* factory = 0;
-    
     if (TAudioGlobals::fRemoteFactoryTable.find(name) != TAudioGlobals::fRemoteFactoryTable.end()) {
         printf("DSP factory already created...\n");
         factory = TAudioGlobals::fRemoteFactoryTable[name];

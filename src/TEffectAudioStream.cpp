@@ -24,20 +24,33 @@ research@grame.fr
 #include "TNullAudioStream.h"
 #include "TSeqAudioStream.h"
 
+/*
 TEffectAudioStream::TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut)
 {
     // Add rest
-    fStream = new TFadeAudioStream(new TSeqAudioStream(stream, new TNullAudioStream(fadeOut), fadeIn), fadeIn, fadeOut);
+    //fStream = new TFadeAudioStream(new TSeqAudioStream(stream, new TNullAudioStream(fadeOut), fadeIn), fadeIn, fadeOut);
+    fStream = stream;
     fEffect = effect;
     fFadeIn = fadeIn;
     fFadeOut = fadeOut;
 	fBufferIn = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fEffect->Inputs());
     fBufferOut = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fEffect->Outputs());
 }
+*/
+
+TEffectAudioStream::TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect)
+{
+    fStream = stream;
+    fEffect = effect;
+ 	fBufferIn = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fEffect->Inputs());
+    fBufferOut = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fEffect->Outputs());
+}
+
 
 TAudioStreamPtr TEffectAudioStream::CutBegin(long frames)
 {
-    return new TEffectAudioStream(fStream->CutBegin(frames), fEffect->Copy(), fFadeIn, fFadeOut);
+    //return new TEffectAudioStream(fStream->CutBegin(frames), fEffect->Copy(), fFadeIn, fFadeOut);
+    return new TEffectAudioStream(fStream->CutBegin(frames), fEffect->Copy());
 }
 
 long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
@@ -74,7 +87,8 @@ void TEffectAudioStream::Reset()
 
 TAudioStreamPtr TEffectAudioStream::Copy()
 {
-    return new TEffectAudioStream(fStream->Copy(), fEffect->Copy(), fFadeIn, fFadeOut);
+    //return new TEffectAudioStream(fStream->Copy(), fEffect->Copy(), fFadeIn, fFadeOut);
+    return new TEffectAudioStream(fStream->Copy(), fEffect->Copy());
 }
 
 

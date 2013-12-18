@@ -140,8 +140,14 @@ TAudioStreamPtr TAudioStreamFactory::MakeSeqSound(TAudioStreamPtr s1, TAudioStre
     if (s1 && s2) {
         if (crossFade > s1->Length() + s2->Length()) {
             TAudioGlobals::AddLibError("MakeSeqSound : crossFade > sound length");
+        } else if (crossFade > 0) {
+            TAudioStream* stream1 = new TCutEndAudioStream(s1, s1->Length() - crossFade);
+            TAudioStream* crossFadeStream = new TMixAudioStream(new TFadeAudioStream(s1->CutBegin(s1->Length() - crossFade), 0, crossFade),   
+                                                                new TFadeAudioStream(new TCutEndAudioStream(s2, crossFade), crossFade, 0));
+            TAudioStream* stream2 = new TSeqAudioStream(crossFadeStream, s2->CutBegin(crossFade));  
+            return new TSeqAudioStream(stream1, stream2);
         } else {
-            return new TSeqAudioStream(s1, s2, crossFade);
+            return new TSeqAudioStream(s1, s2);
         }
     }
     return 0;
@@ -199,23 +205,24 @@ TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
 TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut)
 {
     TRY_CALL
+    TAudioStream* res = 0;
     if (s1 && effect) {
         if (fadeIn + fadeOut > s1->Length()) {
             TAudioGlobals::AddLibError("MakeEffectSound : fadeIn + fadeOut > sound length");
         // If stream and effect are compatible...
         } else if (s1->Channels() == effect->Inputs()) {
-            return new TEffectAudioStream(s1, effect, fadeIn, fadeOut);
+            res = new TEffectAudioStream(s1, effect);
         } else if ((s1->Channels() > effect->Inputs()) && (s1->Channels() % effect->Inputs() == 0)) {
-            return new TEffectAudioStream(s1, TLocalCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()), fadeIn, fadeOut);
+            res = new TEffectAudioStream(s1, TLocalCodeFaustAudioEffectFactory::DuplicateEffect(effect, s1->Channels()/effect->Inputs()));
         } else if ((effect->Inputs() > s1->Channels()) && (effect->Inputs() % s1->Channels() == 0)) {
-            return new TEffectAudioStream(s1, TLocalCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()), fadeIn, fadeOut);
+            res = new TEffectAudioStream(s1, TLocalCodeFaustAudioEffectFactory::SplitEffect(effect, s1->Channels()));
         } else {
             stringstream error;
             error << "MakeEffectSound : stream with " << s1->Channels() << " channels is incompatible with " << effect->Inputs() << " inputs effect";
             TAudioGlobals::AddLibError(error.str());
         }
     }
-    return 0;
+    return (res) ? new TFadeAudioStream(res, fadeIn, fadeOut) : 0;
     CATCH_EXCEPTION_RETURN
 }
 

@@ -60,6 +60,7 @@ typedef TEventHandler * TEventHandlerPtr;
 \brief A TEventSeqAudioStream plays two streams in sequence, and switch to the second stream if an event is received.
 */
 
+/*
 class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 {
     
@@ -86,6 +87,7 @@ class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 };
 
 typedef TEventSeqAudioStream * TEventSeqAudioStreamPtr;
+*/
 
 //-------------------------
 // Class TEventHandlerList
