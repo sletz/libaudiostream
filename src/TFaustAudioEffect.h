@@ -22,11 +22,10 @@ research@grame.fr
 #ifndef __TFaustAudioEffect__
 #define __TFaustAudioEffect__
 
-#include "faust/audio/dsp.h"
-#include "faust/gui/UI.h"
 #include "faust/llvm-dsp.h"
 #include "faust/remote-dsp.h"
 #include "faust/gui/jsonfaustui.h"
+
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
 #include "TLASException.h"
@@ -170,7 +169,6 @@ typedef void (* conclude) (dsp* self);
 /*!
 \brief Faust effect interface.
 */
-
 class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 {
 	protected:
@@ -305,7 +303,6 @@ typedef TFaustAudioEffectBase * TFaustAudioEffectBasePtr;
 /*!
 \brief Faust static effect (loaded from a DLL).
 */
-
 class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 {
 
@@ -388,9 +385,8 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 typedef TModuleFaustAudioEffect * TModuleFaustAudioEffectPtr;
 
 /*!
-\brief Base class for LLVM+libfaust effect.
+\brief Base class for LLVM + libfaust effect.
 */
-
 class TCodeFaustAudioEffect : public TFaustAudioEffectBase {
 
     protected:
@@ -425,9 +421,8 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase {
 };
 
 /*!
-\brief Base class for factories.
+\brief Base class for DSP factories.
 */
-
 class TCodeFaustAudioEffectFactory 
 {
 
@@ -459,9 +454,8 @@ class TCodeFaustAudioEffectFactory
 };
 
 /*!
-\brief Base class for local factories.
+\brief Base class for local DSP factories.
 */
-
 class TLocalCodeFaustAudioEffect;
 
 class TLocalCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory
@@ -491,7 +485,6 @@ class TLocalCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory
 /*!
 \brief Remote factory.
 */
-
 class TRemoteCodeFaustAudioEffect;
 
 class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory
@@ -505,7 +498,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
     
         TRemoteCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
-            int argc = 2;
+            int argc = 0;
             const char* argv[32];
             std::string error_msg;
             
@@ -513,8 +506,8 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             fLibraryPath = library_path;
             fDrawPath = draw_path;
             
-            argv[0] = "dummy";
-            argv[1] = 0;
+            //argv[0] = "dummy";
+            //argv[1] = 0;
             
             
             /*
@@ -530,8 +523,11 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 argc = 1;
             }
             */
+            
+            printf("code %s\n", code.c_str());
          
-            //fFactory = createRemoteDSPFactory(argc, argv, "http://localhost:7777", 19000, code, error_msg, 3);
+            fFactory = createRemoteDSPFactory(argc, argv, "localhost", 7777, code, error_msg, 3);
+            //fFactory = createRemoteDSPFactory(argc, argv, "192.168.1.174", 7777, code, error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fRemoteFactoryTable[code] = this;
                 TAudioGlobals::fRemoteFactoryNumber++;
@@ -551,7 +547,6 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
 /*!
 \brief File based local factory.
 */
-
 class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory {
     
     public:
@@ -597,7 +592,6 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
 /*!
 \brief String based local factory.
 */
-
 class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory {
 
     public :
@@ -644,7 +638,6 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
 /*!
 \brief LLVM IR based local factory.
 */
-
 class TIRCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory {
 
     public :
@@ -695,9 +688,8 @@ class TIRCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory 
 };
 
 /*!
-\brief Local LLVM+libfaust effect.
+\brief Local LLVM + libfaust effect.
 */
-
 class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
 {
 
@@ -789,9 +781,8 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
 typedef TLocalCodeFaustAudioEffect * TLocalCodeFaustAudioEffectPtr;
 
 /*!
-\brief Remote LLVM+libfaust effect.
+\brief Remote LLVM + libfaust effect.
 */
-
 class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
 {
 
@@ -816,15 +807,13 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             const char* argv[32];
             std::string error_msg;
             
+            argv[0] = "--NJ_latency";
+            argv[1] = "2";
+            argv[2] = "--NJ_ip";
+            argv[3] = "127.0.0.1";
             
-            argv[0] = "dummy";
-            argv[1] = "--NJ_latency";
-            argv[2] = "2";
-            argv[3] = 0;
-            
-            //fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
-            
-            //printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
+            fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
+            printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
             
             if (!fDsp) {
                 throw TLASException(error.c_str());

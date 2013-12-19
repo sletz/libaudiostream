@@ -64,10 +64,11 @@ char* TAudioGlobals::fLastLibError = NULL;
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 
-/// Effect factory
+// Local effect factory
 std::map<string, TLocalCodeFaustAudioEffectFactory*> TAudioGlobals::fLocalFactoryTable;
 int TAudioGlobals::fLocalFactoryNumber = 0;
 
+// Remote effect factory
 std::map<string, TRemoteCodeFaustAudioEffectFactory*> TAudioGlobals::fRemoteFactoryTable;
 int TAudioGlobals::fRemoteFactoryNumber = 0;
 

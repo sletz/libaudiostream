@@ -34,9 +34,6 @@ research@grame.fr
 \brief The base class for audio effects.
 */
 
-// Using smartable1 cause crah when desallocating the object: desactivated for now
-// class TAudioEffectInterface : public la_smartable1
-
 //class LA_EXPORT TAudioEffectInterface : public la_smartable
 class LA_EXPORT TAudioEffectInterface : public la_smartable1
 {

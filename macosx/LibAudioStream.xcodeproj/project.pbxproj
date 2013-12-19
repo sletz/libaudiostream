@@ -1771,6 +1771,7 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
+					/usr/local/lib/faust/libfaustremote.a,
 					"-lcurl",
 					"-ljacknet",
 					"-ljack",

@@ -22,13 +22,29 @@ research@grame.fr
 #include "TFaustAudioEffect.h"
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 static bool CheckEnding(const string& name, const string& end)
 {
     unsigned int match = name.rfind(end);
     return ((match != string::npos) && (name.size() - end.size() == match));
 }
+   
+static string PathToContent(const string& path)
+{
+    ifstream f(path.c_str());
+    string result;
+    char line[4096];
     
+    while (f.getline(line, 4096)) {
+        result += line;
+        result += "\n";
+    }
+    
+    f.close();
+    return result;
+}
+
 // Duplicate a Faust effect 'num' times 
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterface* effect, int num) 
 {
@@ -69,8 +85,10 @@ TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const st
     if (TAudioGlobals::fRemoteFactoryTable.find(name) != TAudioGlobals::fRemoteFactoryTable.end()) {
         printf("DSP factory already created...\n");
         factory = TAudioGlobals::fRemoteFactoryTable[name];
+    } else if (CheckEnding(name, ".dsp")) { 
+        factory = new TRemoteCodeFaustAudioEffectFactory(PathToContent(name), library_path, draw_path);
     } else {
         factory = new TRemoteCodeFaustAudioEffectFactory(name, library_path, draw_path);
-    }    
+    }
     return new TRemoteCodeFaustAudioEffect(factory);
 }

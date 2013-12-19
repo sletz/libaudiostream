@@ -114,7 +114,7 @@ void test2_10()  // Cut in midle part
 void test2_11()  // Cut in fadeOut part
 {
     AudioStream s1 = MakeFadeSound(MakeConstantSound(2, 400, 1.f), 100, 100);
-    AudioStream s2 = MakeCutSound(s1, 350, INT_MAX);
+    AudioStream s2 = MakeCutSound(s1, 390, INT_MAX);
     printf("error = %s\n", GetLastLibError());
     FileRender(s2, 60, "test2_11_1.txt");
     FileRender(s2, 60, "test2_11_2.txt", true);
@@ -258,6 +258,7 @@ void test7_3()
     FileRender(s2, 100, "test7_3.txt");
 }
 
+// REMOTE effect
 void test7_4()
 {
     AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
@@ -334,8 +335,8 @@ int main()
     //test2_10();
     //test2_11();
     
-    test3_1();
-    test3_2();
+    //test3_1();
+    //test3_2();
     //printf("error = %s\n", GetLastLibError());
     //test4();
     //printf("error = %s\n", GetLastLibError());
@@ -345,4 +346,6 @@ int main()
     //test6_1();
     //test6_2();
     //printf("error = %s\n", GetLastLibError());
+    
+    test7_4();
 }

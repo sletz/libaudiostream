@@ -17,24 +17,6 @@
 #define FILENAME3 "/Users/letz/son1.wav"
 #define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
 
-std::string pathToContent(const char* path)
-{
-    std::ifstream f(path);
-    std::string line;
-    std::string result;
-    
-    while (f.good()) {
-        f >> line;
-        result += line;
-        //result += "\n";
-        //printf("content %s\n", result.c_str());
-    }
-    
-    f.close();
-
-    return result;
-}
-
 // Global context
 static long gSampleRate = 0;
 static long gBufferSize = 0;
@@ -132,6 +114,7 @@ int main(int argc, char* argv[])
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
+    /*
      next();
     
     // Lit la date courante en frames et usec/sec
@@ -247,20 +230,21 @@ int main(int argc, char* argv[])
     s3 = MakeSeqSound(s1, s2, 1024);
     //MemoryRender(s3, 512);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
-   
+    */
     
     next();
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);
+    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
+   
     
     next();
     
-    /*
-    std::string effect = pathToContent(LLVM_EFFECT3);
+    
+    std::string effect = pathToContent(LLVM_EFFECT1);
     //std::cout << effect;
     
     //std::string effect = "process = _,_;";
@@ -270,7 +254,7 @@ int main(int argc, char* argv[])
     s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(effect.c_str(), "", ""), SR/2, SR/2);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
-    */
+    
 
     next();
     

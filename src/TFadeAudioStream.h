@@ -40,13 +40,19 @@ class TFadeAudioStream : public TDecoratedAudioStream
 
         Envelope fFadeIn;           // FadeIn object
         Envelope fFadeOut;          // FadeOut object
+        
         long fFadeInFrames;         // Number of frames for FadeIn
         long fCurFadeInFrames;      // Number of frames for FadeIn during fade
+        float fFadeInStart;         // FadeIn start value
+        
         long fFadeOutFrames;        // Number of frames for FadeOut
         long fCurFadeOutFrames;     // Number of frames for FadeOut during fade
+        float fFadeOutStart;        // FadeOut start value
+        
         long fStatus;               // Channel state
         long fCurFrame;             // Current frame
         long fFramesNum;            // Frames number
+        
         FLOAT_BUFFER fMixBuffer;    // Used for mixing
 
         long Play(FLOAT_BUFFER buffer, long framesNum, long framePos);
