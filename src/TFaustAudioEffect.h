@@ -541,6 +541,11 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
         remote_dsp_factory* GetFactory() { return fFactory; }
         
         static TCodeFaustAudioEffect* CreateEffect(const string& name, const string& library_path, const string& draw_path);
+        
+        string GetCode() 
+        { 
+            return "environment { " + fCode  + " }.process";
+        }
          
 };
 

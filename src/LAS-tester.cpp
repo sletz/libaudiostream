@@ -348,4 +348,6 @@ int main()
     //printf("error = %s\n", GetLastLibError());
     
     test7_4();
+    test7_5();
+    test7_6();
 }
