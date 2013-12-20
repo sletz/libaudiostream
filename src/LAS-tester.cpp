@@ -223,11 +223,15 @@ void test6_2()
 }
 
 // Test EFFECT
+
+#define LLVM_EFFECT "/Documents/faust-sf/examples/zita_rev1.dsp"
+//#define LLVM_EFFECT "process = _*0.5,_*0.5;"
+
 void test7_1()
 {
     AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
-    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT, "", ""), 10, 10);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
@@ -239,7 +243,7 @@ void test7_2()
 {
     AudioStream s1 = MakeConstantSound(4, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
-    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT, "", ""), 10, 10);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
@@ -251,7 +255,7 @@ void test7_3()
 {
     AudioStream s1 = MakeConstantSound(1, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
-    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    AudioStream s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT, "", ""), 10, 10);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
@@ -259,11 +263,14 @@ void test7_3()
 }
 
 // REMOTE effect
+
+
+
 void test7_4()
 {
     AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
-    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT, "", ""), 10, 10);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
@@ -275,7 +282,7 @@ void test7_5()
 {
     AudioStream s1 = MakeConstantSound(4, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
-    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT, "", ""), 10, 10);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
@@ -287,7 +294,7 @@ void test7_6()
 {
     AudioStream s1 = MakeConstantSound(1, 1000, 1.f);
     printf("len s1 %d\n", GetLengthSound(s1));
-    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect("process = _*0.5,_*0.5;", "", ""), 10, 10);
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT, "", ""), 10, 10);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s2 %d\n", GetLengthSound(s2));
