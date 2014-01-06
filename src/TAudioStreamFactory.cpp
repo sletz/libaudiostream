@@ -138,7 +138,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeSeqSound(TAudioStreamPtr s1, TAudioStre
 {
     TRY_CALL
     if (s1 && s2) {
-        if (crossFade > s1->Length() + s2->Length()) {
+        if (crossFade > s1->Length() || crossFade > s2->Length()) {
             TAudioGlobals::AddLibError("MakeSeqSound : crossFade > sound length");
         } else if (crossFade > 0) {
             TAudioStream* stream1 = new TCutEndAudioStream(s1, s1->Length() - crossFade);

@@ -151,7 +151,6 @@ void test3_2()
     FileRender(s3, 4, "test3_2_2.txt", true);
 }
 
-// Cut
 void test3_3()
 {
     AudioStream s1 = MakeConstantSound(2, 100, 0.5f);
@@ -159,12 +158,27 @@ void test3_3()
     printf("len s1 %d\n", GetLengthSound(s1));
     printf("len s2 %d\n", GetLengthSound(s2));
     
-    AudioStream s3 = MakeSeqSound(s1, s2, 40);
+    AudioStream s3 = MakeSeqSound(s1, s2, 100);
     printf("error = %s\n", GetLastLibError());
     
     printf("len s3 %d\n", GetLengthSound(s3));
-    FileRender(s3, 100, "test3_1_1.txt");
-    FileRender(s3, 100, "test3_1_2.txt", true);
+    FileRender(s3, 4, "test3_3_1.txt");
+    FileRender(s3, 4, "test3_3_2.txt", true);
+}
+
+void test3_4()
+{
+    AudioStream s1 = MakeConstantSound(2, 100, 0.5f);
+    AudioStream s2 = MakeConstantSound(2, 100, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    printf("len s2 %d\n", GetLengthSound(s2));
+    
+    AudioStream s3 = MakeSeqSound(s1, s2, 150);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s3 %d\n", GetLengthSound(s3));
+    FileRender(s3, 100, "test3_4_1.txt");
+    FileRender(s3, 100, "test3_4_2.txt", true);
 }
 
 // Test MIX
@@ -264,8 +278,6 @@ void test7_3()
 
 // REMOTE effect
 
-
-
 void test7_4()
 {
     AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
@@ -308,13 +320,13 @@ int main()
     //test0();
     
     //test1_1();
-     //test1_2();
-     //test1_3();
+    //test1_2();
+    //test1_3();
     
-     //test1();
-     //printf("error = %s\n", GetLastLibError());
+    //test1();
+    //printf("error = %s\n", GetLastLibError());
      
-     
+    /*
     test2_1();
     printf("error = %s\n", GetLastLibError());
     
@@ -328,7 +340,6 @@ int main()
     test2_5();
     printf("error = %s\n", GetLastLibError());
     
-    
     test2_6();
     
     printf("error = %s\n", GetLastLibError());
@@ -337,13 +348,16 @@ int main()
     test2_8();
     printf("error = %s\n", GetLastLibError());
     
-    
     test2_9();
     test2_10();
     test2_11();
+    */
     
-    //test3_1();
-    //test3_2();
+    test3_1();
+    test3_2();
+    test3_3();
+    test3_4();
+    
     //printf("error = %s\n", GetLastLibError());
     //test4();
     //printf("error = %s\n", GetLastLibError());
