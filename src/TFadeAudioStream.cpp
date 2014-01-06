@@ -143,9 +143,6 @@ long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePo
 
 void TFadeAudioStream::Init(float fade_in_val, float fade_in_time, float fade_out_val, float fade_out_time)
 {
-    fFadeInStart = fade_in_val;
-    fFadeOutStart = fade_out_val;
-   
     fFadeIn.setValue(fade_in_val);
     fFadeIn.setTarget(1.0f);
     fFadeIn.setTime(UAudioTools::ConvertFrameToSec(fade_in_time));
@@ -165,39 +162,12 @@ CutBegin(Fade(s, f1, f2), n)  ==> Fade(CutBegin(s, n), f1, f2) // A REVOIR
 
 TAudioStreamPtr TFadeAudioStream::CutBegin(long frames)
 {
-    //long len = fStream->Length();
-    
-    /*
-    // A FINIR
-    long newFadeInFrames = UTools::Min(frames, fFadeInFrames); 
-    if (frames < fFadeInFrames) {
-        return new TFadeAudioStream(fStream->CutBegin(frames), fFadeInFrames - frames, fFadeOutFrames);
+    if (fFadeInFrames + fFadeOutFrames > fStream->Length()) {
+        float ratio = float(fFadeInFrames + fFadeOutFrames) / float(fStream->Length());
+        return new TFadeAudioStream(fStream->CutBegin(frames), int(float(fFadeInFrames)/ratio), int(float(fFadeOutFrames)/ratio));
     } else {
-        return new TFadeAudioStream(fStream->CutBegin(frames), 0, fFadeOutFrames);
+        return new TFadeAudioStream(fStream->CutBegin(frames), fFadeInFrames, fFadeOutFrames);
     }
-    */
-    
-    // A REVOIR : mettre le stream dans le bon Žtat (kFadeOn, kPlaying, kFadeOut...)
-    
-    // if in fadeIn part
-    TFadeAudioStreamPtr res;
-    if (frames < fFadeInFrames) {
-        
-        long new_fade_in_frames = fFadeInFrames - frames;
-        res = new TFadeAudioStream(fStream->CutBegin(frames), new_fade_in_frames, fFadeOutFrames);
-        res->Init(float(new_fade_in_frames)/float(fFadeInFrames), float(new_fade_in_frames), 1.0f, float(fFadeOutFrames));
-        printf("Cur in fadein %f %f\n", float(new_fade_in_frames)/float(fFadeInFrames), float(new_fade_in_frames));
-    // else if before fadeOut part
-    } else if (frames < fFramesNum) {
-        res = new TFadeAudioStream(fStream->CutBegin(frames), 0, fFadeOutFrames);
-    // else in fadeOut part
-    } else {
-        long new_fade_out_frames = fFadeOutFrames - (frames - fFramesNum);
-        res = new TFadeAudioStream(fStream->CutBegin(frames), 0, UTools::Max(0, new_fade_out_frames));
-        res->Init(0.0f, float(fFadeInFrames), float(new_fade_out_frames)/float(fFadeOutFrames), float(new_fade_out_frames));
-        printf("Cur in fadeout %f %f \n", float(new_fade_out_frames)/float(fFadeOutFrames), float(new_fade_out_frames));
-    }
-    return res;
 }
 
 void TFadeAudioStream::Reset()
@@ -207,7 +177,7 @@ void TFadeAudioStream::Reset()
 	fCurFrame = 0;
     fCurFadeInFrames = fFadeInFrames;
     fCurFadeOutFrames = fFadeOutFrames;
-    Init(fFadeInStart, float(fFadeInFrames), fFadeOutStart, float(fFadeOutFrames));
+    Init(0.f, float(fFadeInFrames), 1.f, float(fFadeOutFrames));
 }
 
 // Additional interface
@@ -219,14 +189,14 @@ void TChannelFadeAudioStream::SetStream(TAudioStreamPtr stream, long fadeIn, lon
     fStatus = kIdle;
     fCurFrame = 0;
 	fFramesNum = fStream->Length() - fFadeOutFrames; // Number of frames - FadeOut
-    Init(0.0f, float(fFadeInFrames), 1.0f, float(fFadeOutFrames));
+    Init(0.f, float(fFadeInFrames), 1.f, float(fFadeOutFrames));
 }
 
 void TChannelFadeAudioStream::FadeIn()
 {
     if (fCurFrame < fFramesNum) {
         fStatus = kFadeIn;
-        Init(0.0f, float(fFadeInFrames), 1.0f, float(fFadeOutFrames));
+        Init(0.f, float(fFadeInFrames), 1.f, float(fFadeOutFrames));
     }
 }
 
@@ -234,7 +204,7 @@ void TChannelFadeAudioStream::FadeOut()
 {
     if (fCurFrame < fFramesNum) {
         fStatus = kFadeOut;
-        Init(0.0f, float(fFadeInFrames), 1.0f, float(fFadeOutFrames));
+        Init(0.f, float(fFadeInFrames), 1.f, float(fFadeOutFrames));
     }
 }
 

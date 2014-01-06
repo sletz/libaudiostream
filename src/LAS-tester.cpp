@@ -93,7 +93,7 @@ void test2_8()  // No midle section
     FileRender(s, 60, "test2_8_2.txt", true);
 }
 
-void test2_9()  // Cut in fadeIn
+void test2_9()  // Cut in fadeIn part
 {
     AudioStream s1 = MakeFadeSound(MakeConstantSound(2, 400, 1.f), 100, 100);
     AudioStream s2 = MakeCutSound(s1, 50, INT_MAX);
@@ -314,7 +314,7 @@ int main()
      //test1();
      //printf("error = %s\n", GetLastLibError());
      
-     /*
+     
     test2_1();
     printf("error = %s\n", GetLastLibError());
     
@@ -327,8 +327,8 @@ int main()
     printf("error = %s\n", GetLastLibError());
     test2_5();
     printf("error = %s\n", GetLastLibError());
-    */
-    /*
+    
+    
     test2_6();
     
     printf("error = %s\n", GetLastLibError());
@@ -336,11 +336,11 @@ int main()
     printf("error = %s\n", GetLastLibError());
     test2_8();
     printf("error = %s\n", GetLastLibError());
-    */
     
-    //test2_9();
-    //test2_10();
-    //test2_11();
+    
+    test2_9();
+    test2_10();
+    test2_11();
     
     //test3_1();
     //test3_2();
@@ -354,7 +354,7 @@ int main()
     //test6_2();
     //printf("error = %s\n", GetLastLibError());
     
-    test7_4();
-    test7_5();
-    test7_6();
+    //test7_4();
+    //test7_5();
+    //test7_6();
 }

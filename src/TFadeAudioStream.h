@@ -43,11 +43,9 @@ class TFadeAudioStream : public TDecoratedAudioStream
         
         long fFadeInFrames;         // Number of frames for FadeIn
         long fCurFadeInFrames;      // Number of frames for FadeIn during fade
-        float fFadeInStart;         // FadeIn start value
         
         long fFadeOutFrames;        // Number of frames for FadeOut
         long fCurFadeOutFrames;     // Number of frames for FadeOut during fade
-        float fFadeOutStart;        // FadeOut start value
         
         long fStatus;               // Channel state
         long fCurFrame;             // Current frame
