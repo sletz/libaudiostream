@@ -560,25 +560,22 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
         TFileCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
             int argc;
-            const char* argv[32];
+            const char* argv[16];
             std::string error_msg;
             
             fCode = code;
             fLibraryPath = library_path;
             fDrawPath = draw_path;
 
-            // Try filename...
-            argv[0] = code.c_str();
-            
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argc = 2;
-                argv[1] = "-svg";
-            } else {
                 argc = 1;
+                argv[0] = "-svg";
+            } else {
+                argc = 0;
             }
          
-            fFactory = createDSPFactory(argc, argv, library_path, draw_path, "", "", GetTarget(), error_msg, 3);
+            fFactory = createDSPFactoryFromFile(code, argc, argv, library_path, draw_path, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
@@ -605,7 +602,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
         TStringCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
             int argc;
-            const char* argv[32];
+            const char* argv[16];
             std::string error_msg;
             char input_name[64];
             
@@ -623,8 +620,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
             sprintf(input_name, "LAS-faustfx-%d", TAudioGlobals::fLocalFactoryNumber);
    
-            // Try DSP code...
-            fFactory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, GetTarget(), error_msg, 3);
+            fFactory = createDSPFactoryFromString( input_name, code, argc, argv, library_path, draw_path, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
