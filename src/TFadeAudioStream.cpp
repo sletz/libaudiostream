@@ -63,7 +63,7 @@ long TFadeAudioStream::Play(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     long playingFrames = UTools::Min(framesNum, fFramesNum - fCurFrame);
     
-    printf("Play playingFrames %ld fFramesNum %ld fCurFrame %ld\n", playingFrames, fFramesNum, fCurFrame);
+    //printf("Play playingFrames %ld fFramesNum %ld fCurFrame %ld\n", playingFrames, fFramesNum, fCurFrame);
     
     long res = fStream->Read(buffer, playingFrames, framePos);
     
@@ -103,12 +103,12 @@ long TFadeAudioStream::FadeIn(FLOAT_BUFFER buffer, long framesNum, long framePos
 {
     long fadeInFrames = UTools::Min(framesNum, fCurFadeInFrames);
     
-    printf("FadeIn %ld %f\n", fadeInFrames, fFadeIn.lastOut());
+    //printf("FadeIn %ld %f\n", fadeInFrames, fFadeIn.lastOut());
     
     // Render Fade
     long res = Fade(buffer, fadeInFrames, framePos, fFadeIn);
     
-    printf("FadeIn %ld %f\n", fadeInFrames, fFadeIn.lastOut());
+    //printf("FadeIn %ld %f\n", fadeInFrames, fFadeIn.lastOut());
     
     if (fadeInFrames < framesNum) { // Last buffer of FadeIn
         // Switch in kPlaying state and finish rendering the buffer
@@ -124,12 +124,12 @@ long TFadeAudioStream::FadeOut(FLOAT_BUFFER buffer, long framesNum, long framePo
 {
     long fadeOutFrames = UTools::Min(framesNum, fCurFadeOutFrames);
     
-    printf("FadeOut %ld %f\n", fadeOutFrames, fFadeOut.lastOut());
+    //printf("FadeOut %ld %f\n", fadeOutFrames, fFadeOut.lastOut());
     
     // Render Fade
     long res = Fade(buffer, fadeOutFrames, framePos, fFadeOut);
     
-    printf("FadeOut %ld %f\n", fadeOutFrames, fFadeOut.lastOut());
+    //printf("FadeOut %ld %f\n", fadeOutFrames, fFadeOut.lastOut());
     
     if (fadeOutFrames < framesNum) { // Last buffer of FadeOut
         // Switch in kIdle state
@@ -147,17 +147,17 @@ void TFadeAudioStream::Init(float fade_in_val, float fade_in_time, float fade_ou
     fFadeIn.setTarget(1.0f);
     fFadeIn.setTime(UAudioTools::ConvertFrameToSec(fade_in_time));
     
-    printf("TFadeAudioStream::Init fFadeIn %f\n", fFadeIn.lastOut());
+    //printf("TFadeAudioStream::Init fFadeIn %f\n", fFadeIn.lastOut());
 
     fFadeOut.setValue(fade_out_val);
     fFadeOut.setTarget(0.0f);
     fFadeOut.setTime(UAudioTools::ConvertFrameToSec(fade_out_time));
     
-    printf("TFadeAudioStream::Init fFadeOut %f\n", fFadeOut.lastOut());
+    //printf("TFadeAudioStream::Init fFadeOut %f\n", fFadeOut.lastOut());
 }
 
 /*
-CutBegin(Fade(s, f1, f2), n)  ==> Fade(CutBegin(s, n), f1, f2) // A REVOIR
+CutBegin(Fade(s, f1, f2), n) ==> Fade(CutBegin(s, n), f1, f2) 
 */
 
 TAudioStreamPtr TFadeAudioStream::CutBegin(long frames)

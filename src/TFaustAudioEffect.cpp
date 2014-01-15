@@ -19,6 +19,7 @@ research@grame.fr
 
 */
 
+#include <map>
 #include "TFaustAudioEffect.h"
 #include <iostream>
 #include <sstream>
@@ -38,7 +39,9 @@ static string PathToContent(const string& path)
     
     while (f.getline(line, 4096)) {
         result += line;
-        result += "\n";
+        if (!f.fail()) {
+            result += "\n";
+        }
     }
     
     f.close();

@@ -238,8 +238,8 @@ void test6_2()
 
 // Test EFFECT
 
-#define LLVM_EFFECT "/Documents/faust-sf/examples/zita_rev1.dsp"
-//#define LLVM_EFFECT "process = _*0.5,_*0.5;"
+//#define LLVM_EFFECT "/Documents/faust-sf/examples/zita_rev1.dsp"
+#define LLVM_EFFECT "process = _*0.5,_*0.5;"
 
 void test7_1()
 {
@@ -353,10 +353,10 @@ int main()
     test2_11();
     */
     
-    test3_1();
-    test3_2();
-    test3_3();
-    test3_4();
+    //test3_1();
+    //test3_2();
+    //test3_3();
+    //test3_4();
     
     //printf("error = %s\n", GetLastLibError());
     //test4();
@@ -367,6 +367,10 @@ int main()
     //test6_1();
     //test6_2();
     //printf("error = %s\n", GetLastLibError());
+    
+    test7_1();
+    test7_2();
+    test7_3();
     
     //test7_4();
     //test7_5();

@@ -654,7 +654,6 @@
 				F5C1FF5F0328B7D201053105 /* Factory */,
 				F5C1FF5D0328B7A301053105 /* Interface */,
 				F5EDBD20032F86EF01053105 /* Mixer */,
-				F5C1FF5C0328B78201053105 /* Tools */,
 				F5C1FF600328B7FA01053105 /* Thread */,
 				F5C1FF5B0328B76601053105 /* Player */,
 				4BA6AC5A044AF64500053105 /* Renderer */,
@@ -847,6 +846,7 @@
 			children = (
 				4B29CD9717FDB1E1000C5D6F /* TExpAudioMixer.cpp */,
 				4B29CD9217FDB1D0000C5D6F /* TExpAudioMixer.h */,
+				F5C1FF5C0328B78201053105 /* Tools */,
 			);
 			name = Mixer;
 			sourceTree = "<group>";
@@ -1771,12 +1771,12 @@
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					/usr/local/lib/faust/libfaustremote.a,
+					"-ljack",
 					"-lcurl",
 					"-ljacknet",
-					"-ljack",
 					/usr/local/lib/faust/libHTTPDFaust.a,
 					/usr/local/lib/faust/libfaust.a,
+					/usr/local/lib/faust/libfaustremote.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -1918,6 +1918,7 @@
 				OTHER_LDFLAGS = (
 					"-ljack",
 					/usr/local/lib/faust/libHTTPDFaust.a,
+					/usr/local/lib/faust/libfaustremote.a,
 					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,

@@ -526,8 +526,9 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
             printf("code %s\n", code.c_str());
          
-            fFactory = createRemoteDSPFactory(argc, argv, "localhost", 7777, code, error_msg, 3);
-            //fFactory = createRemoteDSPFactory(argc, argv, "192.168.1.174", 7777, code, error_msg, 3);
+            //fFactory = createRemoteDSPFactory(argc, argv, "localhost", 7777, code, error_msg, 3);
+            fFactory = NULL;
+            fFactory = createRemoteDSPFactoryFromString("toto", code, argc, argv, "192.168.1.174", 7777, error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fRemoteFactoryTable[code] = this;
                 TAudioGlobals::fRemoteFactoryNumber++;
@@ -818,6 +819,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             argv[3] = "127.0.0.1";
             
             fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
+            //fDsp = NULL;
             printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
             
             if (!fDsp) {
