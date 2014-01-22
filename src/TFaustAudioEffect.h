@@ -493,6 +493,8 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
     protected:
 	
         remote_dsp_factory* fFactory;
+        string fRemoteIP;
+        int fRemotePort;
      	
     public:
     
@@ -526,7 +528,6 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
             printf("code %s\n", code.c_str());
          
-            //fFactory = createRemoteDSPFactory(argc, argv, "localhost", 7777, code, error_msg, 3);
             map<string, pair<string, int> > machines;
             bool available = getRemoteMachinesAvailable(&machines);
             
@@ -534,7 +535,9 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 printf("MACHINE AVAILABLE %d\n", machines.size());
                 // Takes the first machine
                 pair <string, int> machine = (*machines.begin()).second;
-                fFactory = createRemoteDSPFactoryFromString("FaustLAS", code, argc, argv, machine.first, machine.second, error_msg, 3);
+                fRemoteIP = machine.first;
+                fRemotePort = machine.second;
+                fFactory = createRemoteDSPFactoryFromString("FaustLAS", code, argc, argv, fRemoteIP, fRemotePort, error_msg, 3);
             } else {
                 throw TLASException("No remote machine available");
             }
@@ -557,6 +560,8 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
         { 
             return "environment { " + fCode  + " }.process";
         }
+        
+        string GetRemoteIP() { return fRemoteIP; }
          
 };
 
@@ -822,7 +827,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             argv[0] = "--NJ_latency";
             argv[1] = "2";
             argv[2] = "--NJ_ip";
-            argv[3] = "127.0.0.1";
+            argv[3] = fFactory->GetRemoteIP().c_str();
             argv[4] = "--NJ_partial";
             argv[5] = "1";
             
