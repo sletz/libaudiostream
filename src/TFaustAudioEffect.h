@@ -527,8 +527,18 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             printf("code %s\n", code.c_str());
          
             //fFactory = createRemoteDSPFactory(argc, argv, "localhost", 7777, code, error_msg, 3);
-            fFactory = NULL;
-            fFactory = createRemoteDSPFactoryFromString("toto", code, argc, argv, "192.168.1.174", 7777, error_msg, 3);
+            map<string, pair<string, int> > machines;
+            bool available = getRemoteMachinesAvailable(&machines);
+            
+            if (available) {
+                printf("MACHINE AVAILABLE %d\n", machines.size());
+                // Takes the first machine
+                pair <string, int> machine = (*machines.begin()).second;
+                fFactory = createRemoteDSPFactoryFromString("FaustLAS", code, argc, argv, machine.first, machine.second, error_msg, 3);
+            } else {
+                throw TLASException("No remote machine available");
+            }
+            
             if (fFactory) {
                 TAudioGlobals::fRemoteFactoryTable[code] = this;
                 TAudioGlobals::fRemoteFactoryNumber++;
@@ -604,7 +614,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             int argc;
             const char* argv[16];
             std::string error_msg;
-            char input_name[64];
+            char name_app[64];
             
             fCode = code;
             fLibraryPath = library_path;
@@ -618,9 +628,9 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 argc = 0;
             }
             
-            sprintf(input_name, "LAS-faustfx-%d", TAudioGlobals::fLocalFactoryNumber);
+            sprintf(name_app, "LAS-faustfx-%d", TAudioGlobals::fLocalFactoryNumber);
    
-            fFactory = createDSPFactoryFromString( input_name, code, argc, argv, library_path, draw_path, GetTarget(), error_msg, 3);
+            fFactory = createDSPFactoryFromString(name_app, code, argc, argv, library_path, draw_path, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
@@ -805,7 +815,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             fFactory = factory;
             string error;
             
-            int argc = 4;
+            int argc = 6;
             const char* argv[32];
             std::string error_msg;
             
@@ -813,9 +823,10 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             argv[1] = "2";
             argv[2] = "--NJ_ip";
             argv[3] = "127.0.0.1";
+            argv[4] = "--NJ_partial";
+            argv[5] = "1";
             
             fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
-            //fDsp = NULL;
             printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
             
             if (!fDsp) {
@@ -825,11 +836,9 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             fDsp->init(TAudioGlobals::fSampleRate);
             fDsp->buildUserInterface(this);
             
-            /*
             Name_Meta meta;
-            metadataDSPFactory(fFactory->GetFactory(), &meta);
+            metadataRemoteDSPFactory(fFactory->GetFactory(), &meta);
             fName = meta.fName;
-            */
             
             // Keep effect name in effect factory
             factory->SetName(fName);
@@ -838,12 +847,12 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         }
         virtual ~TRemoteCodeFaustAudioEffect()
         {
-            //deleteRemoteDSPInstance(fDsp);
+            deleteRemoteDSPInstance(fDsp);
         }
         void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum)
         {
-			fDsp->compute(framesNum, input, output);
-		}
+    		fDsp->compute(framesNum, input, output);
+        }
 
         TAudioEffectInterface* Copy()
         {

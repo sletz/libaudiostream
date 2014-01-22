@@ -240,6 +240,7 @@ void test6_2()
 
 //#define LLVM_EFFECT "/Documents/faust-sf/examples/zita_rev1.dsp"
 #define LLVM_EFFECT "process = _*0.5,_*0.5;"
+//#define LLVM_EFFECT "process = _,_;"
 
 void test7_1()
 {
@@ -289,6 +290,17 @@ void test7_4()
     FileRender(s2, 100, "test7_4.txt");
 }
 
+void test7_4_1()
+{
+    AudioStream s1 = MakeConstantSound(2, 1000, 1.f);
+    printf("len s1 %d\n", GetLengthSound(s1));
+    AudioStream s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT, "", ""), 200, 200);
+    printf("error = %s\n", GetLastLibError());
+    
+    printf("len s2 %d\n", GetLengthSound(s2));
+    FileRender(s2, 100, "test7_4_1.txt");
+}
+
 // Effect duplication
 void test7_5()
 {
@@ -316,6 +328,7 @@ void test7_6()
 int main()
 {
     AudioGlobalsInit(2, 2, 44100, 512, 65536, 65536, 1);
+    //AudioGlobalsInit(2, 2, 44100, 128, 65536, 65536, 1);
     
     //test0();
     
@@ -369,10 +382,11 @@ int main()
     //printf("error = %s\n", GetLastLibError());
     
     test7_1();
-    test7_2();
-    test7_3();
+    //test7_2();
+    //test7_3();
     
-    //test7_4();
+    test7_4();
+    test7_4_1();
     //test7_5();
     //test7_6();
 }

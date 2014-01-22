@@ -109,7 +109,7 @@ static AudioStream MakeEcho(AudioStream stream)
 int main(int argc, char* argv[])
 {
     // Alloue un Player avec 4 entrées/sorties, une entrée TR d'au plus 10 min, et le backend JACK
-    gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
@@ -232,27 +232,27 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
     */
     
+    /*
     next();
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
-    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
+    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR, SR);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
-   
+    */
     
+    /*
     next();
-    
     
     //std::string effect = "process = _,_;";
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
-    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT2, "", ""), SR/2, SR/2);
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
+    s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT1, "", ""), SR, SR);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
-    
-
+ 
     next();
     
     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
@@ -324,22 +324,44 @@ int main(int argc, char* argv[])
  
     // Instancie la date symbolique à la date courante "capturée"
     set_symbolic_date(symb1);
-      
+     
+     
     next();
      
     // Contrôle temporel des effets sur une région d'un fichier
     date = GetCurDate();
-    s1 = MakeRegionSound(FILENAME1, 5*SR, 15*SR);
-    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);  
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
+    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);  
     
     // Rampe sur un paramètre de l'effet en 2 sec, qui commence 1 sec après la date courante
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb4", "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
     }
     
     // Rampe sur un paramètre de l'effet en 2 sec, qui commence 5 sec après la date courante
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb4", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
+    }
+    
+    StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
+      */
+    next();
+    
+    // Contrôle temporel des effets sur une région d'un fichier
+    s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
+    s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);  
+    
+    date = GetCurDate();
+    printf("date %lld\n", date);
+    
+    // Rampe sur un paramètre de l'effet en 2 sec, qui commence 1 sec après la date courante
+    for (int i = 0; i < 100; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
+    }
+    
+    // Rampe sur un paramètre de l'effet en 2 sec, qui commence 5 sec après la date courante
+    for (int i = 0; i < 100; i++) {
+        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
     }
     
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
