@@ -30,6 +30,9 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "TLASException.h"
 
+#include <netdb.h>
+#include <arpa/inet.h>
+
 #include <iostream>
 #include <sstream>
 
@@ -799,6 +802,26 @@ typedef TLocalCodeFaustAudioEffect * TLocalCodeFaustAudioEffectPtr;
 /*!
 \brief Remote LLVM + libfaust effect.
 */
+
+static char* GetLocalIP()
+{
+    char host_name[32];
+    gethostname(host_name, sizeof(host_name));
+
+    struct hostent* host = gethostbyname(host_name);
+    if (host) {
+        for (int i = 0; host->h_addr_list[i] != 0; ++i) {
+            struct in_addr addr;
+            memcpy(&addr, host->h_addr_list[i], sizeof(struct in_addr));
+            // return first...
+            return inet_ntoa(addr);
+        }
+        return NULL;
+    } else {
+        return NULL;
+    }
+}
+
 class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
 {
 
@@ -819,19 +842,19 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             fFactory = factory;
             string error;
             
-            int argc = 4;
+            int argc = 8;
             const char* argv[32];
             std::string error_msg;
             
             argv[0] = "--NJ_latency";
             argv[1] = "2";
-            //argv[1] = "1";
             argv[2] = "--NJ_partial";
             argv[3] = "1";
-            
-            //argv[4] = "--NJ_ip";
-            //argv[5] = self;
-            //printf("--NJ_ip %s\n", fFactory->GetRemoteIP().c_str());
+            argv[4] = "--NJ_port";
+            argv[5] = "19001";
+            argv[6] = "--NJ_ip";
+            argv[7] = GetLocalIP();
+            printf("--NJ_ip %s\n", GetLocalIP());
             
             fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
             printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
