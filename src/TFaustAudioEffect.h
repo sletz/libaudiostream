@@ -511,7 +511,6 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             //argv[0] = "dummy";
             //argv[1] = 0;
             
-            
             /*
             // Try filename...
             argv[0] = code.c_str();
@@ -880,14 +879,12 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         
         const char* GetJson()
         {
-            /*
             httpdfaust::jsonfaustui json("", "", 0);
             fDsp->buildUserInterface(&json);
-            metadataDSPFactory(fFactory->GetFactory(), &json);
+            metadataRemoteDSPFactory(fFactory->GetFactory(), &json);
             json.numInput(fDsp->getNumInputs());
             json.numOutput(fDsp->getNumOutputs());
-            */
-            //fJSON = json.json();
+            fJSON = json.json();
             return fJSON.c_str();
         }
               

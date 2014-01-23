@@ -324,7 +324,7 @@ int main(int argc, char* argv[])
  
     // Instancie la date symbolique à la date courante "capturée"
     set_symbolic_date(symb1);
-     
+       */
      
     next();
      
@@ -344,7 +344,7 @@ int main(int argc, char* argv[])
     }
     
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
-      */
+    
     next();
     
     // Contrôle temporel des effets sur une région d'un fichier
