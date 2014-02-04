@@ -23,7 +23,7 @@ static long gBufferSize = 0;
 static AudioPlayerPtr gAudioPlayer = 0;
 
 //static long BS = 512;
-static long BS = 1024;
+static long BS = 512;
 static long SR = 44100;
 
 static AudioStream s1,s2,s3,s4,s5,s6;
@@ -325,7 +325,7 @@ int main(int argc, char* argv[])
     // Instancie la date symbolique à la date courante "capturée"
     set_symbolic_date(symb1);
     
-     
+      
     next();
      
     // Contrôle temporel des effets sur une région d'un fichier
@@ -344,7 +344,7 @@ int main(int argc, char* argv[])
     }
     
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
-       */
+      */
     next();
     
     // Contrôle temporel des effets sur une région d'un fichier

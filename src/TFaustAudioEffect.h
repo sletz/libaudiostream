@@ -509,24 +509,11 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
             fCode = code;
             fLibraryPath = library_path;
-            fDrawPath = draw_path;
-            
-            //argv[0] = "dummy";
-            //argv[1] = 0;
-            
-            /*
-            // Try filename...
-            argv[0] = code.c_str();
-            
-            // Add -svg parameter if necessary
-            
-            if (draw_path != "") {
-                argc = 2;
-                argv[1] = "-svg";
-            } else {
-                argc = 1;
-            }
-            */
+            fDrawPath = "";
+    
+            argv[0] = "-I";
+            argv[1] = library_path.c_str();
+            argc = 2;
             
             printf("code %s\n", code.c_str());
          
@@ -586,13 +573,19 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
 
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argc = 1;
                 argv[0] = "-svg";
+                argv[1] = "-O";
+                argv[2] = draw_path.c_str();
+                argv[3] = "-I";
+                argv[4] = library_path.c_str();
+                argc = 5;
             } else {
-                argc = 0;
+                argv[0] = "-I";
+                argv[1] = library_path.c_str();
+                argc = 2;
             }
          
-            fFactory = createDSPFactoryFromFile(code, argc, argv, library_path, draw_path, GetTarget(), error_msg, 3);
+            fFactory = createDSPFactoryFromFile(code, argc, argv, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
@@ -629,15 +622,21 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argc = 1;
                 argv[0] = "-svg";
+                argv[1] = "-O";
+                argv[2] = draw_path.c_str();
+                argv[3] = "-I";
+                argv[4] = library_path.c_str();
+                argc = 5;
             } else {
-                argc = 0;
+                argv[0] = "-I";
+                argv[1] = library_path.c_str();
+                argc = 2;
             }
             
             sprintf(name_app, "LAS-faustfx-%d", TAudioGlobals::fLocalFactoryNumber);
    
-            fFactory = createDSPFactoryFromString(name_app, code, argc, argv, library_path, draw_path, GetTarget(), error_msg, 3);
+            fFactory = createDSPFactoryFromString(name_app, code, argc, argv, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
@@ -842,7 +841,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             fFactory = factory;
             string error;
             
-            int argc = 8;
+            int argc = 10;
             const char* argv[32];
             std::string error_msg;
             
@@ -854,6 +853,9 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             argv[5] = "19001";
             argv[6] = "--NJ_ip";
             argv[7] = GetLocalIP();
+            argv[8] = "--NJ_compression";
+            argv[9] = "128";
+            
             printf("--NJ_ip %s\n", GetLocalIP());
             
             fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
