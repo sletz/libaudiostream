@@ -434,7 +434,6 @@ class TCodeFaustAudioEffectFactory
         string fLibraryPath;
         string fDrawPath;
         string fCode;
-        string fName;
         
     public:
     
@@ -444,10 +443,7 @@ class TCodeFaustAudioEffectFactory
         string GetLibraryPath() { return fDrawPath; }
         string GetDrawPath() { return fDrawPath; }
         virtual string GetCode() { return ""; }
-        
-        void SetName(const string& name) { fName = name; }
-        string GetName() { return fName; }
-        
+         
         // Duplicate a Faust effect 'num' times 
         static TCodeFaustAudioEffect* DuplicateEffect(TAudioEffectInterface* effect, int num);
          
@@ -536,7 +532,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 TAudioGlobals::fRemoteFactoryNumber++;
             }  else {
                 stringstream error;
-                error << "createDSPFactory error from DSP file " << error_msg << endl;
+                error << "createRemoteDSPFactoryFromString error from DSP file " << error_msg << endl;
                 throw TLASException(error.str());
             }
         }
@@ -591,7 +587,7 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
                 TAudioGlobals::fLocalFactoryNumber++;
             }  else {
                 stringstream error;
-                error << "createDSPFactory error from DSP file " << error_msg << endl;
+                error << "createDSPFactoryFromFile error from DSP file " << error_msg << endl;
                 throw TLASException(error.str());
             }
         }
@@ -642,7 +638,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 TAudioGlobals::fLocalFactoryNumber++;
             } else {
                 stringstream error;
-                error << "createDSPFactory error from DSP code " << error_msg << endl;
+                error << "createDSPFactoryFromString error from DSP code " << error_msg << endl;
                 throw TLASException(error.str());
             }
         }
@@ -739,16 +735,16 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
             
             Name_Meta meta;
             metadataDSPFactory(fFactory->GetFactory(), &meta);
-            if (meta.fName == "") { 
-                stringstream name;
-                name << "localEffect" << fEffectIndex++;
-                fName = name.str();
-            } else {
-                fName = meta.fName;
-            }
             
-            // Keep effect name in effect factory
-            factory->SetName(fName);
+            stringstream name;
+            if (meta.fName == "") { 
+                name << "localEffect";
+            } else {
+                name << meta.fName;
+            }
+            name << fEffectIndex++;
+            fName = name.str();
+            
             // Keep the effect in effect global table
             TAudioGlobals::fEffectTable[fName].push_back(this);
         }
@@ -880,16 +876,16 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             
             Name_Meta meta;
             metadataRemoteDSPFactory(fFactory->GetFactory(), &meta);
-            if (meta.fName == "") { 
-                stringstream name;
-                name << "remoteEffect" << fEffectIndex++;
-                fName = name.str();
-            } else {
-                fName = meta.fName;
-            }
             
-            // Keep effect name in effect factory
-            factory->SetName(fName);
+            stringstream name;
+            if (meta.fName == "") { 
+                name << "remoteEffect";
+            } else {
+                name << meta.fName;
+            }
+            name << fEffectIndex++;
+            fName = name.str();
+            
             // Keep the effect in effect global table
             TAudioGlobals::fEffectTable[fName].push_back(this);
         }

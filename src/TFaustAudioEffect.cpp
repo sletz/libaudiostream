@@ -71,30 +71,30 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInt
     return faust_effect->CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
-TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const string& name, const string& library_path, const string& draw_path)
+TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const string& code, const string& library_path, const string& draw_path)
 {
     TLocalCodeFaustAudioEffectFactory* factory = 0;
-    if (TAudioGlobals::fLocalFactoryTable.find(name) != TAudioGlobals::fLocalFactoryTable.end()) {
+    if (TAudioGlobals::fLocalFactoryTable.find(code) != TAudioGlobals::fLocalFactoryTable.end()) {
         printf("DSP factory already created...\n");
-        factory = TAudioGlobals::fLocalFactoryTable[name];
-    } else if (CheckEnding(name, ".dsp")) {  // Here we assume only 'file' or 'string' are used (not IR stuff...)
-        factory = new TFileCodeFaustAudioEffectFactory(name, library_path, draw_path);
+        factory = TAudioGlobals::fLocalFactoryTable[code];
+    } else if (CheckEnding(code, ".dsp")) {  // Here we assume only 'file' or 'string' are used (not IR stuff...)
+        factory = new TFileCodeFaustAudioEffectFactory(code, library_path, draw_path);
     } else {
-        factory = new TStringCodeFaustAudioEffectFactory(name, library_path, draw_path);
+        factory = new TStringCodeFaustAudioEffectFactory(code, library_path, draw_path);
     }
     return new TLocalCodeFaustAudioEffect(factory);
 }
 
-TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const string& name, const string& library_path, const string& draw_path)
+TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const string& code, const string& library_path, const string& draw_path)
 {
     TRemoteCodeFaustAudioEffectFactory* factory = 0;
-    if (TAudioGlobals::fRemoteFactoryTable.find(name) != TAudioGlobals::fRemoteFactoryTable.end()) {
+    if (TAudioGlobals::fRemoteFactoryTable.find(code) != TAudioGlobals::fRemoteFactoryTable.end()) {
         printf("DSP factory already created...\n");
-        factory = TAudioGlobals::fRemoteFactoryTable[name];
-    } else if (CheckEnding(name, ".dsp")) { 
-        factory = new TRemoteCodeFaustAudioEffectFactory(PathToContent(name), library_path, draw_path);
+        factory = TAudioGlobals::fRemoteFactoryTable[code];
+    } else if (CheckEnding(code, ".dsp")) { 
+        factory = new TRemoteCodeFaustAudioEffectFactory(PathToContent(code), library_path, draw_path);
     } else {
-        factory = new TRemoteCodeFaustAudioEffectFactory(name, library_path, draw_path);
+        factory = new TRemoteCodeFaustAudioEffectFactory(code, library_path, draw_path);
     }
     return new TRemoteCodeFaustAudioEffect(factory);
 }
