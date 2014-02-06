@@ -716,6 +716,8 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
 		llvm_dsp* fDsp;
         TLocalCodeFaustAudioEffectFactory* fFactory;
         
+        static int fEffectIndex;
+        
         string GetLibraryPath() { return fFactory->GetLibraryPath(); }
         string GetDrawPath() { return fFactory->GetDrawPath(); }
         string GetCode() { return fFactory->GetCode(); }
@@ -737,7 +739,13 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
             
             Name_Meta meta;
             metadataDSPFactory(fFactory->GetFactory(), &meta);
-            fName = meta.fName;
+            if (meta.fName == "") { 
+                stringstream name;
+                name << "localEffect" << fEffectIndex++;
+                fName = name.str();
+            } else {
+                fName = meta.fName;
+            }
             
             // Keep effect name in effect factory
             factory->SetName(fName);
@@ -774,7 +782,7 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
         
         const char* GetJson()
         {
-            httpdfaust::jsonfaustui json("", "", 0);
+            httpdfaust::jsonfaustui json(fName.c_str(), "", 0);
             fDsp->buildUserInterface(&json);
             metadataDSPFactory(fFactory->GetFactory(), &json);
             json.numInput(fDsp->getNumInputs());
@@ -832,6 +840,8 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         string GetLibraryPath() { return fFactory->GetLibraryPath(); }
         string GetDrawPath() { return fFactory->GetDrawPath(); }
         string GetCode() { return fFactory->GetCode(); }
+        
+        static int fEffectIndex;
 
     public:
 
@@ -841,7 +851,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             fFactory = factory;
             string error;
             
-            int argc = 10;
+            int argc = 8;
             const char* argv[32];
             std::string error_msg;
             
@@ -850,11 +860,11 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             argv[2] = "--NJ_partial";
             argv[3] = "1";
             argv[4] = "--NJ_port";
-            argv[5] = "19001";
+            argv[5] = "19000";
             argv[6] = "--NJ_ip";
             argv[7] = GetLocalIP();
-            argv[8] = "--NJ_compression";
-            argv[9] = "128";
+            //argv[8] = "--NJ_compression";
+            //argv[9] = "128";
             
             printf("--NJ_ip %s\n", GetLocalIP());
             
@@ -870,7 +880,13 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             
             Name_Meta meta;
             metadataRemoteDSPFactory(fFactory->GetFactory(), &meta);
-            fName = meta.fName;
+            if (meta.fName == "") { 
+                stringstream name;
+                name << "remoteEffect" << fEffectIndex++;
+                fName = name.str();
+            } else {
+                fName = meta.fName;
+            }
             
             // Keep effect name in effect factory
             factory->SetName(fName);
@@ -907,7 +923,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         
         const char* GetJson()
         {
-            httpdfaust::jsonfaustui json("", "", 0);
+            httpdfaust::jsonfaustui json(fName.c_str(), "", 0);
             fDsp->buildUserInterface(&json);
             metadataRemoteDSPFactory(fFactory->GetFactory(), &json);
             json.numInput(fDsp->getNumInputs());

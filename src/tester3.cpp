@@ -325,43 +325,49 @@ int main(int argc, char* argv[])
     // Instancie la date symbolique à la date courante "capturée"
     set_symbolic_date(symb1);
     
-      
+       */
     next();
      
     // Contrôle temporel des effets sur une région d'un fichier
     date = GetCurDate();
     s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
-    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);  
+    AudioEffect effect1 = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+    const char* name1 = GetNameEffect(effect1);
+    printf("name %s\n", name1);
+    s2 = MakeEffectSound(s1, effect1, SR/2, SR/2);  
     
     // Rampe sur un paramètre de l'effet en 2 sec, qui commence 1 sec après la date courante
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
+        SetTimedControlValueEffect(gAudioPlayer, name1, "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
     }
     
     // Rampe sur un paramètre de l'effet en 2 sec, qui commence 5 sec après la date courante
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
+        SetTimedControlValueEffect(gAudioPlayer, name1, "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
     }
     
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
-      */
+     
     next();
     
     // Contrôle temporel des effets sur une région d'un fichier
     s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
-    s2 = MakeEffectSound(s1, MakeRemoteFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);  
+    AudioEffect effect2 = MakeRemoteFaustAudioEffect(LLVM_EFFECT1, "", "");
+    const char* name2 = GetNameEffect(effect2);
+    printf("name %s\n", name2);
+    s2 = MakeEffectSound(s1, effect2, SR/2, SR/2);  
     
     date = GetCurDate();
     printf("date %lld\n", date);
     
     // Rampe sur un paramètre de l'effet en 2 sec, qui commence 1 sec après la date courante
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
+        SetTimedControlValueEffect(gAudioPlayer, name2, "/Freeverb/Wet", 1.-float(i)*0.01f, GenRealDate(gAudioPlayer, SR+date+i*SR/50));
     }
     
     // Rampe sur un paramètre de l'effet en 2 sec, qui commence 5 sec après la date courante
     for (int i = 0; i < 100; i++) {
-        SetTimedControlValueEffect(gAudioPlayer, "freeverb", "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
+        SetTimedControlValueEffect(gAudioPlayer, name2, "/Freeverb/Wet", float(i)*0.01f, GenRealDate(gAudioPlayer, SR*5+date+i*SR/50));
     }
     
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));

@@ -25,6 +25,9 @@ research@grame.fr
 #include <sstream>
 #include <fstream>
 
+int TLocalCodeFaustAudioEffect::fEffectIndex = 0;
+int TRemoteCodeFaustAudioEffect::fEffectIndex = 0;
+
 static bool CheckEnding(const string& name, const string& end)
 {
     unsigned int match = name.rfind(end);
