@@ -505,12 +505,22 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
             fCode = code;
             fLibraryPath = library_path;
-            fDrawPath = "";
-    
+            fDrawPath = draw_path;
+
+            // Always add library_path
             argv[0] = "-I";
             argv[1] = library_path.c_str();
-            argc = 2;
-            
+         
+            // Add -svg parameter if necessary
+            if (draw_path != "") {
+                argv[2] = "-O";
+                argv[3] = draw_path.c_str();
+                argv[4] = "-svg";
+                argc = 5;
+            } else {
+                argc = 2;
+            }
+    
             printf("code %s\n", code.c_str());
          
             map<string, pair<string, int> > machines;
@@ -567,17 +577,17 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
             fLibraryPath = library_path;
             fDrawPath = draw_path;
 
+            // Always add library_path
+            argv[0] = "-I";
+            argv[1] = library_path.c_str();
+         
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argv[0] = "-svg";
-                argv[1] = "-O";
-                argv[2] = draw_path.c_str();
-                argv[3] = "-I";
-                argv[4] = library_path.c_str();
+                argv[2] = "-O";
+                argv[3] = draw_path.c_str();
+                argv[4] = "-svg";
                 argc = 5;
             } else {
-                argv[0] = "-I";
-                argv[1] = library_path.c_str();
                 argc = 2;
             }
          
@@ -610,29 +620,26 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             int argc;
             const char* argv[16];
             std::string error_msg;
-            char name_app[64];
             
             fCode = code;
             fLibraryPath = library_path;
             fDrawPath = draw_path;
             
+            // Always add library_path
+            argv[0] = "-I";
+            argv[1] = library_path.c_str();
+         
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argv[0] = "-svg";
-                argv[1] = "-O";
-                argv[2] = draw_path.c_str();
-                argv[3] = "-I";
-                argv[4] = library_path.c_str();
+                argv[2] = "-O";
+                argv[3] = draw_path.c_str();
+                argv[4] = "-svg";
                 argc = 5;
             } else {
-                argv[0] = "-I";
-                argv[1] = library_path.c_str();
                 argc = 2;
             }
             
-            sprintf(name_app, "LAS-faustfx-%d", TAudioGlobals::fLocalFactoryNumber);
-   
-            fFactory = createDSPFactoryFromString(name_app, code, argc, argv, GetTarget(), error_msg, 3);
+            fFactory = createDSPFactoryFromString("FaustLAS", code, argc, argv, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
