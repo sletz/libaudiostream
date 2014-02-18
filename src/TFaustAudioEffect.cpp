@@ -36,18 +36,28 @@ static bool CheckEnding(const string& name, const string& end)
    
 static string PathToContent(const string& path)
 {
-    ifstream f(path.c_str());
-    string result;
-    char line[4096];
+    ifstream file(path.c_str());
+   
+    // Compute file size in bytes
+    int begin = file.tellg();
+    file.seekg (0, ios::end);
+    int end = file.tellg();
+    int size = end - begin;
+    file.seekg(0);
     
-    while (f.getline(line, 4096)) {
+    // And allocate line to that a single line can be read...
+    char* line = new char[size];
+    string result;
+      
+    while (file.getline(line, size)) {
         result += line;
-        if (!f.fail()) {
+        if (!file.fail()) {
             result += "\n";
         }
     }
     
-    f.close();
+    delete [] line;
+    file.close();
     return result;
 }
 
