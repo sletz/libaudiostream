@@ -34,23 +34,23 @@ research@grame.fr
 void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
                                         audio_frames_t cur_frame, 
-                                        long offset,
-                                        long slice)
+                                        long offset_in_control,
+                                        long control_slice)
 {
     COMMANDS_ITERATOR it = fControlCommands.begin();
     while (it != fControlCommands.end()) {
      
         TCommandPtr command = *it;
-        long command_offset = command->GetOffset(cur_frame, slice);
+        long command_offset = command->GetOffset(cur_frame, control_slice);
         
-        if (command_offset == offset) {
-            if (command->Execute(shared_buffer, date_map, cur_frame, slice)) {
+        if (command_offset == offset_in_control) {
+            if (command->Execute(shared_buffer, date_map, cur_frame, control_slice)) {
                 it++;
             } else {
                 //printf("fControlCommands.erase offset = %ld\n", command_offset);
                 it = fControlCommands.erase(it);
             }
-        } else if (command_offset > offset || command_offset == -1) {
+        } else if (command_offset > offset_in_control || command_offset == -1) {
             break;
         }
     }
@@ -74,19 +74,20 @@ Render all stream inside a "slice" inside a buffer.
 void TExpAudioMixer::ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                                         map<SymbolicDate, audio_frames_t>& date_map, 
                                         audio_frames_t cur_frame, 
-                                        long offset,
-                                        long slice)
+                                        long offset_in_stream,
+                                        long stream_slice)
 {
-    //printf("ExecuteStreamsSlice cur_frame %lld offset %ld slice %ld\n", cur_frame, offset, slice);
+    
     
     float* temp[shared_buffer.GetChannels()];
-    shared_buffer.GetFrame(offset, temp);
-    TSharedNonInterleavedAudioBuffer<float> shared_buffer_imp(temp, slice, TAudioGlobals::fOutput);
+    shared_buffer.GetFrame(offset_in_stream, temp);
+    TSharedNonInterleavedAudioBuffer<float> shared_buffer_imp(temp, stream_slice, TAudioGlobals::fOutput);
     
     COMMANDS_ITERATOR it = fStreamCommands.begin();
     while (it != fStreamCommands.end()) {
         TCommandPtr command = *it;
-        if (command->Execute(shared_buffer_imp, date_map, cur_frame + offset, slice)) {
+        //printf("ExecuteStreamsSlice cur_frame %lld offset_in_stream %ld stream_slice %ld\n", cur_frame, offset_in_stream, stream_slice);
+        if (command->Execute(shared_buffer_imp, date_map, cur_frame + offset_in_stream, stream_slice)) {
             it++;
         } else {
             //printf("fStreamCommands.erase\n");
@@ -94,6 +95,12 @@ void TExpAudioMixer::ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>
         }
     }
 }
+
+/*
+    [       control               control           ]
+    [ slice    |         slice       |      slice   ]
+
+*/
 
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
@@ -108,27 +115,26 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
      
     long offset_in_control = 0;
     long offset_in_stream = 0;
-    long slice = 0;
+    long stream_slice = 0;
     map<SymbolicDate, audio_frames_t> date_map;
-    
     
     // Possibly render slices in presence of control
     while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames) {
     
         // Render all streams inside this slice
-        slice = offset_in_control - offset_in_stream;
-        ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice);
+        stream_slice = offset_in_control - offset_in_stream;
+        ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, stream_slice);
         
         // Execute all controls at the same date
         ExecuteControlSlice(shared_buffer, date_map, fCurFrame, offset_in_control, frames);
         
         // Move to next slice
-        offset_in_stream += slice;
+        offset_in_stream += stream_slice;
     }
      
-    // Render all streams inside last slice, which can be global buffer is no control
-    slice = offset_in_control - offset_in_stream;
-    ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, slice);
+    // Render all streams inside last slice, which can be entire buffer if no control in it
+    stream_slice = offset_in_control - offset_in_stream;
+    ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, stream_slice);
          
     // Update date in frames
     fCurFrame += frames;

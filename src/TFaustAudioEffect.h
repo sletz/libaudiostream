@@ -871,7 +871,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             
             printf("--NJ_ip %s\n", GetLocalIP());
             
-            fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, error);
+            fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, NULL, NULL, error);
             printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
             
             if (!fDsp) {

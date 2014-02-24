@@ -195,6 +195,7 @@ struct TStreamCommand : public TCommand {
         void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
          
+        /*
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                     map<SymbolicDate, audio_frames_t>& date_map, 
                     audio_frames_t cur_frame, 
@@ -203,6 +204,8 @@ struct TStreamCommand : public TCommand {
             // Keeps the same value for the entire audio cycle
             audio_frames_t start_date = GetDate(date_map, fStartDate);
             audio_frames_t stop_date = GetDate(date_map, fStopDate);
+            
+            printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
             
             long start_offset = 0;
             long stop_offset = std::abs(long(cur_frame - stop_date));
@@ -214,11 +217,13 @@ struct TStreamCommand : public TCommand {
                 // New stream to play...
                 start_offset = start_date - cur_frame;
                 to_play = true;
-                //printf("Start stream fCurFrame = %lld offset = %ld\n", cur_frame, start_offset);
+                printf("Start stream fCurFrame = %lld offset = %ld\n", cur_frame, start_offset);
             } else if (cur_frame > start_date) {
                 // Stream currently playing...
                 to_play = true;
             }
+            
+            printf("TStreamCommand::Execute frame_num = %d start_offset = %d\n", frame_num, start_offset);
             
             // Play it...
             if (to_play && (((res = fStream->Read(&shared_buffer, frame_num, start_offset)) < frames))) {
@@ -228,6 +233,64 @@ struct TStreamCommand : public TCommand {
             } else {
                 return true;
             }
+        }
+        */
+        
+        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+                    map<SymbolicDate, audio_frames_t>& date_map, 
+                    audio_frames_t cur_frame, 
+                    long frames)
+        {
+            // Keeps the same value for the entire audio cycle
+            audio_frames_t start_date = GetDate(date_map, fStartDate);
+            audio_frames_t stop_date = GetDate(date_map, fStopDate);
+            
+            //printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
+            
+            // Possibly entire buffer to play
+            long start_offset = 0;
+            long stop_offset = frames;  
+            
+            // Init values
+            long frame_num;
+            bool to_play = false;
+            bool to_stop = false;
+            long res = 0;
+            
+            // Possibly move start_offset inside this buffer
+            if (InBuffer(start_date, cur_frame, frames)) {
+                // New stream to play...
+                start_offset = start_date - cur_frame;
+                to_play = true;
+                //printf("Start stream fCurFrame = %lld start_offset = %ld\n", cur_frame, start_offset);
+            } else if (cur_frame > start_date) {
+                // Stream currently playing...
+                to_play = true;
+            }
+            
+            // Possibly move stop_offset inside this buffer
+            if (InBuffer(stop_date, cur_frame, frames)) {
+                // Stream will be stopped in this buffer...
+                stop_offset = stop_date - cur_frame;
+                to_stop = true;
+                //printf("Stop stream fCurFrame = %lld stop_offset = %ld\n", cur_frame, stop_offset);
+            }
+            
+            // Then compute effective frame number to play
+            frame_num = stop_offset - start_offset;
+            
+            //printf("TStreamCommand::Execute frame_num = %d start_offset = %d\n", frame_num, start_offset);
+            
+            // Play it...
+            if (to_play) {
+                if (to_stop || (res = fStream->Read(&shared_buffer, frame_num, start_offset)) < frame_num) {
+                    // End of stream
+                    //printf("Stop stream frame_num = %ld res = %ld\n", frame_num, res);
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
 };
