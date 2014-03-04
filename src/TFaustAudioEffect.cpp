@@ -36,28 +36,21 @@ static bool CheckEnding(const string& name, const string& end)
    
 static string PathToContent(const string& path)
 {
-    ifstream file(path.c_str());
+    ifstream file(path.c_str(), std::ifstream::binary);
+
+    file.seekg (0, file.end);
+    int size = file.tellg();
+    file.seekg (0, file.beg);
    
-    // Compute file size in bytes
-    int begin = file.tellg();
-    file.seekg (0, ios::end);
-    int end = file.tellg();
-    int size = end - begin;
-    file.seekg(0);
+    // And allocate buffer to that a single line can be read...
+    char* buffer = new char[size + 1];
+    file.read(buffer, size);
     
-    // And allocate line to that a single line can be read...
-    char* line = new char[size];
-    string result;
-      
-    while (file.getline(line, size)) {
-        result += line;
-        if (!file.fail()) {
-            result += "\n";
-        }
-    }
-    
-    delete [] line;
+    // Terminate the string
+    buffer[size] = 0;
+    string result = buffer;
     file.close();
+    delete [] buffer;
     return result;
 }
 

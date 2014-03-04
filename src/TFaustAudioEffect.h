@@ -852,7 +852,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         {
             assert(factory);
             fFactory = factory;
-            string error;
+            int error;
             
             int argc = 8;
             const char* argv[32];
@@ -872,10 +872,10 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             printf("--NJ_ip %s\n", GetLocalIP());
             
             fDsp = createRemoteDSPInstance(fFactory->GetFactory(), argc, argv, TAudioGlobals::fSampleRate, TAudioGlobals::fBufferSize, NULL, NULL, error);
-            printf("TRemoteCodeFaustAudioEffect %x error.c_str() %s\n", fDsp, error.c_str());
+            printf("TRemoteCodeFaustAudioEffect %x error %d\n", fDsp, error);
             
             if (!fDsp) {
-                throw TLASException(error.c_str());
+                throw TLASException("createRemoteDSPInstance failure...");
             }
             
             fDsp->init(TAudioGlobals::fSampleRate);
