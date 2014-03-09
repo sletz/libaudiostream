@@ -526,7 +526,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             map<string, pair<string, int> > machines;
             bool available = getRemoteMachinesAvailable(&machines);
             
-            if (available) {
+            if (available && machines.size() > 0) {
                 printf("MACHINE AVAILABLE %d\n", machines.size());
                 // Takes the first machine
                 pair <string, int> machine = (*machines.begin()).second;
