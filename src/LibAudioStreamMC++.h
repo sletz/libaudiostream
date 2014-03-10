@@ -210,6 +210,7 @@ AudioStream MakeConstantSound(long channels, long length, float value);
 \return A pointer to new stream object or NULL if the file cannot be opened.
 */
 AudioStream MakeReadSound(const char* name);
+    
 /*!
 \brief Create a file region reader stream. 
 \param name The sound file pathname.
@@ -218,6 +219,7 @@ AudioStream MakeReadSound(const char* name);
 \return A pointer to new stream object or NULL if the wanted region is not part of the file.
 */
 AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
+    
 /*!
 \brief Create a fade on a stream.
 \param sound The stream to be "faded".
@@ -226,6 +228,7 @@ AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
 \return A pointer to new stream object.
 */
 AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
+    
 /*!
 \brief Loop a stream.
 \param sound The stream to be looped.
@@ -233,6 +236,7 @@ AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
 \return A pointer to new stream object.
 */
 AudioStream MakeLoopSound(AudioStream sound, long num);
+    
 /*!
 \brief Cut in a stream : the portion between 0 and beginFrame will be removed, the portion between endFrame and the stream end will be removed.
 \param sound The stream to be cutted.
@@ -241,6 +245,7 @@ AudioStream MakeLoopSound(AudioStream sound, long num);
 \return A pointer to new stream object.
 */
 AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
+    
 /*!
 \brief Put two streams in sequence.
 \param s1 The first stream in the sequence.
@@ -249,6 +254,7 @@ AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
 \return A pointer to new stream object.
 */
 AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
+    
 /*!
 \brief Mix two streams.
 \param s1 The first stream in the mix.
@@ -291,6 +297,7 @@ AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, 
 \return A pointer to new stream object.
 */
 AudioStream MakePitchSchiftTimeStretchSound(AudioStream sound, double* pitch_shift, double* time_strech);
+    
 /*!
 \brief Create a stream writer.
 \param name The sound file pathname.
@@ -299,33 +306,39 @@ AudioStream MakePitchSchiftTimeStretchSound(AudioStream sound, double* pitch_shi
 \return A pointer to new stream object or NULL if the file cannot be opened.
 */
 AudioStream MakeWriteSound(const char* name, AudioStream sound, long format);
+    
 /*!
 \brief Create an input stream.
 \return A pointer to new stream object.
 */
 AudioStream MakeInputSound();
+    
 /*!
 \brief Create a shared stream on the input stream.
 \return A pointer to new stream object.
 */
 AudioStream MakeSharedInputSound();
+    
 /*!
 \brief Create a renderer "wrapper" on a stream, to be used for direct access to the stream content.
 \return A pointer to new stream object.
 */
 AudioStream MakeRendererSound(AudioStream sound);
+    
 /*!
 \brief Get the stream length in frames.
 \param sound The stream.
 \return The stream length in frames.
 */
 long GetLengthSound(AudioStream sound);
+    
 /*!
 \brief Get the stream number of channels.
 \param sound The stream.
 \return The number of channels.
 */
 long GetChannelsSound(AudioStream sound);
+    
 /*!
 \brief Read a buffer of the stream.
 \param sound The stream.
@@ -347,6 +360,7 @@ long ReadSound(AudioStream sound, float** buffer, long buffer_size);
 \return The number of read frames.
 */
 long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long frames, long pos);
+    
 /*!
 \brief Reset a stream.
 \param sound The stream to be reseted.
@@ -360,7 +374,6 @@ void ResetSound(AudioStream sound);
 */
 AudioStream MakeCopySound(AudioStream sound);
 
-
 /* Effect management */
 /*!
 \brief Create an effect described in the Faust DSP language.
@@ -370,6 +383,15 @@ AudioStream MakeCopySound(AudioStream sound);
 \return A pointer to new effect object or NULL if the effect cannot be located or created.
 */
 AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+    
+/* Effect management */
+/*!
+\brief Create an effect described in the Faust DSP language to be computed on a remote machine.
+\param name The code of the Faust effect, as a DSP filename or DSP string.
+\param library_path The pathname where to locate additional DSP libraries.
+\param draw_path The pathname where to save additional resources produced during compilation (like SVG files).
+\return A pointer to new effect object or NULL if the effect cannot be located or created.
+*/
 AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
 
 /*!
@@ -378,11 +400,13 @@ AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_pat
 \return The number of effect controls.
 */
 long GetControlCountEffect(AudioEffect effect);
+    
 /*!
 \brief Return a description on the effect control: control name, min, max and default values
 \param effect The effect pointer.
 */
 void GetControlParamEffect(AudioEffect effect, long control, char* label, float* min, float* max, float* init);
+    
 /*!
 \brief Set the effect control value.
 \param effect The effect pointer.
@@ -390,6 +414,7 @@ void GetControlParamEffect(AudioEffect effect, long control, char* label, float*
 \param value The new value as a float.
 */
 void SetControlValueEffect(AudioEffect effect, long control, float value);
+    
 /*!
 \brief Get the effect control current value.
 \param effect The effect pointer.
@@ -397,23 +422,27 @@ void SetControlValueEffect(AudioEffect effect, long control, float value);
 \return The effect control current value.
 */
 float GetControlValueEffect(AudioEffect effect, long control);
+    
 /*!
 \brief Set the effect running state.
 \param effect The effect to be used.
 \param state The running state.
 */
 void SetStateEffect(AudioEffect effect, long state);	
+    
 /*!
 \brief Get the effect running state.
 \param effect The effect to be used.
 \return state The running state.
 */
 long GetStateEffect(AudioEffect effect);
+    
 /*!
 \brief Reset the effect to intial state.
 \param effect The effect to be resetted.
 */
 void ResetEffect(AudioEffect effect);
+    
 /*!
 \brief Process an audio buffer with the effect.
 \param effect The effect to be used.
@@ -569,6 +598,7 @@ audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date);
 \return An error code.
 */
 long StartAudioPlayer(AudioPlayerPtr player);
+    
 /*!
 \brief Stop the audio player.
 \param player The audio player.
@@ -592,6 +622,7 @@ AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player);
 \return The number of available devices.
 */
 long GetDeviceCount(AudioRendererPtr renderer);
+    
 /*!
 \brief Fill DeviceInfo structure for a given device.
 \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
@@ -599,12 +630,14 @@ long GetDeviceCount(AudioRendererPtr renderer);
 \param info The device info structure to be filled.
 */
 void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
+    
 /*!
 \brief Get the default input device index.
 \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
 \return The default input device index.
 */
 long GetDefaultInputDevice(AudioRendererPtr renderer);
+    
 /*!
 \brief Get the default output device index.
 \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
@@ -619,11 +652,13 @@ long GetDefaultOutputDevice(AudioRendererPtr renderer);
 \return A pointer to new audio renderer object.
 */
 AudioRendererPtr MakeAudioRenderer(long renderer);
+    
 /*!
 \brief Delete an audio renderer.
 \param renderer The renderer to be deleted.
 */
 void DeleteAudioRenderer(AudioRendererPtr renderer);
+    
 /*!
 \brief Open the audio renderer.
 \param renderer The audio renderer used.
@@ -636,6 +671,7 @@ void DeleteAudioRenderer(AudioRendererPtr renderer);
 \return An error code.
 */
 long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  
+
 /*!
 \brief Close an audio renderer.
 \param renderer The audio renderer to be closed.
@@ -647,6 +683,7 @@ void CloseAudioRenderer(AudioRendererPtr renderer);
 \param renderer The audio renderer to be started.
 */	
 void StartAudioRenderer(AudioRendererPtr renderer); 
+    
 /*!
 \brief Stop an audio renderer.
 \param renderer The audio renderer to be stopped.
@@ -666,6 +703,7 @@ void GetAudioRendererInfo(AudioRendererPtr renderer, RendererInfoPtr info);
 \param client The audio client to be added.
 */
 void AddAudioClient(AudioRendererPtr renderer, AudioClientPtr client); 
+    
 /*!
 \brief Remove an audio client from the renderer internal client list.
 \param renderer The audio renderer to be used.
