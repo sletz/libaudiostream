@@ -638,6 +638,11 @@ extern "C"
      */
     long StopAudioPlayer(AudioPlayerPtr player);
     
+    /*!
+     \brief Cleat the audio player internal effect table.
+     \param player The audio player.
+     \return An error code.
+     */
     long ClearAudioPlayer(AudioPlayerPtr player);
     
     /*!

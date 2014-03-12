@@ -352,7 +352,7 @@ static void test21()
     
     //StopAudioPlayer(gAudioPlayer);
     
-    // Clear effect
+    // Clear effects
     ClearAudioPlayer(gAudioPlayer);
      
     for (int i = 0; i < 10; i++) {
@@ -379,7 +379,7 @@ static void test22()
     audio_frames_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
-     // Clear effect
+    // Clear effects
     ClearAudioPlayer(gAudioPlayer);
     
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 3 * tmpSampleRate, tmpSampleRate * 200), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
