@@ -110,7 +110,10 @@ class TCoreAudioRenderer : public TAudioRenderer
 
         long Start();
         long Stop();
-
+    
+        long Pause();
+        long Cont();
+	
         void GetInfo(RendererInfoPtr info);
 		
 		long GetDeviceCount();

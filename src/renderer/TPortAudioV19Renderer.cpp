@@ -236,14 +236,7 @@ long TPortAudioV19Renderer::Start()
     // Init timing here
     fAnchorFrameTime = 0;
     
-    PaError err = Pa_StartStream(fStream);
-
-    if (err != paNoError) {
-        printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
-        return OPEN_ERR;
-    } else {
-        return NO_ERR;
-	}
+    return Cont();
 }
 
 long TPortAudioV19Renderer::Stop()
@@ -252,6 +245,23 @@ long TPortAudioV19Renderer::Stop()
 
     if (err != paNoError) {
         printf("Error while closing device : device close error %s\n", Pa_GetErrorText(err));
+        return OPEN_ERR;
+    } else {
+        return NO_ERR;
+	}
+}
+
+long TPortAudioV19Renderer::Pause()
+{
+    return Stop();
+}
+
+long TPortAudioV19Renderer::Cont()
+{
+    PaError err = Pa_StartStream(fStream);
+    
+    if (err != paNoError) {
+        printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
         return OPEN_ERR;
     } else {
         return NO_ERR;

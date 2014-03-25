@@ -66,6 +66,9 @@ class TPortAudioV19Renderer : public TAudioRenderer
 
         long Start();
         long Stop();
+    
+        long Pause();
+        long Cont();
 
         void GetInfo(RendererInfoPtr info);
 		

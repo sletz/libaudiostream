@@ -141,6 +141,9 @@ class AUDIO_EXPORTS TAudioRenderer
 
         virtual long Start() = 0;
         virtual long Stop() = 0;
+    
+        virtual long Pause() = 0;
+        virtual long Cont() = 0;
 
         virtual void GetInfo(RendererInfoPtr info) = 0;
 		

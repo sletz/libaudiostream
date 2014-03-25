@@ -165,13 +165,22 @@ long TJackAudioRenderer::Close()
     return NO_ERR;
 }
 
+long TJackAudioRenderer::Pause()
+{
+    return Stop();
+}
 long TJackAudioRenderer::Start()
 {
-    const char** ports = NULL;
-    
     // Init timing here
     fAnchorFrameTime = 0;
     fAnchorUsecTime = 0;
+    
+    return Cont();
+}
+
+long TJackAudioRenderer::Cont()
+{
+    const char** ports = NULL;
 
     if (jack_activate(fClient)) {
         printf("Cannot activate client");
