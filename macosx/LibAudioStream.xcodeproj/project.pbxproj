@@ -648,7 +648,6 @@
 				4BF819DC1857ADE3009CD184 /* tester3.cpp */,
 				4BA49D2B185F01CE007749FB /* LAS-test.cpp */,
 				4BA49DF7185F0D64007749FB /* LAS-tester.cpp */,
-				4B0A99071836697800F7D5A8 /* Sorter */,
 				F5EDBD21032F870801053105 /* Channel */,
 				F5D82C3D032DEAA101053105 /* Effect */,
 				F5C1FF5F0328B7D201053105 /* Factory */,
@@ -683,14 +682,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		4B0A99071836697800F7D5A8 /* Sorter */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Sorter;
-			path = ../src/sorter;
-			sourceTree = SOURCE_ROOT;
 		};
 		4B51474207F18D680059C4C8 /* Atomic */ = {
 			isa = PBXGroup;
