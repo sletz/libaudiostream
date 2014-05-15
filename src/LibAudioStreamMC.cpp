@@ -254,6 +254,7 @@ AUDIOAPI AudioStream MakeReadSound(const char* name)
 
 AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame)
 {
+    //printf("MakeRegionSound %s %d %d\n", name, beginFrame, endFrame);
     return TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 }
 

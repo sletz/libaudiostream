@@ -114,7 +114,6 @@ int main(int argc, char* argv[])
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
-    /*
     next();
     
     // Lit la date courante en frames et usec/sec
@@ -128,10 +127,10 @@ int main(int argc, char* argv[])
     next();
     
     // Joue une région de 5 sec d'un fichier à la date courante
-    s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    //s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
+    s1 = MakeRegionSound(FILENAME1, 0, 2*SR);
     //MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
-   
    
     next();
     
@@ -139,12 +138,10 @@ int main(int argc, char* argv[])
     s1 = MakeFadeSound(MakeRegionSound(FILENAME1, 5*SR, 10*SR), SR, SR);
     //MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
-    */
-    
-    /*
+  
     next();
     
-    // Joue une selection d'une région de 5 sec d'un fichier à la date courante (gauche)
+    // Joue une selection d'une région de 5 sec d'un fichier à la date courante (canal gauche)
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     std::vector <int> selection1;
     selection1.push_back(0);
@@ -154,7 +151,7 @@ int main(int argc, char* argv[])
      
     next();
     
-    // Joue une selection d'une région de 5 sec d'un fichier à la date courante (droite)
+    // Joue une selection d'une région de 5 sec d'un fichier à la date courante (canal droite)
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     std::vector <int> selection2;
     selection2.push_back(1);
@@ -198,8 +195,7 @@ int main(int argc, char* argv[])
     s5 = MakeParSound(s2, s4);
     //MemoryRender(s5, 512);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, GetCurDate()));
-    */
-      /*
+  
     next();
     
     // Joue une région de 5 sec d'un fichier à la date courante, arrêt au bout de 3 sec
@@ -208,7 +204,6 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date));
     StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date+3*SR));
     
-     
     next();
      
     // Joue une région de 5 sec d'un fichier à 3 sec dans le futur, arrêt au bout de 6 sec
@@ -244,8 +239,7 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
     
     next();
-    
-   
+       
     //std::string effect = "process = _,_;";
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
@@ -254,9 +248,6 @@ int main(int argc, char* argv[])
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
    
-    */
-    
-    /*
     next();
     
     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
@@ -267,7 +258,6 @@ int main(int argc, char* argv[])
     s3 = MakeEffectSound(s2, MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, date));
     
-  
     next();
       
     // Echo sur une région d'un fichier
@@ -283,7 +273,6 @@ int main(int argc, char* argv[])
     s1 = MakeCutSound(MakeSharedInputSound(), date, date+5*SR);
     s2 = MakeEcho(s1);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
-   
     
     next();
     
@@ -300,7 +289,6 @@ int main(int argc, char* argv[])
     s5 = MakeSeqSound(s3, MakeSeqSound(MakeNullSound(SR*2), s4, SR/2), SR/2);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, date));
     
-    /*
     next();
     
     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
@@ -318,9 +306,7 @@ int main(int argc, char* argv[])
     
     s5 = MakeSeqSound(s3, MakeSeqSound(MakeNullSound(SR*2), s4, SR/2), SR/2);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, date));
-    */
-    
-    /*
+
     next();
     
     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
@@ -366,8 +352,6 @@ int main(int argc, char* argv[])
  
     // Instancie la date symbolique à la date courante "capturée"
     set_symbolic_date(symb1);
-    
-    */
     
     next();
      
@@ -435,7 +419,6 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
       
     next();
-    
   
     // Arrète le Player
     StopAudioPlayer(gAudioPlayer);

@@ -409,7 +409,7 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
-		4B0060721112ED0300B6A836 /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B0060721112ED0300B6A836 /* LibAudioStreamMC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStreamMC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B01286A1803FC54000735C7 /* TParAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TParAudioStream.cpp; path = ../src/TParAudioStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B01286B1803FC54000735C7 /* TParAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TParAudioStream.h; path = ../src/TParAudioStream.h; sourceTree = SOURCE_ROOT; };
 		4B012950180415CC000735C7 /* LAStester2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LAStester2; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -673,7 +673,7 @@
 				4BEA6244095806CD001F733A /* testPlayer */,
 				4BCB2B6C0D12ACE500AB3F6D /* LibAudioStream.framework */,
 				4BCB2BE60D12B71300AB3F6D /* testPlayer */,
-				4B0060721112ED0300B6A836 /* LibAudioStream.framework */,
+				4B0060721112ED0300B6A836 /* LibAudioStreamMC.framework */,
 				4BBBF3B0172A7E210019A47E /* LAStester */,
 				4B7AFCC717E9DF61005FA935 /* LAStester1 */,
 				4B012950180415CC000735C7 /* LAStester2 */,
@@ -1157,7 +1157,7 @@
 			name = "LibAudioStream CoreAudio+Jack";
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = AudioEngineFramework;
-			productReference = 4B0060721112ED0300B6A836 /* LibAudioStream.framework */;
+			productReference = 4B0060721112ED0300B6A836 /* LibAudioStreamMC.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		4B012946180415CC000735C7 /* LAStester2 */ = {
@@ -1765,9 +1765,7 @@
 					"-ljack",
 					"-lcurl",
 					"-ljacknet",
-					/usr/local/lib/faust/libHTTPDFaust.a,
 					/usr/local/lib/faust/libfaust.a,
-					/usr/local/lib/faust/libfaustremote.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -1861,7 +1859,7 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = LibAudioStream;
+				PRODUCT_NAME = LibAudioStreamMC;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -1910,8 +1908,6 @@
 					"-lcurl",
 					"-ljacknet",
 					"-ljack",
-					/usr/local/lib/faust/libHTTPDFaust.a,
-					/usr/local/lib/faust/libfaustremote.a,
 					/usr/local/lib/faust/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
@@ -2007,7 +2003,7 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = LibAudioStream;
+				PRODUCT_NAME = LibAudioStreamMC;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (

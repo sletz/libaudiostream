@@ -25,6 +25,7 @@ research@grame.fr
 #include "faust/llvm-dsp.h"
 #include "faust/remote-dsp.h"
 #include "faust/gui/jsonfaustui.h"
+#include "faust/gui/JSONUI.h"
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
@@ -35,6 +36,8 @@ research@grame.fr
 
 #include <iostream>
 #include <sstream>
+
+//#define REMOTE_DSP
 
 #ifdef WIN32
 
@@ -499,6 +502,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
     
         TRemoteCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
+        #if REMOTE_DSP
             int argc = 0;
             const char* argv[32];
             std::string error_msg;
@@ -545,6 +549,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 error << "createRemoteDSPFactoryFromString error from DSP file " << error_msg << endl;
                 throw TLASException(error.str());
             }
+        #endif
         }
         
         remote_dsp_factory* GetFactory() { return fFactory; }
@@ -785,12 +790,10 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
         
         const char* GetJson()
         {
-            httpdfaust::jsonfaustui json(fName.c_str(), "", 0);
-            fDsp->buildUserInterface(&json);
-            metadataDSPFactory(fFactory->GetFactory(), &json);
-            json.numInput(fDsp->getNumInputs());
-            json.numOutput(fDsp->getNumOutputs());
-            fJSON = json.json();
+            JSONUI builder(fDsp->getNumInputs(), fDsp->getNumOutputs());
+            metadataDSPFactory(fFactory->GetFactory(), &builder);
+            fDsp->buildUserInterface(&builder);
+            fJSON = builder.JSON();
             return fJSON.c_str();
         }
               
@@ -850,6 +853,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
 
         TRemoteCodeFaustAudioEffect(TRemoteCodeFaustAudioEffectFactory* factory):TCodeFaustAudioEffect()
         {
+        #if REMOTE_DSP
             assert(factory);
             fFactory = factory;
             int error;
@@ -895,10 +899,13 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             
             // Keep the effect in effect global table
             TAudioGlobals::fEffectTable[fName].push_back(this);
+        #endif
         }
         virtual ~TRemoteCodeFaustAudioEffect()
         {
+        #if REMOTE_DSP
             deleteRemoteDSPInstance(fDsp);
+        #endif
         }
         void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum)
         {
@@ -926,13 +933,15 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         
         const char* GetJson()
         {
-            httpdfaust::jsonfaustui json(fName.c_str(), "", 0);
-            fDsp->buildUserInterface(&json);
-            metadataRemoteDSPFactory(fFactory->GetFactory(), &json);
-            json.numInput(fDsp->getNumInputs());
-            json.numOutput(fDsp->getNumOutputs());
-            fJSON = json.json();
+        #if REMOTE_DSP
+            JSONUI builder(fDsp->getNumInputs(), fDsp->getNumOutputs());
+            metadataRemoteDSPFactory(fFactory->GetFactory(), &builder);
+            fDsp->buildUserInterface(&builder);
+            fJSON = builder.JSON();
             return fJSON.c_str();
+        #else
+            return "";
+        #endif
         }
               
         string GetName()
