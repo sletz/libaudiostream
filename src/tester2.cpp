@@ -1,6 +1,6 @@
 
 #include <stdio.h>
-#include <LibAudioStream/LibAudioStreamMC++.h>
+#include <LibAudioStreamMC/LibAudioStreamMC++.h>
 
 #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
 #define LLVM_EFFECT2 "/Documents/faust-sf/examples/zita_rev1.dsp"

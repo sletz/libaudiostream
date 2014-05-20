@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <string>
-#include <LibAudioStream/LibAudioStreamMC++.h>
+#include <LibAudioStreamMC/LibAudioStreamMC++.h>
 #include <iostream>
 #include <fstream>
 

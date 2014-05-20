@@ -365,6 +365,8 @@ AUDIOAPI void ResetSound(AudioStream sound)
 	static_cast<TAudioStreamPtr>(sound)->Reset();
 }
 
+// Sound Ptr API
+
 AUDIOAPI AudioStreamPtr MakeSoundPtr(AudioStream sound) 
 {
 	return new LA_SMARTP<TAudioStream>(sound);

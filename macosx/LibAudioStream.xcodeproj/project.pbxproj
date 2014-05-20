@@ -2992,7 +2992,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
-					LibAudioStream,
+					LibAudioStreamMC,
 				);
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -3019,7 +3019,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
-					LibAudioStream,
+					LibAudioStreamMC,
 				);
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;

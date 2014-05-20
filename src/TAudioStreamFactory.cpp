@@ -61,6 +61,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeNullSound(long length)
 
 TAudioStreamPtr TAudioStreamFactory::MakeMultiNullSound(long channels, long length)
 {
+    printf("TAudioStreamFactory::MakeMultiNullSound %d %d\n", channels, length);
     return new TNullAudioStream(channels, length);
 }
 
@@ -84,7 +85,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFrame, long endFrame)
 {
     TRY_CALL
+    printf("TAudioStreamFactory::MakeRegionSound %s %d %d\n", name.c_str(), beginFrame, endFrame);
     if (beginFrame >= 0 && beginFrame <= endFrame) {
+        printf("TAudioStreamFactory::MakeRegionSound 1\n");
+                
         TReadFileAudioStreamPtr sound = new TReadFileAudioStream(name, beginFrame);
         if (sound->SampleRate() != TAudioGlobals::fSampleRate) {
             return new TSampleRateAudioStream(new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length())), double(TAudioGlobals::fSampleRate) / double(sound->SampleRate()), 2);
@@ -92,6 +96,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeRegionSound(string name, long beginFram
             return new TCutEndAudioStream(sound, UTools::Min(endFrame - beginFrame, sound->Length()));
         }
     } else {
+        printf("TAudioStreamFactory::MakeRegionSound 2\n");
         TAudioGlobals::AddLibError("MakeRegionSound : beginFrame < 0 or endFrame > sound length");
         return 0;
     }

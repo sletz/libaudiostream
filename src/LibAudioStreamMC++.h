@@ -28,7 +28,6 @@ research@grame.fr
 #include <list>
 #include <vector>
 
-
 /*!
  \addtogroup interface LibAudioStream programming interface
  
@@ -47,7 +46,7 @@ research@grame.fr
 extern "C"
 {
 #endif
-    
+ 
     typedef int64_t audio_frames_t;
     
     enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
@@ -773,10 +772,12 @@ extern "C"
     /*@}*/
     
     /*! @} */
-    
+
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif
 
