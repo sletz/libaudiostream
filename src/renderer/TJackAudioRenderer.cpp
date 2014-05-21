@@ -169,6 +169,7 @@ long TJackAudioRenderer::Pause()
 {
     return Stop();
 }
+
 long TJackAudioRenderer::Start()
 {
     // Init timing here

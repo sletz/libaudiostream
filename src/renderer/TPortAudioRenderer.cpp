@@ -213,7 +213,7 @@ long TPortAudioRenderer::Close()
 {
     if (fStream) 
         Pa_CloseStream(fStream);
-     return NO_ERR;
+    return NO_ERR;
 }
 
 long TPortAudioRenderer::Start()
