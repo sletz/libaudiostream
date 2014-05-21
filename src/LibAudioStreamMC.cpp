@@ -74,6 +74,7 @@ extern "C"
 	
 	// Build sound (using pointer on smartptr)
 	AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long length);
+    AUDIOAPI AudioStreamPtr MakeMultiNullSoundPtr(long length);
     AUDIOAPI AudioStreamPtr MakeConstantSoundPtr(long channels, long length, float value);
     AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name);
     AUDIOAPI AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
@@ -176,56 +177,58 @@ extern "C"
 									long thread_num);
 	AUDIOAPI void AudioGlobalsDestroy();
 
+    // Build sound (using smartptr)
+    AUDIOAPI AudioStream MakeNullSound(long length);
+    AUDIOAPI AudioStream MakeMultiNullSound(long channels, long length);
+    AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value);
+    AUDIOAPI AudioStream MakeReadSound(const char* name);
+    AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
+    AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
+    AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n);
+    AUDIOAPI AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
+    AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
+    AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
+    AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
+    AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
+    AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
+    AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
+    AUDIOAPI AudioStream MakeWriteSound(const char* name, AudioStream s, long format);
+    AUDIOAPI AudioStream MakeInputSound();
+    AUDIOAPI AudioStream MakeSharedInputSound();
+    AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
+    AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s, double* pitch_shift, double* time_strech);
+
+    AUDIOAPI long GetLengthSound(AudioStream s);
+    AUDIOAPI long GetChannelsSound(AudioStream s);
+    AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
+    AUDIOAPI long ReadSoundPos(AudioStream stream, float** buffer, long buffer_size, long frames, long pos);
+    AUDIOAPI void ResetSound(AudioStream sound);
+    AUDIOAPI AudioStream MakeCopySound(AudioStream sound);
+
+    // Effect management (using smartptr)
+    AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+
+    AUDIOAPI long GetControlCountEffect(AudioEffect effect);
+    AUDIOAPI void GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
+    AUDIOAPI void SetControlValueEffect(AudioEffect effect, long param, float f);
+    AUDIOAPI float GetControlValueEffect(AudioEffect effect, long param);
+
+    AUDIOAPI void SetStateEffect(AudioEffect effect, long state);
+    AUDIOAPI long GetStateEffect(AudioEffect effect);
+    AUDIOAPI void ResetEffect(AudioEffect effect);
+
+    AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);
+    AUDIOAPI const char* GetJsonEffect(AudioEffect effect);
+    AUDIOAPI const char* GetNameEffect(AudioEffect effect);
+    AUDIOAPI AudioEffect MakeCopyEffect(AudioEffect effect);
+
+    AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+
 #ifdef __cplusplus
 }
 #endif
 
-// Build sound (using smartptr)
-AUDIOAPI AudioStream MakeNullSound(long length);
-AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value);
-AUDIOAPI AudioStream MakeReadSound(const char* name);
-AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
-AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
-AUDIOAPI AudioStream MakeLoopSound(AudioStream sound, long n);
-AUDIOAPI AudioStream MakeCutSound(AudioStream sound, long beginFrame, long endFrame);
-AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
-AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
-AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
-AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
-AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
-AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
-AUDIOAPI AudioStream MakeWriteSound(const char* name, AudioStream s, long format);
-AUDIOAPI AudioStream MakeInputSound();
-AUDIOAPI AudioStream MakeSharedInputSound();
-AUDIOAPI AudioStream MakeRendererSound(AudioStream s);
-AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s, double* pitch_shift, double* time_strech);
-
-AUDIOAPI long GetLengthSound(AudioStream s);
-AUDIOAPI long GetChannelsSound(AudioStream s);
-AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
-AUDIOAPI long ReadSoundPos(AudioStream stream, float** buffer, long buffer_size, long frames, long pos);
-AUDIOAPI void ResetSound(AudioStream sound);
-AUDIOAPI AudioStream MakeCopySound(AudioStream sound);
-
-// Effect management (using smartptr)
-AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
-AUDIOAPI AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
-
-AUDIOAPI long GetControlCountEffect(AudioEffect effect);
-AUDIOAPI void GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
-AUDIOAPI void SetControlValueEffect(AudioEffect effect, long param, float f);
-AUDIOAPI float GetControlValueEffect(AudioEffect effect, long param);
-
-AUDIOAPI void SetStateEffect(AudioEffect effect, long state);
-AUDIOAPI long GetStateEffect(AudioEffect effect);
-AUDIOAPI void ResetEffect(AudioEffect effect);
-
-AUDIOAPI void ProcessEffect(AudioEffect effect, float** input, float** output, long framesNum);
-AUDIOAPI const char* GetJsonEffect(AudioEffect effect);
-AUDIOAPI const char* GetNameEffect(AudioEffect effect);
-AUDIOAPI AudioEffect MakeCopyEffect(AudioEffect effect);
-
-AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
 AUDIOAPI long LibVersion()
 {
@@ -240,6 +243,11 @@ AUDIOAPI const char* GetLastLibError()
 AUDIOAPI AudioStream MakeNullSound(long length)
 {
 	return TAudioStreamFactory::MakeNullSound(length);
+}
+
+AUDIOAPI AudioStream MakeMultiNullSound(long channels, long length)
+{
+	return TAudioStreamFactory::MakeMultiNullSound(channels, length);
 }
 
 AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value)
@@ -317,7 +325,6 @@ AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pit
 //#else
 //    return 0;
 //#endif
-    
 }
 
 AUDIOAPI AudioStream MakeWriteSound(const char* name, AudioStream s, long format)
@@ -393,6 +400,11 @@ AUDIOAPI void DeleteSoundPtr(AudioStreamPtr sound)
 AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long length)
 {
 	return MakeSoundPtr(TAudioStreamFactory::MakeNullSound(length));
+}
+
+AUDIOAPI AudioStreamPtr MakeMultiNullSoundPtr(long channels, long length)
+{
+	return MakeSoundPtr(TAudioStreamFactory::MakeMultiNullSound(channels, length));
 }
 
 AUDIOAPI AudioStreamPtr MakeConstantSoundPtr(long channels, long length, float value)
