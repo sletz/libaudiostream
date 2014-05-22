@@ -26,7 +26,7 @@ research@grame.fr
 #include "AudioExports.h"
 #include "TAudioRenderer.h"
 
-enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
+enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer};
 
 /*!
 \brief A factory for audio renderers.

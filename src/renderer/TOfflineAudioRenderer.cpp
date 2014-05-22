@@ -68,6 +68,18 @@ long TOfflineAudioRenderer::Stop()
     return -1;
 }
 
+long TOfflineAudioRenderer::Pause()
+{
+    // TODO
+    return -1;
+}
+
+long TOfflineAudioRenderer::Cont()
+{
+    // TODO 
+    return -1;
+}
+
 void TOfflineAudioRenderer::GetInfo(RendererInfoPtr info)
 {
     // TODO

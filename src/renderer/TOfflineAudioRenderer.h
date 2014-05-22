@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2007
+Copyright (C) Grame 2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -47,6 +47,9 @@ class TOfflineAudioRenderer : public TAudioRenderer
 
         long Start();
         long Stop();
+    
+        long Pause();
+        long Cont();
 
         void GetInfo(RendererInfoPtr info);
 		

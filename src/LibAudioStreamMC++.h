@@ -49,7 +49,7 @@ extern "C"
 
     typedef int64_t audio_frames_t;
     
-    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer};
     
     /*!
      \brief Sound channel info
@@ -544,7 +544,7 @@ extern "C"
      \param buffer_size The audio player internal buffer size.
      \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
      \param rtstream_duration The input stream duration in frames.
-     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer, kJackRenderer or kOffLineAudioRenderer.
      \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
      \return A pointer to new audio player object.
      */
@@ -684,7 +684,7 @@ extern "C"
     // Renderer
     /*!
      \brief Create a new audio renderer.
-     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
+     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer, kJackRenderer or kOffLineAudioRenderer.
      \return A pointer to new audio renderer object.
      */
     AudioRendererPtr MakeAudioRenderer(long renderer);

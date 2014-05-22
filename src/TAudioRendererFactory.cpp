@@ -41,11 +41,16 @@ research@grame.fr
 #include "TCoreAudioRenderer.h"
 #endif
 
+#include "TOfflineAudioRenderer.h"
+
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
     TAudioGlobals::ClearLibError();
 	try {
 		switch (renderer) {
+                
+            case kOffLineAudioRenderer:
+                return new TOfflineAudioRenderer();
 
 			case kPortAudioRenderer:
 			#ifdef __PORTAUDIO__
