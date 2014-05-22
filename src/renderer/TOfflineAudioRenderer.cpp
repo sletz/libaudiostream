@@ -36,13 +36,15 @@ TOfflineAudioRenderer::~TOfflineAudioRenderer()
 	// TODO
 }
 
-long TOfflineAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
+long TOfflineAudioRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     // TODO
-	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
+    int inDevice = 0;
+    int outDevice = 0;
+    return OpenImp(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
-long TOfflineAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+long TOfflineAudioRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
     // TODO
     return -1;

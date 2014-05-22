@@ -1026,7 +1026,7 @@ AUDIOAPI void DeleteAudioRenderer(AudioRendererPtr obj)
 
 AUDIOAPI long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
-   return static_cast<TAudioRendererPtr>(renderer)->Open( inChan, outChan, bufferSize, sampleRate);
+   return static_cast<TAudioRendererPtr>(renderer)->Open(inChan, outChan, bufferSize, sampleRate);
 }
 
 AUDIOAPI void CloseAudioRenderer(AudioRendererPtr renderer)

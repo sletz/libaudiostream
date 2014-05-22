@@ -34,15 +34,15 @@ class TOfflineAudioRenderer : public TAudioRenderer
 {
 
     private:
-
+    
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
     
     public:
 
         TOfflineAudioRenderer();
         virtual ~TOfflineAudioRenderer();
   
-        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+        long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
 
         long Start();
