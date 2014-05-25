@@ -76,6 +76,7 @@ extern "C"
 	AUDIOAPI AudioStreamPtr MakeNullSoundPtr(long length);
     AUDIOAPI AudioStreamPtr MakeMultiNullSoundPtr(long length);
     AUDIOAPI AudioStreamPtr MakeConstantSoundPtr(long channels, long length, float value);
+    AUDIOAPI AudioStreamPtr MakeBufferSoundPtr(float** buffer, long length, long channels);
     AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name);
     AUDIOAPI AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame);
     AUDIOAPI AudioStreamPtr MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut);
@@ -181,6 +182,7 @@ extern "C"
     AUDIOAPI AudioStream MakeNullSound(long length);
     AUDIOAPI AudioStream MakeMultiNullSound(long channels, long length);
     AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value);
+    AUDIOAPI AudioStream MakeBufferSound(float** buffer, long length, long channels);
     AUDIOAPI AudioStream MakeReadSound(const char* name);
     AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame);
     AUDIOAPI AudioStream MakeFadeSound(AudioStream sound, long fadeIn, long fadeOut);
@@ -253,6 +255,11 @@ AUDIOAPI AudioStream MakeMultiNullSound(long channels, long length)
 AUDIOAPI AudioStream MakeConstantSound(long channels, long length, float value)
 {
 	return TAudioStreamFactory::MakeConstantSound(channels, length, value);
+}
+
+AUDIOAPI AudioStream MakeBufferSound(float** buffer, long length, long channels)
+{
+	return TAudioStreamFactory::MakeBufferSound(buffer, length, channels);
 }
 
 AUDIOAPI AudioStream MakeReadSound(const char* name)
@@ -410,6 +417,11 @@ AUDIOAPI AudioStreamPtr MakeMultiNullSoundPtr(long channels, long length)
 AUDIOAPI AudioStreamPtr MakeConstantSoundPtr(long channels, long length, float value)
 {
 	return MakeSoundPtr(TAudioStreamFactory::MakeConstantSound(channels, length, value));
+}
+
+AUDIOAPI AudioStreamPtr MakeBufferSoundPtr(float** buffer, long length, long channels)
+{
+	return MakeSoundPtr(TAudioStreamFactory::MakeBufferSound(buffer, length, channels));
 }
 
 AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name)

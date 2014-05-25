@@ -234,6 +234,15 @@ extern "C"
     AudioStream MakeConstantSound(long channels, long length, float value);
     
     /*!
+     \brief Create a stream from a given external buffer
+     \param buffer The sound buffer a array of non interleaved audio buffers.
+     \param length The sound buffer length.
+     \param length The sound buffer chhanels number.
+     \return A pointer to new stream object.
+     */
+    AudioStream MakeBufferSound(float** buffer, long length, long channels);
+    
+    /*!
      \brief Create a file reader stream.
      \param name The sound file pathname.
      \return A pointer to new stream object or NULL if the file cannot be opened.

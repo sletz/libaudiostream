@@ -70,6 +70,12 @@ TAudioStreamPtr TAudioStreamFactory::MakeConstantSound(long channels, long lengt
     return new TConstantAudioStream(channels, length, value);
 }
 
+TAudioStreamPtr TAudioStreamFactory::MakeBufferSound(float** buffer, long length, long channels)
+{
+    // TODO
+    return NULL;
+}
+
 TAudioStreamPtr TAudioStreamFactory::MakeReadSound(string name)
 {
     TRY_CALL

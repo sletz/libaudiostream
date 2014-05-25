@@ -73,6 +73,7 @@ class AUDIO_EXPORTS TAudioStreamFactory
         static TAudioStreamPtr MakeNullSound(long length);
         static TAudioStreamPtr MakeMultiNullSound(long channels, long length);
         static TAudioStreamPtr MakeConstantSound(long channels, long length, float value);
+        static TAudioStreamPtr MakeBufferSound(float** buffer, long length, long channels);
         static TAudioStreamPtr MakeReadSound(string name);
         static TAudioStreamPtr MakeRegionSound(string name, long beginFrame, long endFrame);
         static TAudioStreamPtr MakeLoopSound(TAudioStreamPtr sound, long n);
