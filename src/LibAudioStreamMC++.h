@@ -311,11 +311,12 @@ extern "C"
     
     /*!
      \brief Creates a selection of channel of a streams
-     \param s1 The  stream.
-     \param s2 A vector of channel to keep.
+     \param s1 The stream.
+     \param selection An array of channels to keep.
+     \param channels The numbre of channels in the selection.
      \return A pointer to new stream object.
      */
-    AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
+    AudioStream MakeSelectSound(AudioStream s1, long* selection, long channels);
     
     /*!
      \brief Apply an effect on a stream.

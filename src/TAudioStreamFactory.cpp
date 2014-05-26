@@ -179,20 +179,22 @@ TAudioStreamPtr TAudioStreamFactory::MakeParSound(TAudioStreamPtr s1, TAudioStre
     CATCH_EXCEPTION_RETURN
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeSelectSound(TAudioStreamPtr s, const std::vector<int>& selection)
+TAudioStreamPtr TAudioStreamFactory::MakeSelectSound(TAudioStreamPtr s, long* selection, long channels)
 {
     TRY_CALL
     if (s) {   
         // Check selection channels
-        for (unsigned int i = 0; i < selection.size(); i++) {
+        std::vector<long> selection_aux;
+        for (long i = 0; i < channels; i++) {
             if (selection[i] >= s->Channels()) {
+                selection_aux.push_back(selection[i]);
                 stringstream error;
                 error << "MakeSelectSound : channel " << selection[i] << " is out of stream channels";
                 TAudioGlobals::AddLibError(error.str());
                 return 0;
             }
         }
-        return new TSelectAudioStream(s, selection);
+        return new TSelectAudioStream(s, selection_aux);
     }
     return 0;
     CATCH_EXCEPTION_RETURN

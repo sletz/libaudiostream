@@ -85,7 +85,7 @@ extern "C"
     AUDIOAPI AudioStreamPtr MakeSeqSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2, long crossFade);
     AUDIOAPI AudioStreamPtr MakeMixSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
     AUDIOAPI AudioStreamPtr MakeParSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2);
-    AUDIOAPI AudioStreamPtr MakeSelectSoundPtr(AudioStreamPtr s1, const std::vector<int>& selection);
+    AUDIOAPI AudioStreamPtr MakeSelectSoundPtr(AudioStreamPtr s1, long* selection, long channels);
     AUDIOAPI AudioStreamPtr MakeEffectSoundPtr(AudioStreamPtr sound, AudioEffectPtr effect, long fadeIn, long fadeOut);
     AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr s, long format);
@@ -191,7 +191,7 @@ extern "C"
     AUDIOAPI AudioStream MakeSeqSound(AudioStream s1, AudioStream s2, long crossFade);
     AUDIOAPI AudioStream MakeMixSound(AudioStream s1, AudioStream s2);
     AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2);
-    AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection);
+    AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, long* selection, long channels);
     AUDIOAPI AudioStream MakeRubberBandSound(AudioStreamPtr sound, double* pitch_shift, double* time_strech);
     AUDIOAPI AudioStream MakeEffectSound(AudioStream sound, AudioEffect effect, long fadeIn, long fadeOut);
     AUDIOAPI AudioStream MakeWriteSound(const char* name, AudioStream s, long format);
@@ -303,9 +303,9 @@ AUDIOAPI AudioStream MakeParSound(AudioStream s1, AudioStream s2)
     return TAudioStreamFactory::MakeParSound(static_cast<TAudioStreamPtr>(s1), static_cast<TAudioStreamPtr>(s2));
 }
 
-AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, const std::vector<int>& selection)
+AUDIOAPI AudioStream MakeSelectSound(AudioStream s1, long* selection, long channels)
 {
-    return TAudioStreamFactory::MakeSelectSound(static_cast<TAudioStreamPtr>(s1), selection);
+    return TAudioStreamFactory::MakeSelectSound(static_cast<TAudioStreamPtr>(s1), selection, channels);
 }
 
 AUDIOAPI AudioStream MakeInputSound()
@@ -473,9 +473,9 @@ AUDIOAPI AudioStreamPtr MakeParSoundPtr(AudioStreamPtr s1, AudioStreamPtr s2)
     return (s1 && s2) ? MakeSoundPtr(TAudioStreamFactory::MakeParSound(static_cast<TAudioStreamPtr>(*s1), static_cast<TAudioStreamPtr>(*s2))) : 0;
 }
 
-AUDIOAPI AudioStreamPtr MakeSelectSoundPtr(AudioStreamPtr s1, const std::vector<int>& selection)
+AUDIOAPI AudioStreamPtr MakeSelectSoundPtr(AudioStreamPtr s1, long* selection, long channels)
 {
-    return (s1) ? MakeSoundPtr(TAudioStreamFactory::MakeSelectSound(static_cast<TAudioStreamPtr>(*s1), selection)) : 0;
+    return (s1) ? MakeSoundPtr(TAudioStreamFactory::MakeSelectSound(static_cast<TAudioStreamPtr>(*s1), selection, channels)) : 0;
 }
 
 AUDIOAPI AudioStreamPtr MakeInputSoundPtr()

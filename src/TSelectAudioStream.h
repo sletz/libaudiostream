@@ -39,12 +39,12 @@ class TSelectAudioStream : public TDecoratedAudioStream
 
     private:
 
-        std::vector<int> fSelection;
+        std::vector<long> fSelection;
         FLOAT_BUFFER fBuffer;
      
     public:
 
-        TSelectAudioStream(TAudioStreamPtr stream, const std::vector<int>& selection)
+        TSelectAudioStream(TAudioStreamPtr stream, const std::vector<long>& selection)
             :TDecoratedAudioStream(stream), fSelection(selection)
         {
             fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());

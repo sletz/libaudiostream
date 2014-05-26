@@ -99,12 +99,22 @@ void set_symbolic_date(SymbolicDate symb)
 }
 
 /// Echo d'un flux
+/*
 static AudioStream MakeEcho(AudioStream stream)
 {
     return MakeMixSound(MakeCopySound(stream),
-                        MakeMixSound(MakeSeqSound(MakeNullSound(SR/2), MakeCopySound(stream), 100),
-                                     MakeSeqSound(MakeNullSound(SR), MakeCopySound(stream), 100)));
+                        MakeMixSound(MakeSeqSound(MakeNullSound(SR), MakeCopySound(stream), 100),
+                                     MakeSeqSound(MakeNullSound(SR*2), MakeCopySound(stream), 100)));
 }
+*/
+
+static AudioStream MakeEcho(AudioStream stream)
+{
+    return MakeMixSound(stream,
+                        MakeMixSound(MakeSeqSound(MakeNullSound(SR), stream, 100),
+                                     MakeSeqSound(MakeNullSound(SR*2), stream, 100)));
+}
+
  
 int main(int argc, char* argv[])
 {
@@ -113,6 +123,7 @@ int main(int argc, char* argv[])
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
+    
     
     next();
     
@@ -143,9 +154,9 @@ int main(int argc, char* argv[])
     
     // Joue une selection d'une région de 5 sec d'un fichier à la date courante (canal gauche)
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    std::vector <int> selection1;
-    selection1.push_back(0);
-    s2 = MakeSelectSound(s1, selection1);
+    long selection1[1];
+    selection1[0] = 0;
+    s2 = MakeSelectSound(s1, selection1, 1);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
@@ -153,9 +164,9 @@ int main(int argc, char* argv[])
     
     // Joue une selection d'une région de 5 sec d'un fichier à la date courante (canal droite)
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    std::vector <int> selection2;
-    selection2.push_back(1);
-    s2 = MakeSelectSound(s1, selection2);
+    long selection2[1];
+    selection2[0] = 0;
+    s2 = MakeSelectSound(s1, selection2, 1);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
      
@@ -163,9 +174,9 @@ int main(int argc, char* argv[])
      
     // Joue une selection d'une région de 5 sec + parallele d'un silence
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    std::vector <int> selection3;
-    selection3.push_back(0);
-    s2 = MakeSelectSound(s1, selection3);
+    long selection3[1];
+    selection3[0] = 0;
+    s2 = MakeSelectSound(s1, selection3, 1);
     s3 = MakeParSound(MakeNullSound(5*SR), s2);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
     
@@ -173,9 +184,9 @@ int main(int argc, char* argv[])
      
     // Joue une selection d'une région de 5 sec + parallele d'un silence
     s1 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
-    std::vector <int> selection4;
-    selection4.push_back(0);
-    s2 = MakeSelectSound(s1, selection4);
+    long selection4[1];
+    selection4[0] = 0;
+    s2 = MakeSelectSound(s1, selection4, 1);
     s3 = MakeParSound(s2, MakeNullSound(5*SR));
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, GetCurDate()));
      
@@ -183,14 +194,14 @@ int main(int argc, char* argv[])
      
     // Montage en parallele de 2 selections
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    std::vector <int> selection6;
-    selection6.push_back(0);
-    s2 = MakeSelectSound(s1, selection6);
+    long selection6[1];
+    selection6[0] = 0;
+    s2 = MakeSelectSound(s1, selection6, 1);
     
     s3 = MakeRegionSound(FILENAME2, 5*SR, 10*SR);
-    std::vector <int> selection7;
-    selection7.push_back(0);
-    s4 = MakeSelectSound(s3, selection7);
+    long selection7[1];
+    selection7[0] = 0;
+    s4 = MakeSelectSound(s3, selection7, 1);
     
     s5 = MakeParSound(s2, s4);
     //MemoryRender(s5, 512);
@@ -234,10 +245,10 @@ int main(int argc, char* argv[])
     
     // Joue l'application d'un effet Faust (compilé dynamiquement) sur une région à la date courante
     s1 = MakeRegionSound(FILENAME1, 5*SR, 20*SR);
-    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR, SR);
+    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), SR/2, SR/2);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
-    
+   
     next();
        
     //std::string effect = "process = _,_;";
@@ -255,7 +266,7 @@ int main(int argc, char* argv[])
     s1 = MakeSharedInputSound();
     // On coupe la section entre 0 et la date courante, et on garde 6 sec à partir de la date courante
     s2 = MakeCutSound(s1, date, date+6*SR);  
-    s3 = MakeEffectSound(s2, MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);
+    s3 = MakeEffectSound(s2, MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR*2, SR*2);
     StartSound(gAudioPlayer, s3, GenRealDate(gAudioPlayer, date));
     
     next();
@@ -273,7 +284,7 @@ int main(int argc, char* argv[])
     s1 = MakeCutSound(MakeSharedInputSound(), date, date+5*SR);
     s2 = MakeEcho(s1);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
-    
+     
     next();
     
     // Application d'un effet Faust (chorus) sur l'entrée temps-réel (*capturée à partir de 0*)
@@ -285,6 +296,11 @@ int main(int argc, char* argv[])
     
     s3 = MakeEffectSound(MakeCopySound(s2), MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);  // <== application d'un 1° effet
     s4 = MakeEffectSound(MakeCopySound(s2), MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);  // <== application d'un 2° effet
+    
+    /*
+    s3 = MakeEffectSound(s2, MakeFaustAudioEffect(LLVM_EFFECT4, "", ""), SR/2, SR/2);  // <== application d'un 1° effet
+    s4 = MakeEffectSound(s2, MakeFaustAudioEffect(LLVM_EFFECT3, "", ""), SR/2, SR/2);  // <== application d'un 2° effet
+    */
     
     s5 = MakeSeqSound(s3, MakeSeqSound(MakeNullSound(SR*2), s4, SR/2), SR/2);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, date));
