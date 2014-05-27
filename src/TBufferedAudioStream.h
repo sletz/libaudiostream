@@ -139,12 +139,13 @@ class TBufferedAudioStream : public TAudioStream
 
 typedef TBufferedAudioStream * TBufferedAudioStreamPtr;
 
-//-----------------------------------
+//----------------------------------
 // Class TSharedBufferedAudioStream
-//-----------------------------------
+//----------------------------------
 
 class TSharedBufferedAudioStream : public TBufferedAudioStream
 {
+    
     protected:
     
         long fBeginFrame;  // First frame to be read in the shared buffer
@@ -179,6 +180,7 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
         {
             return new TSharedBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
         }
+    
         virtual long Length()
         {
             return fMemoryBuffer->GetSize() - fBeginFrame;
@@ -198,5 +200,61 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
 };
 
 typedef TSharedBufferedAudioStream * TSharedBufferedAudioStreamPtr;
+
+//----------------------------------
+// Class TMemoryBufferedAudioStream
+//----------------------------------
+// Wraps an externally given audio buffer
+
+class TMemoryBufferedAudioStream : public TBufferedAudioStream
+{
+    
+    protected:
+        
+        long fBeginFrame;  // First frame to be read in the memory buffer
+        
+    public:
+        
+        TMemoryBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer): TBufferedAudioStream()
+        {
+            fMemoryBuffer = buffer;
+            
+            fBeginFrame = beginFrame;
+            fCurFrame = fBeginFrame;
+            
+            fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
+            fChannels = fMemoryBuffer->GetChannels();
+        }
+        
+        virtual ~TMemoryBufferedAudioStream()
+        {
+            // Will not delete the 'wrapped' buffer
+            delete fMemoryBuffer;
+        }
+         
+        virtual TAudioStreamPtr CutBegin(long frames)
+        {
+            return new TMemoryBufferedAudioStream(frames, fMemoryBuffer);
+        }
+        
+        virtual long Length()
+        {
+            return fMemoryBuffer->GetSize();
+        }
+        
+        virtual TAudioStreamPtr Copy()
+        {
+            return new TMemoryBufferedAudioStream(fBeginFrame, fMemoryBuffer);
+        } 
+        
+        void Reset()
+        {
+            fCurFrame = fBeginFrame;
+            fTotalFrames = 0;
+        }
+        
+};
+
+typedef TMemoryBufferedAudioStream * TMemoryBufferedAudioStreamPtr;
 
 #endif

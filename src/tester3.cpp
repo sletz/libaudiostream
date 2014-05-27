@@ -166,6 +166,7 @@ int main(int argc, char* argv[])
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     long selection2[1];
     selection2[0] = 0;
+    
     s2 = MakeSelectSound(s1, selection2, 1);
     //MemoryRender(s2, 512);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
