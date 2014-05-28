@@ -7,7 +7,23 @@
 (defparameter filename2 "/Users/letz/Music/Sounds/tango.wav")
 
 
+;; Apply a same volume on all channels
+(defun apply-master-volume (sound)
+ (let* ((channels (getchannelssound sound))
+        (effect (MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume\",0.5,0,1,0.01));" channels) "" ""))
+        (json (GetJsonEffect effect))
+        (name (GetNameEffect effect)))
+   (print (list channels name json))
+   (MakeEffectSound sound effect 100 100)))
 
+;; Apply separated volume on each channel
+(defun apply-separated-volume (sound)
+ (let* ((channels (getchannelssound sound))
+        (effect (MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume%2i\",0.5,0,1,0.01));" channels) "" ""))
+        (json (GetJsonEffect effect))
+        (name (GetNameEffect effect)))
+   (print (list channels name json))
+   (MakeEffectSound sound effect 100 100)))
 
 (defvar SR 44100)
 
