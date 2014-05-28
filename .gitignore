@@ -1,4 +1,9 @@
+# LispWorks
 *.lisp~
 *.xfasl
 
+# Xcode
+*.pbxuser
+*.xcuserstate
+project.xcworkspace/
 xcuserdata/
