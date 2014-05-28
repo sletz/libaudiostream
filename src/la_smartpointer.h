@@ -68,7 +68,11 @@ class LA_EXPORT la_smartable {
 		la_smartable() : refCount(0) {}
 		la_smartable(const la_smartable&): refCount(0) {}
 		//! destructor checks for non-zero refCount
-		virtual ~la_smartable()    { assert (refCount == 0); }
+		virtual ~la_smartable()    
+        { 
+            assert (refCount == 0); 
+            printf("~la_smartable %x\n", this);
+        }
 		la_smartable& operator=(const la_smartable&) { return *this; }
 };
 

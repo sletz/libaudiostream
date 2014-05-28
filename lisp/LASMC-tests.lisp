@@ -4,6 +4,10 @@
 ;(defvar filename1 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/Bassclarinet1.aif")
 ;(defvar filename2 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/bach-4ch.aif")
 
+
+(defvar filename1 "/Users/letz/Music/Sounds/levot.wav")
+(defvar filename2 "/Users/letz/Music/Sounds/tango.wav")
+
 (defvar SR 44100)
 
 (defun getcurdate ()
@@ -43,9 +47,24 @@
 ;(GetDeviceInfo (getaudioplayerrenderer gaudioplayer) 0)
 
 (setq s1 (makeregionsound filename1 500 1105))  
+
+(setq s1 (makeregionsound filename1 (* SR 2) (* SR 20)))  
+(setq s2 (makeregionsound filename2 (* SR 2) (* SR 20)))  
+
+
 ;;; Problème dans la récupération des arguments côté LAS?
 
-(startsound gaudioplayer s1 (genrealdate gaudioplayer 0))  ;;;; bus error
+(startsound gaudioplayer (makeregionsound filename1 (* SR 2) (* SR 20)) (genrealdate gaudioplayer 0))  
+(startsound gaudioplayer (makeregionsound filename2 (* SR 2) (* SR 20)) (genrealdate gaudioplayer 0))  
+
+(startsound gaudioplayer s1 (genrealdate gaudioplayer 0))  
+(startsound gaudioplayer s2 (genrealdate gaudioplayer 0))
+
+(resetsound s1)
+(resetsound s2)
+
+(stopsound gaudioplayer s1 (genrealdate gaudioplayer 0)) 
+(stopsound gaudioplayer s2 (genrealdate gaudioplayer 0)) 
 
 |#
 

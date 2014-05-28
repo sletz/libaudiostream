@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
-    
+    /*
     next();
     
     // Lit la date courante en frames et usec/sec
@@ -207,14 +207,21 @@ int main(int argc, char* argv[])
     s5 = MakeParSound(s2, s4);
     //MemoryRender(s5, 512);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, GetCurDate()));
-  
+     */
+    
     next();
     
     // Joue une région de 5 sec d'un fichier à la date courante, arrêt au bout de 3 sec
     date = GetCurDate();
     s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date));
-    StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date+3*SR));
+    
+    //StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, date+3*SR));
+    
+    next();
+    
+    StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, 0));
+    
     
     next();
      

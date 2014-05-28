@@ -269,7 +269,7 @@ struct TStreamCommand : public TCommand {
             }
             
             // Possibly move stop_offset inside this buffer
-            if (InBuffer(stop_date, cur_frame, frames)) {
+            if ((stop_date < cur_frame) || InBuffer(stop_date, cur_frame, frames)) {
                 // Stream will be stopped in this buffer...
                 stop_offset = stop_date - cur_frame;
                 to_stop = true;

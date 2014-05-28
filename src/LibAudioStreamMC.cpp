@@ -432,10 +432,8 @@ AUDIOAPI AudioStreamPtr MakeReadSoundPtr(char* name)
 
 AUDIOAPI AudioStreamPtr MakeRegionSoundPtr(char* name, long beginFrame, long endFrame)
 {
-    printf("MakeRegionSoundPtr %s %d %d\n", name, beginFrame, endFrame);
-	AudioStream sound = TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
-    printf("MakeRegionSoundPtr %s\n", sound);
-	return (sound) ? MakeSoundPtr(sound) : 0;
+ 	AudioStream sound = TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
+ 	return (sound) ? MakeSoundPtr(sound) : 0;
 }
 
 AUDIOAPI AudioStreamPtr MakeFadeSoundPtr(AudioStreamPtr sound, long fadeIn, long fadeOut)
