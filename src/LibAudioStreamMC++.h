@@ -406,22 +406,22 @@ extern "C"
     /* Effect management */
     /*!
      \brief Create an effect described in the Faust DSP language.
-     \param name The code of the Faust effect, as a DSP filename or DSP string.
+     \param code The code of the Faust effect, as a DSP filename or DSP string.
      \param library_path The pathname where to locate additional DSP libraries.
      \param draw_path The pathname where to save additional resources produced during compilation (like SVG files).
      \return A pointer to new effect object or NULL if the effect cannot be located or created.
      */
-    AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+    AudioEffect MakeFaustAudioEffect(const char* code, const char* library_path, const char* draw_path);
     
     /* Effect management */
     /*!
      \brief Create an effect described in the Faust DSP language to be computed on a remote machine.
-     \param name The code of the Faust effect, as a DSP filename or DSP string.
+     \param code The code of the Faust effect, as a DSP filename or DSP string.
      \param library_path The pathname where to locate additional DSP libraries.
      \param draw_path The pathname where to save additional resources produced during compilation (like SVG files).
      \return A pointer to new effect object or NULL if the effect cannot be located or created.
      */
-    AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+    AudioEffect MakeRemoteFaustAudioEffect(const char* code, const char* library_path, const char* draw_path);
     
     /*!
      \brief Return the number of effect controls.

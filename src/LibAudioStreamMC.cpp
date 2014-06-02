@@ -100,11 +100,11 @@ extern "C"
     AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
     AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound);
 
-    AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
-    AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path);
 #ifdef __APPLE__
     // To be used from LispWorks
-    AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path);
 #endif
 	
 	AUDIOAPI long GetControlCountEffectPtr(AudioEffectPtr effect);
@@ -208,8 +208,8 @@ extern "C"
     AUDIOAPI AudioStream MakeCopySound(AudioStream sound);
 
     // Effect management (using smartptr)
-    AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
-    AUDIOAPI AudioEffect MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffect MakeFaustAudioEffect(const char* code, const char* library_path, const char* draw_path);
+    AUDIOAPI AudioEffect MakeRemoteFaustAudioEffect(const char* code, const char* library_path, const char* draw_path);
 
     AUDIOAPI long GetControlCountEffect(AudioEffect effect);
     AUDIOAPI void GetControlParamEffect(AudioEffect effect, long param, char* label, float* min, float* max, float* init);
@@ -682,14 +682,14 @@ AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effe
 
 // Effect management with pointer
 
-AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
+AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path)
 {
     TAudioGlobals::ClearLibError();
     try {
-        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(code));
     } catch (TLASException& e) {
         try {
-            return new LA_SMARTP<TAudioEffectInterface>(TLocalCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
+            return new LA_SMARTP<TAudioEffectInterface>(TLocalCodeFaustAudioEffectFactory::CreateEffect(code, library_path, draw_path));
         } catch (TLASException& e) {
             TAudioGlobals::AddLibError(e.Message());
             return 0;
@@ -697,14 +697,14 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* li
     }
 }
 
-AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
+AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path)
 {
     TAudioGlobals::ClearLibError();
     try {
-        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(code));
     } catch (TLASException& e) {
         try {
-            return new LA_SMARTP<TAudioEffectInterface>(TRemoteCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path));
+            return new LA_SMARTP<TAudioEffectInterface>(TRemoteCodeFaustAudioEffectFactory::CreateEffect(code, library_path, draw_path));
         } catch (TLASException& e) {
             TAudioGlobals::AddLibError(e.Message());
             return 0;
@@ -716,16 +716,16 @@ AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* name, const ch
 #include<dispatch/dispatch.h>
 static TCodeFaustAudioEffect* gDSP = NULL;
 
-AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
+AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path)
 {
     TAudioGlobals::ClearLibError();
     try {
-        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(name));
+        return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(code));
     } catch (TLASException& e) {
         dispatch_sync(dispatch_get_main_queue(),
         ^{ 
             try {
-                gDSP = TLocalCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
+                gDSP = TLocalCodeFaustAudioEffectFactory::CreateEffect(code, library_path, draw_path);
             } catch (TLASException& e) {
                 TAudioGlobals::AddLibError(e.Message());
                 gDSP = NULL;
