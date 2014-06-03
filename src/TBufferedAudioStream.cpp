@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -38,14 +38,12 @@ TBufferedAudioStream::TBufferedAudioStream(): TAudioStream()
 
 void TBufferedAudioStream::ReadBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    //Read(buffer, framesNum, framePos);
     ReadImp(buffer, framesNum, framePos);
     fReady = true;
 }
 
 void TBufferedAudioStream::WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    //Write(buffer, framesNum, framePos);
     WriteImp(buffer, framesNum, framePos);
     fReady = true;
 }

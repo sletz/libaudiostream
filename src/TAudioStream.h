@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -80,6 +80,14 @@ class TAudioStream : public la_smartable1
 
         // Number of channels
         virtual long Channels()
+        {
+            return 0;
+        }
+        
+        virtual void SetPos(long frames)
+        {}
+    
+        virtual long GetPos()
         {
             return 0;
         }
@@ -178,6 +186,18 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
         {
             assert(fStream);
             return fStream->Length();
+        }
+    
+        virtual void SetPos(long frames)
+        {
+            assert(fStream);
+            return fStream->SetPos(frames);
+        }
+        
+        virtual long GetPos()
+        {
+            assert(fStream);
+            return fStream->GetPos();
         }
 
         virtual long Channels()

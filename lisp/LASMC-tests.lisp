@@ -1,6 +1,6 @@
 
 
-
+(load (merge-pathnames "FFI/asdf.lisp" *load-pathname*))
 (load (merge-pathnames "FFI/load-cffi.lisp" *load-pathname*))
 (load (merge-pathnames "LibAudioStream.lisp" *load-pathname*))
 
@@ -93,7 +93,7 @@
 (probe-file filename2)
 
 (setq s1 (makeregionsound filename1 (* SR 0) (* SR 5)))  
-(setq s2 (makeregionsound filename2 (* SR 0) (* SR 2)))  
+(setq s2 (makeregionsound filename2 (* SR 0) (* SR 20)))  
 
 
 ;;; Problème dans la récupération des arguments côté LAS?
