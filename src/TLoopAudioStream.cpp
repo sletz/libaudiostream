@@ -53,7 +53,6 @@ TAudioStreamPtr TLoopAudioStream::CutBegin(long frames)
     long length = fStream->Length();
     long n1 = frames / length + 1;
     long n2 = frames % length;
-    //return new TSeqAudioStream(fStream->CutBegin(n2), new TLoopAudioStream(fStream->Copy(), fLoopNum - n1), 0);
     return new TSeqAudioStream(fStream->CutBegin(n2), new TLoopAudioStream(fStream->Copy(), fLoopNum - n1));
 }
 
