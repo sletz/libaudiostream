@@ -194,48 +194,7 @@ struct TStreamCommand : public TCommand {
         
         void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
-         
-        /*
-        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                    map<SymbolicDate, audio_frames_t>& date_map, 
-                    audio_frames_t cur_frame, 
-                    long frames)
-        {
-            // Keeps the same value for the entire audio cycle
-            audio_frames_t start_date = GetDate(date_map, fStartDate);
-            audio_frames_t stop_date = GetDate(date_map, fStopDate);
-            
-            printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
-            
-            long start_offset = 0;
-            long stop_offset = std::abs(long(cur_frame - stop_date));
-            long frame_num = std::min(frames, stop_offset);
-            bool to_play = false;
-            long res = 0;
-            
-            if (InBuffer(start_date, cur_frame, frames)) {
-                // New stream to play...
-                start_offset = start_date - cur_frame;
-                to_play = true;
-                printf("Start stream fCurFrame = %lld offset = %ld\n", cur_frame, start_offset);
-            } else if (cur_frame > start_date) {
-                // Stream currently playing...
-                to_play = true;
-            }
-            
-            printf("TStreamCommand::Execute frame_num = %d start_offset = %d\n", frame_num, start_offset);
-            
-            // Play it...
-            if (to_play && (((res = fStream->Read(&shared_buffer, frame_num, start_offset)) < frames))) {
-                // End of stream
-                //printf("Stop stream frame_num = %ld res = %ld\n", frame_num, res);
-                return false;
-            } else {
-                return true;
-            }
-        }
-        */
-        
+          
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
                     map<SymbolicDate, audio_frames_t>& date_map, 
                     audio_frames_t cur_frame, 
