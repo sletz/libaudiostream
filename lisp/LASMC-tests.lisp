@@ -111,24 +111,6 @@
 (stopsound gaudioplayer s2 (genrealdate gaudioplayer 0)) 
 
 
-;; Apply a same volume on all channels
-(defun apply-master-volume (sound)
-  (let* ((channels (getchannelssound sound))
-         (effect (MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume\",0.5,0,1,0.01));" channels) "" ""))
-         (json (GetJsonEffect effect))
-         (name (GetNameEffect effect)))
-    (print (list channels name json))
-    (MakeEffectSound sound effect 100 100)))
-
-;; Apply separated volume on each channel
-(defun apply-separated-volume (sound)
-  (let* ((channels (getchannelssound sound))
-         (effect (MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume%2i\",0.5,0,1,0.01));" channels) "" ""))
-         (json (GetJsonEffect effect))
-         (name (GetNameEffect effect)))
-    (print (list channels name json))
-    (MakeEffectSound sound effect 100 100)))
-
 (setq s3 (apply-master-volume (makeregionsound filename1 (* SR 2) (* SR 20))))
 (setq s4 (apply-separated-volume (makeregionsound filename1 (* SR 2) (* SR 20))))
 
