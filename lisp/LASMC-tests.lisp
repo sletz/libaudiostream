@@ -1,9 +1,34 @@
 
+(in-package :cl-user)
 
 (load (merge-pathnames "FFI/asdf.lisp" *load-pathname*))
 (load (merge-pathnames "FFI/load-cffi.lisp" *load-pathname*))
+
 (load (merge-pathnames "LibAudioStream.lisp" *load-pathname*))
 
+
+(defparameter *libaudiostream-pathname* 
+  #+win32
+  "/WINDOWS/system32/LibAudioStream.dll"
+  #+(or darwin macos macosx) 
+  "/Library/Frameworks/LibAudioStreamMC.framework/LibAudioStreamMC"
+  #+(or linux (and clisp unix (not macos)))
+  "/usr/lib/libLibAudioStream.so")
+
+(defvar *libaudiostream* nil)
+
+(defun libaudiostream-framework ()
+  (or *libaudiostream*
+      (setq *libaudiostream*
+            (if (probe-file *libaudiostream-pathname*)
+                (progn 
+                  (print (concatenate 'string "Loading LibAudioStream library: " (namestring *libaudiostream-pathname*))) 
+                  (fli:register-module "LibAudioStream" 
+                                       :real-name (namestring *libaudiostream-pathname*)
+                                       :connection-style :immediate)
+                  t)))))
+
+; (libaudiostream-framework)
 
 (in-package :las)
 
