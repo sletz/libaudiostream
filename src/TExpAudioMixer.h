@@ -41,7 +41,7 @@ struct TCommand : public la_smartable1 {
 
         SymbolicDate fStartDate;
   
-        inline audio_frames_t GetDate(map<SymbolicDate, audio_frames_t>& date_map, SymbolicDate date)
+        inline audio_frame_t GetDate(map<SymbolicDate, audio_frame_t>& date_map, SymbolicDate date)
         {
             if (date_map.find(date) == date_map.end()) {
                 date_map[date] = date->getDate();
@@ -49,12 +49,12 @@ struct TCommand : public la_smartable1 {
             return date_map[date];
         }
         
-        bool InBuffer(audio_frames_t date, audio_frames_t cur_frame, long frames)
+        bool InBuffer(audio_frame_t date, audio_frame_t cur_frame, long frames)
         {
             return (date >= cur_frame && date < cur_frame + frames);
         }
         
-        audio_frames_t GetDate() { return fStartDate->GetDate(); }
+        audio_frame_t GetDate() { return fStartDate->GetDate(); }
         
         TCommand() 
         {}
@@ -64,8 +64,8 @@ struct TCommand : public la_smartable1 {
         {}
          
         virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                            map<SymbolicDate, audio_frames_t>& date_map, 
-                            audio_frames_t cur_frame, 
+                            map<SymbolicDate, audio_frame_t>& date_map, 
+                            audio_frame_t cur_frame, 
                             long frames) = 0;
                             
         bool operator< (const TCommand& command) const
@@ -73,7 +73,7 @@ struct TCommand : public la_smartable1 {
             return fStartDate->getDate() < command.fStartDate->getDate();
         }
         
-        virtual long GetOffset(audio_frames_t cur_frame, long frames) { return -1; }
+        virtual long GetOffset(audio_frame_t cur_frame, long frames) { return -1; }
         
 };
 
@@ -96,7 +96,7 @@ struct TControlCommand : public TCommand {
         /* 
             Returns the offset in buffer, or frames if not in buffer.
         */
-        virtual long GetOffset(audio_frames_t cur_frame, long frames) 
+        virtual long GetOffset(audio_frame_t cur_frame, long frames) 
         { 
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
                 return fStartDate->getDate() - cur_frame;
@@ -128,8 +128,8 @@ struct TEffectControlCommand : public TControlCommand {
         {}
          
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                    map<SymbolicDate, audio_frames_t>& date_map, 
-                    audio_frames_t cur_frame, 
+                    map<SymbolicDate, audio_frame_t>& date_map, 
+                    audio_frame_t cur_frame, 
                     long frames)
         {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
@@ -147,7 +147,7 @@ struct TEffectControlCommand : public TControlCommand {
 // Class TExternalControlCommand : a command to call an user given callback
 //-------------------------------------------------------------------------
 
-typedef void (*AudioControlCallback) (audio_frames_t date, float value, void *arg);
+typedef void (*AudioControlCallback) (audio_frame_t date, float value, void *arg);
 
 struct TExternalControlCommand : public TCommand {
 
@@ -162,8 +162,8 @@ struct TExternalControlCommand : public TCommand {
         {}
          
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                    map<SymbolicDate, audio_frames_t>& date_map, 
-                    audio_frames_t cur_frame, 
+                    map<SymbolicDate, audio_frame_t>& date_map, 
+                    audio_frame_t cur_frame, 
                     long frames)
         {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
@@ -196,13 +196,13 @@ struct TStreamCommand : public TCommand {
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
           
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                    map<SymbolicDate, audio_frames_t>& date_map, 
-                    audio_frames_t cur_frame, 
+                    map<SymbolicDate, audio_frame_t>& date_map, 
+                    audio_frame_t cur_frame, 
                     long frames)
         {
             // Keeps the same value for the entire audio cycle
-            audio_frames_t start_date = GetDate(date_map, fStartDate);
-            audio_frames_t stop_date = GetDate(date_map, fStopDate);
+            audio_frame_t start_date = GetDate(date_map, fStartDate);
+            audio_frame_t stop_date = GetDate(date_map, fStopDate);
             
             //printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
             
@@ -330,24 +330,24 @@ class TExpAudioMixer : public TAudioClient
         COMMANDS fStreamCommands;     // List of stream commands
         COMMANDS fControlCommands;    // List of control commands
         
-        audio_frames_t fCurFrame;
+        audio_frame_t fCurFrame;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
         
         void ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                        map<SymbolicDate, audio_frames_t>& date_map, 
-                                        audio_frames_t cur_frame, 
+                                        map<SymbolicDate, audio_frame_t>& date_map, 
+                                        audio_frame_t cur_frame, 
                                         long offset,
                                         long slice);
 
         void ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                map<SymbolicDate, audio_frames_t>& date_map, 
-                                audio_frames_t cur_frame, 
+                                map<SymbolicDate, audio_frame_t>& date_map, 
+                                audio_frame_t cur_frame, 
                                 long offset,
                                 long slice);
 
-        long GetNextControlOffset(audio_frames_t cur_frame, long frames);
+        long GetNextControlOffset(audio_frame_t cur_frame, long frames);
       
     public:
 

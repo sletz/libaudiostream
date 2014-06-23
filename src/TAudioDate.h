@@ -30,7 +30,8 @@ research@grame.fr
 #include <stdint.h>
 #include "la_smartpointer.h"
 
-typedef int64_t audio_frames_t;
+typedef int64_t audio_frame_t;
+typedef int64_t audio_usec_t;
 
 //---------------------
 // Class TSymbolicDate
@@ -40,23 +41,23 @@ class TSymbolicDate : public la_smartable1
 {
     private:
     
-        audio_frames_t fRealDate;
+        audio_frame_t fRealDate;
    
     public : 
         TSymbolicDate():fRealDate(INT64_MAX)
         {}
-        TSymbolicDate(audio_frames_t date):fRealDate(date)
+        TSymbolicDate(audio_frame_t date):fRealDate(date)
         {}
         
-        audio_frames_t getDate() { return fRealDate; }
-        void setDate(audio_frames_t date) { fRealDate = date; }
+        audio_frame_t getDate() { return fRealDate; }
+        void setDate(audio_frame_t date) { fRealDate = date; }
         
         bool operator< (TSymbolicDate& date) 
         { 
             return fRealDate < date.fRealDate; 
         }
         
-        audio_frames_t GetDate() { return fRealDate; }
+        audio_frame_t GetDate() { return fRealDate; }
     
 };
 

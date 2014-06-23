@@ -48,7 +48,7 @@ class TAudioLASClient : public TAudioClient {
         }
 };
 
-static audio_frames_t GetCurDate()
+static audio_frame_t GetCurDate()
 {
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
     RendererInfo info;
@@ -230,7 +230,7 @@ static void test14()
 {
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 7);
     
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     //AddSound(gAudioPlayer, stream1);
@@ -256,7 +256,7 @@ static void test15()
 {
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 7);
     
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     //AddSound(gAudioPlayer, stream1);
@@ -280,7 +280,7 @@ static void test15()
 
 static void test16()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 17*tmpSampleRate), GenRealDate(gAudioPlayer, curdate + tmpSampleRate*2 + 4000));
@@ -347,7 +347,7 @@ static void test20()
 
 static void test21()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     //StopAudioPlayer(gAudioPlayer);
@@ -376,7 +376,7 @@ static void test21()
 
 static void test22()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     // Clear effects
@@ -412,7 +412,7 @@ static void test22()
 
 static void test23()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     AudioStream stream1 = MakeCutSound(MakeEffectSound(MakeRegionSound(FILENAME2, 2 * tmpSampleRate, tmpSampleRate * 20), faust_effect1, 100, 100), 0, tmpSampleRate * 21);
@@ -428,7 +428,7 @@ static void test23()
 
 static void test24()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     AudioStream stream1 = MakeEffectSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70), MakeFaustAudioEffect(LLVM_EFFECT1, "", ""), 100, 100);
@@ -447,7 +447,7 @@ static void test24()
 
 static void test25()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 70);
@@ -472,7 +472,7 @@ SymbolicDate symb7 = GenSymbolicDate(gAudioPlayer);
 
 static void test26()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     AudioStream stream1 = MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 200);
@@ -485,7 +485,7 @@ SymbolicDate symb8 = GenSymbolicDate(gAudioPlayer);
 
 static void test27()
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     printf("info.Frames %lld\n", curdate);
     
     AudioStream stream1 = MakeEffectSound(MakeInputSound(), faust_effect1, 100, 100); 
@@ -530,7 +530,7 @@ SymbolicDate symb9 = GenSymbolicDate(gAudioPlayer);
 
 static void echo_effect(AudioStream stream)
 {
-    audio_frames_t curdate = GetCurDate();
+    audio_frame_t curdate = GetCurDate();
     
     AudioStream stream1 = ECHO(stream);
     AudioStream stream2 = MakeEffectSound(ECHO(stream), faust_effect4, 100, 100);
@@ -654,7 +654,7 @@ int main(int argc, char* argv[])
                 
             case 'n': {
                  
-                audio_frames_t curdate = GetCurDate();
+                audio_frame_t curdate = GetCurDate();
                 printf("info.Frames %lld\n", curdate);
                 
                 StartSound(gAudioPlayer, MakeRegionSound(FILENAME1, 5*tmpSampleRate, 7*tmpSampleRate), GenRealDate(gAudioPlayer, curdate + 1*tmpSampleRate));
@@ -664,7 +664,7 @@ int main(int argc, char* argv[])
                 
             case 's': {
                   
-                audio_frames_t curdate = GetCurDate();
+                audio_frame_t curdate = GetCurDate();
                 printf("info.Frames %lld\n", curdate);
                 
                 SetSymbolicDate(gAudioPlayer, symb0, curdate);
@@ -693,7 +693,7 @@ int main(int argc, char* argv[])
             }
             
             case 'b': {
-                audio_frames_t curdate = GetCurDate();
+                audio_frame_t curdate = GetCurDate();
                 printf("info.Frames %lld\n", curdate);
                 SetSymbolicDate(gAudioPlayer, symb7, curdate);
                 StartSound(gAudioPlayer, MakeCutSound(MakeRegionSound(FILENAME1, 5 * tmpSampleRate, tmpSampleRate * 200), 0, GetSymbolicDate(gAudioPlayer, symb7)), symb7);

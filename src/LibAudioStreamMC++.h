@@ -47,7 +47,8 @@ extern "C"
 {
 #endif
     
-    typedef int64_t audio_frames_t;
+    typedef int64_t audio_frame_t;
+    typedef int64_t audio_usec_t;
     
     enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer};
     
@@ -566,6 +567,11 @@ extern "C"
      */					
     void CloseAudioClient(AudioPlayerPtr player);
     
+    audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr player);
+    
+    audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player);
+    
+    
     /*!
      \brief Start a sound at a specific date.
      \param player The audio player.
@@ -597,7 +603,7 @@ extern "C"
      \param sound The real date in frames.
      \return The new real date.
      */
-    SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
+    SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frame_t date);
     
     /*!
      \brief Set the symbolic date with a real date.
@@ -606,14 +612,14 @@ extern "C"
      \param date The real date in frames.
      \return An error code.
      */
-    long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frames_t real_date);
+    long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date, audio_frame_t real_date);
     
     /*!
      \brief Get the symbolic date internal date.
      \param player The audio player.
      \return The symbolic date internal date in frames.
      */
-    audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date);
+    audio_frame_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symb_date);
     
     // Transport
     /*!

@@ -137,15 +137,18 @@ extern "C"
 									
     AUDIOAPI void CloseAudioPlayer(AudioPlayerPtr player);
 	AUDIOAPI void CloseAudioClient(AudioPlayerPtr player);
+    
+    AUDIOAPI audio_frame_t GetAudioPlayerDateInUsec(AudioPlayerPtr player);
+    AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player);
   
     // Add a sound in the player
     AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
     AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date);
     
     AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
-    AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frames_t date);
-    AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t read_date);
-    AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
+    AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frame_t date);
+    AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t read_date);
+    AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
 
     // Transport
     AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -930,6 +933,30 @@ AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
     free(player);
 }
 
+AUDIOAPI audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr player)
+{
+    if (player && player->fRenderer) {
+        AudioRendererPtr renderer = player->fRenderer;
+        RendererInfo info;
+        GetAudioRendererInfo(renderer, &info);
+        return info.fCurUsec;
+    } else {
+        return 0;
+    }
+}
+
+AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
+{
+    if (player && player->fRenderer) {
+        AudioRendererPtr renderer = player->fRenderer;
+        RendererInfo info;
+        GetAudioRendererInfo(renderer, &info);
+        return info.fCurFrame;
+    } else {
+        return 0;
+    }
+}
+
 AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
@@ -960,12 +987,12 @@ AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr /*player*/)
     return new TSymbolicDate();
 }
 
-AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frames_t date)
+AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frame_t date)
 {
     return new TSymbolicDate(date);
 }
 
-AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frames_t real_date)
+AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t real_date)
 {
     if (player && player->fMixer) {
         symbolic_date->setDate(real_date);
@@ -976,7 +1003,7 @@ AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date,
     }
 }
 
-AUDIOAPI audio_frames_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
+AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
 {
     return symbolic_date->getDate();
 }

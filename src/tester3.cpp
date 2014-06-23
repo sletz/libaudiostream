@@ -28,7 +28,7 @@ static long SR = 44100;
 
 static AudioStream s1,s2,s3,s4,s5,s6;
 static SymbolicDate symb1,symb2,symb3,symb4,symb5,symb6;
-static audio_frames_t date;
+static audio_frame_t date;
 
 /*
 // Accès au flux temps-réel
@@ -56,13 +56,21 @@ StopSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, date));
 */
 
 // Lit la date courante du Player en frames
-static audio_frames_t GetCurDate()
+/*
+static audio_frame_t GetCurDate()
 {
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
     RendererInfo info;
     GetAudioRendererInfo(renderer, &info);
     printf("frame = %lld usec = %lld sec = %f \n", info.fCurFrame, info.fCurUsec, float(info.fCurUsec)/1000000.);
     return info.fCurFrame;
+}
+ */
+
+static audio_frame_t GetCurDate()
+{
+    printf("frame = %lld \n", GetAudioPlayerDateInFrame(gAudioPlayer));
+    return GetAudioPlayerDateInFrame(gAudioPlayer);
 }
 
 // Avance au test suivant
@@ -124,7 +132,7 @@ int main(int argc, char* argv[])
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
     
-    /*
+    
     next();
     
     // Lit la date courante en frames et usec/sec
@@ -145,6 +153,7 @@ int main(int argc, char* argv[])
    
     next();
     
+    /*
     // Joue un fade d'une région de 5 sec d'un fichier à la date courante
     s1 = MakeFadeSound(MakeRegionSound(FILENAME1, 5*SR, 10*SR), SR, SR);
     //MemoryRender(s1, 512);
