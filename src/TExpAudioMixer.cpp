@@ -32,8 +32,8 @@ research@grame.fr
 /*--------------------------------------------------------------------------*/
 
 void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                        map<SymbolicDate, audio_frames_t>& date_map, 
-                                        audio_frames_t cur_frame, 
+                                        map<SymbolicDate, audio_frame_t>& date_map, 
+                                        audio_frame_t cur_frame, 
                                         long offset_in_control,
                                         long control_slice)
 {
@@ -59,7 +59,7 @@ void TExpAudioMixer::ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>
 /* 
     Returns the offset if next control if in buffer, or frames if not in buffer.
 */
-long TExpAudioMixer::GetNextControlOffset(audio_frames_t cur_frame, long frames)
+long TExpAudioMixer::GetNextControlOffset(audio_frame_t cur_frame, long frames)
 {
     if (fControlCommands.begin() != fControlCommands.end()) {
         return (*fControlCommands.begin())->GetOffset(cur_frame, frames);
@@ -72,8 +72,8 @@ long TExpAudioMixer::GetNextControlOffset(audio_frames_t cur_frame, long frames)
 Render all stream inside a "slice" inside a buffer.
 */
 void TExpAudioMixer::ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                        map<SymbolicDate, audio_frames_t>& date_map, 
-                                        audio_frames_t cur_frame, 
+                                        map<SymbolicDate, audio_frame_t>& date_map, 
+                                        audio_frame_t cur_frame, 
                                         long offset_in_stream,
                                         long stream_slice)
 {
@@ -116,7 +116,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     long offset_in_control = 0;
     long offset_in_stream = 0;
     long stream_slice = 0;
-    map<SymbolicDate, audio_frames_t> date_map;
+    map<SymbolicDate, audio_frame_t> date_map;
     
     // Possibly render slices in presence of control
     while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames) {
