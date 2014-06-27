@@ -1,23 +1,31 @@
 
 (in-package :cl-user)
 
+
+;;;=============================================
+;;; LOAD THIS FILE TO GET EVERYTHING READY
+;;;=============================================
+
+;;; CHARGER CES 3 FICHIERS
 (load (merge-pathnames "FFI/asdf.lisp" *load-pathname*))
 (load (merge-pathnames "FFI/load-cffi.lisp" *load-pathname*))
-
 (load (merge-pathnames "LibAudioStream.lisp" *load-pathname*))
 
+;;; METTRE LE BON PATHNAME OU LA LIB AU BON ENDROIT AVANT
+;(defparameter *libaudiostream-pathname* 
+;  #+win32
+;  "/WINDOWS/system32/LibAudioStream.dll"
+;  #+(or darwin macos macosx) 
+;  "/Library/Frameworks/LibAudioStreamMC.framework/LibAudioStreamMC"
+;  #+(or linux (and clisp unix (not macos)))
+;  "/usr/lib/libLibAudioStream.so")
 
 (defparameter *libaudiostream-pathname* 
-  #+win32
-  "/WINDOWS/system32/LibAudioStream.dll"
-  #+(or darwin macos macosx) 
-  "/Library/Frameworks/LibAudioStreamMC.framework/LibAudioStreamMC"
-  #+(or linux (and clisp unix (not macos)))
-  "/usr/lib/libLibAudioStream.so")
+  (probe-file (make-pathname :directory (append (pathname-directory *load-pathname*) '("bin" "LibAudioStreamMC.framework")) 
+                             :name "LibAudioStreamMC")))
 
 (defvar *libaudiostream* nil)
-
-(defun libaudiostream-framework ()
+(defun load-libaudiostream-framework ()
   (or *libaudiostream*
       (setq *libaudiostream*
             (if (probe-file *libaudiostream-pathname*)
@@ -28,116 +36,126 @@
                                        :connection-style :immediate)
                   t)))))
 
-; (libaudiostream-framework)
+; (load-libaudiostream-framework)
 
-(in-package :las)
-
-
-;(defparameter filename1 "/Users/bouche/Desktop/LAS\ 2/audio/30662__erh__tk-4-40.wav")
-;(defparameter filename1 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/Bassclarinet1.aif")
-;(defparameter filename2 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/bach-4ch.aiff")
-(defparameter filename1 "/Users/letz/Music/Sounds/levot.wav")
-(defparameter filename2 "/Users/letz/Music/Sounds/tango.wav")
-
-(defvar SR 44100)
+;;;=============================================
+;;; TEST UTILITIES ON TOP OF LAS
+;;;=============================================
 
 ;; Apply a same volume on all channels
 (defun apply-master-volume (sound)
- (let* ((channels (getchannelssound sound))
-        (effect (MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume\",0.5,0,1,0.01));" channels) "" ""))
-        (json (GetJsonEffect effect))
-        (name (GetNameEffect effect)))
+ (let* ((channels (las::GetChannelsSound sound))
+        (effect (las::MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume\",0.5,0,1,0.01));" channels) "" ""))
+        (json (las::GetJsonEffect effect))
+        (name (las::GetNameEffect effect)))
    (print (list channels name json))
-   (MakeEffectSound sound effect 100 100)))
+   (las::MakeEffectSound sound effect 100 100)))
 
 ;; Apply separated volume on each channel
 (defun apply-separated-volume (sound)
- (let* ((channels (getchannelssound sound))
-        (effect (MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume%2i\",0.5,0,1,0.01));" channels) "" ""))
-        (json (GetJsonEffect effect))
-        (name (GetNameEffect effect)))
+ (let* ((channels (las::GetChannelsSound sound))
+        (effect (las::MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume%2i\",0.5,0,1,0.01));" channels) "" ""))
+        (json (las::GetJsonEffect effect))
+        (name (las::GetNameEffect effect)))
    (print (list channels name json))
-   (MakeEffectSound sound effect 100 100)))
+   (las::MakeEffectSound sound effect 100 100)))
 
+(defun get-date (player)
+  (cffi:with-foreign-object (renderer-info '(:struct las::RendererInfo))
+    (las::get-audio-renderer-info (las::GetAudioPlayerRenderer player) renderer-info) 
+    (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct las::RendererInfo) 'las::fCurFrame) :unsigned-long-long)))
 
-(defun print-date ()
-  (cffi:with-foreign-object (renderer-info '(:struct rendererinfo))
-    (get-audio-renderer-info (getaudioplayerrenderer gaudioplayer) renderer-info)
+(defun print-date (player)
+  (cffi:with-foreign-object (renderer-info '(:struct las::RendererInfo))
+    (las::get-audio-renderer-info (las::GetAudioPlayerRenderer player) renderer-info)
     (print (format nil "frame = ~A / usec = ~A / sec = ~A" 
-                   (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct rendererinfo) 'fCurFrame) :unsigned-long-long)
-                   (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct rendererinfo) 'fCurUsec) :unsigned-long-long)
-                   (/ (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct rendererinfo) 'fCurUsec) :unsigned-long-long) 1000000.0)))
+                   (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct las::RendererInfo) 'las::fCurFrame) :unsigned-long-long)
+                   (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct las::RendererInfo) 'las::fCurUsec) :unsigned-long-long)
+                   (/ (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct las::RendererInfo) 'las::fCurUsec) :unsigned-long-long) 1000000.0)))
    ))
 
-(defun get-date ()
-  (cffi:with-foreign-object (renderer-info '(:struct rendererinfo))
-    (get-audio-renderer-info (getaudioplayerrenderer gaudioplayer) renderer-info) 
-    (cffi::mem-aref (cffi:foreign-slot-pointer renderer-info '(:struct rendererinfo) 'fCurFrame) :unsigned-long-long)))
-
-
-
-(defun get-date-from-info ()
-  (nth 4 (getaudiorendererinfo (getaudioplayerrenderer gaudioplayer))))
-
-
+; getaudiorendererinfo should return
 ; fInput fOutput fSampleRate fBufferSize fCurFrame fCurUsec fOutputLatencyFrame fOutputLatencyUsec fInputLatencyFrame fInputLatencyUsec)
-(defun test-time ()
+(defun test-time (player)
   (loop for i from 0 to 5 do 
-        (print (getaudiorendererinfo (getaudioplayerrenderer gaudioplayer)))
+        (print (las::GetAudioRendererInfo (las::GetAudioPlayerRenderer player)))
         (sleep 1)))
-
 
 
 ;; (GetLastLibError)
 
 
+;;;=============================================
+;;; REAL TESTS
+;;;=============================================
+
+#+jb(defparameter filename1 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/Bassclarinet1.aif")
+#+jb(defparameter filename2 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/bach-4ch.aiff")
+#-jb(defparameter filename1 "/Users/letz/Music/Sounds/levot.wav")
+#-jb(defparameter filename2 "/Users/letz/Music/Sounds/tango.wav")
+      
+(defvar SR 44100)
+
+(defvar *AudioPlayer* nil)
+
+(defun start-sequence ()
+  (load-libaudiostream-framework)
+  (setf *AudioPlayer* (las::OpenAudioPlayer 2 2 SR 512 (* 65536 4) (* SR 60 20) las::kcoreaudiorenderer 1))
+  (las::StartAudioPlayer *AudioPlayer*)
+  )
+
 
 #|
 ;;; SEQUENCE DE TEST
 ;; charge les bindings
-(las::libaudiostream-framework)
 
-(defvar gAudioPlayer (openaudioplayer 2 2 SR 512 (* 65536 4) (* SR 60 20) kcoreaudiorenderer 1))
+(start-sequence)
 
-;(CloseAudioPlayer gAudioPlayer)
+;(las::StopAudioPlayer *AudioPlayer*)
+;(las::CloseAudioPlayer *AudioPlayer*)
+;(las::StartAudioPlayer *AudioPlayer*)
 ;;;kcoreaudiorenderer marche, ou kjackrenderer si serveur Jack démarré
 
-;Démarre le player
-(startaudioplayer gaudioplayer)
 
+(las::GetAudioRendererInfo (las::GetAudioPlayerRenderer *AudioPlayer*))
+(las::GetAudioPlayerDateInUsec *AudioPlayer*)
 
-; (get-date)
-;;; (test-time)
+;;; !!!!
+(las::GenRealdate *AudioPlayer* 0)
 
-;(stopaudioplayer gaudioplayer)
+; (get-date *AudioPlayer*)
+; (test-time *AudioPlayer*)
 
-;(getdevicecount (getaudioplayerrenderer gaudioplayer)) ;;;renvoie bien 1
-;(GetDeviceInfo (getaudioplayerrenderer gaudioplayer) 0)
+;(las::GetDeviceCount (las::GetAudioRendererInfo *AudioPlayer*))
+;(las::GetDeviceInfo (las::GetAudioRendererInfo *AudioPlayer*) 0)
 
 (probe-file filename1)
 (probe-file filename2)
 
-(setq s1 (makeregionsound filename1 (* SR 0) (* SR 5)))  
-(setq s2 (makeregionsound filename2 (* SR 0) (* SR 20)))  
+(setq s1 (las::makeregionsound filename1 (* SR 0) (* SR 5)))  
+(setq s2 (las::makeregionsound filename2 (* SR 0) (* SR 20)))  
 
 
 ;;; Problème dans la récupération des arguments côté LAS?
 
-(startsound gaudioplayer (makeregionsound filename1 (* SR 2) (* SR 20)) (genrealdate gaudioplayer (get-date)))
-(startsound gaudioplayer (makeregionsound filename2 (* SR 2) (* SR 20)) (genrealdate gaudioplayer 0))  
+(startsound *AudioPlayer* 
+            (las::makeregionsound filename1 (* SR 2) (* SR 20)) 
+            (las::genrealdate *AudioPlayer* (las::GetAudioPlayerDateInUsec *AudioPlayer*)))
 
-(startsound gaudioplayer s1 (genrealdate gaudioplayer (getdatefrominfo)))  
-(startsound gaudioplayer s2 (genrealdate gaudioplayer 0))
+(startsound *AudioPlayer* (las::makeregionsound filename2 (* SR 2) (* SR 20)) (las::GenRealDate *AudioPlayer* 0))  
 
-(resetsound s1)
-(resetsound s2)
+;(startsound *AudioPlayer* s1 (genrealdate gaudioplayer (getdatefrominfo)))  
+;(startsound *AudioPlayer* s2 (genrealdate gaudioplayer 0))
 
-(stopsound gaudioplayer s1 (genrealdate gaudioplayer 0)) 
-(stopsound gaudioplayer s2 (genrealdate gaudioplayer 0)) 
+(las::resetsound s1)
+(las::resetsound s2)
+
+(las::stopsound *AudioPlayer* s1 (las::genrealdate *AudioPlayer* 0)) 
+(las::stopsound *AudioPlayer* s2 (las::genrealdate *AudioPlayer* 0)) 
 
 
-(setq s3 (apply-master-volume (makeregionsound filename1 (* SR 2) (* SR 20))))
-(setq s4 (apply-separated-volume (makeregionsound filename1 (* SR 2) (* SR 20))))
+(setq s3 (apply-master-volume (las::makeregionsound filename1 (* SR 2) (* SR 20))))
+(setq s4 (apply-separated-volume (las::makeregionsound filename1 (* SR 2) (* SR 20))))
 
 
 |#
