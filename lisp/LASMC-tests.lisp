@@ -101,6 +101,7 @@
 (defun start-sequence ()
   (load-libaudiostream-framework)
   (setf *AudioPlayer* (las::OpenAudioPlayer 2 2 SR 512 (* 65536 4) (* SR 60 20) las::kcoreaudiorenderer 1))
+  ;;(setf *AudioPlayer* (las::OpenAudioPlayer 2 2 SR 512 (* 65536 4) (* SR 60 20) las::kjackrenderer 1))
   (las::StartAudioPlayer *AudioPlayer*)
   )
 
@@ -111,6 +112,9 @@
 
 (start-sequence)
 
+(las::StartAudioPlayer *AudioPlayer*)
+(las::StopAudioPlayer *AudioPlayer*)
+
 ;(las::StopAudioPlayer *AudioPlayer*)
 ;(las::CloseAudioPlayer *AudioPlayer*)
 ;(las::StartAudioPlayer *AudioPlayer*)
@@ -119,6 +123,7 @@
 
 (las::GetAudioRendererInfo (las::GetAudioPlayerRenderer *AudioPlayer*))
 (las::GetAudioPlayerDateInUsec *AudioPlayer*)
+(las::GetAudioPlayerDateInFrame *AudioPlayer*)
 
 ;;; !!!!
 (las::GenRealdate *AudioPlayer* 0)

@@ -143,7 +143,6 @@ int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
     
     // Keep time
     fCallbackTime = *inTimeStamp;
-    
     fCallbackHostTime = AudioGetCurrentHostTime();
     
     // Take time stamp of first call to Process 
@@ -1138,20 +1137,34 @@ long TCoreAudioRenderer::Close()
 long TCoreAudioRenderer::Start()
 {
     // Init timing here
+    memset(&fInfo, 0, sizeof(RendererInfo));
+    
     fAnchorFrameTime = 0;
     fAnchorHostTime = 0;
-        
+         
     return Cont();
 }
 
 long TCoreAudioRenderer::Stop()
 {
-   OSStatus err = AudioOutputUnitStop(fAUHAL);
-
+    OSStatus err = AudioOutputUnitStop(fAUHAL);
+   
     if (err != noErr) {
         printf("Error while closing device : device close error \n");
         return OPEN_ERR;
     } else {
+        
+        // Keep current time if really started...
+        if (fAnchorHostTime > 0) {
+            UInt64 cur_host_time = AudioGetCurrentHostTime();
+            fInfo.fCurFrame = uint64_t(fCallbackTime.mSampleTime + ConvertUsec2Sample(AudioConvertHostTimeToNanos(cur_host_time - fCallbackHostTime)/1000.) - fAnchorFrameTime);
+            fInfo.fCurUsec = AudioConvertHostTimeToNanos(cur_host_time - fAnchorHostTime)/1000.;
+        }
+        
+        // Renderer is stopped...
+        fAnchorFrameTime = 0;
+        fAnchorHostTime = 0;
+        
         return NO_ERR;
 	}
 }
@@ -1169,22 +1182,22 @@ long TCoreAudioRenderer::Cont()
     } else {
         
         /*
-         // Waiting for Render callback to be called (= driver has started)
-         fState = false;
-         int count = 0;
+        // Waiting for Render callback to be called (= driver has started)
+        fState = false;
+        int count = 0;
          
-         while (!fState && count++ < WAIT_COUNTER) {
-         usleep(50000);
-         printf("TCoreAudioRenderer::Start : wait count = %d\n", count);
-         }
+        while (!fState && count++ < WAIT_COUNTER) {
+            usleep(50000);
+            printf("TCoreAudioRenderer::Start : wait count = %d\n", count);
+        }
          
-         if (count < WAIT_COUNTER) {
-         printf("CoreAudio driver is running...\n");
-         return NO_ERR;
-         } else {
-         return OPEN_ERR;
-         }
-         */
+        if (count < WAIT_COUNTER) {
+            printf("CoreAudio driver is running...\n");
+            return NO_ERR;
+        } else {
+            return OPEN_ERR;
+        }
+        */
         return NO_ERR;
 	}
 }
@@ -1196,12 +1209,13 @@ void TCoreAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    if (fAnchorHostTime == 0) { // Renderer is stopped...
-        info->fCurFrame = info->fCurUsec = 0;
+    if (fAnchorHostTime == 0) { // Renderer is stopped, get values when stopped...
+        info->fCurFrame = fInfo.fCurFrame;
+        info->fCurUsec = fInfo.fCurUsec;
     } else {
         UInt64 cur_host_time = AudioGetCurrentHostTime();
         info->fCurFrame = uint64_t(fCallbackTime.mSampleTime + ConvertUsec2Sample(AudioConvertHostTimeToNanos(cur_host_time - fCallbackHostTime)/1000.) - fAnchorFrameTime);
-        info->fCurUsec = (AudioConvertHostTimeToNanos(cur_host_time) - AudioConvertHostTimeToNanos(fAnchorHostTime))/1000.;
+        info->fCurUsec = AudioConvertHostTimeToNanos(cur_host_time - fAnchorHostTime)/1000.;
     }
 }
 

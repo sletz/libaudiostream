@@ -50,12 +50,15 @@ class TCoreAudioRenderer : public TAudioRenderer
 		AudioUnit fAUHAL;
         AudioObjectID fPluginID;    // Used for aggregate device
         bool fState;
+    
         AudioTimeStamp fCallbackTime;
-        
-        Float64 fAnchorFrameTime;
-        UInt64 fAnchorHostTime;
         UInt64 fCallbackHostTime;
-		
+    
+        RendererInfo fInfo;
+    
+        Float64 fAnchorFrameTime;   // Time stamp of the begining of rendering
+        UInt64 fAnchorHostTime;     // Time stamp of the begining of rendering
+   	
 		OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
         int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
         int SetupBufferSize(long buffer_size);

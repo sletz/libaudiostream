@@ -277,6 +277,7 @@ void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
     if (fAnchorFrameTime == 0) { // Renderer is stopped...
         info->fCurFrame = info->fCurUsec = 0;
     } else {
+        // TODO : check if time still changes when stream is stopped...
         info->fCurFrame = long(Pa_GetStreamTime(fStream));
         info->fCurUsec = ConvertSample2Usec(info->fCurFrame);
     }

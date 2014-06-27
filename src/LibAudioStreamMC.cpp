@@ -989,7 +989,10 @@ AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr /*player*/)
 
 AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frame_t date)
 {
-    return new TSymbolicDate(date);
+    //return new TSymbolicDate(date);
+    TSymbolicDate* date_ptr = new TSymbolicDate(date);
+    printf("GenRealDate %x\n", date_ptr);
+    return date_ptr;
 }
 
 AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t real_date)

@@ -111,7 +111,8 @@ template<class T> class LA_SMARTP {
 		//! an empty constructor - points to null
 		LA_SMARTP()	: fSmartPtr(0) {}
 		//! build a smart pointer from a class pointer
-		LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)              {
+		LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)  {
+            printf("LA_SMARTP %x\n", rawptr);
 			if (fSmartPtr) fSmartPtr->addReference(); 
 		}
 		//! build a smart pointer from an convertible class reference

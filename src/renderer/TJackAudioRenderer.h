@@ -57,6 +57,9 @@ class TJackAudioRenderer : public TAudioRenderer
 		
 		long fInput;
 		long fOutput;
+    
+        
+        RendererInfo fInfo;
         
         jack_nframes_t fAnchorFrameTime;    // Time stamp of the begining of rendering
         jack_time_t fAnchorUsecTime;        // Time stamp of the begining of rendering

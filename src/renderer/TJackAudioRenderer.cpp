@@ -173,6 +173,8 @@ long TJackAudioRenderer::Pause()
 long TJackAudioRenderer::Start()
 {
     // Init timing here
+    memset(&fInfo, 0, sizeof(RendererInfo));
+    
     fAnchorFrameTime = 0;
     fAnchorUsecTime = 0;
     
@@ -223,6 +225,17 @@ long TJackAudioRenderer::Stop()
         printf("Cannot deactivate client");
         return OPEN_ERR;
     } else {
+        
+        // Keep current time if really started...
+        if (fAnchorFrameTime > 0) {
+            fInfo.fCurFrame = jack_frame_time(fClient) - fAnchorFrameTime;
+            fInfo.fCurUsec = jack_get_time() - fAnchorUsecTime;
+        }
+        
+        // Renderer is stopped...
+        fAnchorFrameTime = 0;
+        fAnchorUsecTime = 0;
+        
 		return NO_ERR;
 	}
 }
@@ -233,8 +246,10 @@ void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
+    
     if (fAnchorFrameTime == 0) { // Renderer is stopped...
-        info->fCurFrame = info->fCurUsec = 0;
+        info->fCurFrame = fInfo.fCurFrame;
+        info->fCurUsec = fInfo.fCurUsec;
     } else {
         info->fCurFrame = jack_frame_time(fClient) - fAnchorFrameTime;
         info->fCurUsec = jack_get_time() - fAnchorUsecTime;
