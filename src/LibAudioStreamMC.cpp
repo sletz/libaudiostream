@@ -35,7 +35,7 @@ research@grame.fr
 
     struct AudioPlayer {
         TAudioRendererPtr fRenderer;
-		TExpAudioMixerPtr	fMixer;  	
+		TExpAudioMixerPtr fMixer;  	
     };
 
     // Opaque pointers
@@ -100,6 +100,7 @@ extern "C"
     AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
     AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound);
 
+    // Build effect (using pointer on smartptr)
     AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path);
     AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path);
 #ifdef __APPLE__
@@ -149,7 +150,15 @@ extern "C"
     AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frame_t date);
     AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t read_date);
     AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
-
+    
+    AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date);
+    AUDIOAPI long StopSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date);
+    
+    AUDIOAPI SymbolicDatePtr GenSymbolicDatePtr(AudioPlayerPtr player);
+    AUDIOAPI SymbolicDatePtr GenRealDatePtr(AudioPlayerPtr player, audio_frame_t date);
+    AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date, audio_frame_t read_date);
+    AUDIOAPI audio_frame_t GetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date);
+   
     // Transport
     AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
     AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
@@ -1009,6 +1018,59 @@ AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date,
 AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate symbolic_date)
 {
     return symbolic_date->getDate();
+}
+
+////
+
+AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
+            player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(*sound), *date, new TSymbolicDate()));
+            return NO_ERR;
+        }
+    } 
+    
+    return LOAD_ERR;
+}    
+
+AUDIOAPI long StopSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        TStreamCommandPtr command = player->fMixer->GetStreamCommand(*sound);
+        if (command) {
+            command->SetStopDate(*date);
+            return NO_ERR;
+        } 
+    }
+    
+    return LOAD_ERR;
+}
+
+AUDIOAPI SymbolicDatePtr GenSymbolicDatePtr(AudioPlayerPtr /*player*/)
+{
+    return new LA_SMARTP<TSymbolicDate>(new TSymbolicDate());
+}
+
+AUDIOAPI SymbolicDatePtr GenRealDatePtr(AudioPlayerPtr /*player*/, audio_frame_t date)
+{
+    return new LA_SMARTP<TSymbolicDate>(new TSymbolicDate(date));
+}
+
+AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date, audio_frame_t real_date)
+{
+    if (player && player->fMixer) {
+        (*symbolic_date)->setDate(real_date);
+        player->fMixer->NeedSort();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
+    }
+}
+
+AUDIOAPI audio_frame_t GetSymbolicDatePtr(AudioPlayerPtr /*player*/, SymbolicDatePtr symbolic_date)
+{
+    return (*symbolic_date)->getDate();
 }
 
 AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player)

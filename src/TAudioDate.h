@@ -65,6 +65,8 @@ typedef LA_SMARTP<TSymbolicDate> TSymbolicDatePtr;
 
 typedef TSymbolicDatePtr SymbolicDate;
 
+typedef SymbolicDate* SymbolicDatePtr;
+
 #endif
 
 
