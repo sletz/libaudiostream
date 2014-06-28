@@ -148,16 +148,18 @@ extern "C"
     
     AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr player);
     AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr player, audio_frame_t date);
-    AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t read_date);
+    AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t real_date);
     AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date);
     
+    // Using pointer on smartptr
     AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date);
     AUDIOAPI long StopSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date);
     
     AUDIOAPI SymbolicDatePtr GenSymbolicDatePtr(AudioPlayerPtr player);
     AUDIOAPI SymbolicDatePtr GenRealDatePtr(AudioPlayerPtr player, audio_frame_t date);
-    AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date, audio_frame_t read_date);
+    AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date, audio_frame_t real_date);
     AUDIOAPI audio_frame_t GetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date);
+    AUDIOAPI void DeleteSymbolicDatePtr(SymbolicDatePtr symbolic_date);
    
     // Transport
     AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
@@ -1071,6 +1073,11 @@ AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic
 AUDIOAPI audio_frame_t GetSymbolicDatePtr(AudioPlayerPtr /*player*/, SymbolicDatePtr symbolic_date)
 {
     return (*symbolic_date)->getDate();
+}
+
+AUDIOAPI void DeleteSymbolicDatePtr(SymbolicDatePtr symbolic_date)
+{
+    delete symbolic_date;
 }
 
 AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player)
