@@ -131,6 +131,8 @@
 ; (get-date *AudioPlayer*)
 ; (test-time *AudioPlayer*)
 
+(las::GenSymbolicDate *AudioPlayer*)
+
 ;(las::GetDeviceCount (las::GetAudioRendererInfo *AudioPlayer*))
 ;(las::GetDeviceInfo (las::GetAudioRendererInfo *AudioPlayer*) 0)
 
@@ -143,13 +145,13 @@
 
 ;;; Problème dans la récupération des arguments côté LAS?
 
-(startsound *AudioPlayer* 
+(las::startsound *AudioPlayer* 
             (las::makeregionsound filename1 (* SR 2) (* SR 20)) 
             (las::genrealdate *AudioPlayer* (las::GetAudioPlayerDateInUsec *AudioPlayer*)))
 
 (startsound *AudioPlayer* (las::makeregionsound filename2 (* SR 2) (* SR 20)) (las::GenRealDate *AudioPlayer* 0))  
 
-;(startsound *AudioPlayer* s1 (genrealdate gaudioplayer (getdatefrominfo)))  
+;(startsound *AudioPlayer* s1 (genrealdate gaudioplayer (getdatefrominfo)))
 ;(startsound *AudioPlayer* s2 (genrealdate gaudioplayer 0))
 
 (las::resetsound s1)
