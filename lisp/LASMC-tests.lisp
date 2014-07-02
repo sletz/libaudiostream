@@ -142,26 +142,20 @@
 (setq s1 (las::makeregionsound filename1 (* SR 0) (* SR 5)))  
 (setq s2 (las::makeregionsound filename2 (* SR 0) (* SR 20)))  
 
+;(las::startsound *AudioPlayer* s1 (las::GenRealDate *AudioPlayer* (las::GetAudioPlayerDateInFrame *AudioPlayer*)))
+;(las::startsound *AudioPlayer* s1 (las::GenRealDate *AudioPlayer* 0))
 
-;;; Problème dans la récupération des arguments côté LAS?
-
-(las::startsound *AudioPlayer* 
-            (las::makeregionsound filename1 (* SR 2) (* SR 20)) 
-            (las::genrealdate *AudioPlayer* (las::GetAudioPlayerDateInUsec *AudioPlayer*)))
-
-(startsound *AudioPlayer* (las::makeregionsound filename2 (* SR 2) (* SR 20)) (las::GenRealDate *AudioPlayer* 0))  
-
-;(startsound *AudioPlayer* s1 (genrealdate gaudioplayer (getdatefrominfo)))
-;(startsound *AudioPlayer* s2 (genrealdate gaudioplayer 0))
 
 (las::resetsound s1)
-(las::resetsound s2)
+(las::resetsound s3)
 
-(las::stopsound *AudioPlayer* s1 (las::genrealdate *AudioPlayer* 0)) 
+(las::stopsound *AudioPlayer* s1 (las::genrealdate *AudioPlayer* 0))
 (las::stopsound *AudioPlayer* s2 (las::genrealdate *AudioPlayer* 0)) 
 
 
-(setq s3 (apply-master-volume (las::makeregionsound filename1 (* SR 2) (* SR 20))))
+(las::GetNameEffect (las::MakeFaustAudioEffect (format nil "process = par(i,~S,_*hslider(\"Volume\",0.5,0,1,0.01));" 1) "" ""))
+
+(setq s3 (apply-master-volume s1))
 (setq s4 (apply-separated-volume (las::makeregionsound filename1 (* SR 2) (* SR 20))))
 
 
