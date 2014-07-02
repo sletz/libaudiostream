@@ -121,6 +121,7 @@ extern "C"
     AUDIOAPI const char* GetJsonEffectPtr(AudioEffectPtr effect);
     AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
     AUDIOAPI AudioEffectPtr MakeCopyEffectPtr(AudioEffectPtr effect);
+    AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect);
     
     AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDatePtr date);
  
@@ -815,6 +816,11 @@ AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect)
 AUDIOAPI AudioEffectPtr MakeCopyEffectPtr(AudioEffectPtr effect)
 {
     return (effect) ? new LA_SMARTP<TAudioEffectInterface>(static_cast<TAudioEffectInterface*>(*effect)->Copy()) : 0;
+}
+
+AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect)
+{
+    delete effect;
 }
 
 AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDatePtr date)
