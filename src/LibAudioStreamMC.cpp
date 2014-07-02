@@ -122,7 +122,7 @@ extern "C"
     AUDIOAPI const char* GetNameEffectPtr(AudioEffectPtr effect);
     AUDIOAPI AudioEffectPtr MakeCopyEffectPtr(AudioEffectPtr effect);
     
-    AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
+    AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDatePtr date);
  
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
@@ -817,13 +817,13 @@ AUDIOAPI AudioEffectPtr MakeCopyEffectPtr(AudioEffectPtr effect)
     return (effect) ? new LA_SMARTP<TAudioEffectInterface>(static_cast<TAudioEffectInterface*>(*effect)->Copy()) : 0;
 }
 
-AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
+AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDatePtr date)
 {
     if (player && player->fMixer && player->fRenderer) {
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
             for (it = TAudioGlobals::fEffectTable[effect].begin(); it != TAudioGlobals::fEffectTable[effect].end(); it++) {
-                player->fMixer->AddControlCommand(new TEffectControlCommand((*it), path, value, date));
+                player->fMixer->AddControlCommand(new TEffectControlCommand((*it), path, value, *date));
             }
             return NO_ERR;
         } else {
