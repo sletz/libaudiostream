@@ -26,7 +26,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 
 #ifdef __JACK__
-#include "TJackAudioRenderer.h"
+#include "TJackRenderer.h"
 #endif
 
 #ifdef __PORTAUDIO__
@@ -41,7 +41,7 @@ research@grame.fr
 #include "TCoreAudioRenderer.h"
 #endif
 
-#include "TOfflineAudioRenderer.h"
+#include "TOfflineRenderer.h"
 
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
@@ -50,7 +50,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 		switch (renderer) {
                 
             case kOffLineAudioRenderer:
-                return new TOfflineAudioRenderer();
+                return new TOfflineRenderer();
 
 			case kPortAudioRenderer:
 			#ifdef __PORTAUDIO__
@@ -66,7 +66,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 
 			case kJackRenderer:
 			#ifdef __JACK__
-				return new TJackAudioRenderer();
+				return new TJackRenderer();
 			#else
 			#ifdef WIN32
 				#pragma message ("Jack renderer is not compiled")

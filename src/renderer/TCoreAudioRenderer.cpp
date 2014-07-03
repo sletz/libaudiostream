@@ -37,6 +37,9 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define DEBUG 1
 
+AudioObjectID TCoreAudioRenderer::fPluginID = 0;
+bool TCoreAudioRenderer::fState = false;
+
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
     printf("- - - - - - - - - - - - - - - - - - - -\n");
@@ -128,10 +131,10 @@ OSStatus TCoreAudioRenderer::Render(void *inRefCon,
 }
 
 int TCoreAudioRenderer::Render(AudioUnitRenderActionFlags *ioActionFlags,
-                                     const AudioTimeStamp *inTimeStamp,
-                                     UInt32 inBusNumber,
-                                     UInt32 inNumberFrames,
-                                     AudioBufferList *ioData)
+                             const AudioTimeStamp *inTimeStamp,
+                             UInt32 inBusNumber,
+                             UInt32 inNumberFrames,
+                             AudioBufferList *ioData)
 {
 
     // Signal waiting start function...
@@ -606,11 +609,11 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
 
 error:
     printf("Cannot create aggregate device : modify your audio setup so that default audio input and output devices can be aggregated\n");
-    DestroyAggregateDevice();
+    DestroyAggregateDevice(*outAggregateDevice);
     return -1;
 }
 
-OSStatus TCoreAudioRenderer::DestroyAggregateDevice()
+OSStatus TCoreAudioRenderer::DestroyAggregateDevice(AudioDeviceID id)
 {
     OSStatus osErr = noErr;
     AudioObjectPropertyAddress pluginAOPA;
@@ -626,7 +629,7 @@ OSStatus TCoreAudioRenderer::DestroyAggregateDevice()
             printError(osErr);
             return osErr;
         }
-        osErr = AudioObjectGetPropertyData(fPluginID, &pluginAOPA, 0, NULL, &outDataSize, &fDeviceID);
+        osErr = AudioObjectGetPropertyData(fPluginID, &pluginAOPA, 0, NULL, &outDataSize, &id);
         if (osErr != noErr) {
             printf("TCoreAudioRenderer::DestroyAggregateDevice : AudioObjectGetPropertyData error\n");
             printError(osErr);
@@ -643,13 +646,11 @@ OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
                                                      AudioDevicePropertyID inPropertyID,
                                                      void* inClientData)
 {
-    TCoreAudioRenderer* driver = (TCoreAudioRenderer*)inClientData;
-    
     switch (inPropertyID) {
             
         case kAudioDevicePropertyNominalSampleRate: {
             //printf("TCoreAudioRenderer::SRNotificationCallback kAudioDevicePropertyNominalSampleRate\n");
-            driver->fState = true;
+            fState = true;
             // Check new sample rate
             Float64 sampleRate;
             UInt32 outSize =  sizeof(Float64);
@@ -673,8 +674,6 @@ OSStatus TCoreAudioRenderer::BSNotificationCallback(AudioDeviceID inDevice,
                                                      AudioDevicePropertyID inPropertyID,
                                                      void* inClientData)
 {
-    TCoreAudioRenderer* driver = (TCoreAudioRenderer*)inClientData;
-
     switch (inPropertyID) {
 
         case kAudioDevicePropertyBufferFrameSize: {
@@ -689,7 +688,7 @@ OSStatus TCoreAudioRenderer::BSNotificationCallback(AudioDeviceID inDevice,
             } else {
                 //printf("TCoreAudioRenderer::BSNotificationCallback : checked buffer size = %d\n", tmp_buffer_size);
             }
-            driver->fState = true;
+            fState = true;
             break;
         }
     }
@@ -791,7 +790,7 @@ int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long sample_r
         tmp_sample_rate = (Float64)sample_rate;
 
         // To get SR change notification
-        err = AudioDeviceAddPropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback, this);
+        err = AudioDeviceAddPropertyListener(inDevice, 0, true, kAudioDevicePropertyNominalSampleRate, SRNotificationCallback, 0);
         if (err != noErr) {
             printf("Error calling AudioDeviceAddPropertyListener with kAudioDevicePropertyNominalSampleRate\n");
             printError(err);
@@ -960,6 +959,8 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
     }
 
     in_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
+    
+    printf("in_nChannels %d\n", in_nChannels);
 
     err1 = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, &outSize, &isWritable);
     if (err1 != noErr) {
@@ -968,6 +969,8 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
     }
 
     out_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
+    
+    printf("out_nChannels %d\n", out_nChannels);
 
     if (outChan > out_nChannels) {
         printf("This device hasn't required output channels\n");
@@ -1130,7 +1133,7 @@ long TCoreAudioRenderer::Close()
     }
 	AudioUnitUninitialize(fAUHAL);
     CloseComponent(fAUHAL);
-    DestroyAggregateDevice();
+    DestroyAggregateDevice(fDeviceID);
     return NO_ERR;
 }
 
@@ -1225,7 +1228,88 @@ long TCoreAudioRenderer::GetDeviceCount()
 }
 
 void TCoreAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
-{}
+{
+    OSStatus err;
+    UInt32 outSize;
+    Boolean isWritable;
+    
+    AudioDeviceID fDeviceID;
+    AudioUnit fAUHAL;
+    
+    // AUHAL
+    ComponentDescription cd = {kAudioUnitType_Output, kAudioUnitSubType_HALOutput, kAudioUnitManufacturer_Apple, 0, 0};
+    Component HALOutput = FindNextComponent(NULL, &cd);
+    
+    if (GetDefaultDevice(2, 2, 44100, &fDeviceID) != noErr) {
+		printf("Cannot open default device\n");
+		return;
+	}
+    
+    err = OpenAComponent(HALOutput, &fAUHAL);
+    if (err != noErr) {
+		printf("Error calling OpenAComponent");
+        printError(err);
+        goto end;
+	}
+    
+    err = AudioUnitInitialize(fAUHAL);
+    if (err != noErr) {
+		printf("Cannot initialize AUHAL unit");
+		printError(err);
+        goto end;
+	}
+    
+    outSize = 1;
+    
+    err = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, 1, &outSize, sizeof(outSize));
+    if (err != noErr) {
+        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input\n");
+        printError(err);
+        goto end;
+    }
+    
+    err = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &outSize, sizeof(outSize));
+    if (err != noErr) {
+        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output\n");
+        printError(err);
+        goto end;
+    }
+    
+    err = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &fDeviceID, sizeof(AudioDeviceID));
+    if (err != noErr) {
+        printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_CurrentDevice\n");
+        printError(err);
+        goto end;
+    }
+     
+    err = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Input, 1, &outSize, &isWritable);
+    if (err != noErr) {
+        printf("Error calling AudioUnitGetPropertyInfo - kAudioOutputUnitProperty_ChannelMap-INFO 1\n");
+        printError(err);
+    }
+    
+    info->fMaxInputChannels = (err == noErr) ? outSize / sizeof(SInt32) : 0;
+    
+    printf("info->fMaxInputChannels %d\n", info->fMaxInputChannels);
+    
+    err = AudioUnitGetPropertyInfo(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, &outSize, &isWritable);
+    if (err != noErr) {
+        printf("Error calling AudioUnitGetPropertyInfo - kAudioOutputUnitProperty_ChannelMap-INFO 0\n");
+        printError(err);
+    }
+    
+    info->fMaxOutputChannels = (err == noErr) ? outSize / sizeof(SInt32) : 0;
+    
+    printf("info->fMaxOutputChannels %d\n", info->fMaxOutputChannels);
+    
+    strcpy(info->fName, "CoreAudio backend");
+	info->fDefaultSampleRate = 512;	
+	info->fDefaultBufferSize = 44100.0;
+  
+end:
+    AudioUnitUninitialize(fAUHAL);
+    CloseComponent(fAUHAL);
+}
 
 long TCoreAudioRenderer::GetDefaultInputDevice()
 {

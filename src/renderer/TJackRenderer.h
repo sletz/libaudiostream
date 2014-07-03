@@ -20,8 +20,8 @@ research@grame.fr
 
 */
 
-#ifndef __TJackAudioRenderer__
-#define __TJackAudioRenderer__
+#ifndef __TJackRenderer__
+#define __TJackRenderer__
 
 #include "TAudioRenderer.h"
 
@@ -36,13 +36,13 @@ research@grame.fr
 #define MAX_PORTS 32
 
 //--------------------------
-// Class TJackAudioRenderer
+// Class TJackRenderer
 //--------------------------
 /*!
 \brief Use the <A HREF=http://jackit.sourceforge.net> Jack API </A> to access sound devices.
 */
 
-class TJackAudioRenderer : public TAudioRenderer
+class TJackRenderer : public TAudioRenderer
 {
 
     private:
@@ -71,8 +71,8 @@ class TJackAudioRenderer : public TAudioRenderer
 
     public:
 
-        TJackAudioRenderer();
-        virtual ~TJackAudioRenderer();
+        TJackRenderer();
+        virtual ~TJackRenderer();
 
       	long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
@@ -85,13 +85,13 @@ class TJackAudioRenderer : public TAudioRenderer
 	
         void GetInfo(RendererInfoPtr info);
 		
-		long GetDeviceCount();
-		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
-		long GetDefaultInputDevice();
-		long GetDefaultOutputDevice();
+		static long GetDeviceCount();
+		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		static long GetDefaultInputDevice();
+		static long GetDefaultOutputDevice();
 };
 
-typedef TJackAudioRenderer * TJackAudioRendererPtr;
+typedef TJackRenderer * TJackRendererPtr;
 
 #endif
 

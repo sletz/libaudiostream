@@ -21,22 +21,22 @@ research@grame.fr
 */
 
 #include <cstring>
-#include "TOfflineAudioRenderer.h"
+#include "TOfflineRenderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
-TOfflineAudioRenderer::TOfflineAudioRenderer(): TAudioRenderer()
+TOfflineRenderer::TOfflineRenderer(): TAudioRenderer()
 {
 	// TODO
 }
 
-TOfflineAudioRenderer::~TOfflineAudioRenderer()
+TOfflineRenderer::~TOfflineRenderer()
 {
 	// TODO
 }
 
-long TOfflineAudioRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
+long TOfflineRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     // TODO
     int inDevice = 0;
@@ -44,64 +44,64 @@ long TOfflineAudioRenderer::Open(long inChan, long outChan, long bufferSize, lon
     return OpenImp(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
-long TOfflineAudioRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+long TOfflineRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
     // TODO
     return -1;
 }
 
-long TOfflineAudioRenderer::Close()
+long TOfflineRenderer::Close()
 {
     // TODO
     return -1;
 }
 
-long TOfflineAudioRenderer::Start()
+long TOfflineRenderer::Start()
 {
     // TODO
     return -1;
 }
 
-long TOfflineAudioRenderer::Stop()
+long TOfflineRenderer::Stop()
 {
     // TODO 
     return -1;
 }
 
-long TOfflineAudioRenderer::Pause()
+long TOfflineRenderer::Pause()
 {
     // TODO
     return -1;
 }
 
-long TOfflineAudioRenderer::Cont()
+long TOfflineRenderer::Cont()
 {
     // TODO 
     return -1;
 }
 
-void TOfflineAudioRenderer::GetInfo(RendererInfoPtr info)
+void TOfflineRenderer::GetInfo(RendererInfoPtr info)
 {
     // TODO
 }
 
-long TOfflineAudioRenderer::GetDeviceCount()
+long TOfflineRenderer::GetDeviceCount()
 {
 	// TODO
     return 0;
 }
 
-void TOfflineAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
+void TOfflineRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
 	// TODO
 }
 
-long TOfflineAudioRenderer::GetDefaultInputDevice()
+long TOfflineRenderer::GetDefaultInputDevice()
 {
 	return 1;
 }
 
-long TOfflineAudioRenderer::GetDefaultOutputDevice()
+long TOfflineRenderer::GetDefaultOutputDevice()
 {
 	return 1;
 }

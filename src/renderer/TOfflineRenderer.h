@@ -20,17 +20,16 @@ research@grame.fr
 
 */
 
-#ifndef __TOfflineAudioRenderer__
-#define __TOfflineAudioRenderer__
+#ifndef __TOfflineRenderer__
+#define __TOfflineRenderer__
 
 #include "TAudioRenderer.h"
-#include "portaudio.h"
 
 //-----------------------------
-// Class TOfflineAudioRenderer
+// Class TOfflineRenderer
 //-----------------------------
 
-class TOfflineAudioRenderer : public TAudioRenderer
+class TOfflineRenderer : public TAudioRenderer
 {
 
     private:
@@ -39,8 +38,8 @@ class TOfflineAudioRenderer : public TAudioRenderer
     
     public:
 
-        TOfflineAudioRenderer();
-        virtual ~TOfflineAudioRenderer();
+        TOfflineRenderer();
+        virtual ~TOfflineRenderer();
   
         long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
@@ -53,13 +52,13 @@ class TOfflineAudioRenderer : public TAudioRenderer
 
         void GetInfo(RendererInfoPtr info);
 		
-		long GetDeviceCount();
-		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
-		long GetDefaultInputDevice();
-		long GetDefaultOutputDevice();
+		static long GetDeviceCount();
+		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		static long GetDefaultInputDevice();
+		static long GetDefaultOutputDevice();
 };
 
-typedef TOfflineAudioRenderer * TOfflineAudioRendererPtr;
+typedef TOfflineRenderer * TOfflineRendererPtr;
 
 #endif
 

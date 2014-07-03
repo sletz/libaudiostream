@@ -74,7 +74,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             return 0;
         }
     
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        virtual long Read(FLOAT_BUFFER /* unused */, long framesNum, long framePos)
         {
             assert_stream(framesNum, framePos);
             
