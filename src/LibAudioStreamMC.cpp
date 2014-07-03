@@ -1266,32 +1266,28 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
 #ifdef __PORTAUDIO__
     #ifdef __PORTAUDIOV19__
         case kPortAudioRenderer:
-            TPortAudioV19Renderer::GetDefaultInputDevice();
-            break;
+            return TPortAudioV19Renderer::GetDefaultInputDevice();
     #endif
 #else
     #warning PortAudio renderer is not compiled
 #endif
 #ifdef __JACK__
         case kJackRenderer:
-            TJackRenderer::GetDefaultInputDevice();
-            break;
+            return TJackRenderer::GetDefaultInputDevice();
 #else
     #warning Jack renderer is not compiled
 #endif
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
-            TCoreAudioRenderer::GetDefaultInputDevice();
-            break;
+            return TCoreAudioRenderer::GetDefaultInputDevice();
 #else
     #warning CoreAudio renderer is not compiled
 #endif
         case kOffLineAudioRenderer:
-            TOfflineRenderer::GetDefaultInputDevice();
-            break;
+            return TOfflineRenderer::GetDefaultInputDevice();
         default:
             assert(false);
-            break;
+            return 0;
     }
 }
 
@@ -1301,32 +1297,28 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
 #ifdef __PORTAUDIO__
     #ifdef __PORTAUDIOV19__
         case kPortAudioRenderer:
-            TPortAudioV19Renderer::GetDefaultOutputDevice();
-            break;
+            return TPortAudioV19Renderer::GetDefaultOutputDevice();
     #endif
 #else
     #warning PortAudio renderer is not compiled
 #endif
 #ifdef __JACK__
         case kJackRenderer:
-            TJackRenderer::GetDefaultOutputDevice();
-            break;
+            return TJackRenderer::GetDefaultOutputDevice();
 #else
     #warning Jack renderer is not compiled
 #endif
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
-            TCoreAudioRenderer::GetDefaultOutputDevice();
-            break;
+            return TCoreAudioRenderer::GetDefaultOutputDevice();
 #else
     #warning CoreAudio renderer is not compiled
 #endif
         case kOffLineAudioRenderer:
-            TOfflineRenderer::GetDefaultOutputDevice();
-            break;
+            return TOfflineRenderer::GetDefaultOutputDevice();
         default:
             assert(false);
-            break;
+            return 0;
     }
 }
 
