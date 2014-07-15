@@ -48,8 +48,8 @@ class TCoreAudioRenderer : public TAudioRenderer
 		AudioBufferList* fInputData;
 		AudioDeviceID fDeviceID;
 		AudioUnit fAUHAL;
-        static AudioObjectID fPluginID;    // Used for aggregate device
-        static bool fState;
+        AudioObjectID fPluginID;    // Used for aggregate device
+        bool fState;
     
         AudioTimeStamp fCallbackTime;
         UInt64 fCallbackHostTime;
@@ -59,8 +59,8 @@ class TCoreAudioRenderer : public TAudioRenderer
         Float64 fAnchorFrameTime;   // Time stamp of the begining of rendering
         UInt64 fAnchorHostTime;     // Time stamp of the begining of rendering
    	
-		static OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
-        static int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
+		OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
+        int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
         int SetupBufferSize(long buffer_size);
         
         int Render(AudioUnitRenderActionFlags *ioActionFlags,
@@ -88,11 +88,11 @@ class TCoreAudioRenderer : public TAudioRenderer
                                                 AudioDevicePropertyID inPropertyID,
                                                 void* inClientData);
                                        
-        static OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
+        OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
                                             
-        static OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
-        static OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
-        static OSStatus DestroyAggregateDevice(AudioDeviceID id);
+        OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
+        OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
+        OSStatus DestroyAggregateDevice();
         
         static void InitTime();
         static double GetMicroSeconds();
@@ -102,7 +102,7 @@ class TCoreAudioRenderer : public TAudioRenderer
     public:
 
         TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),
-            fAUHAL(0),
+            fAUHAL(0),fPluginID(0),fState(false),
             fAnchorFrameTime(0.), fAnchorHostTime(0), fCallbackHostTime(0)
         {}
         virtual ~TCoreAudioRenderer()
@@ -119,10 +119,10 @@ class TCoreAudioRenderer : public TAudioRenderer
 	
         void GetInfo(RendererInfoPtr info);
 		
-		static long GetDeviceCount();
-		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
-		static long GetDefaultInputDevice();
-		static long GetDefaultOutputDevice();
+		long GetDeviceCount();
+		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		long GetDefaultInputDevice();
+		long GetDefaultOutputDevice();
 };
 
 typedef TCoreAudioRenderer * TCoreAudioRendererPtr;

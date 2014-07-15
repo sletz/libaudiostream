@@ -22,7 +22,7 @@ research@grame.fr
 #include <cstring>
 
 #include "TAudioEffect.h"
-#include "TJackRenderer.h"
+#include "TJackAudioRenderer.h"
 #include "TAudioGlobals.h"
 #include "TSharedBuffers.h"
 #include "UTools.h"
@@ -32,13 +32,13 @@ research@grame.fr
 	#define snprintf _snprintf
 #endif
 
-int TJackRenderer::Process(jack_nframes_t nframes, void *arg)
+int TJackAudioRenderer::Process(jack_nframes_t nframes, void *arg)
 {
-    TJackRendererPtr renderer = (TJackRendererPtr)arg;
+    TJackAudioRendererPtr renderer = (TJackAudioRendererPtr)arg;
     return renderer->ProcessAux(nframes);
 }
 
-int TJackRenderer::ProcessAux(jack_nframes_t nframes)
+int TJackAudioRenderer::ProcessAux(jack_nframes_t nframes)
 {
 	int i;
     
@@ -66,7 +66,7 @@ int TJackRenderer::ProcessAux(jack_nframes_t nframes)
     return 0;
 }
 
-TJackRenderer::TJackRenderer(): TAudioRenderer()
+TJackAudioRenderer::TJackAudioRenderer(): TAudioRenderer()
 {
 	fInput = fOutput = MAX_PORTS;
     fInputBuffer = new float*[TAudioGlobals::fInput];
@@ -77,7 +77,7 @@ TJackRenderer::TJackRenderer(): TAudioRenderer()
     fAnchorUsecTime = 0;
 }
 
-TJackRenderer::~TJackRenderer()
+TJackAudioRenderer::~TJackAudioRenderer()
 {
     delete[] fInputBuffer;
     delete[] fOutputBuffer;
@@ -85,7 +85,7 @@ TJackRenderer::~TJackRenderer()
 	free(fOutput_ports);
 }
 
-long TJackRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
+long TJackAudioRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
 	int i;
  
@@ -139,12 +139,12 @@ error:
     return OPEN_ERR;
 }
 
-long TJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
+long TJackAudioRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long samplerate)
 {
 	return Open(inChan, outChan, bufferSize, samplerate);
 }
 
-long TJackRenderer::Close()
+long TJackAudioRenderer::Close()
 {
 	int i;
 
@@ -165,12 +165,12 @@ long TJackRenderer::Close()
     return NO_ERR;
 }
 
-long TJackRenderer::Pause()
+long TJackAudioRenderer::Pause()
 {
     return Stop();
 }
 
-long TJackRenderer::Start()
+long TJackAudioRenderer::Start()
 {
     // Init timing here
     memset(&fInfo, 0, sizeof(RendererInfo));
@@ -181,7 +181,7 @@ long TJackRenderer::Start()
     return Cont();
 }
 
-long TJackRenderer::Cont()
+long TJackAudioRenderer::Cont()
 {
     const char** ports = NULL;
 
@@ -219,7 +219,7 @@ error:
     return OPEN_ERR;
 }
 
-long TJackRenderer::Stop()
+long TJackAudioRenderer::Stop()
 {
     if (jack_deactivate(fClient)) {
         printf("Cannot deactivate client");
@@ -240,7 +240,7 @@ long TJackRenderer::Stop()
 	}
 }
 
-void TJackRenderer::GetInfo(RendererInfoPtr info)
+void TJackAudioRenderer::GetInfo(RendererInfoPtr info)
 {
     info->fInput = fInput;
     info->fOutput = fOutput;
@@ -256,7 +256,7 @@ void TJackRenderer::GetInfo(RendererInfoPtr info)
     }
 }
 
-long TJackRenderer::GetDeviceCount()
+long TJackAudioRenderer::GetDeviceCount()
 {
     jack_client_t* client;
 	if ((client = jack_client_open("Dummy", JackNullOption, NULL)) == 0) {
@@ -268,7 +268,7 @@ long TJackRenderer::GetDeviceCount()
 	}
 }
 
-void TJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
+void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
 	const char** ports = NULL;
     jack_client_t* client;
@@ -299,19 +299,19 @@ void TJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
         jack_free(ports);
     }
 	
-	strcpy(info->fName, "Jack backend");
+	strcpy(info->fName, "Jack duplex");
 	info->fDefaultSampleRate = double(jack_get_sample_rate(client));	
 	info->fDefaultBufferSize = jack_get_buffer_size(client);
 	
 	jack_client_close(client);
 }
 
-long TJackRenderer::GetDefaultInputDevice()
+long TJackAudioRenderer::GetDefaultInputDevice()
 {
 	return 0; // Only 1 device available...
 }
 
-long TJackRenderer::GetDefaultOutputDevice()
+long TJackAudioRenderer::GetDefaultOutputDevice()
 {
 	return 0; // Only 1 device available...
 }

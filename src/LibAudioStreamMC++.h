@@ -653,32 +653,32 @@ extern "C"
     // Devices scanning
     /*!
      \brief Scan and return the number of available devices on the machine.
-     \param renderer The audio renderer type used to access audio I/O, built using MakeAudioRenderer.
+     \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
      \return The number of available devices.
      */
-    long GetDeviceCount(long renderer);
+    long GetDeviceCount(AudioRendererPtr renderer);
     
     /*!
      \brief Fill DeviceInfo structure for a given device.
-     \param renderer The audio renderer type used to access audio I/O, built using MakeAudioRenderer.
+     \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
      \param deviceNum The device index between 0 and GetDeviceCount.	
      \param info The device info structure to be filled.
      */
-    void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info);
+    void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
     
     /*!
      \brief Get the default input device index.
-     \param renderer The audio renderer type used to access audio I/O, built using MakeAudioRenderer.
+     \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
      \return The default input device index.
      */
-    long GetDefaultInputDevice(long renderer);
+    long GetDefaultInputDevice(AudioRendererPtr renderer);
     
     /*!
      \brief Get the default output device index.
-     \param renderer The audio renderer type used to access audio I/O, built using MakeAudioRenderer.
+     \param renderer The audio renderer used to access audio I/O, built using MakeAudioRenderer.
      \return The default output device index.
      */
-    long GetDefaultOutputDevice(long renderer);
+    long GetDefaultOutputDevice(AudioRendererPtr renderer);
     
     // Renderer
     /*!
