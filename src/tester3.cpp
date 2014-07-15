@@ -16,6 +16,7 @@
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 #define FILENAME3 "/Users/letz/son1.wav"
 #define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
+#define FILENAME5 "/Users/letz/Music/Sounds/add-synth-4ch-ntour.aiff"
 
 // Global context
 static long gSampleRate = 0;
@@ -127,7 +128,23 @@ static AudioStream MakeEcho(AudioStream stream)
 int main(int argc, char* argv[])
 {
     // Alloue un Player avec 4 entrées/sorties, une entrée TR d'au plus 10 min, et le backend JACK
-    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
+    DeviceInfo device_info;
+    GetDeviceInfo(kJackRenderer, 0, &device_info);
+    printf("fName %s\n", device_info.fName);
+    printf("fMaxInputChannels %ld\n", device_info.fMaxInputChannels);
+    printf("fMaxOutputChannels %ld\n", device_info.fMaxOutputChannels);
+    printf("fDefaultBufferSize %ld\n", device_info.fDefaultBufferSize);
+    printf("fDefaultSampleRate %f\n", device_info.fDefaultSampleRate);
+    
+    //gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
+    
+    gAudioPlayer = OpenAudioPlayer(3, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    assert(gAudioPlayer);
+    
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
+    RendererInfo info;
+    GetAudioRendererInfo(renderer, &info);
+    
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
@@ -147,7 +164,8 @@ int main(int argc, char* argv[])
     
     // Joue une région de 5 sec d'un fichier à la date courante
     //s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    s1 = MakeRegionSound(FILENAME1, 0, 2*SR);
+    //s1 = MakeRegionSound(FILENAME1, 0, 10*SR);
+    s1 = MakeRegionSound(FILENAME5, 0, 10*SR);
     //MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
    

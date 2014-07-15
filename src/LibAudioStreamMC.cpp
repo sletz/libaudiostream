@@ -27,6 +27,11 @@ research@grame.fr
 #include "TBufferedInputAudioStream.h"
 #include "TAudioDate.h"
 
+#include "TPortAudioV19Renderer.h"
+#include "TCoreAudioRenderer.h"
+#include "TJackRenderer.h"
+#include "TOfflineRenderer.h"
+
 #ifdef WIN32
 	#define	AUDIOAPI __declspec(dllexport)
 #else
@@ -64,10 +69,10 @@ extern "C"
     AUDIOAPI const char* GetLastLibError();
 		
 	// Device scanning
-	AUDIOAPI long GetDeviceCount(AudioRendererPtr renderer);
-	AUDIOAPI void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info);
-	AUDIOAPI long GetDefaultInputDevice(AudioRendererPtr renderer);
-	AUDIOAPI long GetDefaultOutputDevice(AudioRendererPtr renderer);
+	AUDIOAPI long GetDeviceCount(long renderer);
+	AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info);
+	AUDIOAPI long GetDefaultInputDevice(long renderer);
+	AUDIOAPI long GetDefaultOutputDevice(long renderer);
 	
 	AUDIOAPI AudioStreamPtr MakeSoundPtr(AudioStream sound) ;
 	AUDIOAPI void DeleteSoundPtr(AudioStreamPtr sound);
@@ -977,7 +982,8 @@ AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
 AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        if (sound->Channels() < MAX_OUTPUT_CHAN) {
+        //if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
+        if (sound->Channels() < TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
             return NO_ERR;
         }
@@ -1033,7 +1039,8 @@ AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate s
 AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
+        //if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
+        if ((*sound)->Channels() < TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(*sound), *date, new TSymbolicDate()));
             return NO_ERR;
         }
@@ -1190,24 +1197,129 @@ AUDIOAPI void AudioGlobalsDestroy()
 	TAudioGlobals::Destroy();
 }
 
-AUDIOAPI long GetDeviceCount(AudioRendererPtr renderer)
+AUDIOAPI long GetDeviceCount(long renderer)
 {
-	return static_cast<TAudioRendererPtr>(renderer)->GetDeviceCount();
+    switch (renderer) {
+#ifdef __PORTAUDIO__
+    #ifdef __PORTAUDIOV19__
+        case kPortAudioRenderer:
+            return TPortAudioV19Renderer::GetDeviceCount();
+    #endif
+#else
+    #warning PortAudio renderer is not compiled
+            return 0;
+#endif
+#ifdef __JACK__
+        case kJackRenderer:
+            return TJackRenderer::GetDeviceCount();
+#else
+    #warning Jack renderer is not compiled
+#endif
+        case kCoreAudioRenderer:
+            return TCoreAudioRenderer::GetDeviceCount();
+        case kOffLineAudioRenderer:
+            return TOfflineRenderer::GetDeviceCount();
+        default:
+            assert(false);
+            break;
+    }
 }
 
-AUDIOAPI void GetDeviceInfo(AudioRendererPtr renderer, long deviceNum, DeviceInfo* info)
+AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
 {
-	static_cast<TAudioRendererPtr>(renderer)->GetDeviceInfo(deviceNum, info);
+    switch (renderer) {
+#ifdef __PORTAUDIO__
+    #ifdef __PORTAUDIOV19__
+        case kPortAudioRenderer:
+            TPortAudioV19Renderer::GetDeviceInfo(deviceNum, info);
+            break;
+    #endif
+#else
+    #warning PortAudio renderer is not compiled
+#endif
+#ifdef __JACK__
+        case kJackRenderer:
+            TJackRenderer::GetDeviceInfo(deviceNum, info);
+            break;
+#else
+    #warning Jack renderer is not compiled
+#endif
+#ifdef __COREAUDIO__
+        case kCoreAudioRenderer:
+            TCoreAudioRenderer::GetDeviceInfo(deviceNum, info);
+            break;
+#else
+    #warning CoreAudio renderer is not compiled
+#endif
+        case kOffLineAudioRenderer:
+            TOfflineRenderer::GetDeviceInfo(deviceNum, info);
+            break;
+        default:
+            assert(false);
+            break;
+    }
 }
 
-AUDIOAPI long GetDefaultInputDevice(AudioRendererPtr renderer)
+AUDIOAPI long GetDefaultInputDevice(long renderer)
 {
-	return static_cast<TAudioRendererPtr>(renderer)->GetDefaultInputDevice();
+    switch (renderer) {
+#ifdef __PORTAUDIO__
+    #ifdef __PORTAUDIOV19__
+        case kPortAudioRenderer:
+            return TPortAudioV19Renderer::GetDefaultInputDevice();
+    #endif
+#else
+    #warning PortAudio renderer is not compiled
+#endif
+#ifdef __JACK__
+        case kJackRenderer:
+            return TJackRenderer::GetDefaultInputDevice();
+#else
+    #warning Jack renderer is not compiled
+#endif
+#ifdef __COREAUDIO__
+        case kCoreAudioRenderer:
+            return TCoreAudioRenderer::GetDefaultInputDevice();
+#else
+    #warning CoreAudio renderer is not compiled
+#endif
+        case kOffLineAudioRenderer:
+            return TOfflineRenderer::GetDefaultInputDevice();
+        default:
+            assert(false);
+            return 0;
+    }
 }
 
-AUDIOAPI long GetDefaultOutputDevice(AudioRendererPtr renderer)
+AUDIOAPI long GetDefaultOutputDevice(long renderer)
 {
-	return static_cast<TAudioRendererPtr>(renderer)->GetDefaultOutputDevice();
+    switch (renderer) {
+#ifdef __PORTAUDIO__
+    #ifdef __PORTAUDIOV19__
+        case kPortAudioRenderer:
+            return TPortAudioV19Renderer::GetDefaultOutputDevice();
+    #endif
+#else
+    #warning PortAudio renderer is not compiled
+#endif
+#ifdef __JACK__
+        case kJackRenderer:
+            return TJackRenderer::GetDefaultOutputDevice();
+#else
+    #warning Jack renderer is not compiled
+#endif
+#ifdef __COREAUDIO__
+        case kCoreAudioRenderer:
+            return TCoreAudioRenderer::GetDefaultOutputDevice();
+#else
+    #warning CoreAudio renderer is not compiled
+#endif
+        case kOffLineAudioRenderer:
+            return TOfflineRenderer::GetDefaultOutputDevice();
+        default:
+            assert(false);
+            return 0;
+    }
 }
 
 

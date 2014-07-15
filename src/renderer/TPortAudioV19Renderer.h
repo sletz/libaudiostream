@@ -72,10 +72,10 @@ class TPortAudioV19Renderer : public TAudioRenderer
 
         void GetInfo(RendererInfoPtr info);
 		
-		long GetDeviceCount();
-		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
-		long GetDefaultInputDevice();
-		long GetDefaultOutputDevice();
+		static long GetDeviceCount();
+		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		static long GetDefaultInputDevice();
+		static long GetDefaultOutputDevice();
 };
 
 typedef TPortAudioV19Renderer * TPortAudioV19RendererPtr;
