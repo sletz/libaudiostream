@@ -983,7 +983,7 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate 
 {
     if (player && player->fMixer && player->fRenderer) {
         //if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
-        if (sound->Channels() < TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
+        if (sound->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
             return NO_ERR;
         }
@@ -1040,7 +1040,7 @@ AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, Symboli
 {
     if (player && player->fMixer && player->fRenderer) {
         //if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
-        if ((*sound)->Channels() < TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
+        if ((*sound)->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(*sound), *date, new TSymbolicDate()));
             return NO_ERR;
         }
