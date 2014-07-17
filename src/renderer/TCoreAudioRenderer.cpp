@@ -208,7 +208,7 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, int sampl
 			*id = inDefault;
 			return noErr;
 		} else {
-			//printf("GetDefaultDevice : error input = %ld and output = %ld are not the same\n", inDefault, outDefault);
+			printf("GetDefaultDevice : input = %ld and output = %ld are not the same\n", inDefault, outDefault);
             if (CreateAggregateDevice(inDefault, outDefault, samplerate, id) != noErr) {
                 return kAudioHardwareBadDeviceError;
             }
@@ -341,12 +341,12 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     char device_name[256];
     for (UInt32 i = 0; i < captureDeviceID.size(); i++) {
         GetDeviceNameFromID(captureDeviceID[i], device_name);
-        //printf("Separated input = '%s' \n", device_name);
+        printf("Separated input = '%s' \n", device_name);
     }
 
     for (UInt32 i = 0; i < playbackDeviceID.size(); i++) {
         GetDeviceNameFromID(playbackDeviceID[i], device_name);
-        //printf("Separated output = '%s' \n", device_name);
+        printf("Separated output = '%s' \n", device_name);
     }
 
     osErr = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyPlugInForBundleID, &outSize, &outWritable);
@@ -592,8 +592,9 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     CFRelease(aggDeviceDict);
     CFRelease(subDevicesArray);
 
-    if (subDevicesArrayClock)
+    if (subDevicesArrayClock) {
         CFRelease(subDevicesArrayClock);
+    }
 
     // release the device UID
     for (UInt32 i = 0; i < captureDeviceUID.size(); i++) {
@@ -956,9 +957,9 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
     if (err1 != noErr) {
         printf("Error calling AudioUnitGetPropertyInfo - kAudioOutputUnitProperty_ChannelMap-INFO 1\n");
         printError(err1);
+    } else {
+        in_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
     }
-
-    in_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
     
     printf("in_nChannels %d\n", in_nChannels);
 
@@ -966,12 +967,15 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
     if (err1 != noErr) {
         printf("Error calling AudioUnitGetPropertyInfo - kAudioOutputUnitProperty_ChannelMap-INFO 0\n");
         printError(err1);
+    } else {
+        out_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
     }
-
-    out_nChannels = (err1 == noErr) ? outSize / sizeof(SInt32) : 0;
     
     printf("out_nChannels %d\n", out_nChannels);
 
+    /*
+    // Just ignore this case : seems to work without any further change...
+     
     if (outChan > out_nChannels) {
         printf("This device hasn't required output channels\n");
         goto error;
@@ -980,23 +984,10 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
         printf("This device hasn't required input channels\n");
         goto error;
     }
-
-    if (outChan > 0  && outChan <= out_nChannels) {
-        SInt32 chanArr[out_nChannels];
-        for (int i = 0;	i < out_nChannels; i++) {
-            chanArr[i] = -1;
-        }
-        for (int i = 0; i < outChan; i++) {
-            chanArr[i] = i;
-        }
-        err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, chanArr, sizeof(SInt32) * out_nChannels);
-        if (err1 != noErr) {
-            printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap 0\n");
-            printError(err1);
-        }
-    }
-
-    if (inChan > 0 && inChan <= in_nChannels) {
+    */
+    
+    //if (inChan > 0 && inChan <= in_nChannels) {
+    if (inChan < in_nChannels) {  // Taken from Faust coreaudio-dsp.h
         SInt32 chanArr[in_nChannels];
         for (int i = 0; i < in_nChannels; i++) {
             chanArr[i] = -1;
@@ -1007,6 +998,22 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
         err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Input, 1, chanArr, sizeof(SInt32) * in_nChannels);
         if (err1 != noErr) {
             printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap 1\n");
+            printError(err1);
+        }
+    }
+ 
+    //if (outChan > 0  && outChan <= out_nChannels) {
+    if (outChan < out_nChannels) {  // Taken from Faust coreaudio-dsp.h
+        SInt32 chanArr[out_nChannels];
+        for (int i = 0;	i < out_nChannels; i++) {
+            chanArr[i] = -1;
+        }
+        for (int i = 0; i < outChan; i++) {
+            chanArr[i] = i;
+        }
+        err1 = AudioUnitSetProperty(fAUHAL, kAudioOutputUnitProperty_ChannelMap, kAudioUnitScope_Output, 0, chanArr, sizeof(SInt32) * out_nChannels);
+        if (err1 != noErr) {
+            printf("Error calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap 0\n");
             printError(err1);
         }
     }

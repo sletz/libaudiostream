@@ -982,7 +982,7 @@ AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
 AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        //if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
+        //if (sound->Channels() < MAX_OUTPUT_CHAN) {
         if (sound->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
             return NO_ERR;
