@@ -220,10 +220,10 @@ extern "C"
     AudioStream MakeConstantSound(long channels, long length, float value);
     
     /*!
-     \brief Create a stream from a given external buffer
+     \brief Create a stream from a given external buffer. Memory has to be managed by the external code (allocation/deallocation).
      \param buffer The sound buffer a array of non interleaved audio buffers.
      \param length The sound buffer length.
-     \param length The sound buffer chhanels number.
+     \param length The sound buffer channels number.
      \return A pointer to new stream object.
      */
     AudioStream MakeBufferSound(float** buffer, long length, long channels);
