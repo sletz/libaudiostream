@@ -191,7 +191,7 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
         virtual void SetPos(long frames)
         {
             assert(fStream);
-            return fStream->SetPos(frames);
+            fStream->SetPos(frames);
         }
         
         virtual long GetPos()

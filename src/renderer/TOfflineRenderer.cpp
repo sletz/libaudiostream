@@ -96,14 +96,12 @@ long TOfflineRenderer::Stop()
 
 long TOfflineRenderer::Pause()
 {
-    // TODO
-    return -1;
+    return Stop();
 }
 
 long TOfflineRenderer::Cont()
 {
-    // TODO 
-    return -1;
+    return Start();
 }
 
 void TOfflineRenderer::GetInfo(RendererInfoPtr info)

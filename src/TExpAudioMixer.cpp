@@ -158,4 +158,7 @@ TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
     return 0;
 }
 
-
+void TExpAudioMixer::SetPos(long frames)
+{
+    // TODO
+}

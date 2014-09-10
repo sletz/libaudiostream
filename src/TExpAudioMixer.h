@@ -381,6 +381,8 @@ class TExpAudioMixer : public TAudioClient
             fControlCommands.NeedSort();
             fStreamCommands.NeedSort();
         }
+        
+        void SetPos(long frames);
     
 };
 

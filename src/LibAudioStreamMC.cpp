@@ -20,13 +20,14 @@ research@grame.fr
 
 */
 
-#include "TExpAudioEngine.h"
+#include "TExpAudioMixer.h"
 #include "TAudioRendererFactory.h"
 #include "TAudioStreamFactory.h"
 #include "TFaustAudioEffect.h"
 #include "TBufferedInputAudioStream.h"
 #include "TAudioDate.h"
 
+// Renderers
 #include "TPortAudioV19Renderer.h"
 #include "TCoreAudioRenderer.h"
 #include "TJackRenderer.h"
@@ -1154,7 +1155,12 @@ AUDIOAPI long ContAudioPlayer(AudioPlayerPtr player)
 
 AUDIOAPI long SetPosAudioPlayer(AudioPlayerPtr player, audio_frame_t new_date)
 {
-    return PLAYER_ERR;
+     if (player && player->fMixer && player->fRenderer) {
+        player->fMixer->SetPos(new_date);
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
+    }
 }
 
 AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player)
