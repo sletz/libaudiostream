@@ -90,7 +90,7 @@
 ;;;=============================================
 
 #+jb(defparameter filename1 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/Bassclarinet1.aif")
-#+jb(defparameter filename2 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/bach-4ch.aiff")
+#+jb(defparameter filename2 "/Users/bresson/_SHARED-FILES/IN-FILES/SOUNDFILES/anton.aif")
 #-jb(defparameter filename1 "/Users/letz/Music/Sounds/levot.wav")
 #-jb(defparameter filename2 "/Users/letz/Music/Sounds/tango.wav")
       
@@ -139,12 +139,13 @@
 (probe-file filename1)
 (probe-file filename2)
 
-(setq s1 (las::makeregionsound filename1 (* SR 0) (* SR 5)))  
-(setq s2 (las::makeregionsound filename2 (* SR 0) (* SR 20)))  
+(setq s1 (las::makereadsound filename1))
+(setq s2 (las::makereadsound filename2))
 
 ;(las::startsound *AudioPlayer* s1 (las::GenRealDate *AudioPlayer* (las::GetAudioPlayerDateInFrame *AudioPlayer*)))
 ;(las::startsound *AudioPlayer* s1 (las::GenRealDate *AudioPlayer* 0))
 
+(las::startsound om::*las-player* s2 (las::GenRealDate om::*las-player* 0))
 
 (las::resetsound s1)
 (las::resetsound s3)

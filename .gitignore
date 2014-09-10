@@ -1,6 +1,7 @@
 # LispWorks
 *.lisp~
 *.xfasl
+*.lisp#
 
 # Xcode
 *.pbxuser
