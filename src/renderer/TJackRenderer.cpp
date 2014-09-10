@@ -50,7 +50,7 @@ int TJackRenderer::ProcessAux(jack_nframes_t nframes)
     
         //printf("fAnchorFrameTime %ld \n", int(fAnchorFrameTime));
         //printf("fAnchorUsecTime %ld \n", int(fAnchorUsecTime));
-   }
+    }
 
     // Copy input buffers
 	for (i = 0; i < fInput; i++) {

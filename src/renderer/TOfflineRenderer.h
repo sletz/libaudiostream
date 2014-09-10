@@ -24,6 +24,7 @@ research@grame.fr
 #define __TOfflineRenderer__
 
 #include "TAudioRenderer.h"
+#include <pthread.h>
 
 //-----------------------------
 // Class TOfflineRenderer
@@ -34,7 +35,14 @@ class TOfflineRenderer : public TAudioRenderer
 
     private:
     
+        float** fInputBuffer;
+        float** fOutputBuffer;
+        
+        pthread_t fThread;
+    
         long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+        
+        void ProcessAux();
     
     public:
 
@@ -56,6 +64,8 @@ class TOfflineRenderer : public TAudioRenderer
 		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
 		static long GetDefaultInputDevice();
 		static long GetDefaultOutputDevice();
+        
+        static void* Process(void* arg);
 };
 
 typedef TOfflineRenderer * TOfflineRendererPtr;

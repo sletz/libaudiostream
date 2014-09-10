@@ -26,19 +26,47 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 
+void* TOfflineRenderer::Process(void* arg)
+{
+    TOfflineRenderer* renderer = static_cast<TOfflineRenderer*>(arg);
+    renderer->ProcessAux();
+ }
+
+void TOfflineRenderer::ProcessAux()
+{
+    while (true) {
+        Run(fInputBuffer, fOutputBuffer, TAudioGlobals::fBufferSize);
+    }
+}
+
 TOfflineRenderer::TOfflineRenderer(): TAudioRenderer()
 {
-	// TODO
+    fInputBuffer = new float*[TAudioGlobals::fInput];
+    fOutputBuffer = new float*[TAudioGlobals::fOutput];
+    
+    for (int i = 0; i < TAudioGlobals::fInput; i++) {
+        fInputBuffer[i] = new float[TAudioGlobals::fBufferSize];
+    }
+    for (int i = 0; i < TAudioGlobals::fInput; i++) {
+        fOutputBuffer[i] = new float[TAudioGlobals::fBufferSize];
+    }
 }
 
 TOfflineRenderer::~TOfflineRenderer()
 {
-	// TODO
+    for (int i = 0; i < TAudioGlobals::fInput; i++) {
+        delete [] fInputBuffer[i];
+    }
+    for (int i = 0; i < TAudioGlobals::fInput; i++) {
+        delete [] fOutputBuffer[i];;
+    }
+    
+    delete [] fInputBuffer;
+    delete [] fOutputBuffer;
 }
 
 long TOfflineRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
-    // TODO
     int inDevice = 0;
     int outDevice = 0;
     return OpenImp(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
@@ -46,26 +74,24 @@ long TOfflineRenderer::Open(long inChan, long outChan, long bufferSize, long sam
 
 long TOfflineRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
-    // TODO
-    return -1;
+    return 0;
 }
 
 long TOfflineRenderer::Close()
 {
-    // TODO
-    return -1;
+    return 0;
 }
 
 long TOfflineRenderer::Start()
 {
-    // TODO
-    return -1;
+    return pthread_create(&fThread, NULL, Process, this); 
 }
 
 long TOfflineRenderer::Stop()
 {
-    // TODO 
-    return -1;
+    pthread_cancel(fThread);
+    pthread_join(fThread, NULL); 
+    return 0;
 }
 
 long TOfflineRenderer::Pause()
