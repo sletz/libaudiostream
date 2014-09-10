@@ -571,7 +571,6 @@ extern "C"
     
     audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player);
     
-    
     /*!
      \brief Start a sound at a specific date.
      \param player The audio player.
@@ -636,13 +635,35 @@ extern "C"
      */
     long StopAudioPlayer(AudioPlayerPtr player);
     
+     /*!
+     \brief Pause the audio player.
+     \param player The audio player.
+     \return An error code.
+     */
+    long PauseAudioPlayer(AudioPlayerPtr player);
+    
+     /*!
+     \brief Continue the audio player from the current position.
+     \param player The audio player.
+     \return An error code.
+     */
+    long ContAudioPlayer(AudioPlayerPtr player);
+    
+    /*!
+     \brief Set the current position the audio player.
+     \param player The audio player.
+     \param new_date The new date in frames.
+     \return An error code.
+     */
+    long SetPosAudioPlayer(AudioPlayerPtr player, audio_frame_t new_date);
+    
     /*!
      \brief Clear the audio player internal effect table.
      \param player The audio player.
      \return An error code.
      */
     long ClearAudioPlayer(AudioPlayerPtr player);
-    
+       
     /*!
      \brief Get the audio player internal renderer.
      \param player The audio player.

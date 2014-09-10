@@ -168,8 +168,11 @@ extern "C"
     AUDIOAPI void DeleteSymbolicDatePtr(SymbolicDatePtr symbolic_date);
    
     // Transport
-    AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		// Start the global player
-    AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player);		// Stop the global player
+    AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player);		
+    AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player);	
+    AUDIOAPI long PauseAudioPlayer(AudioPlayerPtr player);	
+    AUDIOAPI long ContAudioPlayer(AudioPlayerPtr player);
+    AUDIOAPI long SetPosAudioPlayer(AudioPlayerPtr player, audio_frame_t new_date);
     
     AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player);
 
@@ -1127,6 +1130,31 @@ AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player)
     } else {
         return PLAYER_ERR;
     }
+}
+
+AUDIOAPI long PauseAudioPlayer(AudioPlayerPtr player)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        player->fRenderer->Pause();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
+    }
+}
+
+AUDIOAPI long ContAudioPlayer(AudioPlayerPtr player)
+{
+    if (player && player->fMixer && player->fRenderer) {
+        player->fRenderer->Cont();
+        return NO_ERR;
+    } else {
+        return PLAYER_ERR;
+    }
+}
+
+AUDIOAPI long SetPosAudioPlayer(AudioPlayerPtr player, audio_frame_t new_date)
+{
+    return PLAYER_ERR;
 }
 
 AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player)
