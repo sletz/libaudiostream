@@ -219,6 +219,9 @@ TAudioStreamPtr TAudioStreamFactory::MakeEffectSound(TAudioStreamPtr s1, TAudioE
     if (s1 && effect) {
         if (fadeIn + fadeOut > s1->Length()) {
             TAudioGlobals::AddLibError("MakeEffectSound : fadeIn + fadeOut > sound length");
+        // If pure instrument...
+        } else if (effect->Inputs() == 0) {
+            res = new TEffectAudioStream(s1, effect);
         // If stream and effect are compatible...
         } else if (s1->Channels() == effect->Inputs()) {
             res = new TEffectAudioStream(s1, effect);

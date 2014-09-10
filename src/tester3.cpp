@@ -11,6 +11,8 @@
 #define LLVM_EFFECT2 "/Documents/faust-sf/examples/zita_rev1.dsp"
 #define LLVM_EFFECT3 "/Documents/faust-sf/examples/freeverb4.dsp"
 #define LLVM_EFFECT4 "/Documents/faust-sf/examples/chorus.dsp"
+#define LLVM_EFFECT5 "/Documents/faust-sf/examples/osc.dsp"
+#define LLVM_EFFECT6 "/Documents/faust-sf/examples/noise.dsp"
 
 #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 #define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
@@ -163,6 +165,13 @@ int main(int argc, char* argv[])
     
     next();
     
+    s1 = MakeMultiNullSound(2, 60*SR);
+    s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT6, "", ""), SR/2, SR/2);
+    StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
+  
+    next();
+    
+    /*
     float* buffer[2];
     buffer[0] = new float[1014*100];
     buffer[1] = new float[1014*100];
@@ -171,6 +180,7 @@ int main(int argc, char* argv[])
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
    
     next();
+    */
   
     // Joue une région de 5 sec d'un fichier à la date courante
     //s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
@@ -258,7 +268,6 @@ int main(int argc, char* argv[])
     next();
     
     StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, 0));
-    
     
     next();
      
