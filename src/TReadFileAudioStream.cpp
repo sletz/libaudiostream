@@ -45,6 +45,24 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
         throw TLASException(error);
     }
     
+    fFramesNum = long(fInfo.frames);
+    fChannels = long(fInfo.channels);
+    
+    if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
+        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);
+    }
+    
+    // Dynamic allocation
+    fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fCopyBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fFileBuffer = new float[fChannels * TAudioGlobals::fStreamBufferSize];
+  
+    // Read first buffer directly
+    TBufferedAudioStream::ReadBuffer(fMemoryBuffer, TAudioGlobals::fStreamBufferSize, 0);
+    TNonInterleavedAudioBuffer<float>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
+
+    fReady = true;
+     
     SetPos(beginFrame);
 }
 
@@ -56,24 +74,7 @@ void TReadFileAudioStream::SetPos(long frames)
         throw TLASException(error);
     }
 
-    fFramesNum = long(fInfo.frames);
-    fChannels = long(fInfo.channels);
     fBeginFrame = frames;
-
-    if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
-        printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);
-    }
-
-    // Dynamic allocation
-    fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
-    fCopyBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
-    fFileBuffer = new float[fChannels * TAudioGlobals::fStreamBufferSize];
-  
-    // Read first buffer directly
-    TBufferedAudioStream::ReadBuffer(fMemoryBuffer, TAudioGlobals::fStreamBufferSize, 0);
-    TNonInterleavedAudioBuffer<float>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
-
-    fReady = true;
 }
 
 TReadFileAudioStream::~TReadFileAudioStream()
