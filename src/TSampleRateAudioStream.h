@@ -56,9 +56,11 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
         {
             return 0;
         }
+        
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         TAudioStreamPtr CutBegin(long frames);    // Length in frames
     
         TAudioStreamPtr Copy();

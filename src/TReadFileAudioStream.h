@@ -53,17 +53,22 @@ class TReadFileAudioStream : public TFileAudioStream
         void ReadEndBuffer(long framesNum, long framePos);
 
         virtual void Reset();
-		virtual TAudioStreamPtr CutBegin(long frames);
+        
+        virtual TAudioStreamPtr CutBegin(long frames);
+        
         virtual long Length()
         {
-   			return fFramesNum - fBeginFrame;
+            return fFramesNum - fBeginFrame;
         }
+        
         virtual TAudioStreamPtr Copy()
         {
             return new TReadFileAudioStream(fName, fBeginFrame);
         }
         
         int SampleRate() { return fInfo.samplerate; }
+        
+        void SetPos(long frames);
 };
 
 typedef TReadFileAudioStream * TReadFileAudioStreamPtr;

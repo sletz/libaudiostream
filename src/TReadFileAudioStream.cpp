@@ -44,8 +44,13 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
         snprintf(error, 512, "Cannot open filename \'%s\'\n", utf8name);
         throw TLASException(error);
     }
+    
+    SetPos(beginFrame);
+}
 
-    if (sf_seek(fFile, beginFrame, SEEK_SET) < 0) {
+void TReadFileAudioStream::SetPos(long frames)
+{
+    if (sf_seek(fFile, frames, SEEK_SET) < 0) {
         const char* error = sf_strerror(fFile);
         sf_close(fFile);
         throw TLASException(error);
@@ -53,7 +58,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 
     fFramesNum = long(fInfo.frames);
     fChannels = long(fInfo.channels);
-    fBeginFrame = beginFrame;
+    fBeginFrame = frames;
 
     if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
         printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);

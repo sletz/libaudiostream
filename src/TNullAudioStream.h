@@ -106,9 +106,9 @@ class TConstantAudioStream : public TAudioStream
 
     public:
 
-        TConstantAudioStream(long lengthFrame, float value): fFramesNum(lengthFrame), fCurFrame(0), fChannels(1), fValue(value)
+        TConstantAudioStream(long length, float value): fFramesNum(length), fCurFrame(0), fChannels(1), fValue(value)
         {}
-        TConstantAudioStream(long channels, long lengthFrame, float value): fFramesNum(lengthFrame), fCurFrame(0), fChannels(channels), fValue(value)
+        TConstantAudioStream(long channels, long length, float value): fFramesNum(length), fCurFrame(0), fChannels(channels), fValue(value)
         {}
         virtual ~TConstantAudioStream()
         {}
@@ -149,6 +149,11 @@ class TConstantAudioStream : public TAudioStream
         TAudioStreamPtr Copy()
         {
             return new TConstantAudioStream(fChannels, fFramesNum, fValue);
+        }
+        
+        void SetPos(long frames)
+        {
+            fCurFrame = UTools::Min(frames, fFramesNum);
         }
 };
 

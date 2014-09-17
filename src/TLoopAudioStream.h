@@ -30,7 +30,7 @@ research@grame.fr
 // Class TLoopAudioStream
 //------------------------
 /*!
-\brief  A TLoopAudioStream loops the decorated stream n times.
+\brief A TLoopAudioStream loops the decorated stream n times.
 */
 
 class TLoopAudioStream : public TDecoratedAudioStream
@@ -50,14 +50,24 @@ class TLoopAudioStream : public TDecoratedAudioStream
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         TAudioStreamPtr CutBegin(long frames);
+        
         long Length()
         {
             return fLoopNum * fStream->Length();
         }
+        
         TAudioStreamPtr Copy()
         {
             return new TLoopAudioStream(fStream->Copy(), fLoopNum);
+        }
+        
+        void SetPos(long frames)
+        {
+            long len = fStream->Length();
+            fLoopNum = frames / len;
+            fStream->SetPos(frames % len);
         }
 };
 

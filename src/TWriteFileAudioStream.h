@@ -66,14 +66,18 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
         {
             return new TWriteFileAudioStream(fName, fStream->CutBegin(frames), fFormat);
         }
+        
         long Length()
         {
             return fStream->Length();
         }
+        
         TAudioStreamPtr Copy()
         {
             return new TWriteFileAudioStream(fName, fStream->Copy(), fFormat);
         }
+        
+        void SetPos(long frames) { fStream->SetPos(frames); }
 };
 
 typedef TWriteFileAudioStream * TWriteFileAudioStreamPtr;

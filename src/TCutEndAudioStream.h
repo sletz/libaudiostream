@@ -49,11 +49,14 @@ class TCutEndAudioStream : public TDecoratedAudioStream
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         long Length()
         {
             return fFramesNum;
         }
+        
         TAudioStreamPtr CutBegin(long frames);
+        
         TAudioStreamPtr Copy()
         {
             return new TCutEndAudioStream(fStream->Copy(), fFramesNum);

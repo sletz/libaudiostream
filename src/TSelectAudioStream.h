@@ -58,6 +58,7 @@ class TSelectAudioStream : public TDecoratedAudioStream
         {
             return 0;
         }
+        
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
         
         long Channels()
@@ -66,6 +67,7 @@ class TSelectAudioStream : public TDecoratedAudioStream
         }
 
         TAudioStreamPtr CutBegin(long frames);    // Length in frames
+        
         TAudioStreamPtr Copy();
 };
 

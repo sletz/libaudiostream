@@ -45,18 +45,32 @@ class TSeqAudioStream : public TBinaryAudioStream
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         TAudioStreamPtr CutBegin(long frames);
+        
         long Length()
         {
             return fStream1->Length() + fStream2->Length();
         }
+        
         long Channels()
         {
             return UTools::Max(fStream1->Channels(), fStream2->Channels());
         }
+        
         TAudioStreamPtr Copy()
         {
             return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy());
+        }
+        
+        void SetPos(long frames)
+        {
+            long len1 = fStream1->Length();
+            if (frames < len1) {
+                fStream1->SetPos(frames);
+            } else {
+                fStream2->SetPos(frames - len1);
+            }
         }
 };
 
