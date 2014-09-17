@@ -391,6 +391,13 @@ extern "C"
     void ResetSound(AudioStream sound);
     
     /*!
+     \brief Change the current position in the stream.
+     \param sound The stream to be used.
+     \param frames The new position.
+     */
+    void SetPosSound(AudioStream sound, long frames);
+    
+    /*!
      \brief Create a copy of a stream.
      \param sound The stream to be copied.
      \return The copied stream.

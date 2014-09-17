@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
     
     gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
     
-    //gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    //gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
     assert(gAudioPlayer);
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
@@ -165,11 +165,13 @@ int main(int argc, char* argv[])
     
     next();
     
+    /*
     s1 = MakeMultiNullSound(2, 60*SR);
     s2 = MakeEffectSound(s1, MakeFaustAudioEffect(LLVM_EFFECT6, "", ""), SR/2, SR/2);
     StartSound(gAudioPlayer, s2, GenRealDate(gAudioPlayer, GetCurDate()));
   
     next();
+    */
     
     /*
     float* buffer[2];
@@ -184,8 +186,8 @@ int main(int argc, char* argv[])
   
     // Joue une région de 5 sec d'un fichier à la date courante
     //s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
-    s1 = MakeRegionSound(FILENAME1, 0, 10*SR);
-    //s1 = MakeRegionSound(FILENAME5, 0, 10*SR);
+    //s1 = MakeRegionSound(FILENAME1, 0, 10*SR);
+    s1 = MakeRegionSound(FILENAME5, 0, 100*SR);
     //MemoryRender(s1, 512);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
    
