@@ -353,7 +353,7 @@ class TExpAudioMixer : public TAudioClient
       
     public:
 
-        TExpAudioMixer():fCurFrame(0) {}
+        TExpAudioMixer():fCurFrame(0),fMasterEffect(NULL) {}
         virtual ~TExpAudioMixer() {}
         
         void AddStreamCommand(TCommandPtr command)
@@ -385,6 +385,8 @@ class TExpAudioMixer : public TAudioClient
         }
         
         void SetPos(audio_frame_t frames);
+        
+        void SetEffect(TAudioEffectInterfacePtr effect) { fMasterEffect = effect; }
     
 };
 

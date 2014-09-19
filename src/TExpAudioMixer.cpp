@@ -137,6 +137,9 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, stream_slice);
     
     // Apply master effect
+    if (fMasterEffect) {
+        fMasterEffect->Process(inputs, outputs, frames);
+    }
          
     // Update date in frames
     fCurFrame += frames;

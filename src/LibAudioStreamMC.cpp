@@ -978,12 +978,20 @@ AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
 
 AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffect effect)
 {
-    return NO_ERR;
+    if (player && player->fMixer && player->fRenderer && effect->Outputs() <= TAudioGlobals::fOutput) {
+        player->fMixer->SetEffect(effect);
+        return NO_ERR;
+    }
+    return LOAD_ERR;
 }
 
 AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffectPtr effect)
 {
-    return NO_ERR;
+    if (player && player->fMixer && player->fRenderer && (*effect)->Outputs() <= TAudioGlobals::fOutput) {
+        player->fMixer->SetEffect(*effect);
+        return NO_ERR;
+    }
+    return LOAD_ERR;
 }
 
 AUDIOAPI audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr player)
