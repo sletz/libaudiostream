@@ -331,6 +331,8 @@ class TExpAudioMixer : public TAudioClient
         COMMANDS fControlCommands;    // List of control commands
         
         audio_frame_t fCurFrame;
+        
+        TAudioEffectInterfacePtr fMasterEffect;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         

@@ -40,7 +40,7 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable1
 
     private:
 
-        bool fState;	// Running state
+        bool fState; // Running state
 
     public:
 

@@ -135,6 +135,8 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Render all streams inside last slice, which can be entire buffer if no control in it
     stream_slice = offset_in_control - offset_in_stream;
     ExecuteStreamsSlice(shared_buffer, date_map, fCurFrame, offset_in_stream, stream_slice);
+    
+    // Apply master effect
          
     // Update date in frames
     fCurFrame += frames;

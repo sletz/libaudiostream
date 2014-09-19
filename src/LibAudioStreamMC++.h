@@ -299,7 +299,7 @@ extern "C"
      \brief Creates a selection of channel of a streams
      \param s1 The stream.
      \param selection An array of channels to keep.
-     \param channels The numbre of channels in the selection.
+     \param channels The number of channels in the selection array.
      \return A pointer to new stream object.
      */
     AudioStream MakeSelectSound(AudioStream s1, long* selection, long channels);

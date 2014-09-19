@@ -143,6 +143,9 @@ extern "C"
                                             long renderer,
                                             long thread_num);
 	AUDIOAPI AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer);	
+    
+    AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffect effect);
+    AUDIOAPI long SetMasterEffectPtr(AudioPlayerPtr player, AudioEffectPtr effect);
 									
     AUDIOAPI void CloseAudioPlayer(AudioPlayerPtr player);
 	AUDIOAPI void CloseAudioClient(AudioPlayerPtr player);
@@ -295,7 +298,6 @@ AUDIOAPI AudioStream MakeReadSound(const char* name)
 
 AUDIOAPI AudioStream MakeRegionSound(const char* name, long beginFrame, long endFrame)
 {
-    printf("MakeRegionSound %s %d %d\n", name, beginFrame, endFrame);
     return TAudioStreamFactory::MakeRegionSound(name, beginFrame, endFrame);
 }
 
@@ -356,7 +358,7 @@ AUDIOAPI AudioStream MakePitchSchiftTimeStretchSound(AudioStream s1, double* pit
 //#ifdef SOUND_TOUCH
 //	return TAudioStreamFactory::MakeSoundTouchSound(static_cast<TAudioStreamPtr>(s1), pitch_shift, time_strech);
 //#else
-//    return 0;
+//  return 0;
 //#endif
 }
 
@@ -534,7 +536,7 @@ AUDIOAPI AudioStreamPtr MakePitchSchiftTimeStretchSoundPtr(AudioStreamPtr sound,
 //#ifdef SOUND_TOUCH
 //	return (s) ? MakeSoundPtr(TAudioStreamFactory::MakeSoundTouchSound(static_cast<TAudioStreamPtr>(s), pitch_shift, time_strech)) : 0;
 //#else
-//    return 0;
+//  return 0;
 //#endif
     
 }
@@ -886,7 +888,6 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
     TAudioGlobals::ClearLibError();
 	
 	if (thread_num < 1) {
-		printf("OpenAudioPlayer error: thread_num parameter should be at least one !! \n");
         TAudioGlobals::AddLibError("OpenAudioPlayer error: thread_num parameter should be at least one !!");
     }
 
@@ -975,6 +976,16 @@ AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
     free(player);
 }
 
+AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffect effect)
+{
+    return NO_ERR;
+}
+
+AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffectPtr effect)
+{
+    return NO_ERR;
+}
+
 AUDIOAPI audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr player)
 {
     if (player && player->fRenderer) {
@@ -1032,10 +1043,7 @@ AUDIOAPI SymbolicDate GenSymbolicDate(AudioPlayerPtr /*player*/)
 
 AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frame_t date)
 {
-    //return new TSymbolicDate(date);
-    TSymbolicDate* date_ptr = new TSymbolicDate(date);
-    printf("GenRealDate %x\n", date_ptr);
-    return date_ptr;
+    return new TSymbolicDate(date);
 }
 
 AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t real_date)

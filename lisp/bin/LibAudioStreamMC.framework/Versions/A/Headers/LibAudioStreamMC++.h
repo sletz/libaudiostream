@@ -299,7 +299,7 @@ extern "C"
      \brief Creates a selection of channel of a streams
      \param s1 The stream.
      \param selection An array of channels to keep.
-     \param channels The numbre of channels in the selection.
+     \param channels The number of channels in the selection array.
      \return A pointer to new stream object.
      */
     AudioStream MakeSelectSound(AudioStream s1, long* selection, long channels);
@@ -389,6 +389,13 @@ extern "C"
      \param sound The stream to be reseted.
      */
     void ResetSound(AudioStream sound);
+    
+    /*!
+     \brief Change the current position in the stream.
+     \param sound The stream to be used.
+     \param frames The new position.
+     */
+    void SetPosSound(AudioStream sound, long frames);
     
     /*!
      \brief Create a copy of a stream.
