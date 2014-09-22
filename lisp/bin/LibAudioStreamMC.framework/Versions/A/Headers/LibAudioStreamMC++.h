@@ -562,6 +562,8 @@ extern "C"
      */					
     AudioPlayerPtr OpenAudioClient(AudioRendererPtr manager);	
     
+    long SetMasterEffect(AudioPlayerPtr player, AudioEffect effect); 
+    
     /*!
      \brief Close the audio player.
      \param player The audio player to be closed.
