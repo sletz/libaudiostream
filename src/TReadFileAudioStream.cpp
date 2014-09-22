@@ -48,6 +48,8 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     fFramesNum = long(fInfo.frames);
     fChannels = long(fInfo.channels);
     
+    SetPos(beginFrame);
+    
     if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
         printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);
     }
@@ -62,8 +64,6 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     TNonInterleavedAudioBuffer<float>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
 
     fReady = true;
-     
-    SetPos(beginFrame);
 }
 
 void TReadFileAudioStream::SetPos(long frames)
