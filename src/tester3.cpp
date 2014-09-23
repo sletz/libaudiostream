@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
     printf("fDefaultBufferSize %ld\n", device_info.fDefaultBufferSize);
     printf("fDefaultSampleRate %f\n", device_info.fDefaultSampleRate);
     
-    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
     
     //gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
     assert(gAudioPlayer);
@@ -147,7 +147,9 @@ int main(int argc, char* argv[])
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
     RendererInfo info;
     GetAudioRendererInfo(renderer, &info);
+
     
+    SetMasterEffect(gAudioPlayer, MakeFaustAudioEffect("process = _*0.1, _*0.5, _*0.5, _*0.5;", "", ""));
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);

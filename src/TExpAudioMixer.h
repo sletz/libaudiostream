@@ -63,7 +63,7 @@ struct TCommand : public la_smartable1 {
         virtual ~TCommand() 
         {}
          
-        virtual bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+        virtual bool Execute(TNonInterleavedAudioBuffer<float>* buffer, 
                             map<SymbolicDate, audio_frame_t>& date_map, 
                             audio_frame_t cur_frame, 
                             long frames) = 0;
@@ -127,7 +127,7 @@ struct TEffectControlCommand : public TControlCommand {
         virtual ~TEffectControlCommand() 
         {}
          
-        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+        bool Execute(TNonInterleavedAudioBuffer<float>* buffer, 
                     map<SymbolicDate, audio_frame_t>& date_map, 
                     audio_frame_t cur_frame, 
                     long frames)
@@ -195,7 +195,7 @@ struct TStreamCommand : public TCommand {
         void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
           
-        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+        bool Execute(TNonInterleavedAudioBuffer<float>* buffer, 
                     map<SymbolicDate, audio_frame_t>& date_map, 
                     audio_frame_t cur_frame, 
                     long frames)
@@ -242,7 +242,7 @@ struct TStreamCommand : public TCommand {
             
             // Play it...
             if (to_play) {
-                if (to_stop || (res = fStream->Read(&shared_buffer, frame_num, start_offset)) < frame_num) {
+                if (to_stop || (res = fStream->Read(buffer, frame_num, start_offset)) < frame_num) {
                     // End of stream
                     //printf("Stop stream frame_num = %ld res = %ld\n", frame_num, res);
                     return false;
@@ -333,17 +333,18 @@ class TExpAudioMixer : public TAudioClient
         audio_frame_t fCurFrame;
         
         TAudioEffectInterfacePtr fMasterEffect;
+        FLOAT_BUFFER fBuffer;
    
         bool AudioCallback(float** inputs, float** outputs, long frames);
         
         
-        void ExecuteControlSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                                        map<SymbolicDate, audio_frame_t>& date_map, 
-                                        audio_frame_t cur_frame, 
-                                        long offset,
-                                        long slice);
+        void ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer, 
+                                map<SymbolicDate, audio_frame_t>& date_map, 
+                                audio_frame_t cur_frame, 
+                                long offset,
+                                long slice);
 
-        void ExecuteStreamsSlice(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
+        void ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer, 
                                 map<SymbolicDate, audio_frame_t>& date_map, 
                                 audio_frame_t cur_frame, 
                                 long offset,
@@ -353,8 +354,14 @@ class TExpAudioMixer : public TAudioClient
       
     public:
 
-        TExpAudioMixer():fCurFrame(0),fMasterEffect(NULL) {}
-        virtual ~TExpAudioMixer() {}
+        TExpAudioMixer():fCurFrame(0),fMasterEffect(NULL) 
+        {
+            fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);  
+        }
+        virtual ~TExpAudioMixer() 
+        {
+            delete fBuffer;
+        }
         
         void AddStreamCommand(TCommandPtr command)
         { 
