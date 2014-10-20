@@ -138,22 +138,21 @@ int main(int argc, char* argv[])
     printf("fMaxOutputChannels %ld\n", device_info.fMaxOutputChannels);
     printf("fDefaultBufferSize %ld\n", device_info.fDefaultBufferSize);
     printf("fDefaultSampleRate %f\n", device_info.fDefaultSampleRate);
+    long res;
     
-    gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
+    //gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
     
-    //gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
     assert(gAudioPlayer);
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
     RendererInfo info;
     GetAudioRendererInfo(renderer, &info);
-
-    
-    SetMasterEffect(gAudioPlayer, MakeFaustAudioEffect("process = _*0.1, _*0.5, _*0.5, _*0.5;", "", ""));
+  
+    //SetMasterEffect(gAudioPlayer, MakeFaustAudioEffect("process = _*0.1, _*0.5, _*0.5, _*0.5;", "", ""));
 
     // Démarre le Player
     StartAudioPlayer(gAudioPlayer);
-    
      
     next();
     
@@ -191,7 +190,8 @@ int main(int argc, char* argv[])
     //s1 = MakeRegionSound(FILENAME1, 0, 10*SR);
     s1 = MakeRegionSound(FILENAME5, 0, 100*SR);
     //MemoryRender(s1, 512);
-    StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    res = StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    printf("res = %d\n", res);
    
     next();
     

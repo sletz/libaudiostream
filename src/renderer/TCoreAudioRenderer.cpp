@@ -714,7 +714,7 @@ int TCoreAudioRenderer::SetupBufferSize(long buffer_size)
     }
 
     // If needed, set new buffer size
-    if (buffer_size != tmp_buffer_size) {
+    if ((UInt32)buffer_size != tmp_buffer_size) {
         tmp_buffer_size = buffer_size;
 
         // To get BS change notification
@@ -844,8 +844,7 @@ error:
 
 long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long samplerate)
 {
-	OSStatus err = noErr;
-    ComponentResult err1;
+   ComponentResult err1;
     UInt32 outSize;
 	Boolean isWritable;
 	AudioStreamBasicDescription srcFormat, dstFormat;

@@ -25,6 +25,7 @@ research@grame.fr
 #include "TAudioStreamFactory.h"
 #include "TFaustAudioEffect.h"
 #include "TBufferedInputAudioStream.h"
+#include "TSelectAudioStream.h"
 #include "TAudioDate.h"
 
 // Renderers
@@ -259,7 +260,6 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-
 
 AUDIOAPI long LibVersion()
 {
@@ -1021,13 +1021,20 @@ AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
 AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        //if (sound->Channels() < MAX_OUTPUT_CHAN) {
         if (sound->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
-            return NO_ERR;
+        } else {
+            std::vector<long> selection_aux;
+            for (int  i = 0; i < TAudioGlobals::fOutput; i++) {
+                selection_aux.push_back(1);
+            }
+            player->fMixer->AddStreamCommand(new TStreamCommand(
+                                                new TRTRendererAudioStream(
+                                                    new TSelectAudioStream(sound, selection_aux)), 
+                                                        date, new TSymbolicDate()));
         }
+        return NO_ERR;
     } 
-        
     return LOAD_ERR;
 }    
     
@@ -1040,7 +1047,6 @@ AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate d
             return NO_ERR;
         } 
     }
-    
     return LOAD_ERR;
 }
 
@@ -1075,13 +1081,20 @@ AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate s
 AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
 {
     if (player && player->fMixer && player->fRenderer) {
-        //if ((*sound)->Channels() < MAX_OUTPUT_CHAN) {
         if ((*sound)->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
             player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(*sound), *date, new TSymbolicDate()));
-            return NO_ERR;
+        } else {
+            std::vector<long> selection_aux;
+            for (int  i = 0; i < TAudioGlobals::fOutput; i++) {
+                selection_aux.push_back(1);
+            }
+            player->fMixer->AddStreamCommand(new TStreamCommand(
+                                                new TRTRendererAudioStream(
+                                                    new TSelectAudioStream(*sound, selection_aux)), 
+                                                        *date, new TSymbolicDate()));
         }
+        return NO_ERR;
     } 
-    
     return LOAD_ERR;
 }    
 
@@ -1094,7 +1107,6 @@ AUDIOAPI long StopSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, Symbolic
             return NO_ERR;
         } 
     }
-    
     return LOAD_ERR;
 }
 

@@ -815,7 +815,7 @@ typedef TLocalCodeFaustAudioEffect * TLocalCodeFaustAudioEffectPtr;
 /*!
 \brief Remote LLVM + libfaust effect.
 */
-
+#if REMOTE_DSP
 static char* GetLocalIP()
 {
     char host_name[32];
@@ -834,6 +834,7 @@ static char* GetLocalIP()
         return NULL;
     }
 }
+#endif
 
 class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
 {

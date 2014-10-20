@@ -102,8 +102,8 @@ class TCoreAudioRenderer : public TAudioRenderer
     public:
 
         TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),
-            fAUHAL(0),
-            fAnchorFrameTime(0.), fAnchorHostTime(0), fCallbackHostTime(0)
+            fAUHAL(0), fCallbackHostTime(0),
+            fAnchorFrameTime(0.),fAnchorHostTime(0)
         {}
         virtual ~TCoreAudioRenderer()
         {}

@@ -567,7 +567,7 @@
 		4BEA623C095806CD001F733A /* LibAudioStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LibAudioStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEA6244095806CD001F733A /* testPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TCoreAudioRenderer.cpp; path = ../src/renderer/TCoreAudioRenderer.cpp; sourceTree = SOURCE_ROOT; };
-		4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TCoreAudioRenderer.h; path = "../../LibAudioSTream-git/src/renderer/TCoreAudioRenderer.h"; sourceTree = SOURCE_ROOT; };
+		4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TCoreAudioRenderer.h; path = ../src/renderer/TCoreAudioRenderer.h; sourceTree = SOURCE_ROOT; };
 		4BF819CC1857ADA6009CD184 /* LAStester3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LAStester3; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BF819DC1857ADE3009CD184 /* tester3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tester3.cpp; path = ../src/tester3.cpp; sourceTree = SOURCE_ROOT; };
 		4BFC6E7E08729C6F0012D079 /* TThreadUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TThreadUtils.h; path = ../src/TThreadUtils.h; sourceTree = SOURCE_ROOT; };
@@ -1997,7 +1997,7 @@
 					"-ljack",
 					"-lcurl",
 					"-ljacknet",
-					/usr/local/lib/faust/libfaust.a,
+					/usr/local/lib/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -2140,7 +2140,7 @@
 					"-lcurl",
 					"-ljacknet",
 					"-ljack",
-					/usr/local/lib/faust/libfaust.a,
+					/usr/local/lib/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -3033,7 +3033,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
-					/usr/local/lib/faust/libfaust.a,
+					/usr/local/lib/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
@@ -3173,7 +3173,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"-lcurl",
-					/usr/local/lib/faust/libfaust.a,
+					/usr/local/lib/libfaust.a,
 					librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
