@@ -1021,18 +1021,17 @@ AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
 AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
 {
     if (player && player->fMixer && player->fRenderer) {
+        AudioStream rd_sound;
         if (sound->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
-            player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(sound), date, new TSymbolicDate()));
+            rd_sound = sound;
         } else {
             std::vector<long> selection_aux;
             for (int  i = 0; i < TAudioGlobals::fOutput; i++) {
                 selection_aux.push_back(1);
             }
-            player->fMixer->AddStreamCommand(new TStreamCommand(
-                                                new TRTRendererAudioStream(
-                                                    new TSelectAudioStream(sound, selection_aux)), 
-                                                        date, new TSymbolicDate()));
+            rd_sound = new TSelectAudioStream(sound, selection_aux);
         }
+        player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(rd_sound), date, new TSymbolicDate()));
         return NO_ERR;
     } 
     return LOAD_ERR;
@@ -1081,18 +1080,17 @@ AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate s
 AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
 {
     if (player && player->fMixer && player->fRenderer) {
+        AudioStream rd_sound;
         if ((*sound)->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
-            player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(*sound), *date, new TSymbolicDate()));
+            rd_sound = *sound;
         } else {
             std::vector<long> selection_aux;
             for (int  i = 0; i < TAudioGlobals::fOutput; i++) {
                 selection_aux.push_back(1);
             }
-            player->fMixer->AddStreamCommand(new TStreamCommand(
-                                                new TRTRendererAudioStream(
-                                                    new TSelectAudioStream(*sound, selection_aux)), 
-                                                        *date, new TSymbolicDate()));
+            rd_sound = new TSelectAudioStream(*sound, selection_aux);
         }
+        player->fMixer->AddStreamCommand(new TStreamCommand(new TRTRendererAudioStream(rd_sound), *date, new TSymbolicDate()));
         return NO_ERR;
     } 
     return LOAD_ERR;
