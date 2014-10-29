@@ -36,7 +36,7 @@ INCLUDES = -I../src/atomic -I../src/renderer -I../src $(FAUSTINCLUDES)
 # CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__
 # CXXFLAGS = -Wall -I../src/atomic -I../src/renderer -I../src -D__PORTAUDIO__ -std=gnu++11  -fPIC -march=native
 # CXXFLAGS = -Wall  $(INCLUDES) -D__PORTAUDIO__ -D__PORTAUDIOV19__ -std=gnu++11  -fPIC -march=native
-CXXFLAGS = -Wall  $(INCLUDES) -D__PORTAUDIO__ -D__PORTAUDIOV19__
+CXXFLAGS = -Wall  $(INCLUDES) -D__PORTAUDIO__ -D__PORTAUDIOV19__ -fPIC
 CFLAGS = -fPIC
 
 TARGET = libaudiostream.a
