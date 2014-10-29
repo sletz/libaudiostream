@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "la_smartpointer.h"
 #include <list>
+#include <stdint.h>
 
 #define NO_ERR 0
 #define OPEN_ERR -1
