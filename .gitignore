@@ -10,3 +10,6 @@ project.xcworkspace/
 xcuserdata/
 *.xcuserstate
 *xcuserdatad/
+/linux/libaudiostream.a
+/linux/libaudiostream.so
+/src/TAGS
