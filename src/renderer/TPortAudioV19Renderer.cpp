@@ -19,7 +19,7 @@ Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
 research@grame.fr
 
 */
-
+#include <cstring>
 #include "TPortAudioV19Renderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
@@ -34,7 +34,7 @@ int TPortAudioV19Renderer::Process(const void* inputBuffer, void* outputBuffer, 
     
     // Take time stamp of first call to Process 
     if (fAnchorFrameTime == 0) {
-        renderer->fAnchorFrameTime = timeInfo.currentTime;
+        renderer->fAnchorFrameTime = timeInfo->currentTime;
     }
     renderer->Run((float**)inputBuffer, (float**)outputBuffer, framesPerBuffer);
     return 0;

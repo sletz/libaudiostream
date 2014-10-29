@@ -24,6 +24,7 @@ research@grame.fr
 #pragma warning (disable : 4786)
 #endif
 
+#include "TAudioBuffer.h"
 #include "TAudioMixer.h"
 #include "UAudioTools.h"
 #include "TPanTable.h"

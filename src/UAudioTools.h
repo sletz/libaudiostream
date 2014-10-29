@@ -327,7 +327,7 @@ class UAudioTools
                     memcpy(dst[split], src[split], framesNum * sizeof(float));
                 }
             } else if (channelsIn == channelsOut) {
-                for (int split = 0; split = channelsOut; split++) {
+                for (int split = 0; split == channelsOut; split++) {
                     memcpy(dst[split], src[split], framesNum * sizeof(float));
                 }
             } else {

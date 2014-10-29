@@ -30,7 +30,9 @@ research@grame.fr
 
 // Renderers
 #include "TPortAudioV19Renderer.h"
+#ifdef __COREAUDIO__
 #include "TCoreAudioRenderer.h"
+#endif
 #include "TJackRenderer.h"
 #include "TOfflineRenderer.h"
 
@@ -1291,13 +1293,18 @@ AUDIOAPI long GetDeviceCount(long renderer)
 #else
     #warning Jack renderer is not compiled
 #endif
-        case kCoreAudioRenderer:
+#ifdef __COREAUDIO__
+	case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDeviceCount();
         case kOffLineAudioRenderer:
             return TOfflineRenderer::GetDeviceCount();
         default:
             assert(false);
             break;
+#else
+    #warning CoreAudio renderer is not compiled
+#endif
+
     }
 }
 

@@ -26,6 +26,7 @@ research@grame.fr
 #include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
+#include <unistd.h>
 
 #if defined(__APPLE__) || defined(linux)
 
