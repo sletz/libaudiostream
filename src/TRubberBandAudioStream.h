@@ -23,7 +23,7 @@ research@grame.fr
 #define __TRubberBandAudioStream__
 
 #include "TAudioStream.h"
-#include "rubberband/RubberBandStretcher.h"
+#include <rubberband/RubberBandStretcher.h>
 
 //------------------------------
 // Class TRubberBandAudioStream
