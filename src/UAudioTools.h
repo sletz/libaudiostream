@@ -327,7 +327,7 @@ class UAudioTools
                     memcpy(dst[split], src[split], framesNum * sizeof(float));
                 }
             } else if (channelsIn == channelsOut) {
-                for (int split = 0; split = channelsOut; split++) {
+                for (int split = 0; split < channelsOut; split++) {
                     memcpy(dst[split], src[split], framesNum * sizeof(float));
                 }
             } else {
@@ -569,7 +569,7 @@ class UAudioTools
 	
         static void cTocCopy(char *dest, const char* src)
         {
-            register short i = 0;
+            short i = 0;
 
             while (src[i] != 0) {
                 dest[i] = src[i];
