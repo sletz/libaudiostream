@@ -23,7 +23,9 @@ research@grame.fr
 #define __TFaustAudioEffect__
 
 #include "faust/llvm-dsp.h"
+#if REMOTE_DSP
 #include "faust/remote-dsp.h"
+#endif
 #include "faust/gui/jsonfaustui.h"
 #include "faust/gui/JSONUI.h"
 
@@ -487,6 +489,8 @@ class TLocalCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory
 /*!
 \brief Remote factory.
 */
+
+#if REMOTE_DSP
 class TRemoteCodeFaustAudioEffect;
 
 class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory
@@ -564,6 +568,8 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
         string GetRemoteIP() { return fRemoteIP; }
          
 };
+
+#endif
 
 /*!
 \brief File based local factory.
@@ -815,7 +821,9 @@ typedef TLocalCodeFaustAudioEffect * TLocalCodeFaustAudioEffectPtr;
 /*!
 \brief Remote LLVM + libfaust effect.
 */
+
 #if REMOTE_DSP
+
 static char* GetLocalIP()
 {
     char host_name[32];
@@ -834,7 +842,6 @@ static char* GetLocalIP()
         return NULL;
     }
 }
-#endif
 
 class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
 {
@@ -958,6 +965,8 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         }
 		
 };
+
+#endif
 
 typedef TLocalCodeFaustAudioEffect * TLocalCodeFaustAudioEffectPtr;
     

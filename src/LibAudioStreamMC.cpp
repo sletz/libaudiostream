@@ -626,6 +626,7 @@ AudioEffect AUDIOAPI MakeFaustAudioEffect(const char* name, const char* library_
 
 AudioEffect AUDIOAPI MakeRemoteFaustAudioEffect(const char* name, const char* library_path, const char* draw_path)
 {
+#if REMOTE_DSP
     TAudioGlobals::ClearLibError();
     try {
 		return new TModuleFaustAudioEffect(name);
@@ -637,6 +638,9 @@ AudioEffect AUDIOAPI MakeRemoteFaustAudioEffect(const char* name, const char* li
             return 0;
         }
 	}
+#else
+     return 0;
+#endif
 }
 
 AUDIOAPI long GetControlCountEffect(AudioEffect effect) 
@@ -741,6 +745,7 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* code, const char* li
 
 AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path)
 {
+#if REMOTE_DSP
     TAudioGlobals::ClearLibError();
     try {
         return new LA_SMARTP<TAudioEffectInterface>(new TModuleFaustAudioEffect(code));
@@ -752,6 +757,9 @@ AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* code, const ch
             return 0;
         }
     }
+#else
+    return 0;
+#endif
 }
 
 #ifdef __APPLE__

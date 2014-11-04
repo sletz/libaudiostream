@@ -26,7 +26,9 @@ research@grame.fr
 #include <fstream>
 
 int TLocalCodeFaustAudioEffect::fEffectIndex = 0;
+#if REMOTE_DSP
 int TRemoteCodeFaustAudioEffect::fEffectIndex = 0;
+#endif
 
 static bool CheckEnding(const string& name, const string& end)
 {
@@ -88,6 +90,7 @@ TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const str
     return new TLocalCodeFaustAudioEffect(factory);
 }
 
+#if REMOTE_DSP
 TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const string& code, const string& library_path, const string& draw_path)
 {
     TRemoteCodeFaustAudioEffectFactory* factory = 0;
@@ -101,3 +104,4 @@ TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const st
     }
     return new TRemoteCodeFaustAudioEffect(factory);
 }
+#endif
