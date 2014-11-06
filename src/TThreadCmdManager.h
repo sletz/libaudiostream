@@ -37,6 +37,14 @@ research@grame.fr
 #include "lflifo.h"
 #include <vector>
 
+#ifdef _MSVC
+// window 
+#define ALIGN(A) __declspec(align(A))
+#else
+// GCC
+#define ALIGN(A) __attribute__((aligned(A)))
+#endif
+
 //-------------
 // Struct TCmd
 //-------------
@@ -174,8 +182,8 @@ class TThreadCmdManager : public TCmdManager
 
     private:
     
-        lifo fFreeCmd __attribute__ ((aligned (16)));      // Commands free list
-        fifo fRunningCmd __attribute__ ((aligned (16)));   // Running commands
+        lifo fFreeCmd ALIGN(16);      // Commands free list
+        fifo fRunningCmd ALIGN(16);   // Running commands
         bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
@@ -206,8 +214,8 @@ class TWaitThreadCmdManager : public TCmdManager
 
     private:
     
-        lifo fFreeCmd __attribute__ ((aligned (16)));      // Commands free list
-        fifo fRunningCmd __attribute__ ((aligned (16)));   // Running commands
+        lifo fFreeCmd ALIGN(16);      // Commands free list
+        fifo fRunningCmd ALIGN(16);   // Running commands
         bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
