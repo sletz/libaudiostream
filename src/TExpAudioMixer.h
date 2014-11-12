@@ -24,7 +24,7 @@ research@grame.fr
 #define __TExpAudioMixer__
 
 #include "TAudioClient.h"
-#include "TAudioChannel.h"
+#include "TRendererAudioStream.h"
 #include "TAudioGlobals.h"
 #include "TAudioDate.h"
 #include "TFaustAudioEffect.h"
