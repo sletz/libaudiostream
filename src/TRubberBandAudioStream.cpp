@@ -22,6 +22,8 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "TRubberBandAudioStream.h"
 #include "UTools.h"
+#undef min
+#undef max
 
 using namespace RubberBand;
 
@@ -64,8 +66,8 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 		fRubberBand->setPitchScale(fPitchShiftVal);
 	}
     
-    float* temp1[fBuffer->GetChannels()];
-    float* temp2[buffer->GetChannels()];
+    float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
+    float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     
     while (fRubberBand->available() < framesNum) {
         int needFrames = std::min((int)framesNum, (int)fRubberBand->getSamplesRequired());
@@ -77,6 +79,7 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
     }
     
     fRubberBand->retrieve(buffer->GetFrame(framePos, temp2), std::min((int)framesNum, fRubberBand->available()));
+
 	return framesNum;
 }
 

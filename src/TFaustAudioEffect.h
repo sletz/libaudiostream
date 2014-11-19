@@ -26,15 +26,17 @@ research@grame.fr
 #if REMOTE_DSP
 #include "faust/remote-dsp.h"
 #endif
-#include "faust/gui/jsonfaustui.h"
+//#include "faust/gui/jsonfaustui.h"
 #include "faust/gui/JSONUI.h"
 
 #include "TAudioEffectInterface.h"
 #include "TAudioGlobals.h"
 #include "TLASException.h"
 
+#ifndef _WIN32
 #include <netdb.h>
 #include <arpa/inet.h>
+#endif
 
 #include <iostream>
 #include <sstream>
@@ -44,7 +46,7 @@ research@grame.fr
 #ifdef WIN32
 
 #include <windows.h>
-#define HANDLE HINSTANCE 
+#define HANDLER HINSTANCE 
 #define LoadFaustModule(name) LoadLibrary((name));
 #define UnloadFaustModule(handle) FreeLibrary((handle));  
 #define GetFaustProc(handle, name) GetProcAddress((handle), (name));
@@ -52,7 +54,7 @@ research@grame.fr
 #else
 
 #include <dlfcn.h>
-#define HANDLE void* 
+#define HANDLER void* 
 #define LoadFaustModule(name) dlopen((name), RTLD_NOW | RTLD_LOCAL);
 #define UnloadFaustModule(handle) dlclose((handle));
 #define GetFaustProc(handle, name) dlsym((handle), (name));
@@ -317,7 +319,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
     private:
 	
 		string fName;
-		HANDLE fHandle;
+		HANDLER fHandle;
 		dsp* fDsp;
 		newDsp fNew;
 		deleteDsp fDelete;

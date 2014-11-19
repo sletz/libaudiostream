@@ -29,6 +29,10 @@ research@grame.fr
 #include <stdio.h>
 #include <assert.h>
 
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
+
 TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
     memset(&fInfo, 0, sizeof(fInfo));
@@ -133,10 +137,11 @@ void TReadFileAudioStream::Reset()
 long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    float* temp[buffer->GetChannels()];
+    float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     int res = sf_readf_float(fFile, fFileBuffer, framesNum); // In frames
     UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp), fFileBuffer, framesNum, fChannels);
-    return res;
+    
+	return res;
 }
 
 

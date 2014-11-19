@@ -39,10 +39,8 @@ research@grame.fr
                 maxWSS += increase;
                 minWSS += increase;
                 if (!SetProcessWorkingSetSize(hProc, minWSS, maxWSS)) {
-                    jack_error("SetProcessWorkingSetSize error = %d", GetLastError());
                     return false;
                 } else if (!VirtualLock((ptr), (size))) {
-                    jack_error("VirtualLock error = %d", GetLastError());
                     return false;
                 } else {
                     return true;
@@ -207,9 +205,9 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             assert(frames + f2 <= b2->GetSize());
             assert(b1->GetChannels() == b2->GetChannels());
             
-            T* tmp1[b1->GetChannels()];
-            T* tmp2[b2->GetChannels()];
-            
+            T** tmp1 = (T**)alloca(b1->GetChannels());
+            T** tmp2 = (T**)alloca(b2->GetChannels());
+
             T** dst = b1->GetFrame(f1, tmp1);
             T** src = b2->GetFrame(f2, tmp2);
             

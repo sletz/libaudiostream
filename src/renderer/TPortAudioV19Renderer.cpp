@@ -33,8 +33,8 @@ int TPortAudioV19Renderer::Process(const void* inputBuffer, void* outputBuffer, 
     TPortAudioV19RendererPtr renderer = (TPortAudioV19RendererPtr)userData;
     
     // Take time stamp of first call to Process 
-    if (fAnchorFrameTime == 0) {
-        renderer->fAnchorFrameTime = timeInfo.currentTime;
+    if (renderer->fAnchorFrameTime == 0) {
+        renderer->fAnchorFrameTime = timeInfo->currentTime;
     }
     renderer->Run((float**)inputBuffer, (float**)outputBuffer, framesPerBuffer);
     return 0;

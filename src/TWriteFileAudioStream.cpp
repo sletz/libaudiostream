@@ -30,6 +30,10 @@ research@grame.fr
 #include <string.h>
 #include <assert.h>
 
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
+
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
@@ -112,8 +116,9 @@ void TWriteFileAudioStream::Reset()
 long TWriteFileAudioStream::WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    float* temp[buffer->GetChannels()];
+    float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     UAudioTools::Interleave(fFileBuffer, buffer->GetFrame(framePos, temp), framesNum, fChannels);
+
     return long(sf_writef_float(fFile, fFileBuffer, framesNum));  // In frames
 }
 

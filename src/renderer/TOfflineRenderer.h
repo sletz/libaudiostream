@@ -24,7 +24,7 @@ research@grame.fr
 #define __TOfflineRenderer__
 
 #include "TAudioRenderer.h"
-#include <pthread.h>
+//#include <pthread.h>
 
 //-----------------------------
 // Class TOfflineRenderer
@@ -38,7 +38,7 @@ class TOfflineRenderer : public TAudioRenderer
         float** fInputBuffer;
         float** fOutputBuffer;
         
-        pthread_t fThread;
+        //pthread_t fThread;
     
         long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
         

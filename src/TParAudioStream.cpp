@@ -40,8 +40,8 @@ long TParAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
     if (fStream) { // One of the 2 stream is finished
         return fStream->Read(buffer, framesNum, framePos);
     } else {
-        float* temp1[fBuffer->GetChannels()];
-        float* temp2[buffer->GetChannels()];
+        float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
+        float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
         long res1 = fStream1->Read(buffer, framesNum, framePos);
         UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream2->Channels());
         if (res1 < framesNum) {
@@ -55,7 +55,7 @@ long TParAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
             if (res2 < framesNum) {
                 fStream = fStream1; // Stream2 is finished, fStream variable is used as the remaining stream
             }
-            return res1;
+			return res1;
         }
     }
 }

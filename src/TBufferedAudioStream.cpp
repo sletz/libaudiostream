@@ -62,8 +62,8 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
 {
     assert(fMemoryBuffer);
     
-    float* temp1[fMemoryBuffer->GetChannels()];
-    float* temp2[buffer->GetChannels()];
+    float** temp1 = (float**)alloca(fMemoryBuffer->GetChannels()*sizeof(float*));
+    float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
   
     // Check length
     framesNum = UTools::Min(framesNum, fFramesNum - (fTotalFrames + fCurFrame));

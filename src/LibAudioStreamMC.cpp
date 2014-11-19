@@ -30,8 +30,12 @@ research@grame.fr
 
 // Renderers
 #include "TPortAudioV19Renderer.h"
+#ifdef __COREAUDIO__
 #include "TCoreAudioRenderer.h"
+#endif
+#ifdef __JACK__
 #include "TJackRenderer.h"
+#endif
 #include "TOfflineRenderer.h"
 
 #ifdef WIN32
@@ -400,7 +404,7 @@ AUDIOAPI long ReadSoundPos(AudioStream s, float** buffer, long buffer_size, long
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
         TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
         // Init the correct part of the buffer...
-        float* temp[stream->Channels()];
+        float** temp = (float**)alloca(stream->Channels()*sizeof(float*));
         UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
         return stream->Read(&process_buffer, frames, pos);
     } else {
@@ -599,7 +603,8 @@ AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr sound, float** buffer, long buffer_
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(*sound);
         TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
         // Init the correct part of the buffer...
-        float* temp[stream->Channels()];
+
+        float** temp = (float**)alloca(stream->Channels()*sizeof(float*));
         UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
         return stream->Read(&process_buffer, frames, pos);
     } else {
@@ -1297,10 +1302,16 @@ AUDIOAPI long GetDeviceCount(long renderer)
         case kJackRenderer:
             return TJackRenderer::GetDeviceCount();
 #else
-    #warning Jack renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Jack renderer is not compiled")
+	#else
+			#warning Jack renderer is not compiled
+	#endif
 #endif
+#ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDeviceCount();
+#endif
         case kOffLineAudioRenderer:
             return TOfflineRenderer::GetDeviceCount();
         default:
@@ -1326,14 +1337,22 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
             TJackRenderer::GetDeviceInfo(deviceNum, info);
             break;
 #else
-    #warning Jack renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Jack renderer is not compiled")
+	#else
+			#warning Jack renderer is not compiled
+	#endif
 #endif
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             TCoreAudioRenderer::GetDeviceInfo(deviceNum, info);
             break;
 #else
-    #warning CoreAudio renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Coreaudio renderer is not compiled")
+	#else
+			#warning CoreAudio renderer is not compiled
+	#endif
 #endif
         case kOffLineAudioRenderer:
             TOfflineRenderer::GetDeviceInfo(deviceNum, info);
@@ -1359,13 +1378,21 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
         case kJackRenderer:
             return TJackRenderer::GetDefaultInputDevice();
 #else
-    #warning Jack renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Jack renderer is not compiled")
+	#else
+		#warning Jack renderer is not compiled
+	#endif
 #endif
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDefaultInputDevice();
 #else
-    #warning CoreAudio renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Coreaudio renderer is not compiled")
+	#else
+			#warning CoreAudio renderer is not compiled
+	#endif
 #endif
         case kOffLineAudioRenderer:
             return TOfflineRenderer::GetDefaultInputDevice();
@@ -1390,13 +1417,21 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
         case kJackRenderer:
             return TJackRenderer::GetDefaultOutputDevice();
 #else
-    #warning Jack renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Jack renderer is not compiled")
+	#else
+		#warning Jack renderer is not compiled
+	#endif
 #endif
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDefaultOutputDevice();
 #else
-    #warning CoreAudio renderer is not compiled
+	#ifdef WIN32
+		#pragma message ("Coreaudio renderer is not compiled")
+	#else
+			#warning CoreAudio renderer is not compiled
+	#endif
 #endif
         case kOffLineAudioRenderer:
             return TOfflineRenderer::GetDefaultOutputDevice();

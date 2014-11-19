@@ -84,9 +84,9 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
     int written = 0;
     bool end = false;
     
-    float* temp1[fBuffer->GetChannels()];
-    float* temp2[buffer->GetChannels()];
-    
+    float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
+    float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
+
     while (written < framesNum && !end) {
     
         if (fReadFrames == 0) {
@@ -120,7 +120,7 @@ long TSampleRateAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
         fReadPos += src_data.input_frames_used;
         fReadFrames -= src_data.input_frames_used; 
     }
-      
+ 
     return written;
 }
 

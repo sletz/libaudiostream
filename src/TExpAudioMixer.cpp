@@ -20,9 +20,9 @@ research@grame.fr
 
 */
 
-#ifdef WIN32 
+/*#ifdef WIN32 
 #pragma warning (disable : 4786)
-#endif
+#endif*/
 
 #include "TExpAudioMixer.h"
 #include "TBufferedInputAudioStream.h"
@@ -77,9 +77,7 @@ void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buff
                                         long offset_in_stream,
                                         long stream_slice)
 {
-    
-    
-    float* temp[buffer->GetChannels()];
+    float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     buffer->GetFrame(offset_in_stream, temp);
     TSharedNonInterleavedAudioBuffer<float> buffer_imp(temp, stream_slice, TAudioGlobals::fOutput);
     
@@ -113,7 +111,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 
     if (fMasterEffect) {
         buffer = fBuffer;
-        float* temp[buffer->GetChannels()];
+        float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
         UAudioTools::ZeroFloatBlk(buffer->GetFrame(0, temp), frames, TAudioGlobals::fOutput);
     } else {
         buffer = &shared_buffer;
@@ -148,7 +146,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     
     // Apply master effect
     if (fMasterEffect) {
-        float* temp[buffer->GetChannels()];
+        float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
         fMasterEffect->Process(buffer->GetFrame(0, temp), outputs, frames);
     }
          

@@ -37,7 +37,7 @@ research@grame.fr
 #include "lflifo.h"
 #include <vector>
 
-#ifdef _MSVC
+#ifdef _WIN32
 // window 
 #define ALIGN(A) __declspec(align(A))
 #else
@@ -182,8 +182,8 @@ class TThreadCmdManager : public TCmdManager
 
     private:
     
-        lifo fFreeCmd ALIGN(16);      // Commands free list
-        fifo fRunningCmd ALIGN(16);   // Running commands
+        ALIGN(16) lifo fFreeCmd;      // Commands free list
+        ALIGN(16) fifo fRunningCmd ;   // Running commands
         bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
@@ -214,8 +214,8 @@ class TWaitThreadCmdManager : public TCmdManager
 
     private:
     
-        lifo fFreeCmd ALIGN(16);      // Commands free list
-        fifo fRunningCmd ALIGN(16);   // Running commands
+        ALIGN(16) lifo fFreeCmd;      // Commands free list
+        ALIGN(16) fifo fRunningCmd;   // Running commands
         bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
@@ -223,6 +223,7 @@ class TWaitThreadCmdManager : public TCmdManager
 		static void* CmdHandler(void* arg);
 	#elif WIN32
 		std::vector<HANDLE> fThreadList; // Execution thread
+		HANDLE fCond;   // Condition variable
   		static DWORD WINAPI CmdHandler(void* arg);
 	#endif
        

@@ -30,6 +30,7 @@ void* TOfflineRenderer::Process(void* arg)
 {
     TOfflineRenderer* renderer = static_cast<TOfflineRenderer*>(arg);
     renderer->ProcessAux();
+	return NULL;
  }
 
 void TOfflineRenderer::ProcessAux()
@@ -84,13 +85,14 @@ long TOfflineRenderer::Close()
 
 long TOfflineRenderer::Start()
 {
-    return pthread_create(&fThread, NULL, Process, this); 
+    //return pthread_create(&fThread, NULL, Process, this);
+	return false;
 }
 
 long TOfflineRenderer::Stop()
 {
-    pthread_cancel(fThread);
-    pthread_join(fThread, NULL); 
+    //pthread_cancel(fThread);
+    //pthread_join(fThread, NULL); 
     return 0;
 }
 
