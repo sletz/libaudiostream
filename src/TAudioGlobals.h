@@ -54,7 +54,6 @@ class AUDIO_EXPORTS TAudioGlobals
 
     public:
 
-        /* static long fChannels;                     // ??? */
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
         static long fSampleRate;                // Sampling Rate
