@@ -19,7 +19,7 @@ Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
 research@grame.fr
 
 */
-
+#include <cstring>
 #include "TPortAudioV19Renderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"

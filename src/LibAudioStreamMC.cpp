@@ -1305,18 +1305,26 @@ AUDIOAPI long GetDeviceCount(long renderer)
 	#ifdef WIN32
 		#pragma message ("Jack renderer is not compiled")
 	#else
-			#warning Jack renderer is not compiled
+        #warning Jack renderer is not compiled
 	#endif
 #endif
+
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDeviceCount();
+#else
+    #ifdef WIN32
+        #pragma message ("CoreAudio renderer is not compiled")
+    #else
+        #warning CoreAudio renderer is not compiled
+    #endif
 #endif
         case kOffLineAudioRenderer:
             return TOfflineRenderer::GetDeviceCount();
         default:
             assert(false);
             break;
+
     }
 }
 
