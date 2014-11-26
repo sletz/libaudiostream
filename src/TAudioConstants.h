@@ -60,13 +60,14 @@ typedef unsigned char Boolean;
 #define RT_CHANNELS 2
 #define MIXER_BUFFER_SIZE BUFFER_SIZE*CHANNELS
 
-#define NO_ERR 0
-#define OPEN_ERR -1
-#define CLOSE_ERR -2
-#define LOAD_ERR -3
-#define FILE_NOT_FOUND_ERR -4
-#define EFFECT_NOT_FOUND_ERR -5
-#define PLAYER_ERR -6
+#define NO_ERR                   0
+#define OPEN_ERR                -1
+#define CLOSE_ERR               -2
+#define LOAD_ERR                -3
+#define FILE_NOT_FOUND_ERR      -4
+#define EFFECT_NOT_FOUND_ERR    -5
+#define PLAYER_ERR              -6
+#define SET_POS_ERR             -7
 
 #endif
 

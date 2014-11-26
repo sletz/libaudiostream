@@ -109,7 +109,7 @@ extern "C"
     AUDIOAPI long ReadSoundPtr(AudioStreamPtr stream, float** buffer, long buffer_size);
     AUDIOAPI long ReadSoundPosPtr(AudioStreamPtr stream, float** buffer, long buffer_size, long frames, long pos);
     AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound);
-    AUDIOAPI void SetPosSoundPtr(AudioStreamPtr sound, long frames);
+    AUDIOAPI long SetPosSoundPtr(AudioStreamPtr sound, long frames);
     AUDIOAPI AudioStreamPtr MakeCopySoundPtr(AudioStreamPtr sound);
 
     // Build effect (using pointer on smartptr)
@@ -238,7 +238,7 @@ extern "C"
     AUDIOAPI long ReadSound(AudioStream stream, float** buffer, long buffer_size);
     AUDIOAPI long ReadSoundPos(AudioStream stream, float** buffer, long buffer_size, long frames, long pos);
     AUDIOAPI void ResetSound(AudioStream sound);
-    AUDIOAPI void SetPosSound(AudioStream sound, long frames);
+    AUDIOAPI long SetPosSound(AudioStream sound, long frames);
     AUDIOAPI AudioStream MakeCopySound(AudioStream sound);
 
     // Effect management (using smartptr)
@@ -419,10 +419,12 @@ AUDIOAPI void ResetSound(AudioStream s)
     }
 }
 
-AUDIOAPI void SetPosSound(AudioStream s, long frames)
+AUDIOAPI long SetPosSound(AudioStream s, long frames)
 {
     if (s) {
-        static_cast<TAudioStreamPtr>(s)->SetPos(frames);
+        return static_cast<TAudioStreamPtr>(s)->SetPos(frames);
+    } else {
+        return FILE_NOT_FOUND_ERR;
     }
 }
 
@@ -573,10 +575,12 @@ AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound)
     }
 }
 
-AUDIOAPI void SetPosSoundPtr(AudioStreamPtr s, long frames)
+AUDIOAPI long SetPosSoundPtr(AudioStreamPtr s, long frames)
 {
     if (s) {
-        static_cast<TAudioStreamPtr>(*s)->SetPos(frames);
+        return static_cast<TAudioStreamPtr>(*s)->SetPos(frames);
+    } else {
+        return FILE_NOT_FOUND_ERR;
     }
 }
 

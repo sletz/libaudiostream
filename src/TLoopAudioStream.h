@@ -63,11 +63,11 @@ class TLoopAudioStream : public TDecoratedAudioStream
             return new TLoopAudioStream(fStream->Copy(), fLoopNum);
         }
         
-        void SetPos(long frames)
+        long SetPos(long frames)
         {
             long len = fStream->Length();
             fLoopNum = frames / len;
-            fStream->SetPos(frames % len);
+            return fStream->SetPos(frames % len);
         }
 };
 

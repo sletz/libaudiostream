@@ -23,20 +23,13 @@ research@grame.fr
 #ifndef __TAudioRenderer__
 #define __TAudioRenderer__
 
+#include "TAudioConstants.h"
 #include "TAudioClient.h"
 #include "AudioExports.h"
 #include <list>
 #include <stdint.h>
 
 using namespace std;
-
-#define NO_ERR                   0
-#define OPEN_ERR                -1
-#define CLOSE_ERR               -2
-#define LOAD_ERR                -3
-#define FILE_NOT_FOUND_ERR      -4
-#define EFFECT_NOT_FOUND_ERR    -5
-#define PLAYER_ERR              -6
 
 /*!
 \brief To get renderer state.

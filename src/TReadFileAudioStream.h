@@ -68,7 +68,7 @@ class TReadFileAudioStream : public TFileAudioStream
         
         int SampleRate() { return fInfo.samplerate; }
         
-        void SetPos(long frames);
+        long SetPos(long frames);
 };
 
 typedef TReadFileAudioStream * TReadFileAudioStreamPtr;

@@ -391,7 +391,7 @@ class TExpAudioMixer : public TAudioClient
             fStreamCommands.NeedSort();
         }
         
-        void SetPos(audio_frame_t frames);
+        long SetPos(audio_frame_t frames);
         
         void SetEffect(TAudioEffectInterfacePtr effect) { fMasterEffect = effect; }
     

@@ -41,6 +41,7 @@
 #define FILE_NOT_FOUND_ERR      -4
 #define EFFECT_NOT_FOUND_ERR    -5
 #define PLAYER_ERR              -6
+#define SET_POS_ERR             -7
 
 #ifdef __cplusplus
 extern "C"
@@ -394,8 +395,9 @@ extern "C"
      \brief Change the current position in the stream.
      \param sound The stream to be used.
      \param frames The new position.
+     \return An error code.
      */
-    void SetPosSound(AudioStream sound, long frames);
+    long SetPosSound(AudioStream sound, long frames);
     
     /*!
      \brief Create a copy of a stream.

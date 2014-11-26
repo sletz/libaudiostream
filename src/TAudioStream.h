@@ -84,8 +84,10 @@ class TAudioStream : public la_smartable1
             return 0;
         }
         
-        virtual void SetPos(long frames)
-        {}
+        virtual long SetPos(long frames)
+        {
+            return 0;
+        }
     
         virtual long GetPos()
         {
@@ -188,10 +190,10 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             return fStream->Length();
         }
     
-        virtual void SetPos(long frames)
+        virtual long SetPos(long frames)
         {
             assert(fStream);
-            fStream->SetPos(frames);
+            return fStream->SetPos(frames);
         }
         
         virtual long GetPos()

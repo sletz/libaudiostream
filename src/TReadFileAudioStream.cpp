@@ -52,7 +52,9 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     fFramesNum = long(fInfo.frames);
     fChannels = long(fInfo.channels);
     
-    SetPos(beginFrame);
+    if (SetPos(beginFrame) != NO_ERR) {
+        throw TLASException("TReadFileAudioStream::SetPos : seek error");
+    }
     
     if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
         printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);
@@ -70,15 +72,16 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
     fReady = true;
 }
 
-void TReadFileAudioStream::SetPos(long frames)
+long TReadFileAudioStream::SetPos(long frames)
 {
     if (sf_seek(fFile, frames, SEEK_SET) < 0) {
         const char* error = sf_strerror(fFile);
         sf_close(fFile);
-        throw TLASException(error);
+        return SET_POS_ERR;
     }
 
     fBeginFrame = frames;
+    return NO_ERR;
 }
 
 TReadFileAudioStream::~TReadFileAudioStream()

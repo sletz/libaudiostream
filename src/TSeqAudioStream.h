@@ -63,13 +63,13 @@ class TSeqAudioStream : public TBinaryAudioStream
             return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy());
         }
         
-        void SetPos(long frames)
+        long SetPos(long frames)
         {
             long len1 = fStream1->Length();
             if (frames < len1) {
-                fStream1->SetPos(frames);
+                return fStream1->SetPos(frames);
             } else {
-                fStream2->SetPos(frames - len1);
+                return fStream2->SetPos(frames - len1);
             }
         }
 };

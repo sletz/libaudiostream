@@ -179,7 +179,7 @@ TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
         - change command_start_date to command_start_date - frames for all commands where frames < command_start_date
 */
 
-void TExpAudioMixer::SetPos(audio_frame_t frames)
+long TExpAudioMixer::SetPos(audio_frame_t frames)
 {
     // TODO
 }

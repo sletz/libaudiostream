@@ -77,7 +77,7 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
             return new TWriteFileAudioStream(fName, fStream->Copy(), fFormat);
         }
         
-        void SetPos(long frames) { fStream->SetPos(frames); }
+        long SetPos(long frames) { return fStream->SetPos(frames); }
 };
 
 typedef TWriteFileAudioStream * TWriteFileAudioStreamPtr;

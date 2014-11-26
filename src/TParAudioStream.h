@@ -66,10 +66,11 @@ class TParAudioStream : public TBinaryAudioStream
             return new TParAudioStream(fStream1->Copy(), fStream2->Copy());
         }
         
-        void SetPos(long frames)
+        long SetPos(long frames)
         {
-            fStream1->SetPos(frames);
-            fStream2->SetPos(frames);
+            long res1 = fStream1->SetPos(frames);
+            long res2 = fStream2->SetPos(frames);
+            return (res1 != NO_ERR) ? res1 : res2;
         }
 };
 

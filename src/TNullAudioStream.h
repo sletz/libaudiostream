@@ -150,9 +150,10 @@ class TConstantAudioStream : public TAudioStream
             return new TConstantAudioStream(fChannels, fFramesNum, fValue);
         }
         
-        void SetPos(long frames)
+        long SetPos(long frames)
         {
             fCurFrame = UTools::Min(frames, fFramesNum);
+            return NO_ERR;
         }
 };
 
