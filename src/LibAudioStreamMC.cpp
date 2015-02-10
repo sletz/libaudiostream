@@ -48,23 +48,29 @@ research@grame.fr
         TAudioRendererPtr fRenderer;
 		TExpAudioMixerPtr fMixer;  	
     };
-
+    
+    
     // Opaque pointers
-    typedef AudioPlayer* AudioPlayerPtr;
-	typedef TAudioStreamPtr AudioStream;			// smart pointer type
-	typedef AudioStream* AudioStreamPtr;
+    typedef void* AudioPlayerPtr;
+    typedef void* AudioRendererPtr;
+    typedef void* AudioClientPtr;
 
-	typedef TAudioRenderer* AudioRendererPtr;	
-	typedef TAudioClient* AudioClientPtr;
+    typedef AudioPlayer* IntAudioPlayerPtr;
+    typedef TAudioRenderer* IntAudioRendererPtr;	
+    typedef TAudioClient* IntAudioClientPtr;
 
- 	typedef TAudioEffectListPtr AudioEffectList;	// smart pointer type
+    typedef TAudioStreamPtr AudioStream;			// smart pointer type
+    typedef AudioStream* AudioStreamPtr;
+
+    typedef TAudioEffectListPtr AudioEffectList;	// smart pointer type
     typedef TAudioEffectInterfacePtr AudioEffect;	// smart pointer type
 
-	typedef AudioEffectList* AudioEffectListPtr;
+    typedef AudioEffectList* AudioEffectListPtr;
     typedef AudioEffect* AudioEffectPtr;	
-	typedef TAudioEffectInterface* AudioEffectInterfacePtr;
-	
-	typedef void (*StopCallback)(void* context);
+
+    typedef TAudioEffectInterface* AudioEffectInterfacePtr;
+
+    typedef void (*StopCallback)(void* context);
 
 #ifdef __cplusplus
 extern "C"
@@ -719,8 +725,10 @@ AUDIOAPI AudioEffect MakeCopyEffect(AudioEffect effect)
     return (effect) ? static_cast<TAudioEffectInterfacePtr>(effect)->Copy(): 0;
 }
 
-AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date)
+AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr ext_player, const char* effect, const char* path, float value, SymbolicDate date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
@@ -867,8 +875,10 @@ AUDIOAPI void DeleteEffectPtr(AudioEffectPtr effect)
     delete effect;
 }
 
-AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDatePtr date)
+AUDIOAPI long SetTimedControlValueEffectPtr(AudioPlayerPtr ext_player, const char* effect, const char* path, float value, SymbolicDatePtr date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         if (TAudioGlobals::fEffectTable.find(effect) != TAudioGlobals::fEffectTable.end()) {
             list<TAudioEffectInterfacePtr>::iterator it;
@@ -910,7 +920,7 @@ AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan,
 
     TAudioGlobals::Init(inChan, outChan, sample_rate, buffer_size, stream_buffer_size, rtstream_duration, thread_num);
 
-    AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
+    IntAudioPlayerPtr player = static_cast<IntAudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
     if (!player) {
         goto error;
     }
@@ -937,9 +947,11 @@ error:
     return 0;
 }
 
-AUDIOAPI AudioPlayerPtr OpenAudioClient(AudioRendererPtr renderer)
+AUDIOAPI AudioPlayerPtr OpenAudioClient(AudioRendererPtr ext_renderer)
 {
-	AudioPlayerPtr player = static_cast<AudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
+    IntAudioRendererPtr renderer = IntAudioRendererPtr(ext_renderer);
+    
+	IntAudioPlayerPtr player = static_cast<IntAudioPlayerPtr>(calloc(1, sizeof(AudioPlayer)));
     if (!player) {
         goto error;
     }
@@ -959,8 +971,10 @@ error:
     return 0;
 }
 
-AUDIOAPI void CloseAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI void CloseAudioPlayer(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (!player) {
         return;
     }
@@ -979,8 +993,10 @@ AUDIOAPI void CloseAudioPlayer(AudioPlayerPtr player)
 	TAudioGlobals::Destroy();
 }
 
-AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
+AUDIOAPI void CloseAudioClient(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (!player) {
         return;
     }
@@ -993,8 +1009,10 @@ AUDIOAPI void CloseAudioClient(AudioPlayerPtr player)
     free(player);
 }
 
-AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffect effect)
+AUDIOAPI long SetMasterEffect(AudioPlayerPtr ext_player, AudioEffect effect)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer && effect->Outputs() <= TAudioGlobals::fOutput) {
         player->fMixer->SetEffect(effect);
         return NO_ERR;
@@ -1002,8 +1020,10 @@ AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffect effect)
     return LOAD_ERR;
 }
 
-AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffectPtr effect)
+AUDIOAPI long SetMasterEffect(AudioPlayerPtr ext_player, AudioEffectPtr effect)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer && (*effect)->Outputs() <= TAudioGlobals::fOutput) {
         player->fMixer->SetEffect(*effect);
         return NO_ERR;
@@ -1011,8 +1031,10 @@ AUDIOAPI long SetMasterEffect(AudioPlayerPtr player, AudioEffectPtr effect)
     return LOAD_ERR;
 }
 
-AUDIOAPI audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr player)
+AUDIOAPI audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fRenderer) {
         AudioRendererPtr renderer = player->fRenderer;
         RendererInfo info;
@@ -1023,8 +1045,10 @@ AUDIOAPI audio_usec_t GetAudioPlayerDateInUsec(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
+AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fRenderer) {
         AudioRendererPtr renderer = player->fRenderer;
         RendererInfo info;
@@ -1035,8 +1059,10 @@ AUDIOAPI audio_frame_t GetAudioPlayerDateInFrame(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
+AUDIOAPI long StartSound(AudioPlayerPtr ext_player, AudioStream sound, SymbolicDate date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         AudioStream rd_sound;
         if (sound->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
@@ -1054,8 +1080,10 @@ AUDIOAPI long StartSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate 
     return LOAD_ERR;
 }    
     
-AUDIOAPI long StopSound(AudioPlayerPtr player, AudioStream sound, SymbolicDate date)
+AUDIOAPI long StopSound(AudioPlayerPtr ext_player, AudioStream sound, SymbolicDate date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+     
     if (player && player->fMixer && player->fRenderer) {
         TStreamCommandPtr command = player->fMixer->GetStreamCommand(sound);
         if (command) {
@@ -1076,8 +1104,10 @@ AUDIOAPI SymbolicDate GenRealDate(AudioPlayerPtr /*player*/, audio_frame_t date)
     return new TSymbolicDate(date);
 }
 
-AUDIOAPI long SetSymbolicDate(AudioPlayerPtr player, SymbolicDate symbolic_date, audio_frame_t real_date)
+AUDIOAPI long SetSymbolicDate(AudioPlayerPtr ext_player, SymbolicDate symbolic_date, audio_frame_t real_date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer) {
         symbolic_date->setDate(real_date);
         player->fMixer->NeedSort();
@@ -1094,8 +1124,10 @@ AUDIOAPI audio_frame_t GetSymbolicDate(AudioPlayerPtr /*player*/, SymbolicDate s
 
 ////
 
-AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
+AUDIOAPI long StartSoundPtr(AudioPlayerPtr ext_player, AudioStreamPtr sound, SymbolicDatePtr date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         AudioStream rd_sound;
         if ((*sound)->Channels() <= TAudioGlobals::fOutput) { // Limited to TAudioGlobals::fOutput for now
@@ -1113,8 +1145,10 @@ AUDIOAPI long StartSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, Symboli
     return LOAD_ERR;
 }    
 
-AUDIOAPI long StopSoundPtr(AudioPlayerPtr player, AudioStreamPtr sound, SymbolicDatePtr date)
+AUDIOAPI long StopSoundPtr(AudioPlayerPtr ext_player, AudioStreamPtr sound, SymbolicDatePtr date)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         TStreamCommandPtr command = player->fMixer->GetStreamCommand(*sound);
         if (command) {
@@ -1135,8 +1169,10 @@ AUDIOAPI SymbolicDatePtr GenRealDatePtr(AudioPlayerPtr /*player*/, audio_frame_t
     return new LA_SMARTP<TSymbolicDate>(new TSymbolicDate(date));
 }
 
-AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr player, SymbolicDatePtr symbolic_date, audio_frame_t real_date)
-{
+AUDIOAPI long SetSymbolicDatePtr(AudioPlayerPtr ext_player, SymbolicDatePtr symbolic_date, audio_frame_t real_date)
+{   
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer) {
         (*symbolic_date)->setDate(real_date);
         player->fMixer->NeedSort();
@@ -1167,8 +1203,10 @@ AUDIOAPI long ClearAudioPlayer(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI long StartAudioPlayer(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         // Reset real-time input
         TAudioGlobals::fSharedInput->Reset();
@@ -1182,8 +1220,10 @@ AUDIOAPI long StartAudioPlayer(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI long StopAudioPlayer(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         player->fRenderer->Stop();
         return NO_ERR;
@@ -1192,8 +1232,10 @@ AUDIOAPI long StopAudioPlayer(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI long PauseAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI long PauseAudioPlayer(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         player->fRenderer->Pause();
         return NO_ERR;
@@ -1202,8 +1244,10 @@ AUDIOAPI long PauseAudioPlayer(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI long ContAudioPlayer(AudioPlayerPtr player)
+AUDIOAPI long ContAudioPlayer(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     if (player && player->fMixer && player->fRenderer) {
         player->fRenderer->Cont();
         return NO_ERR;
@@ -1212,9 +1256,11 @@ AUDIOAPI long ContAudioPlayer(AudioPlayerPtr player)
     }
 }
 
-AUDIOAPI long SetPosAudioPlayer(AudioPlayerPtr player, audio_frame_t new_date)
+AUDIOAPI long SetPosAudioPlayer(AudioPlayerPtr ext_player, audio_frame_t new_date)
 {
-     if (player && player->fMixer && player->fRenderer) {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
+    if (player && player->fMixer && player->fRenderer) {
         player->fMixer->SetPos(new_date);
         return NO_ERR;
     } else {
@@ -1222,8 +1268,10 @@ AUDIOAPI long SetPosAudioPlayer(AudioPlayerPtr player, audio_frame_t new_date)
     }
 }
 
-AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr player)
+AUDIOAPI AudioRendererPtr GetAudioPlayerRenderer(AudioPlayerPtr ext_player)
 {
+    IntAudioPlayerPtr player = IntAudioPlayerPtr(ext_player);
+    
     return (player) ? player->fRenderer : NULL;
 }
 
@@ -1307,7 +1355,7 @@ AUDIOAPI long GetDeviceCount(long renderer)
             return TJackRenderer::GetDeviceCount();
 #else
 	#ifdef WIN32
-		#pragma message ("Jack renderer is not compiled")
+		#pragma message ("JACK renderer is not compiled")
 	#else
         #warning Jack renderer is not compiled
 	#endif
@@ -1350,9 +1398,9 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
             break;
 #else
 	#ifdef WIN32
-		#pragma message ("Jack renderer is not compiled")
+		#pragma message ("JACK renderer is not compiled")
 	#else
-			#warning Jack renderer is not compiled
+        #warning Jack renderer is not compiled
 	#endif
 #endif
 #ifdef __COREAUDIO__
@@ -1363,7 +1411,7 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
 	#ifdef WIN32
 		#pragma message ("Coreaudio renderer is not compiled")
 	#else
-			#warning CoreAudio renderer is not compiled
+        #warning CoreAudio renderer is not compiled
 	#endif
 #endif
         case kOffLineAudioRenderer:
@@ -1391,7 +1439,7 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
             return TJackRenderer::GetDefaultInputDevice();
 #else
 	#ifdef WIN32
-		#pragma message ("Jack renderer is not compiled")
+		#pragma message ("JACK renderer is not compiled")
 	#else
 		#warning Jack renderer is not compiled
 	#endif
@@ -1403,7 +1451,7 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
 	#ifdef WIN32
 		#pragma message ("Coreaudio renderer is not compiled")
 	#else
-			#warning CoreAudio renderer is not compiled
+        #warning CoreAudio renderer is not compiled
 	#endif
 #endif
         case kOffLineAudioRenderer:
@@ -1430,7 +1478,7 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
             return TJackRenderer::GetDefaultOutputDevice();
 #else
 	#ifdef WIN32
-		#pragma message ("Jack renderer is not compiled")
+		#pragma message ("JACK renderer is not compiled")
 	#else
 		#warning Jack renderer is not compiled
 	#endif
@@ -1442,7 +1490,7 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
 	#ifdef WIN32
 		#pragma message ("Coreaudio renderer is not compiled")
 	#else
-			#warning CoreAudio renderer is not compiled
+        #warning CoreAudio renderer is not compiled
 	#endif
 #endif
         case kOffLineAudioRenderer:

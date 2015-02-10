@@ -94,8 +94,7 @@ extern "C"
     
     typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
     
-    class TAudioEffectInterface : public la_smartable
-    {
+    class TAudioEffectInterface : public la_smartable {
         
     private:
         
@@ -142,9 +141,7 @@ extern "C"
     
     typedef LA_SMARTP<TAudioEffectInterface> TAudioEffectInterfacePtr;
     
-    
-    class TAudioClient
-    {
+    class TAudioClient {
         
     public:
         
@@ -163,7 +160,7 @@ extern "C"
         virtual bool AudioCallback(float** inputs, float** outputs, long frames) = 0;
     };
     
-    typedef TAudioClient * TAudioClientPtr;
+    typedef TAudioClient* TAudioClientPtr;
     
     class TSymbolicDate : public la_smartable {}; 
     

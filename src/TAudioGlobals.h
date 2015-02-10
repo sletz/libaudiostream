@@ -56,9 +56,9 @@ class AUDIO_EXPORTS TAudioGlobals
 
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
-        static long fSampleRate;                // Sampling Rate
-        static long fBufferSize;                // I/O Buffer size
-        static long fStreamBufferSize;          // Stream Buffer size
+        static long fSampleRate;                // Sampling rate
+        static long fBufferSize;                // I/O buffer size
+        static long fStreamBufferSize;          // Stream buffer size
         static long fDiskError;                 // Counter of disk streaming errors
 		static long fFileMax;
 
@@ -75,7 +75,7 @@ class AUDIO_EXPORTS TAudioGlobals
         static std::map<std::string, TRemoteCodeFaustAudioEffectFactory*> fRemoteFactoryTable;   // Remote effect factory 
         static int fRemoteFactoryNumber;
        
-        static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;    // Effect table 
+        static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;         // Effect table 
    
         TAudioGlobals(long inChan, long outChan, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
