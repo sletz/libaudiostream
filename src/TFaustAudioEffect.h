@@ -643,18 +643,20 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             fDrawPath = draw_path;
             
             // Always add library_path
-            argv[0] = "-I";
-            argv[1] = library_path.c_str();
-         
+            argv[argc++] = "-I";
+            argv[argc++] = library_path.c_str();
+          
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argv[2] = "-O";
-                argv[3] = draw_path.c_str();
-                argv[4] = "-svg";
-                argc = 5;
-            } else {
-                argc = 2;
+                argv[argc++] = "-O";
+                argv[argc++] = draw_path.c_str();
+                argv[argc++] = "-svg";
             }
+            
+        #ifdef WIN32     
+            argv[argc++] = "-l";
+            argv[argc++] = "llvm_math.ll"
+        #endif
             
             fFactory = createDSPFactoryFromString("FaustLAS", code, argc, argv, GetTarget(), error_msg, 3);
             if (fFactory) {
