@@ -41,9 +41,9 @@ long TEffectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
 {
     assert_stream(framesNum, framePos);
     
-    float** temp1 = (float**)alloca(fBufferIn->GetChannels());
-    float** temp2 = (float**)alloca(fBufferOut->GetChannels());
-    float** temp3 = (float**)alloca(buffer->GetChannels());
+    float** temp1 = (float**)alloca(fBufferIn->GetChannels()*sizeof(float*));
+    float** temp2 = (float**)alloca(fBufferOut->GetChannels()*sizeof(float*));
+    float** temp3 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
 
     /* Cleanup temporary fBuffer */
     UAudioTools::ZeroFloatBlk(fBufferIn->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fEffect->Inputs());
