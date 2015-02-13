@@ -530,7 +530,7 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
         #ifdef WIN32     
             argv[argc++] = "-l";
-            argv[argc++] = "llvm_math.ll"
+            argv[argc++] = "llvm_math.ll";
         #endif
     
             printf("code %s\n", code.c_str());
@@ -605,7 +605,7 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
             
         #ifdef WIN32     
             argv[argc++] = "-l";
-            argv[argc++] = "llvm_math.ll"
+            argv[argc++] = "llvm_math.ll";
         #endif
          
             fFactory = createDSPFactoryFromFile(code, argc, argv, GetTarget(), error_msg, 3);
@@ -655,7 +655,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             
         #ifdef WIN32     
             argv[argc++] = "-l";
-            argv[argc++] = "llvm_math.ll"
+            argv[argc++] = "llvm_math.ll";
         #endif
             
             fFactory = createDSPFactoryFromString("FaustLAS", code, argc, argv, GetTarget(), error_msg, 3);
