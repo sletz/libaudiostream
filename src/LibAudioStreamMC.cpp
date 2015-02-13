@@ -410,7 +410,7 @@ AUDIOAPI long ReadSoundPos(AudioStream s, float** buffer, long buffer_size, long
         TAudioStreamPtr stream = static_cast<TAudioStreamPtr>(s);
         TSharedNonInterleavedAudioBuffer<float> process_buffer(buffer, buffer_size, stream->Channels());
         // Init the correct part of the buffer...
-        float** temp = (float**)alloca(stream->Channels()*sizeof(float*));
+        float** temp = (float**)alloca(process_buffer.GetChannels()*sizeof(float*));
         UAudioTools::ZeroFloatBlk(process_buffer.GetFrame(pos, temp), frames, stream->Channels());
         return stream->Read(&process_buffer, frames, pos);
     } else {

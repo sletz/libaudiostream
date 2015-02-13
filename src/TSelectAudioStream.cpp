@@ -27,7 +27,7 @@ long TSelectAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos
     assert_stream(framesNum, framePos);
     
     float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
-    float** temp2 = (float**)alloca(Channels()*sizeof(float*));
+    float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
 
     // Cleanup temporary fBuffer 
     UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());

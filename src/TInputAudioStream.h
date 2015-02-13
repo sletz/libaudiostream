@@ -52,7 +52,7 @@ class TInputAudioStream : public TAudioStream
             //printf("TInputAudioStream::Read framesNum %ld\n", framesNum);
             
             float** temp1 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-            float** temp2 = (float**)alloca(TAudioGlobals::fInput*sizeof(float*));
+            //float** temp2 = (float**)alloca(TAudioGlobals::fInput*sizeof(float*));
             
             UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos, temp1),
                                              //TSharedBuffers::GetInBuffer(framesNum, TAudioGlobals::fInput, temp2),

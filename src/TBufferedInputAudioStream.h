@@ -40,7 +40,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
 {
     private:
         
-        FLOAT_BUFFER fTmpBuffer;
+        FLOAT_BUFFER fBuffer;
     
     public:
      
@@ -51,12 +51,12 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             
             // Dynamic allocation
             fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(endFrame, fChannels, true);
-            fTmpBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
+            fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, fChannels);
         }
         virtual ~TBufferedInputAudioStream()
         {
             delete fMemoryBuffer;
-            delete fTmpBuffer;
+            delete fBuffer;
         }
         
         long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
@@ -89,16 +89,16 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             */
                                              
             // Read input and write it to memory
-            float** temp1 = (float**)alloca(fTmpBuffer->GetChannels()*sizeof(float*));
+            float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
             float** temp2 = (float**)alloca(TAudioGlobals::fInput*sizeof(float*));
             
-            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, TAudioGlobals::fInput);
-            UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos, temp1),
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, TAudioGlobals::fInput);
+            UAudioTools::MixFrameToFrameBlk1(fBuffer->GetFrame(framePos, temp1),
                                              TSharedBuffers::GetInBuffer(framesNum, TAudioGlobals::fInput, temp2),
                                              //TSharedBuffers::GetInBuffer(),
                                              framesNum, TAudioGlobals::fInput);
 
-            return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos); 
+            return TBufferedAudioStream::Write(fBuffer, framesNum, framePos); 
         }
 
         virtual TAudioStreamPtr CutBegin(long frames)

@@ -205,8 +205,8 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             assert(frames + f2 <= b2->GetSize());
             assert(b1->GetChannels() == b2->GetChannels());
             
-            T** tmp1 = (T**)alloca(b1->GetChannels());
-            T** tmp2 = (T**)alloca(b2->GetChannels());
+            T** tmp1 = (T**)alloca(b1->GetChannels()*sizeof(T*));
+            T** tmp2 = (T**)alloca(b2->GetChannels()*sizeof(T*));
 
             T** dst = b1->GetFrame(f1, tmp1);
             T** src = b2->GetFrame(f2, tmp2);

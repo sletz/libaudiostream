@@ -78,7 +78,7 @@ long TFadeAudioStream::Play(FLOAT_BUFFER buffer, long framesNum, long framePos)
 
 long TFadeAudioStream::Fade(FLOAT_BUFFER buffer, long framesNum, long framePos, Envelope& fade)
 {
-    float** temp1 = (float**)alloca(fStream->Channels()*sizeof(float*));
+    float** temp1 = (float**)alloca(fMixBuffer->GetChannels()*sizeof(float*));
     float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
       
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
