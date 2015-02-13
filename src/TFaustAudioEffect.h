@@ -518,18 +518,20 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
             fDrawPath = draw_path;
 
             // Always add library_path
-            argv[0] = "-I";
-            argv[1] = library_path.c_str();
-         
+            argv[argc++] = "-I";
+            argv[argc++] = library_path.c_str();
+          
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argv[2] = "-O";
-                argv[3] = draw_path.c_str();
-                argv[4] = "-svg";
-                argc = 5;
-            } else {
-                argc = 2;
+                argv[argc++] = "-O";
+                argv[argc++] = draw_path.c_str();
+                argv[argc++] = "-svg";
             }
+            
+        #ifdef WIN32     
+            argv[argc++] = "-l";
+            argv[argc++] = "llvm_math.ll"
+        #endif
     
             printf("code %s\n", code.c_str());
          
@@ -582,7 +584,7 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
     
         TFileCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
-            int argc;
+            int argc = 0;
             const char* argv[16];
             std::string error_msg;
             
@@ -591,18 +593,20 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
             fDrawPath = draw_path;
 
             // Always add library_path
-            argv[0] = "-I";
-            argv[1] = library_path.c_str();
-         
+            argv[argc++] = "-I";
+            argv[argc++] = library_path.c_str();
+          
             // Add -svg parameter if necessary
             if (draw_path != "") {
-                argv[2] = "-O";
-                argv[3] = draw_path.c_str();
-                argv[4] = "-svg";
-                argc = 5;
-            } else {
-                argc = 2;
+                argv[argc++] = "-O";
+                argv[argc++] = draw_path.c_str();
+                argv[argc++] = "-svg";
             }
+            
+        #ifdef WIN32     
+            argv[argc++] = "-l";
+            argv[argc++] = "llvm_math.ll"
+        #endif
          
             fFactory = createDSPFactoryFromFile(code, argc, argv, GetTarget(), error_msg, 3);
             if (fFactory) {
@@ -630,7 +634,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
     
         TStringCodeFaustAudioEffectFactory(const string& code, const string& library_path, const string& draw_path)
         {
-            int argc;
+            int argc = 0;
             const char* argv[16];
             std::string error_msg;
             
