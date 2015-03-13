@@ -331,13 +331,13 @@ extern "C"
     AudioStream MakeWriteSound(const char* name, AudioStream sound, long format);
     
     /*!
-     \brief Create an input stream.
+     \brief Create an input stream that starts 'recording' at the time position is is placed in the score.
      \return A pointer to new stream object.
      */
     AudioStream MakeInputSound();
     
     /*!
-     \brief Create a shared stream on the input stream.
+     \brief Create a shared stream on the input stream, that starts 'recording' as soon as the Player is started.
      \return A pointer to new stream object.
      */
     AudioStream MakeSharedInputSound();

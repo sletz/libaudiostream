@@ -174,8 +174,8 @@ TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 
 /*
     Semantic of SetPos(frames):
-        - erase all commands whichcommand_end_date are before "frames"
-        - call SetPos (frames - command_start_date) for all command where command_start_date < frames < command_end_date, set command_start_date to 0
+        - erase all commands which command_end_date are before "frames"
+        - call SetPos (frames - command_start_date) for all commands where command_start_date < frames < command_end_date, set command_start_date to 0
         - change command_start_date to command_start_date - frames for all commands where frames < command_start_date
 */
 
