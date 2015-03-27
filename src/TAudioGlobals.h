@@ -32,6 +32,16 @@ research@grame.fr
 
 #define MAX_OUTPUT_CHAN 64 // Used in TExpAudioMixer
 
+//-------------------
+// Error management
+//-------------------
+
+ typedef struct ErrorInfo {
+        char fStreamError[256];
+        long fDiskError;            // Counter of disk streaming errors
+        long fSchedulingError;      // Counter of too late scheduled stream commmands  
+} ErrorInfo;
+
 //---------------------
 // Class TAudioGlobals
 //---------------------
@@ -60,6 +70,7 @@ class AUDIO_EXPORTS TAudioGlobals
         static long fBufferSize;                // I/O buffer size
         static long fStreamBufferSize;          // Stream buffer size
         static long fDiskError;                 // Counter of disk streaming errors
+        static long fSchedulingError;           // Counter of too late scheduled stream commmands 
 		static long fFileMax;
 
 		static long fInputLatency;				// Suggested input latency (when used with PortAudio)

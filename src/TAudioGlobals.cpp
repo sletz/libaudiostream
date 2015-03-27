@@ -52,6 +52,7 @@ long TAudioGlobals::fStreamBufferSize = 0;
 
 long TAudioGlobals::fSampleRate = 0;
 long TAudioGlobals::fDiskError = 0;
+long TAudioGlobals::fSchedulingError = 0;
 long TAudioGlobals::fFileMax = 0;
 
 long TAudioGlobals::fInputLatency = -1;

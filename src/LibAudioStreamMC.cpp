@@ -79,6 +79,7 @@ extern "C"
         
     AUDIOAPI long LibVersion();
     AUDIOAPI const char* GetLastLibError();
+    AUDIOAPI void GetErrors(ErrorInfo* error, bool clear);
 		
 	// Device scanning
 	AUDIOAPI long GetDeviceCount(long renderer);
@@ -279,6 +280,18 @@ AUDIOAPI long LibVersion()
 AUDIOAPI const char* GetLastLibError()
 {
     return TAudioGlobals::fLastLibError;
+}
+
+AUDIOAPI void GetErrors(ErrorInfo* error, bool clear)
+{
+    strncpy(error->fStreamError, TAudioGlobals::fLastLibError, 256);
+    error->fDiskError = TAudioGlobals::fDiskError;
+    error->fSchedulingError = TAudioGlobals::fSchedulingError;
+    if (clear) {
+        strcpy(TAudioGlobals::fLastLibError, "");
+        TAudioGlobals::fDiskError = 0;
+        TAudioGlobals::fSchedulingError = 0;
+    }
 }
 
 AUDIOAPI AudioStream MakeNullSound(long length)

@@ -49,12 +49,12 @@ struct TCommand : public la_smartable1 {
             return date_map[date];
         }
         
-        bool InBuffer(audio_frame_t date, audio_frame_t cur_frame, long frames)
+        inline bool InBuffer(audio_frame_t date, audio_frame_t cur_frame, long frames)
         {
             return (date >= cur_frame && date < cur_frame + frames);
         }
         
-        audio_frame_t GetDate() { return fStartDate->GetDate(); }
+        inline audio_frame_t GetDate() { return fStartDate->GetDate(); }
         
         TCommand() 
         {}
@@ -183,11 +183,13 @@ struct TExternalControlCommand : public TCommand {
 struct TStreamCommand : public TCommand {
         
         TRTRendererAudioStreamPtr fStream; // SmartPtr here...
+        
+        long fPos;
             
         SymbolicDate fStopDate;
  
         TStreamCommand(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
-                :TCommand(start_date), fStream(stream), fStopDate(stop_date)
+                :TCommand(start_date), fStream(stream), fPos(0), fStopDate(stop_date)
         {}
         virtual ~TStreamCommand() 
         {}
@@ -207,8 +209,8 @@ struct TStreamCommand : public TCommand {
             //printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
             
             // Possibly entire buffer to play
-            long start_offset = 0;
-            long stop_offset = frames;  
+            long start_offset;
+            long stop_offset;  
             
             // Init values
             long frame_num;
@@ -219,20 +221,33 @@ struct TStreamCommand : public TCommand {
             // Possibly move start_offset inside this buffer
             if (InBuffer(start_date, cur_frame, frames)) {
                 // New stream to play...
-                start_offset = start_date - cur_frame;
                 to_play = true;
+                start_offset = start_date - cur_frame;
                 //printf("Start stream fCurFrame = %lld start_offset = %ld\n", cur_frame, start_offset);
             } else if (cur_frame > start_date) {
                 // Stream currently playing...
                 to_play = true;
+                start_offset = 0;
+                // If pos is still 0, then we have a too late command...
+                if (fPos == 0) {
+                    TAudioGlobals::fSchedulingError++;
+                }
+            } else {
+                start_offset = 0;
             }
             
             // Possibly move stop_offset inside this buffer
-            if ((stop_date < cur_frame) || InBuffer(stop_date, cur_frame, frames)) {
+            if (InBuffer(stop_date, cur_frame, frames)) {
                 // Stream will be stopped in this buffer...
                 stop_offset = stop_date - cur_frame;
                 to_stop = true;
                 //printf("Stop stream fCurFrame = %lld stop_offset = %ld\n", cur_frame, stop_offset);
+            } else if (stop_date < cur_frame) {
+                // Stop playing...
+                stop_offset = 0;
+                to_stop = true;
+            } else {
+                stop_offset = frames;
             }
             
             // Then compute effective frame number to play
@@ -242,11 +257,11 @@ struct TStreamCommand : public TCommand {
             
             // Play it...
             if (to_play) {
-                if (to_stop || (res = fStream->Read(buffer, frame_num, start_offset)) < frame_num) {
-                    // End of stream
-                    //printf("Stop stream frame_num = %ld res = %ld\n", frame_num, res);
+                res = fStream->Read(buffer, frame_num, start_offset);
+                fPos += res;
+                if (to_stop || (res < frame_num)) {
                     return false;
-                }
+                } 
             }
             
             return true;

@@ -84,6 +84,13 @@ extern "C"
         long fInputLatencyUsec;     // Input latency in microsecond
     } RendererInfo;
     
+    
+    typedef struct ErrorInfo {
+        char fStreamError[256];
+        long fDiskError;            // Counter of disk streaming errors
+        long fSchedulingError;      // Counter of too late scheduled stream commmands  
+    } ErrorInfo;
+    
     class TAudioStream : public la_smartable {
         
 	public:
@@ -188,6 +195,12 @@ extern "C"
      \return the error.
      */
     const char* GetLastLibError();
+    
+     /*!
+     \brief Fill the error data structure.
+     \param clear True if the error internal state should be cleared.
+     */
+    void GetErrors(ErrorInfo* error, bool clear);
     
     /**
      * @defgroup SoundFunctions Sound creation and manipulation functions

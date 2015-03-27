@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
     //s1 = MakeRegionSound(FILENAME1, 0, 10*SR);
     s1 = MakeRegionSound(FILENAME5, 0, 100*SR);
     //MemoryRender(s1, 512);
-    res = StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    res = StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate() + 100));
     printf("res = %d\n", res);
    
     next();

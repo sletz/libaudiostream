@@ -69,7 +69,7 @@ long TExpAudioMixer::GetNextControlOffset(audio_frame_t cur_frame, long frames)
 }
 
 /*
-Render all stream inside a "slice" inside a buffer.
+Render all streams inside a "slice" in a buffer.
 */
 void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer, 
                                         map<SymbolicDate, audio_frame_t>& date_map, 
@@ -109,6 +109,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     // Real-time input
     TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
 
+    // Prepare buffer for master effect
     if (fMasterEffect) {
         buffer = fBuffer;
         float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
