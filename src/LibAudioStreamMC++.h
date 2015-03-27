@@ -86,7 +86,7 @@ extern "C"
     
     
     typedef struct ErrorInfo {
-        char fStreamError[256];
+        char fStreamError[512];
         long fDiskError;            // Counter of disk streaming errors
         long fSchedulingError;      // Counter of too late scheduled stream commmands  
     } ErrorInfo;
@@ -389,7 +389,7 @@ extern "C"
      \param sound The stream.
      \param buffer A buffer to be filled with frames.
      \param buffer_size The buffer length.
-     \param frames The number of frames to render length.
+     \param frames The number of frames to render.
      \param pos The position in buffer.
      \return The number of read frames.
      */

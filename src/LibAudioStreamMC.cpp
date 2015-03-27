@@ -284,7 +284,7 @@ AUDIOAPI const char* GetLastLibError()
 
 AUDIOAPI void GetErrors(ErrorInfo* error, bool clear)
 {
-    strncpy(error->fStreamError, TAudioGlobals::fLastLibError, 256);
+    strncpy(error->fStreamError, TAudioGlobals::fLastLibError, 512);
     error->fDiskError = TAudioGlobals::fDiskError;
     error->fSchedulingError = TAudioGlobals::fSchedulingError;
     if (clear) {

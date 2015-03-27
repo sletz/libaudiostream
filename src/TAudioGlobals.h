@@ -37,7 +37,7 @@ research@grame.fr
 //-------------------
 
  typedef struct ErrorInfo {
-        char fStreamError[256];
+        char fStreamError[512];
         long fDiskError;            // Counter of disk streaming errors
         long fSchedulingError;      // Counter of too late scheduled stream commmands  
 } ErrorInfo;
