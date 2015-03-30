@@ -82,11 +82,11 @@ class TBufferedAudioStream : public TAudioStream
 
         FLOAT_BUFFER fMemoryBuffer;
 
-        long fChannels;		// Number of channels
-        long fCurFrame;		// Position inside a buffer
-        long fFramesNum;	// Total file frames number
-        long fTotalFrames;	// Total frames already handled
-     
+        long fChannels;     // Number of channels
+        long fCurFrame;     // Position inside the buffer
+        long fFramesNum;    // Total file frames number
+        long fTotalFrames;  // Total frames already handled
+
         volatile bool fReady; // For disk access error detection
 
         virtual long WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
@@ -152,15 +152,15 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
 
     public:
     
-        TSharedBufferedAudioStream(long beginFrame, FLOAT_BUFFER shared_buffer): TBufferedAudioStream()
+        TSharedBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer): TBufferedAudioStream()
         {
             fBeginFrame = beginFrame;
-            assert(fBeginFrame < shared_buffer->GetSize());
+            assert(fBeginFrame < buffer->GetSize());
             
-            fChannels = shared_buffer->GetChannels();
+            fChannels = buffer->GetChannels();
            
             // Keep the shared buffer
-            fMemoryBuffer = shared_buffer;
+            fMemoryBuffer = buffer;
             // Start from fBeginFrame
             fCurFrame = fBeginFrame;
             fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
@@ -168,13 +168,15 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
         virtual ~TSharedBufferedAudioStream()
         {}
         
+        /*
+        // To clean up ?
         virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             // Read buffer from memory
             assert_stream(framesNum, framePos);
-            
             return TBufferedAudioStream::Read(buffer, framesNum, framePos); 
         }
+        */
         
         virtual TAudioStreamPtr CutBegin(long frames)
         {

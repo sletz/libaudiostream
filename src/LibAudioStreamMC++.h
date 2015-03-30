@@ -396,6 +396,15 @@ extern "C"
     long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long frames, long pos);
     
     /*!
+     \brief Write a buffer to the stream. This fonction can only be used with streams built with MakeBufferSound and has to have the correct number of channels.
+     \param sound The stream.
+     \param buffer A buffer with frames to be written.
+     \param buffer_size The buffer length.
+     \return The number of written frames.
+     */
+    long WriteSound(AudioStream sound, float** buffer, long buffer_size);
+    
+    /*!
      \brief Reset a stream.
      \param sound The stream to be reseted.
      */
