@@ -214,7 +214,8 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
     
     protected:
         
-        long fBeginFrame;  // First frame to be read in the memory buffer
+        long fBeginFrame;       // First frame to be read in the memory buffer
+        long fCurWriteFrame;    // Write position inside the buffer
         
     public:
         
@@ -224,6 +225,7 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             
             fBeginFrame = beginFrame;
             fCurFrame = fBeginFrame;
+            fCurWriteFrame = fBeginFrame;
             
             fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
             fChannels = fMemoryBuffer->GetChannels();
@@ -234,7 +236,21 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             // Will not delete the 'wrapped' buffer
             delete fMemoryBuffer;
         }
-         
+        
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        {
+            assert(framePos == 0);  // Entire buffer for now...
+            framesNum = UTools::Min(framesNum, fMemoryBuffer->GetSize() - fCurWriteFrame);
+            
+            float** temp1 = (float**)alloca(fMemoryBuffer->GetChannels()*sizeof(float*));
+            float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
+  
+            UAudioTools::Float2Float(buffer->GetFrame(framePos, temp2), fMemoryBuffer->GetFrame(fCurWriteFrame, temp1), framesNum, fChannels);
+            
+            fCurWriteFrame += framesNum;
+            return framesNum;
+        }
+    
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             return new TMemoryBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
@@ -253,93 +269,12 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
         void Reset()
         {
             fCurFrame = fBeginFrame;
+            fCurWriteFrame = fBeginFrame;
             fTotalFrames = 0;
         }
         
 };
 
 typedef TMemoryBufferedAudioStream * TMemoryBufferedAudioStreamPtr;
-
-
-class TMemoryBufferedAudioStream1 : public TBufferedAudioStream
-{
-
-     protected:
-        
-        long fBeginFrame;     // First frame to be read in the memory buffer
-        long fCurWriteFrame;  // Write position inside the buffer
-      
-    public:
-        
-        TMemoryBufferedAudioStream1(long beginFrame, FLOAT_BUFFER buffer)
-        {
-            fMemoryBuffer = buffer;
-            fChannels = fMemoryBuffer->GetChannels();
-            
-            fBeginFrame = beginFrame;
-            fCurFrame = fBeginFrame;
-            fCurWriteFrame = fBeginFrame;
-            
-            fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
-            fChannels = fMemoryBuffer->GetChannels();
-        }
-        
-        virtual ~TMemoryBufferedAudioStream1()
-        {
-            // Will not delete the 'wrapped' buffer
-            delete fMemoryBuffer;
-        }
-        
-        /*
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
-        {
-            assert(framePos == 0);  // Entire buffer for now...
-            framesNum = UTools::Min(framesNum, fMemoryBuffer->GetSize() - fCurReadFrame);
-            
-            float** temp1 = (float**)alloca(fMemoryBuffer->GetChannels()*sizeof(float*));
-            float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-  
-            UAudioTools::Float2FloatMix(fMemoryBuffer->GetFrame(fCurReadFrame, temp1), buffer->GetFrame(framePos, temp2), framesNum, fChannels);
-            
-            fCurReadFrame += framesNum;
-            return framesNum;
-        }
-        */
-        
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
-        {
-            assert(framePos == 0);  // Entire buffer for now...
-            framesNum = UTools::Min(framesNum, fMemoryBuffer->GetSize() - fCurWriteFrame);
-            
-            float** temp1 = (float**)alloca(fMemoryBuffer->GetChannels()*sizeof(float*));
-            float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-  
-            UAudioTools::Float2Float(buffer->GetFrame(framePos, temp2), fMemoryBuffer->GetFrame(fCurWriteFrame, temp1), framesNum, fChannels);
-            
-            fCurWriteFrame += framesNum;
-            return framesNum;
-        }
-        
-        virtual TAudioStreamPtr CutBegin(long frames)
-        {
-            return new TMemoryBufferedAudioStream1(fBeginFrame + frames, fMemoryBuffer);
-        }
-        
-        virtual long Length()
-        {
-            return fMemoryBuffer->GetSize() - fBeginFrame;
-        }
-        
-        virtual TAudioStreamPtr Copy()
-        {
-            return new TMemoryBufferedAudioStream1(fBeginFrame, fMemoryBuffer);
-        } 
-        
-        void Reset()
-        {
-            fCurFrame = fBeginFrame;
-            fCurWriteFrame = fBeginFrame;
-        }
-};
 
 #endif

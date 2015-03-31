@@ -73,7 +73,6 @@ TAudioStreamPtr TAudioStreamFactory::MakeBufferSound(float** buffer, long length
 {
     TRY_CALL
     return new TMemoryBufferedAudioStream(0, new TSharedNonInterleavedAudioBuffer<float>(buffer, length, channels));
-    //return new TMemoryBufferedAudioStream1(0, new TSharedNonInterleavedAudioBuffer<float>(buffer, length, channels));
     CATCH_EXCEPTION_RETURN
 }
 

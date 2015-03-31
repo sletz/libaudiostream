@@ -4,6 +4,7 @@
 #include <LibAudioStreamMC/LibAudioStreamMC++.h>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 #include "LAS-test.h"
 
@@ -32,6 +33,43 @@ static long SR = 44100;
 static AudioStream s1,s2,s3,s4,s5,s6;
 static SymbolicDate symb1,symb2,symb3,symb4,symb5,symb6;
 static audio_frame_t date;
+
+// Sinus generator
+float* table_sinus;
+int size_sinus;
+int phase_sinus;
+
+void init_sinus(int sample_rate, int freq)
+{
+    size_sinus = sample_rate / freq;
+    
+    /* Alloue dynamiquement une table. */
+    table_sinus = (float*)malloc(size_sinus * sizeof(float));
+    
+    /* Remplit la table */
+    int i;
+    for (i = 0 ; i < size_sinus; i++) {
+        table_sinus[i] = 0.5 * sinf(((float)i / (float)size_sinus) * M_PI * 2.);
+    }
+}
+
+void destroy_sinus()
+{
+    /* Desalloue le tableau. */
+    free(table_sinus);
+}
+
+void process_sinus(float* output, int nframes)
+{
+    int i;
+    for (i = 0 ; i < nframes; i++) {
+        output[i] = table_sinus[phase_sinus];  
+        phase_sinus = phase_sinus + 1;
+        if (phase_sinus == size_sinus) {
+            phase_sinus = 0;
+        }
+    }
+}
 
 /*
 // Accès au flux temps-réel
@@ -174,16 +212,37 @@ int main(int argc, char* argv[])
     next();
     */
     
-    /*
-    float* buffer[2];
-    buffer[0] = new float[1014*100];
-    buffer[1] = new float[1014*100];
     
-    s1 = MakeBufferSound(buffer, 1014*100, 2);
+    float* buffer[2];
+    int stream_size = BS * 1000;
+    buffer[0] = new float[stream_size];
+    buffer[1] = new float[stream_size];
+     
+    init_sinus(SR, 700);
+    
+    /*
+    for (int buf = 0; buf < stream_size/size_sinus; buf++) {
+        process_sinus(&(buffer[0])[buf * size_sinus], size_sinus);
+        process_sinus(&(buffer[1])[buf * size_sinus], size_sinus);
+    }
+    */
+    
+    s1 = MakeBufferSound(buffer, stream_size, 2);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    
+    
+    sleep(1);
+    
+    for (int buf = 0; buf < stream_size/size_sinus; buf++) {
+        process_sinus(&(buffer[0])[buf * size_sinus], size_sinus);
+        process_sinus(&(buffer[1])[buf * size_sinus], size_sinus);
+        long res = WriteSound(s1, buffer, size_sinus);
+        printf("size_sinus = %d res = %d\n", size_sinus, res);
+    }
    
     next();
-    */
+    
+    /*
   
     // Joue une région de 5 sec d'un fichier à la date courante
     //s1 = MakeRegionSound(FILENAME1, 5*SR, 10*SR);
@@ -194,7 +253,7 @@ int main(int argc, char* argv[])
     printf("res = %d\n", res);
    
     next();
-    
+    */
     
     // Joue un fade d'une région de 5 sec d'un fichier à la date courante
     s1 = MakeFadeSound(MakeRegionSound(FILENAME1, 5*SR, 10*SR), SR, SR);

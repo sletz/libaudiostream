@@ -84,6 +84,13 @@ extern "C"
         long fInputLatencyUsec;     // Input latency in microsecond
     } RendererInfo;
     
+    
+    typedef struct ErrorInfo {
+        char fStreamError[512];
+        long fDiskError;            // Counter of disk streaming errors
+        long fSchedulingError;      // Counter of too late scheduled stream commmands  
+    } ErrorInfo;
+    
     class TAudioStream : public la_smartable {
         
 	public:
@@ -188,6 +195,12 @@ extern "C"
      \return the error.
      */
     const char* GetLastLibError();
+    
+     /*!
+     \brief Fill the error data structure.
+     \param clear True if the error internal state should be cleared.
+     */
+    void GetErrors(ErrorInfo* error, bool clear);
     
     /**
      * @defgroup SoundFunctions Sound creation and manipulation functions
@@ -331,13 +344,13 @@ extern "C"
     AudioStream MakeWriteSound(const char* name, AudioStream sound, long format);
     
     /*!
-     \brief Create an input stream.
+     \brief Create an input stream that starts 'recording' at the time position is is placed in the score.
      \return A pointer to new stream object.
      */
     AudioStream MakeInputSound();
     
     /*!
-     \brief Create a shared stream on the input stream.
+     \brief Create a shared stream on the input stream, that starts 'recording' as soon as the Player is started.
      \return A pointer to new stream object.
      */
     AudioStream MakeSharedInputSound();
@@ -376,11 +389,20 @@ extern "C"
      \param sound The stream.
      \param buffer A buffer to be filled with frames.
      \param buffer_size The buffer length.
-     \param frames The number of frames to render length.
+     \param frames The number of frames to render.
      \param pos The position in buffer.
      \return The number of read frames.
      */
     long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long frames, long pos);
+    
+    /*!
+     \brief Write a buffer to the stream. This fonction can only be used with streams built with MakeBufferSound and has to have the correct number of channels.
+     \param sound The stream.
+     \param buffer A buffer with frames to be written.
+     \param buffer_size The buffer length.
+     \return The number of written frames.
+     */
+    long WriteSound(AudioStream sound, float** buffer, long buffer_size);
     
     /*!
      \brief Reset a stream.
