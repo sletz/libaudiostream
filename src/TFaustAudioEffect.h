@@ -22,9 +22,9 @@ research@grame.fr
 #ifndef __TFaustAudioEffect__
 #define __TFaustAudioEffect__
 
-#include "faust/llvm-dsp.h"
+#include "faust/dsp/llvm-dsp.h"
 #if REMOTE_DSP
-#include "faust/remote-dsp.h"
+#include "faust/dsp/remote-dsp.h"
 #endif
 //#include "faust/gui/jsonfaustui.h"
 #include "faust/gui/JSONUI.h"
