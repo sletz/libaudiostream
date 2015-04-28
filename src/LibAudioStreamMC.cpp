@@ -35,6 +35,7 @@ research@grame.fr
 #endif
 #ifdef __JACK__
 #include "TJackRenderer.h"
+#include "TNetJackRenderer.h"
 #endif
 #include "TOfflineRenderer.h"
 
@@ -1379,6 +1380,9 @@ AUDIOAPI long GetDeviceCount(long renderer)
 #ifdef __JACK__
         case kJackRenderer:
             return TJackRenderer::GetDeviceCount();
+            
+        case kNetJackRenderer:
+            return TNetJackRenderer::GetDeviceCount();
 #else
 	#ifdef WIN32
 		#pragma message ("JACK renderer is not compiled")
@@ -1422,6 +1426,10 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
         case kJackRenderer:
             TJackRenderer::GetDeviceInfo(deviceNum, info);
             break;
+            
+        case kNetJackRenderer:
+            TNetJackRenderer::GetDeviceInfo(deviceNum, info);
+            break;
 #else
 	#ifdef WIN32
 		#pragma message ("JACK renderer is not compiled")
@@ -1463,6 +1471,9 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
 #ifdef __JACK__
         case kJackRenderer:
             return TJackRenderer::GetDefaultInputDevice();
+            
+        case kNetJackRenderer:
+            return TNetJackRenderer::GetDefaultInputDevice();
 #else
 	#ifdef WIN32
 		#pragma message ("JACK renderer is not compiled")
@@ -1502,6 +1513,9 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
 #ifdef __JACK__
         case kJackRenderer:
             return TJackRenderer::GetDefaultOutputDevice();
+            
+        case kNetJackRenderer:
+            return TNetJackRenderer::GetDefaultOutputDevice();
 #else
 	#ifdef WIN32
 		#pragma message ("JACK renderer is not compiled")

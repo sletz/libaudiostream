@@ -27,6 +27,7 @@ research@grame.fr
 
 #ifdef __JACK__
 #include "TJackRenderer.h"
+#include "TNetJackRenderer.h"
 #endif
 
 #ifdef __PORTAUDIO__
@@ -74,6 +75,11 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 				#warning Jack renderer is not compiled
 			#endif
 				return NULL;
+			#endif
+            
+            case kNetJackRenderer:
+            #ifdef __JACK__
+				return new TNetJackRenderer(-1, DEFAULT_MULTICAST_IP, DEFAULT_PORT, DEFAULT_MTU, 5);
 			#endif
 		
 			 case kCoreAudioRenderer:

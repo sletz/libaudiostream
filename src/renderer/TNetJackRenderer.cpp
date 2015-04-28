@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2014
+Copyright (C) Grame 2015
 
 This library is free software; you can redistribute it and modify it under 
 the terms of the GNU Library General Public License as published by the 
@@ -20,26 +20,17 @@ research@grame.fr
 
 */
 
-#include <cstring>
 #include "TNetJackRenderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
-#include "UTools.h"
 
-void* TNetJackRenderer::Process(void* arg)
-{
-    TNetJackRenderer* renderer = static_cast<TNetJackRenderer*>(arg);
-  	return NULL;
- }
-
-TNetJackRenderer::TNetJackRenderer(): TAudioRenderer()
-{
-    
-}
+TNetJackRenderer::TNetJackRenderer(int net_format, const std::string& master_ip, int master_port, int mtu, int latency)
+    :TAudioRenderer(), fNet(0), fNetFormat(net_format), fMasterIP(master_ip), fMasterPort(master_port), fMTU(mtu), fLatency(latency)
+{}
 
 TNetJackRenderer::~TNetJackRenderer()
 {
-    
+    Close();
 }
 
 long TNetJackRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
@@ -51,22 +42,61 @@ long TNetJackRenderer::Open(long inChan, long outChan, long bufferSize, long sam
 
 long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
-    return 0;
+    jack_slave_t request = {
+                inChan,
+                outChan,
+                0, 
+                0,
+                fMTU,
+                2,
+                (fNetFormat > 0) ? JackOpusEncoder : ((fNetFormat == -1) ? JackFloatEncoder : JackIntEncoder),
+                (fNetFormat > 0) ? fNetFormat : 0,
+                fLatency
+            };
+
+    if ((fNet = jack_net_slave_open(fMasterIP.c_str(), fMasterPort, "net_slave", &request, &fResult)) == 0) {
+        printf("jack remote server not running ?\n");
+        return OPEN_ERR;
+    }
+    
+    jack_set_net_slave_process_callback(fNet, net_process, this);
+#ifdef RESTART_CB_API
+    jack_set_net_slave_restart_callback(fNet, net_restart, this);
+#else
+    jack_set_net_slave_shutdown_callback(fNet, net_shutdown, this);
+#endif
+    jack_set_net_slave_sample_rate_callback(fNet, net_sample_rate, this);
+    
+    jack_set_net_slave_buffer_size_callback(fNet, net_buffer_size, this);
+    
+    jack_set_net_slave_error_callback(fNet, net_error, this);
+
+    return NO_ERR;
 }
 
 long TNetJackRenderer::Close()
 {
-    return 0;
+    if (fNet) {
+        Stop();
+        jack_net_slave_close(fNet);
+        fNet = 0;
+    }
 }
 
 long TNetJackRenderer::Start()
 {
- 	return false;
+    if (jack_net_slave_activate(fNet)) {
+        printf("cannot activate net");
+        return false;
+    }
+    return true;
 }
 
 long TNetJackRenderer::Stop()
 {
-    return 0;
+    if (fNet) {
+        jack_net_slave_deactivate(fNet);
+    }
 }
 
 long TNetJackRenderer::Pause()
@@ -86,8 +116,7 @@ void TNetJackRenderer::GetInfo(RendererInfoPtr info)
 
 long TNetJackRenderer::GetDeviceCount()
 {
-	// TODO
-    return 0;
+    return 1;
 }
 
 void TNetJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
@@ -105,3 +134,7 @@ long TNetJackRenderer::GetDefaultOutputDevice()
 	return 1;
 }
 
+void TNetJackRenderer::Process(int count, float** audio_inputs, float** audio_outputs, void** midi_inputs, void** midi_outputs)
+{
+    Run(audio_inputs, audio_outputs, count);
+}

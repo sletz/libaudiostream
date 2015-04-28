@@ -61,27 +61,22 @@
 		4B29CD9917FDB1E1000C5D6F /* TExpAudioMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B29CD9717FDB1E1000C5D6F /* TExpAudioMixer.cpp */; };
 		4B29CD9A17FDB1E1000C5D6F /* TExpAudioMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B29CD9717FDB1E1000C5D6F /* TExpAudioMixer.cpp */; };
 		4B29CD9B17FDB1E1000C5D6F /* TExpAudioMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B29CD9717FDB1E1000C5D6F /* TExpAudioMixer.cpp */; };
-		4B5108A019655A330046C73B /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089B19655A330046C73B /* TCoreAudioRenderer.h */; };
 		4B5108A119655A330046C73B /* TJackRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089C19655A330046C73B /* TJackRenderer.cpp */; };
 		4B5108A219655A330046C73B /* TJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089D19655A330046C73B /* TJackRenderer.h */; };
 		4B5108A319655A330046C73B /* TOfflineRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089E19655A330046C73B /* TOfflineRenderer.cpp */; };
 		4B5108A419655A330046C73B /* TOfflineRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089F19655A330046C73B /* TOfflineRenderer.h */; };
-		4B5108A519655A330046C73B /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089B19655A330046C73B /* TCoreAudioRenderer.h */; };
 		4B5108A619655A330046C73B /* TJackRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089C19655A330046C73B /* TJackRenderer.cpp */; };
 		4B5108A719655A330046C73B /* TJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089D19655A330046C73B /* TJackRenderer.h */; };
 		4B5108A819655A330046C73B /* TOfflineRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089E19655A330046C73B /* TOfflineRenderer.cpp */; };
 		4B5108A919655A330046C73B /* TOfflineRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089F19655A330046C73B /* TOfflineRenderer.h */; };
-		4B5108AA19655A330046C73B /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089B19655A330046C73B /* TCoreAudioRenderer.h */; };
 		4B5108AB19655A330046C73B /* TJackRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089C19655A330046C73B /* TJackRenderer.cpp */; };
 		4B5108AC19655A330046C73B /* TJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089D19655A330046C73B /* TJackRenderer.h */; };
 		4B5108AD19655A330046C73B /* TOfflineRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089E19655A330046C73B /* TOfflineRenderer.cpp */; };
 		4B5108AE19655A330046C73B /* TOfflineRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089F19655A330046C73B /* TOfflineRenderer.h */; };
-		4B5108AF19655A330046C73B /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089B19655A330046C73B /* TCoreAudioRenderer.h */; };
 		4B5108B019655A330046C73B /* TJackRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089C19655A330046C73B /* TJackRenderer.cpp */; };
 		4B5108B119655A330046C73B /* TJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089D19655A330046C73B /* TJackRenderer.h */; };
 		4B5108B219655A330046C73B /* TOfflineRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089E19655A330046C73B /* TOfflineRenderer.cpp */; };
 		4B5108B319655A330046C73B /* TOfflineRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089F19655A330046C73B /* TOfflineRenderer.h */; };
-		4B5108B419655A330046C73B /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089B19655A330046C73B /* TCoreAudioRenderer.h */; };
 		4B5108B719655A330046C73B /* TOfflineRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B51089E19655A330046C73B /* TOfflineRenderer.cpp */; };
 		4B5108B819655A330046C73B /* TOfflineRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B51089F19655A330046C73B /* TOfflineRenderer.h */; };
 		4B63B0540BDF790600CD9753 /* TPortAudioV19Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0520BDF790600CD9753 /* TPortAudioV19Renderer.cpp */; };
@@ -518,7 +513,6 @@
 		4B271B35182A71CA001E13D6 /* TFaustAudioEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TFaustAudioEffect.cpp; path = ../src/TFaustAudioEffect.cpp; sourceTree = SOURCE_ROOT; };
 		4B29CD9217FDB1D0000C5D6F /* TExpAudioMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TExpAudioMixer.h; path = ../src/TExpAudioMixer.h; sourceTree = SOURCE_ROOT; };
 		4B29CD9717FDB1E1000C5D6F /* TExpAudioMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TExpAudioMixer.cpp; path = ../src/TExpAudioMixer.cpp; sourceTree = SOURCE_ROOT; };
-		4B51089B19655A330046C73B /* TCoreAudioRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCoreAudioRenderer.h; path = ../src/renderer/TCoreAudioRenderer.h; sourceTree = SOURCE_ROOT; };
 		4B51089C19655A330046C73B /* TJackRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TJackRenderer.cpp; path = ../src/renderer/TJackRenderer.cpp; sourceTree = SOURCE_ROOT; };
 		4B51089D19655A330046C73B /* TJackRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TJackRenderer.h; path = ../src/renderer/TJackRenderer.h; sourceTree = SOURCE_ROOT; };
 		4B51089E19655A330046C73B /* TOfflineRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TOfflineRenderer.cpp; path = ../src/renderer/TOfflineRenderer.cpp; sourceTree = SOURCE_ROOT; };
@@ -813,7 +807,6 @@
 			children = (
 				4BA141351AEFCF2300E7B9BB /* TNetJackRenderer.cpp */,
 				4BA141361AEFCF2300E7B9BB /* TNetJackRenderer.h */,
-				4B51089B19655A330046C73B /* TCoreAudioRenderer.h */,
 				4B51089C19655A330046C73B /* TJackRenderer.cpp */,
 				4B51089D19655A330046C73B /* TJackRenderer.h */,
 				4B51089E19655A330046C73B /* TOfflineRenderer.cpp */,
@@ -1019,7 +1012,6 @@
 				4B741638183D163000D1BE27 /* TAudioStreamFactory.h in Headers */,
 				4BAC541418448F6900EFA988 /* TAudioDate.h in Headers */,
 				4B888D8F192CACE40055160E /* TAudioRenderer.h in Headers */,
-				4B5108A019655A330046C73B /* TCoreAudioRenderer.h in Headers */,
 				4B5108A219655A330046C73B /* TJackRenderer.h in Headers */,
 				4B5108A419655A330046C73B /* TOfflineRenderer.h in Headers */,
 				4BA141381AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */,
@@ -1109,7 +1101,6 @@
 				4BC71DF51931C7760065A7E3 /* TAudioStreamFactory.h in Headers */,
 				4BC71DF61931C7760065A7E3 /* TAudioDate.h in Headers */,
 				4BC71DF71931C7760065A7E3 /* TAudioRenderer.h in Headers */,
-				4B5108B419655A330046C73B /* TCoreAudioRenderer.h in Headers */,
 				4B5108B819655A330046C73B /* TOfflineRenderer.h in Headers */,
 				4BA141401AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */,
 			);
@@ -1167,7 +1158,6 @@
 				4BAC1F3B182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
 				4BAC541718448F6900EFA988 /* TAudioDate.h in Headers */,
 				4B888D89192CACE40055160E /* TAudioRenderer.h in Headers */,
-				4B5108AF19655A330046C73B /* TCoreAudioRenderer.h in Headers */,
 				4B5108B119655A330046C73B /* TJackRenderer.h in Headers */,
 				4B5108B319655A330046C73B /* TOfflineRenderer.h in Headers */,
 				4BA1413E1AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */,
@@ -1233,7 +1223,6 @@
 				4BAC1F39182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
 				4BAC541618448F6900EFA988 /* TAudioDate.h in Headers */,
 				4B888D8B192CACE40055160E /* TAudioRenderer.h in Headers */,
-				4B5108AA19655A330046C73B /* TCoreAudioRenderer.h in Headers */,
 				4B5108AC19655A330046C73B /* TJackRenderer.h in Headers */,
 				4B5108AE19655A330046C73B /* TOfflineRenderer.h in Headers */,
 				4BA1413C1AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */,
@@ -1294,7 +1283,6 @@
 				4BAC1F37182D2193003D6EFA /* TSelectAudioStream.h in Headers */,
 				4BAC541518448F6900EFA988 /* TAudioDate.h in Headers */,
 				4B888D8D192CACE40055160E /* TAudioRenderer.h in Headers */,
-				4B5108A519655A330046C73B /* TCoreAudioRenderer.h in Headers */,
 				4B5108A719655A330046C73B /* TJackRenderer.h in Headers */,
 				4B5108A919655A330046C73B /* TOfflineRenderer.h in Headers */,
 				4BA1413A1AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */,

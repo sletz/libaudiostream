@@ -51,7 +51,7 @@ extern "C"
     typedef int64_t audio_frame_t;
     typedef int64_t audio_usec_t;
     
-    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer, kNetJackRenderer};
     
     /*!
      \brief Audio device info.
