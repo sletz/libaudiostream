@@ -235,7 +235,6 @@ long TPortAudioV19Renderer::Start()
 {
     // Init timing here
     fAnchorFrameTime = 0;
-    
     return Cont();
 }
 

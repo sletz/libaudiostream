@@ -33,6 +33,11 @@ TNetJackRenderer::~TNetJackRenderer()
     Close();
 }
 
+void TNetJackRenderer::Process(int count, float** audio_inputs, float** audio_outputs, void** midi_inputs, void** midi_outputs)
+{
+    Run(audio_inputs, audio_outputs, count);
+}
+
 long TNetJackRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     int inDevice = 0;
@@ -48,14 +53,14 @@ long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan,
                 0, 
                 0,
                 fMTU,
-                2,
+                -1,
                 (fNetFormat > 0) ? JackOpusEncoder : ((fNetFormat == -1) ? JackFloatEncoder : JackIntEncoder),
                 (fNetFormat > 0) ? fNetFormat : 0,
                 fLatency
             };
 
     if ((fNet = jack_net_slave_open(fMasterIP.c_str(), fMasterPort, "net_slave", &request, &fResult)) == 0) {
-        printf("jack remote server not running ?\n");
+        printf("JACK remote server not running ?\n");
         return OPEN_ERR;
     }
     
@@ -71,7 +76,7 @@ long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan,
     
     jack_set_net_slave_error_callback(fNet, net_error, this);
 
-    return NO_ERR;
+    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 }
 
 long TNetJackRenderer::Close()
@@ -87,15 +92,18 @@ long TNetJackRenderer::Start()
 {
     if (jack_net_slave_activate(fNet)) {
         printf("cannot activate net");
-        return false;
+        return OPEN_ERR;
+    } else {
+        return NO_ERR;
     }
-    return true;
 }
 
 long TNetJackRenderer::Stop()
 {
     if (fNet) {
-        jack_net_slave_deactivate(fNet);
+        return (jack_net_slave_deactivate(fNet) == 0) ? NO_ERR : OPEN_ERR;
+    } else {
+        return OPEN_ERR;
     }
 }
 
@@ -111,6 +119,10 @@ long TNetJackRenderer::Cont()
 
 void TNetJackRenderer::GetInfo(RendererInfoPtr info)
 {
+    info->fInput = fInput;
+    info->fOutput = fOutput;
+    info->fSampleRate = fSampleRate;
+    info->fBufferSize = fBufferSize;
     // TODO
 }
 
@@ -126,15 +138,10 @@ void TNetJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 
 long TNetJackRenderer::GetDefaultInputDevice()
 {
-	return 1;
+	return 0;
 }
 
 long TNetJackRenderer::GetDefaultOutputDevice()
 {
-	return 1;
-}
-
-void TNetJackRenderer::Process(int count, float** audio_inputs, float** audio_outputs, void** midi_inputs, void** midi_outputs)
-{
-    Run(audio_inputs, audio_outputs, count);
+	return 0;
 }
