@@ -108,20 +108,17 @@ long TJackRenderer::Open(long inChan, long outChan, long bufferSize, long sample
 
 	assert(inChan < MAX_PORTS);
 	assert(outChan < MAX_PORTS);
-	
-	fInput = inChan;
-	fOutput = outChan;
 		
 	char buf[256];
 	
-	for (i = 0; i < fInput; i++) {
+	for (i = 0; i < inChan; i++) {
 		snprintf(buf, sizeof(buf) - 1, "in%d", i + 1);
 		fInput_ports[i] = jack_port_register(fClient, buf, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
 		if (!fInput_ports[i]) {
 			goto error;
         }
 	}
-	for (i = 0; i < fOutput; i++) {
+	for (i = 0; i < outChan; i++) {
 		snprintf(buf, sizeof(buf) - 1, "out%d", i + 1);
 		fOutput_ports[i] = jack_port_register(fClient, buf, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 		if (!fOutput_ports[i]) {
@@ -133,8 +130,9 @@ long TJackRenderer::Open(long inChan, long outChan, long bufferSize, long sample
 
 error:
     printf("Error while opening jack client\n");
-    if (fClient)
+    if (fClient) {
         jack_client_close(fClient);
+    }
     fClient = 0;
     return OPEN_ERR;
 }

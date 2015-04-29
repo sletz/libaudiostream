@@ -64,6 +64,17 @@ long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan,
         return OPEN_ERR;
     }
     
+    if (sampleRate != fResult.sample_rate) {
+		printf("Warning: requested sample rate = %ld different from driver sample rate = %d \n", sampleRate, fResult.sample_rate);
+	}
+	
+	if (bufferSize != fResult.buffer_size) { 
+		printf("Warning: requested buffer size = %ld different from driver buffer size = %d \n", bufferSize, fResult.buffer_size);
+	}
+    
+    sampleRate = fResult.sample_rate;
+    bufferSize = fResult.buffer_size;
+   
     jack_set_net_slave_process_callback(fNet, net_process, this);
 #ifdef RESTART_CB_API
     jack_set_net_slave_restart_callback(fNet, net_restart, this);
@@ -123,7 +134,11 @@ void TNetJackRenderer::GetInfo(RendererInfoPtr info)
     info->fOutput = fOutput;
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
-    // TODO
+    // TODO : Zero for now...
+    info->fCurFrame = 0;
+    info->fCurUsec = 0;
+    info->fOutputLatencyFrame = 0;
+    info->fOutputLatencyUsec = 0;
 }
 
 long TNetJackRenderer::GetDeviceCount()
@@ -133,7 +148,8 @@ long TNetJackRenderer::GetDeviceCount()
 
 void TNetJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
-	// TODO
+    strcpy(info->fName, "NetJack backend");
+ 	// TODO
 }
 
 long TNetJackRenderer::GetDefaultInputDevice()
