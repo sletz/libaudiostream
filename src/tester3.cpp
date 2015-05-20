@@ -179,9 +179,9 @@ int main(int argc, char* argv[])
     long res;
     
     //gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kJackRenderer, 1);
-    gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kNetJackRenderer, 1);
+    //gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kNetJackRenderer, 1);
     
-    //gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
     assert(gAudioPlayer);
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
@@ -213,7 +213,6 @@ int main(int argc, char* argv[])
     next();
     */
     
-    
     float* buffer[2];
     int stream_size = BS * 1000;
     buffer[0] = new float[stream_size];
@@ -231,16 +230,29 @@ int main(int argc, char* argv[])
     s1 = MakeBufferSound(buffer, stream_size, 2);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
-    
     sleep(1);
+    long res1;
     
     for (int buf = 0; buf < stream_size/size_sinus; buf++) {
         process_sinus(&(buffer[0])[buf * size_sinus], size_sinus);
         process_sinus(&(buffer[1])[buf * size_sinus], size_sinus);
-        long res = WriteSound(s1, buffer, size_sinus);
-        printf("size_sinus = %d res = %d\n", size_sinus, res);
+        res1 = WriteSound(s1, buffer, size_sinus);
+        printf("size_sinus 1 = %d res = %d\n", size_sinus, res1);
     }
-   
+    
+    next();
+        
+    init_sinus(SR, 800);
+    ResetSound(s1);
+    StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    
+    for (int buf = 0; buf < stream_size/size_sinus; buf++) {
+        process_sinus(&(buffer[0])[buf * size_sinus], size_sinus);
+        process_sinus(&(buffer[1])[buf * size_sinus], size_sinus);
+        res1 = WriteSound(s1, buffer, size_sinus);
+        printf("size_sinus 2 = %d res = %d\n", size_sinus, res1);
+    }
+    
     next();
     
     /*
@@ -318,8 +330,7 @@ int main(int argc, char* argv[])
     s5 = MakeParSound(s2, s4);
     //MemoryRender(s5, 512);
     StartSound(gAudioPlayer, s5, GenRealDate(gAudioPlayer, GetCurDate()));
-    
-    
+     
     next();
     
     // Joue une région de 5 sec d'un fichier à la date courante, arrêt au bout de 3 sec
