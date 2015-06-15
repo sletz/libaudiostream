@@ -243,7 +243,10 @@ int main(int argc, char* argv[])
     next();
         
     init_sinus(SR, 800);
+   
+    StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     ResetSound(s1);
+     
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
     for (int buf = 0; buf < stream_size/size_sinus; buf++) {

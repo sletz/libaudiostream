@@ -51,7 +51,7 @@ extern "C"
     typedef int64_t audio_frame_t;
     typedef int64_t audio_usec_t;
     
-    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer};
+    enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer, kNetJackRenderer};
     
     /*!
      \brief Audio device info.
@@ -396,7 +396,7 @@ extern "C"
     long ReadSoundPos(AudioStream sound, float** buffer, long buffer_size, long frames, long pos);
     
     /*!
-     \brief Write a buffer to the stream. This fonction can only be used with streams built with MakeBufferSound and has to have the correct number of channels.
+     \brief Write a buffer to the stream. This fonction can only be used with streams built with MakeBufferSound.
      \param sound The stream.
      \param buffer A buffer with frames to be written.
      \param buffer_size The buffer length.
