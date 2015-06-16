@@ -227,7 +227,7 @@ int main(int argc, char* argv[])
     }
     */
     
-    s1 = MakeBufferSound(buffer, stream_size, 2);
+    s1 = MakeLoopSound(MakeFadeSound(MakeBufferSound(buffer, stream_size, 2), SR, SR),10);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
     sleep(1);
@@ -244,10 +244,10 @@ int main(int argc, char* argv[])
         
     init_sinus(SR, 800);
    
-    StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    //StopSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     ResetSound(s1);
      
-    StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
+    //StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
     for (int buf = 0; buf < stream_size/size_sinus; buf++) {
         process_sinus(&(buffer[0])[buf * size_sinus], size_sinus);

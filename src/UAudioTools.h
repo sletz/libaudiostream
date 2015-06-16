@@ -538,7 +538,7 @@ class UAudioTools
                 }
                 */
                 for (long j = 0; j < framesNum; j++) {
-                    out[i][j] += in[i][j];
+                    out[i][j] = in[i][j];
                 }
             }        
         }
