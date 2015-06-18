@@ -235,7 +235,7 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             // Clear just read buffer
             float** temp = (float**)alloca(fChannels*sizeof(float*));
             
-            UAudioTools::ZeroFloatBlk(fMemoryBuffer->GetFrame(cur_pos, temp), framesNum, fChannels);
+            UAudioTools::ZeroFloatBlk(fMemoryBuffer->GetFrame(cur_pos, temp), res, fChannels);
             return res;
         }
         
