@@ -275,6 +275,11 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             fTotalFrames = 0;
         }
         
+        long GetPos()
+        {
+            return fCurFrame;
+        }
+        
 };
 
 typedef TMemoryBufferedAudioStream * TMemoryBufferedAudioStreamPtr;
