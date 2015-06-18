@@ -169,16 +169,6 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
         virtual ~TSharedBufferedAudioStream()
         {}
         
-        /*
-        // To clean up ?
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
-        {
-            // Read buffer from memory
-            assert_stream(framesNum, framePos);
-            return TBufferedAudioStream::Read(buffer, framesNum, framePos); 
-        }
-        */
-        
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             return new TSharedBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
@@ -235,6 +225,18 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
         {
             // Will not delete the 'wrapped' buffer
             delete fMemoryBuffer;
+        }
+        
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        {
+            long cur_pos = fCurFrame;
+            long res = TBufferedAudioStream::Read(buffer, framesNum, framePos);
+            
+            // Clear just read buffer
+            float** temp = (float**)alloca(fChannels*sizeof(float*));
+            
+            UAudioTools::ZeroFloatBlk(fMemoryBuffer->GetFrame(cur_pos, temp), framesNum, fChannels);
+            return res;
         }
         
         virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
