@@ -69,10 +69,10 @@ TAudioStreamPtr TAudioStreamFactory::MakeConstantSound(long channels, long lengt
     return new TConstantAudioStream(channels, length, value);
 }
 
-TAudioStreamPtr TAudioStreamFactory::MakeBufferSound(float** buffer, long length, long channels)
+TAudioStreamPtr TAudioStreamFactory::MakeBufferSound(float** buffer, long length, long channels, bool clear)
 {
     TRY_CALL
-    return new TMemoryBufferedAudioStream(0, new TSharedNonInterleavedAudioBuffer<float>(buffer, length, channels));
+    return new TMemoryBufferedAudioStream(0, new TSharedNonInterleavedAudioBuffer<float>(buffer, length, channels), clear);
     CATCH_EXCEPTION_RETURN
 }
 

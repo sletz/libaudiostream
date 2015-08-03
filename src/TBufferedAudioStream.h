@@ -207,9 +207,11 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
         long fBeginFrame;       // First frame to be read in the memory buffer
         long fCurWriteFrame;    // Write position inside the buffer
         
+        bool fClear;
+        
     public:
         
-        TMemoryBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer): TBufferedAudioStream()
+        TMemoryBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer, bool clear = true): TBufferedAudioStream()
         {
             fMemoryBuffer = buffer;
             
@@ -219,6 +221,8 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             
             fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
             fChannels = fMemoryBuffer->GetChannels();
+            
+            fClear = clear;
         }
         
         virtual ~TMemoryBufferedAudioStream()
@@ -233,9 +237,10 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             long res = TBufferedAudioStream::Read(buffer, framesNum, framePos);
             
             // Clear just read buffer
-            float** temp = (float**)alloca(fChannels*sizeof(float*));
-            
-            UAudioTools::ZeroFloatBlk(fMemoryBuffer->GetFrame(cur_pos, temp), res, fChannels);
+            if (fClear) {
+                float** temp = (float**)alloca(fChannels*sizeof(float*));
+                UAudioTools::ZeroFloatBlk(fMemoryBuffer->GetFrame(cur_pos, temp), res, fChannels);
+            }
             return res;
         }
         

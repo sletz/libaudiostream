@@ -235,9 +235,10 @@ extern "C"
      \param buffer The sound buffer a array of non interleaved audio buffers.
      \param length The sound buffer length.
      \param length The sound buffer channels number.
+     \param erase A boolean to indicate if internal bufer should be cleared just after Read
      \return A pointer to new stream object.
      */
-    AudioStream MakeBufferSound(float** buffer, long length, long channels);
+    AudioStream MakeBufferSound(float** buffer, long length, long channels, bool clear);
     
     /*!
      \brief Create a file reader stream.
