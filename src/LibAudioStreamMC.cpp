@@ -457,7 +457,11 @@ AUDIOAPI void ResetSound(AudioStream s)
 AUDIOAPI long SetPosSound(AudioStream s, long frames)
 {
     if (s) {
-        return static_cast<TAudioStreamPtr>(s)->SetPos(frames);
+        if (frames < 0 || frames > static_cast<TAudioStreamPtr>(s)->Length()) {
+            return SET_POS_ERR;
+        } else {
+            return static_cast<TAudioStreamPtr>(s)->SetPos(frames);
+        }
     } else {
         return FILE_NOT_FOUND_ERR;
     }
@@ -622,7 +626,11 @@ AUDIOAPI void ResetSoundPtr(AudioStreamPtr sound)
 AUDIOAPI long SetPosSoundPtr(AudioStreamPtr s, long frames)
 {
     if (s) {
-        return static_cast<TAudioStreamPtr>(*s)->SetPos(frames);
+        if (frames < 0 || frames > static_cast<TAudioStreamPtr>(*s)->Length()) {
+            return SET_POS_ERR;
+        } else {
+            return static_cast<TAudioStreamPtr>(*s)->SetPos(frames);
+        }
     } else {
         return FILE_NOT_FOUND_ERR;
     }

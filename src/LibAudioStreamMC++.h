@@ -235,7 +235,7 @@ extern "C"
      \param buffer The sound buffer a array of non interleaved audio buffers.
      \param length The sound buffer length.
      \param length The sound buffer channels number.
-     \param erase A boolean to indicate if internal buffer should be cleared just after Read
+     \param clear A boolean to indicate if internal buffer should be cleared just after Read
      \return A pointer to new stream object.
      */
     AudioStream MakeBufferSound(float** buffer, long length, long channels, bool clear);
@@ -415,7 +415,7 @@ extern "C"
      \brief Change the current position in the stream.
      \param sound The stream to be used.
      \param frames The new position.
-     \return An error code.
+     \return An error code (SET_POS_ERR if outside of the stream).
      */
     long SetPosSound(AudioStream sound, long frames);
     

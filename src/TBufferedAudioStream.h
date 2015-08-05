@@ -85,7 +85,7 @@ class TBufferedAudioStream : public TAudioStream
 
         long fChannels;     // Number of channels
         long fCurFrame;     // Position inside the buffer
-        long fFramesNum;    // Total file frames number
+        long fFramesNum;    // Total buffer frames number
         long fTotalFrames;  // Total frames already handled
 
         volatile bool fReady; // For disk access error detection
@@ -114,21 +114,24 @@ class TBufferedAudioStream : public TAudioStream
         virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         virtual void Reset();
-		
-		virtual TAudioStreamPtr CutBegin(long frames)
+        
+        virtual TAudioStreamPtr CutBegin(long frames)
         {
             assert(false);
             return 0;
         }
+        
         virtual long Length()
         {
             assert(false);
             return 0;
         }
+        
         virtual long Channels()
         {
             return fChannels;
         }
+        
         virtual TAudioStreamPtr Copy()
         {
             assert(false);
@@ -155,16 +158,16 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
     
         TSharedBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer): TBufferedAudioStream()
         {
-            fBeginFrame = beginFrame;
-            assert(fBeginFrame < buffer->GetSize());
-            
-            fChannels = buffer->GetChannels();
-           
             // Keep the shared buffer
             fMemoryBuffer = buffer;
-            // Start from fBeginFrame
-            fCurFrame = fBeginFrame;
+
+            fChannels = buffer->GetChannels();
             fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
+            
+            // Start from fBeginFrame
+            fBeginFrame = beginFrame;
+            Reset();
+            
         }
         virtual ~TSharedBufferedAudioStream()
         {}
@@ -176,7 +179,7 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
     
         virtual long Length()
         {
-            return fMemoryBuffer->GetSize() - fBeginFrame;
+            return fFramesNum;
         }
         
         virtual TAudioStreamPtr Copy()
@@ -188,6 +191,11 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
         {
             fCurFrame = fBeginFrame;
             fTotalFrames = 0;
+        }
+        
+        long GetPos()
+        {
+            return fCurFrame;
         }
 
 };
@@ -211,16 +219,17 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
         
     public:
         
-        TMemoryBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer, bool clear = true): TBufferedAudioStream()
+        TMemoryBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer, bool clear = true):TBufferedAudioStream()
         {
+            // Keep the shared buffer
             fMemoryBuffer = buffer;
             
-            fBeginFrame = beginFrame;
-            fCurFrame = fBeginFrame;
-            fCurWriteFrame = fBeginFrame;
-            
-            fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
             fChannels = fMemoryBuffer->GetChannels();
+            fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
+            
+            // Start from fBeginFrame
+            fBeginFrame = beginFrame;
+            Reset();
             
             fClear = clear;
         }
@@ -265,7 +274,7 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
         
         virtual long Length()
         {
-            return fMemoryBuffer->GetSize() - fBeginFrame;
+            return fFramesNum;
         }
         
         virtual TAudioStreamPtr Copy()
@@ -280,6 +289,14 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             fTotalFrames = 0;
         }
         
+        virtual long SetPos(long frames)
+        {
+            assert(frames <= fMemoryBuffer->GetSize());
+            fBeginFrame = frames;
+            Reset();
+            return NO_ERR;
+        }
+	      
         long GetPos()
         {
             return fCurFrame;

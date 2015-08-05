@@ -78,10 +78,10 @@ long TReadFileAudioStream::SetPos(long frames)
         const char* error = sf_strerror(fFile);
         sf_close(fFile);
         return SET_POS_ERR;
+    } else {
+        fBeginFrame = frames;
+        return NO_ERR;
     }
-
-    fBeginFrame = frames;
-    return NO_ERR;
 }
 
 TReadFileAudioStream::~TReadFileAudioStream()
