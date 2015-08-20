@@ -74,8 +74,11 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 
 long TReadFileAudioStream::SetPos(long frames)
 {
+    printf("TReadFileAudioStream::SetPos frames = %d\n", frames);
+     
     if (sf_seek(fFile, frames, SEEK_SET) < 0) {
         const char* error = sf_strerror(fFile);
+        printf("TReadFileAudioStream::SetPos error = %s\n", error);
         sf_close(fFile);
         return SET_POS_ERR;
     } else {
