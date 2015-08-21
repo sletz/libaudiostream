@@ -131,7 +131,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeCutSound(TAudioStreamPtr sound, long be
     TRY_CALL
     if (beginFrame >= 0 && beginFrame < endFrame && sound) {
 		if (beginFrame >= sound->Length()) {
-            TAudioGlobals::AddLibError("MakeCutSound : beginFrame < 0 or endFrame > sound length");
+            TAudioGlobals::AddLibError("MakeCutSound : beginFrame > sound length");
 		} else {
 			TAudioStreamPtr begin = sound->CutBegin(beginFrame);
             return new TCutEndAudioStream(sound->CutBegin(beginFrame), UTools::Min(endFrame - beginFrame, begin->Length()));
