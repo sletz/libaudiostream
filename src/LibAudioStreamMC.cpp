@@ -458,7 +458,7 @@ AUDIOAPI long SetPosSound(AudioStream s, long frames)
 {
     if (s) {
         if (frames < 0 || frames > static_cast<TAudioStreamPtr>(s)->Length()) {
-            printf("SetPosSound error : frames %ld\n", frames);
+            printf("SetPosSound error : frames = %ld Length = %ld\n", frames, static_cast<TAudioStreamPtr>(s)->Length());
             return SET_POS_ERR;
         } else {
             return static_cast<TAudioStreamPtr>(s)->SetPos(frames);

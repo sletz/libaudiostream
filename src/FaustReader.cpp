@@ -74,7 +74,7 @@ struct FaustFileReader {
 
 // External API
 
-std::map<const char*, FaustFileReader*> fFileTable;
+std::map<const char*, FaustFileReader*> gFileTable;
 
 #ifdef __cplusplus
 extern "C"
@@ -92,13 +92,14 @@ AUDIOAPI float FaustFileSample(const char* name, int channel, int index);
 AUDIOAPI int FaustFileOpen(const char* name)
 {
     //printf("FaustFileOpen %s\n", name);
-    if (fFileTable.find(name) == fFileTable.end()) {
+    if (gFileTable.find(name) == gFileTable.end()) {
         try {
             TAudioGlobals::ClearLibError();
             TAudioGlobals::Init(2, 2, 2, 44100, 512, 65536 * 4, 44100 * 60 * 10, 1);
-            fFileTable[name] = new FaustFileReader(name);
+            gFileTable[name] = new FaustFileReader(name);
             return true;
         } catch (...) {
+            printf("Cannot open filename %s\n", name);
             return false;
         }
     } else {
@@ -108,14 +109,14 @@ AUDIOAPI int FaustFileOpen(const char* name)
 
 AUDIOAPI int FaustFileSize(const char* name)
 {
-    FaustFileReader* reader = fFileTable[name];
+    FaustFileReader* reader = gFileTable[name];
     assert(reader);
 	return reader->Size();
 }
 
 AUDIOAPI float FaustFileSample(const char* name, int channel, int index)
 {
-    FaustFileReader* reader = fFileTable[name];
+    FaustFileReader* reader = gFileTable[name];
     assert(reader);
     return reader->Sample(channel, index);
 }
