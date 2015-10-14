@@ -55,7 +55,6 @@
 		4B00603F1112ED0300B6A836 /* la_smartpointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB3FEDA0B39BAD400CA1607 /* la_smartpointer.h */; };
 		4B0060421112ED0300B6A836 /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */; };
 		4B0060431112ED0300B6A836 /* StringTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8E50E30CAA86670070FDA9 /* StringTools.h */; };
-		4B0060441112ED0300B6A836 /* TSoundTouchAudioStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B98A5BD0D168B2D00A93365 /* TSoundTouchAudioStream.h */; };
 		4B0060461112ED0300B6A836 /* Info-LibAudioStreamPA_CA_Jack.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B8E185809FCD83A00D586F5 /* Info-LibAudioStreamPA_CA_Jack.plist */; };
 		4B0060481112ED0300B6A836 /* TAudioChannel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C1D58D0330C7F001053105 /* TAudioChannel.cpp */; };
 		4B0060491112ED0300B6A836 /* TAudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5D82C47032DF3CC01053105 /* TAudioEffect.cpp */; };
@@ -84,7 +83,6 @@
 		4B0060601112ED0300B6A836 /* LibAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B83CA1907FBE5AE00256489 /* LibAudioStream.cpp */; };
 		4B0060611112ED0300B6A836 /* la_smartpointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB3FED90B39BAD400CA1607 /* la_smartpointer.cpp */; };
 		4B0060641112ED0300B6A836 /* TCoreAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */; };
-		4B0060661112ED0300B6A836 /* TSoundTouchAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B98A5BC0D168B2D00A93365 /* TSoundTouchAudioStream.cpp */; };
 		4B0060681112ED0300B6A836 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192308B9CD8D00C1962D /* Accelerate.framework */; };
 		4B0060691112ED0300B6A836 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4B00606A1112ED0300B6A836 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B7BD8D8097D0ED00029D6DC /* AudioUnit.framework */; };
@@ -374,6 +372,8 @@
 		4BEA6238095806CD001F733A /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192308B9CD8D00C1962D /* Accelerate.framework */; };
 		4BEA6239095806CD001F733A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4BEA6240095806CD001F733A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0DEDE087FE455003B1CB3 /* main.cpp */; };
+		4BED59291BCEBDBF002DF43F /* TJackAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0580BDF791A00CD9753 /* TJackAudioRenderer.cpp */; };
+		4BED592A1BCEBDC0002DF43F /* TJackAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0590BDF791A00CD9753 /* TJackAudioRenderer.h */; };
 		4BEFE9810C59C93E00F8AE0C /* TCoreAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */; };
 		4BEFE9820C59C93E00F8AE0C /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */; };
 /* End PBXBuildFile section */
@@ -861,13 +861,13 @@
 				4B00603F1112ED0300B6A836 /* la_smartpointer.h in Headers */,
 				4B0060421112ED0300B6A836 /* TCoreAudioRenderer.h in Headers */,
 				4B0060431112ED0300B6A836 /* StringTools.h in Headers */,
-				4B0060441112ED0300B6A836 /* TSoundTouchAudioStream.h in Headers */,
 				4B9A47CF1648104E000A1C0F /* TSampleRateAudioStream.h in Headers */,
 				4B16AD2A165548EB00FBB3EA /* TSeqAudioStream.h in Headers */,
 				4BE4D18A165671C700495934 /* TRubberBandAudioStream.h in Headers */,
 				4B66D56816ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
 				4BB9AE8817170DB000A56C3A /* TLASException.h in Headers */,
 				4B884DAA1743CF53004AAD1D /* TEventAudioStream.h in Headers */,
+				4BED592A1BCEBDC0002DF43F /* TJackAudioRenderer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1078,9 +1078,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio */ = {
+		4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio+Jack */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio" */;
+			buildConfigurationList = 4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio+Jack" */;
 			buildPhases = (
 				4B0060111112ED0300B6A836 /* Headers */,
 				4B0060451112ED0300B6A836 /* Resources */,
@@ -1092,7 +1092,7 @@
 			);
 			dependencies = (
 			);
-			name = "LibAudioStream CoreAudio";
+			name = "LibAudioStream CoreAudio+Jack";
 			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 			productName = AudioEngineFramework;
 			productReference = 4B0060721112ED0300B6A836 /* LibAudioStream.framework */;
@@ -1240,7 +1240,7 @@
 				4BCB2B0E0D12ACE500AB3F6D /* LibAudioStream PortAudio Intel */,
 				4BEA6192095806CD001F733A /* LibAudioStream PortAudio */,
 				4BEA61E7095806CD001F733A /* LibAudioStream PortAudio+CoreAudio+Jack */,
-				4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio */,
+				4B0060101112ED0300B6A836 /* LibAudioStream CoreAudio+Jack */,
 				4BEA623D095806CD001F733A /* testPlayer */,
 				4BCB2BDC0D12B71300AB3F6D /* testPlayer Intel */,
 				4BBBF3A6172A7E210019A47E /* LAStester */,
@@ -1367,11 +1367,11 @@
 				4B0060601112ED0300B6A836 /* LibAudioStream.cpp in Sources */,
 				4B0060611112ED0300B6A836 /* la_smartpointer.cpp in Sources */,
 				4B0060641112ED0300B6A836 /* TCoreAudioRenderer.cpp in Sources */,
-				4B0060661112ED0300B6A836 /* TSoundTouchAudioStream.cpp in Sources */,
 				4B9A47CE1648104E000A1C0F /* TSampleRateAudioStream.cpp in Sources */,
 				4BE4D189165671C700495934 /* TRubberBandAudioStream.cpp in Sources */,
 				4BB3A97E16FDDBE3000F728C /* StringTools.cpp in Sources */,
 				4B884DA51743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */,
+				4BED59291BCEBDBF002DF43F /* TJackAudioRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1523,8 +1523,8 @@
 		4B00606F1112ED0300B6A836 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1547,15 +1547,17 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
-					"-DSOUND_TOUCH",
+					"-D_JACK_",
 					"-D__COREAUDIO__",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					/usr/local/lib/faust/libHTTPDFaust.a,
-					/usr/local/lib/faust/libfaust.a,
-					librubberband.a,
+					"-ljack",
+					/usr/local/lib/libHTTPDFaust.a,
+					/usr/local/lib/libfaust.a,
+					/opt/local/lib/libsndfile.a,
+					/opt/local/lib/librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",
@@ -1640,8 +1642,6 @@
 					"-lLLVMCore",
 					"-lLLVMSupport",
 					libSoundTouch.a,
-					libsndfile.a,
-					libsndfile_i386.a,
 					"-flat_namespace",
 				);
 				OTHER_LIBTOOL_FLAGS = "";
@@ -1664,8 +1664,8 @@
 		4B0060701112ED0300B6A836 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1687,15 +1687,17 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
-					"-DSOUND_TOUCH",
+					"-D_JACK_",
 					"-D__COREAUDIO__",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					/usr/local/lib/faust/libHTTPDFaust.a,
-					/usr/local/lib/faust/libfaust.a,
-					librubberband.a,
+					"-ljack",
+					/usr/local/lib/libHTTPDFaust.a,
+					/usr/local/lib/libfaust.a,
+					/opt/local/lib/librubberband.a,
+					/opt/local/lib/libsndfile.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",
@@ -1781,8 +1783,6 @@
 					"-lLLVMSupport",
 					libSoundTouch.a,
 					libportaudioV19.a,
-					libsndfile.a,
-					libsndfile_i386.a,
 					"-flat_namespace",
 				);
 				OTHER_LIBTOOL_FLAGS = "";
@@ -2529,7 +2529,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio" */ = {
+		4B00606E1112ED0300B6A836 /* Build configuration list for PBXNativeTarget "LibAudioStream CoreAudio+Jack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B00606F1112ED0300B6A836 /* Development */,

@@ -24,8 +24,9 @@ research@grame.fr
 
 #include "faust/audio/dsp.h"
 #include "faust/gui/UI.h"
-#include "faust/llvm-dsp.h"
-#include "faust/gui/jsonfaustui.h"
+#include "faust/dsp/llvm-dsp.h"
+//#include "faust/gui/jsonfaustui.h"
+#include "faust/gui/JSONUI.h"
 //#include "faust/gui/OSCUI.h"
 
 #include "TAudioEffectInterface.h"
@@ -358,6 +359,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         string fCode;
         string fLibraryPath;
         string fDrawPath;
+        string fJSON;
         
         // Global DSP factory table
         static std::map<string, llvm_dsp_factory*> fFactoryTable;
@@ -376,7 +378,10 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
         {
             int argc;
             const char* argv[32];
-            char error_msg[256] = {0};
+            
+            // SL : 14/10/15
+            //char error_msg[256] = {0};
+            std::string error_msg;
             char error_lib[512] = {0};
             llvm_dsp_factory* factory = NULL;
             char input_name[64];
@@ -385,12 +390,15 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             fLibraryPath = library_path;
             fDrawPath = draw_path;
             
+            /*
             if (fFactoryTable.find(code) != fFactoryTable.end()) {
                 printf("DSP factory already created...\n");
                 factory = fFactoryTable[code];
                 goto make_instance;
             }
             
+            
+            // SL : 14/10/15
             // Try filename...
             argv[0] = code.c_str();
             
@@ -401,8 +409,28 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             } else {
                 argc = 1;
             }
+            */
+            
+            // Always add library_path
+            argv[argc++] = "-I";
+            argv[argc++] = library_path.c_str();
+          
+            // Add -svg parameter if necessary
+            if (draw_path != "") {
+                argv[argc++] = "-O";
+                argv[argc++] = draw_path.c_str();
+                argv[argc++] = "-svg";
+            }
+            
+        #ifdef WIN32     
+            argv[argc++] = "-l";
+            argv[argc++] = "llvm_math.ll";
+        #endif
          
-            factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
+            // SL : 14/10/15
+            //factory = createDSPFactory(argc, argv, library_path, draw_path, "", "", getTarget(), error_msg, 3);
+            factory = createDSPFactoryFromFile(code, argc, argv, getTarget(), error_msg, 3);
+          
             if (factory) {
                 goto make_instance;
             }  else {
@@ -421,7 +449,11 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             sprintf(input_name, "LAS-faustfx-%d", fFactoryNumber);
    
             // Try DSP code...
-            factory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, getTarget(), error_msg, 3);
+            
+            // SL : 14/10/15
+            //factory = createDSPFactory(argc, argv, library_path, draw_path, input_name, code, getTarget(), error_msg, 3);
+            factory = createDSPFactoryFromString("FaustLAS", code, argc, argv, getTarget(), error_msg, 3);
+            
             if (factory) {
                 goto make_instance;
             }  else {
@@ -512,6 +544,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             return fDsp->getNumInputs();
         }
         
+        /*
         const char* GetJson()
         {
             httpdfaust::jsonfaustui json("", "", 0);
@@ -520,6 +553,16 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             json.numInput(fDsp->getNumInputs());
             json.numOutput(fDsp->getNumOutputs());
             return json.json();
+        }
+        */
+        
+        const char* GetJson()
+        {
+            JSONUI builder(fDsp->getNumInputs(), fDsp->getNumOutputs());
+            metadataDSPFactory(fFactoryTable[fCode], &builder);
+            fDsp->buildUserInterface(&builder);
+            fJSON = builder.JSON();
+            return fJSON.c_str();
         }
 		
 };
