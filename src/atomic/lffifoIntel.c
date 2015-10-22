@@ -1,28 +1,21 @@
 /*
+  MidiShare Project
+  Copyright (C) Grame 1999-2005
 
-  Copyright © Grame 2001-2007
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  This library is free software; you can redistribute it and modify it under 
-  the terms of the GNU Library General Public License as published by the 
-  Free Software Foundation version 2 of the License, or any later version.
-
-  This library is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public 
-  License for more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-  Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
   research@grame.fr
 
 */
 
 
+#include "stdio.h"
 #include "lffifo.h"
 
+//#define __trace__
 #define fifo_end(ff)	(fifocell *)ff
 
 //----------------------------------------------------------------
@@ -32,11 +25,14 @@ void fifoinit (fifo* ff)
 	ff->oc = ff->ic = 0;
 	ff->dummy.link = fifo_end(ff);
 	ff->head = ff->tail = &ff->dummy;
+#ifdef __trace__
+printf("fifoinit %p %p\n", ff, ff->head);
+#endif
 }
 
 
 //----------------------------------------------------------------
-unsigned long fifosize (fifo * ff)
+atomic_long fifosize (fifo * ff)
 {
     return ff->count.value;
 }
@@ -44,7 +40,7 @@ unsigned long fifosize (fifo * ff)
 //----------------------------------------------------------------
 void fifoput (fifo * ff, fifocell * cl) 
 {
-    long ic;
+    atomic_long ic;
 	fifocell * volatile tail;
 
 	cl->link = fifo_end(ff);	/* set the cell next pointer to the end marker */
@@ -61,6 +57,10 @@ void fifoput (fifo * ff, fifocell * cl)
     /* enqeue is done, try to set tail to the enqueued cell */
 	CAS2 (&ff->tail, tail, ic, cl, ic+1);
 	msAtomicInc (&ff->count);
+#ifdef __trace__
+fprintf(stdout, "fifoput %p %p %ld\n", ff, cl, ff->count.value); 
+fflush(stdout);
+#endif
 }
 
 //----------------------------------------------------------------
@@ -68,7 +68,7 @@ fifocell *  fifoget(fifo * ff)
 {
 	fifocell * volatile head;
 	fifocell * next; 
-	unsigned long ic, oc;
+	atomic_long ic, oc;
 	short done = 0;
 	
 	do {
@@ -96,6 +96,10 @@ fifocell *  fifoget(fifo * ff)
 		fifoput(ff,head);
 		head = fifoget(ff);
 	}
+#ifdef __trace__
+fprintf(stdout, "fifoget %p %p %ld\n", ff, head, ff->count.value);
+fflush(stdout);
+#endif
 	return (fifocell *)head;
 }
 
@@ -110,7 +114,7 @@ fifocell* fifoavail (fifo* ff)
 {
 	/* simulated atomic read of the required fields*/
 	while (1) {
-		unsigned long count = ff->oc;
+		atomic_long count = ff->oc;
 		fifocell * 	hd  = ff->head;
 		fifocell*	n   = hd->link;
 		fifocell*	tail= ff->tail;
@@ -139,5 +143,20 @@ fifocell* fifoflush (fifo* ff)
 		cur = next;
 	}
 	cur->link = 0;
+#ifdef __trace__
+printf("fifoflush %p %p %ld\n", ff, first, ff->count.value);
+#endif
 	return first;
 }
+
+//----------------------------------------------------------------
+/* fifoclear is now obsolete
+fifocell* fifoclear (fifo* ff) 
+{
+	fifocell* head = ff->head;
+	fifocell* tail = ff->tail;
+	fifoinit(ff);
+	if (tail) tail->link = 0;
+	return head;
+}
+*/

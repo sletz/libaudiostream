@@ -80,8 +80,8 @@ AudioStream test0()
     printf("Build a region \n");
     printf("-------------- \n\n");
     AudioStream s1;
-    //s1 = MakeReadSound(FILENAME1);
-    s1 = MakeReadSound(FILENAME4);
+    s1 = MakeReadSound(FILENAME1);
+    //s1 = MakeReadSound(FILENAME4);
     return s1;
 }
 
@@ -673,12 +673,14 @@ int main(int argc, char* argv[])
 
 	int res = LibVersion();
     
+    /*
 	// Try to open Jack version
     player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, SAMPLE_RATE * 60 * 10, kJackRenderer, 1);
     // If failure opens PortAudio version
     if (!player) {
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kPortAudioRenderer, 1);
     }
+    */
     // If failure opens CoreAudio version
     if (!player) {
         player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kCoreAudioRenderer, 1);
@@ -689,7 +691,7 @@ int main(int argc, char* argv[])
         return -1;
     } 
     
-    //StartAudioPlayer(player);
+    StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");
@@ -712,7 +714,7 @@ int main(int argc, char* argv[])
     */
     
 
-    /*
+    
     ExecTest(player, test0());
     ExecTest(player, test1());
 	ExecTest(player, test1());
@@ -721,7 +723,7 @@ int main(int argc, char* argv[])
     ExecTest(player, test4());
     ExecTest(player, test5());
     ExecTest(player, test6());
-    */
+    
     
     /*
     //ExecTest(player, test5bis());
@@ -762,7 +764,7 @@ int main(int argc, char* argv[])
 	test21();
     */
     
-    test22();
+    //test22();
     
     //ExecTest(player, test0());
 	
