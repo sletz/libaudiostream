@@ -249,7 +249,7 @@ AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 AUDIOAPI long LibVersion()
 {
-	return 1279;
+	return 1280;
 }
 
 AUDIOAPI const char* GetLastLibError()
