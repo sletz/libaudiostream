@@ -848,7 +848,8 @@ long TCoreAudioRenderer::Open(long inChan, long outChan, long bufferSize, long s
     UInt32 outSize;
 	Boolean isWritable;
 	AudioStreamBasicDescription srcFormat, dstFormat;
-    long in_nChannels, out_nChannels;
+    long in_nChannels = 0;
+    long out_nChannels = 0;
     
     SInt32 major;
     SInt32 minor;

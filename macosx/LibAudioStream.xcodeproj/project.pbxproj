@@ -2241,8 +2241,6 @@
 					"-lLLVMSupport",
 					libSoundTouch.a,
 					libportaudioV19.a,
-					libsndfile.a,
-					libsndfile_i386.a,
 					"-flat_namespace",
 				);
 				OTHER_LIBTOOL_FLAGS = "";
