@@ -25,6 +25,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 #include <mach/mach_time.h>
+#include <sys/time.h>
 
 #define WAIT_COUNTER 60
 
@@ -365,9 +366,20 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
 
     CFMutableDictionaryRef aggDeviceDict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-    CFStringRef AggregateDeviceNameRef = CFSTR("CoreAudioDuplex");
-    CFStringRef AggregateDeviceUIDRef = CFSTR("com.grame.CoreAudioDuplex");
-
+    char buffer1[64];
+    char buffer2[64];
+    
+    // generate "random" name
+    struct timeval fTv1;
+    struct timezone tz;
+    gettimeofday(&fTv1, &tz);
+    
+    sprintf(buffer1, "com.grame.%d", fTv1.tv_sec + fTv1.tv_usec);
+    sprintf(buffer2, "%d", fTv1.tv_sec + fTv1.tv_usec);
+    
+    CFStringRef AggregateDeviceNameRef = CFStringCreateWithCString(kCFAllocatorDefault, buffer1, CFStringGetSystemEncoding());
+    CFStringRef AggregateDeviceUIDRef = CFStringCreateWithCString(kCFAllocatorDefault, buffer2, CFStringGetSystemEncoding());
+       
     // add the name of the device to the dictionary
     CFDictionaryAddValue(aggDeviceDict, CFSTR(kAudioAggregateDeviceNameKey), AggregateDeviceNameRef);
 
@@ -642,7 +654,7 @@ OSStatus TCoreAudioRenderer::SRNotificationCallback(AudioDeviceID inDevice,
             driver->fState = true;
             // Check new sample rate
             Float64 sampleRate;
-            UInt32 outSize =  sizeof(Float64);
+            UInt32 outSize = sizeof(Float64);
             OSStatus err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &sampleRate);
             if (err != noErr) {
                 printf("Cannot get current sample rate\n");
@@ -766,7 +778,7 @@ int TCoreAudioRenderer::SetupSampleRateAux(AudioDeviceID inDevice, long sample_r
     Float64 tmp_sample_rate;
 
     // Get sample rate
-    outSize =  sizeof(Float64);
+    outSize = sizeof(Float64);
     err = AudioDeviceGetProperty(inDevice, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &tmp_sample_rate);
     if (err != noErr) {
         printf("Cannot get current sample rate\n");
@@ -858,7 +870,7 @@ long TCoreAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         }
     }
  	
-	if (GetDefaultDevice(inChan, outChan, samplerate, &fDeviceID) != noErr){
+	if (GetDefaultDevice(inChan, outChan, samplerate, &fDeviceID) != noErr) {
 		printf("Cannot open default device\n");
 		return OPEN_ERR;
 	}
