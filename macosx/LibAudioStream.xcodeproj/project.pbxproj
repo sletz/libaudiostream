@@ -372,8 +372,6 @@
 		4BEA6238095806CD001F733A /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192308B9CD8D00C1962D /* Accelerate.framework */; };
 		4BEA6239095806CD001F733A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C5192408B9CD8D00C1962D /* AudioToolbox.framework */; };
 		4BEA6240095806CD001F733A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA0DEDE087FE455003B1CB3 /* main.cpp */; };
-		4BED59291BCEBDBF002DF43F /* TJackAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B63B0580BDF791A00CD9753 /* TJackAudioRenderer.cpp */; };
-		4BED592A1BCEBDC0002DF43F /* TJackAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B63B0590BDF791A00CD9753 /* TJackAudioRenderer.h */; };
 		4BEFE9810C59C93E00F8AE0C /* TCoreAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEFE97F0C59C93E00F8AE0C /* TCoreAudioRenderer.cpp */; };
 		4BEFE9820C59C93E00F8AE0C /* TCoreAudioRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEFE9800C59C93E00F8AE0C /* TCoreAudioRenderer.h */; };
 /* End PBXBuildFile section */
@@ -867,7 +865,6 @@
 				4B66D56816ECD1C100AF5DDD /* TBufferedInputAudioStream.h in Headers */,
 				4BB9AE8817170DB000A56C3A /* TLASException.h in Headers */,
 				4B884DAA1743CF53004AAD1D /* TEventAudioStream.h in Headers */,
-				4BED592A1BCEBDC0002DF43F /* TJackAudioRenderer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1371,7 +1368,6 @@
 				4BE4D189165671C700495934 /* TRubberBandAudioStream.cpp in Sources */,
 				4BB3A97E16FDDBE3000F728C /* StringTools.cpp in Sources */,
 				4B884DA51743CF4D004AAD1D /* TEventAudioStream.cpp in Sources */,
-				4BED59291BCEBDBF002DF43F /* TJackAudioRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1547,13 +1543,12 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
-					"-D_JACK_",
 					"-D__COREAUDIO__",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					"-ljack",
+					"-lcrypto",
 					/usr/local/lib/libHTTPDFaust.a,
 					/usr/local/lib/libfaust.a,
 					/opt/local/lib/libsndfile.a,
@@ -1687,13 +1682,12 @@
 				);
 				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
-					"-D_JACK_",
 					"-D__COREAUDIO__",
 					"-fvisibility=hidden",
 					"-DLIBAUDIOSTREAM_EXPORTS",
 				);
 				OTHER_LDFLAGS = (
-					"-ljack",
+					"-lcrypto",
 					/usr/local/lib/libHTTPDFaust.a,
 					/usr/local/lib/libfaust.a,
 					/opt/local/lib/librubberband.a,
