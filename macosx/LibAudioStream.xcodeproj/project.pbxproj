@@ -3010,8 +3010,8 @@
 		4BC71E261931C7760065A7E3 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -3042,7 +3042,8 @@
 				OTHER_LDFLAGS = (
 					"-lcurl",
 					/usr/local/lib/libfaust.a,
-					librubberband.a,
+					/opt/local/lib/libsndfile.a,
+					/opt/local/lib/librubberband.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",
@@ -3151,8 +3152,8 @@
 		4BC71E271931C7760065A7E3 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -3182,7 +3183,8 @@
 				OTHER_LDFLAGS = (
 					"-lcurl",
 					/usr/local/lib/libfaust.a,
-					librubberband.a,
+					/opt/local/lib/librubberband.a,
+					/opt/local/lib/libsndfile.a,
 					/opt/local/lib/libsamplerate.a,
 					"-lLLVMAsmParser",
 					"-lLLVMInstrumentation",
