@@ -38,9 +38,9 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define DEBUG 1
 
-AudioObjectID TCoreAudioRenderer::fPluginID = 0;
+AudioObjectID TCoreAudioRenderer::gPluginID = 0;
 bool TCoreAudioRenderer::fState = false;
-AudioDeviceID TCoreAudioRenderer::fAggregateDeviceID = 0;
+AudioDeviceID TCoreAudioRenderer::gAggregateDeviceID = 0;
 
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
@@ -210,16 +210,16 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, int sampl
 			*id = inDefault;
 			return noErr;
 		} else {
-			printf("GetDefaultDevice : input = %ld and output = %ld are not the same %ld\n", inDefault, outDefault, fAggregateDeviceID);
-            if (fAggregateDeviceID == 0) { // Create aggregate device the first time
+			printf("GetDefaultDevice : input = %ld and output = %ld are not the same \n", inDefault, outDefault);
+            if (gAggregateDeviceID == 0) { // Create aggregate device the first time
                 if (CreateAggregateDevice(inDefault, outDefault, samplerate, id) != noErr) {
                     return kAudioHardwareBadDeviceError;
                 }
-                fAggregateDeviceID = *id;
-                printf("GetDefaultDevice : new fAgregateDeviceID = %d \n", fAggregateDeviceID);
+                gAggregateDeviceID = *id;
+                printf("GetDefaultDevice : new fAgregateDeviceID = %d\n", gAggregateDeviceID);
             } else {
-                printf("GetDefaultDevice : fAgregateDeviceID already created %d \n", fAggregateDeviceID);
-                *id = fAggregateDeviceID;
+                printf("GetDefaultDevice : fAgregateDeviceID already created\n");
+                *id = gAggregateDeviceID;
             }
 		}
 	} else if (inChan > 0) {
@@ -371,8 +371,8 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
 
     pluginAVT.mInputData = &inBundleRef;
     pluginAVT.mInputDataSize = sizeof(inBundleRef);
-    pluginAVT.mOutputData = &fPluginID;
-    pluginAVT.mOutputDataSize = sizeof(fPluginID);
+    pluginAVT.mOutputData = &gPluginID;
+    pluginAVT.mOutputDataSize = sizeof(gPluginID);
 
     osErr = AudioHardwareGetProperty(kAudioHardwarePropertyPlugInForBundleID, &outSize, &pluginAVT);
     if (osErr != noErr) {
@@ -503,14 +503,14 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     pluginAOPA.mElement = kAudioObjectPropertyElementMaster;
     UInt32 outDataSize;
 
-    osErr = AudioObjectGetPropertyDataSize(fPluginID, &pluginAOPA, 0, NULL, &outDataSize);
+    osErr = AudioObjectGetPropertyDataSize(gPluginID, &pluginAOPA, 0, NULL, &outDataSize);
     if (osErr != noErr) {
         printf("TCoreAudioRenderer::CreateAggregateDevice : AudioObjectGetPropertyDataSize error\n");
         printError(osErr);
         goto error;
     }
 
-    osErr = AudioObjectGetPropertyData(fPluginID, &pluginAOPA, sizeof(aggDeviceDict), &aggDeviceDict, &outDataSize, outAggregateDevice);
+    osErr = AudioObjectGetPropertyData(gPluginID, &pluginAOPA, sizeof(aggDeviceDict), &aggDeviceDict, &outDataSize, outAggregateDevice);
     if (osErr != noErr) {
         printf("TCoreAudioRenderer::CreateAggregateDevice : AudioObjectGetPropertyData error\n");
         printError(osErr);
@@ -637,28 +637,7 @@ error:
 
 OSStatus TCoreAudioRenderer::DestroyAggregateDevice(AudioDeviceID id)
 {
-    OSStatus osErr = noErr;
-    AudioObjectPropertyAddress pluginAOPA;
-    pluginAOPA.mSelector = kAudioPlugInDestroyAggregateDevice;
-    pluginAOPA.mScope = kAudioObjectPropertyScopeGlobal;
-    pluginAOPA.mElement = kAudioObjectPropertyElementMaster;
-    UInt32 outDataSize;
-
-    if (fPluginID > 0)   {
-        osErr = AudioObjectGetPropertyDataSize(fPluginID, &pluginAOPA, 0, NULL, &outDataSize);
-        if (osErr != noErr) {
-            printf("TCoreAudioRenderer::DestroyAggregateDevice : AudioObjectGetPropertyDataSize error\n");
-            printError(osErr);
-            return osErr;
-        }
-        osErr = AudioObjectGetPropertyData(fPluginID, &pluginAOPA, 0, NULL, &outDataSize, &id);
-        if (osErr != noErr) {
-            printf("TCoreAudioRenderer::DestroyAggregateDevice : AudioObjectGetPropertyData error\n");
-            printError(osErr);
-            return osErr;
-        }
-    }
-
+    // No more needed : will be done when process quits...
     return noErr;
 }
 

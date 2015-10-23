@@ -279,7 +279,7 @@ extern "C"
 
 AUDIOAPI long LibVersion()
 {
-	return 200;
+	return 201;
 }
 
 AUDIOAPI const char* GetLastLibError()

@@ -48,8 +48,8 @@ class TCoreAudioRenderer : public TAudioRenderer
 		AudioBufferList* fInputData;
 		AudioDeviceID fDeviceID;
 		AudioUnit fAUHAL;
-        static AudioObjectID fPluginID;             // Used for aggregate device
-        static AudioDeviceID fAggregateDeviceID;    // Used for aggregate device
+        static AudioObjectID gPluginID;             // Used for aggregate device
+        static AudioDeviceID gAggregateDeviceID;    // Used for aggregate device
         static bool fState;
     
         AudioTimeStamp fCallbackTime;

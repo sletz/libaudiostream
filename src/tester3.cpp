@@ -182,7 +182,8 @@ int main(int argc, char* argv[])
     //gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kNetJackRenderer, 1);
     
     gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
-    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    AudioPlayerPtr player1 = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    CloseAudioPlayer(player1);
     assert(gAudioPlayer);
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);

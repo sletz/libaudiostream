@@ -158,8 +158,6 @@
 		4BA1413C1AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BA141361AEFCF2300E7B9BB /* TNetJackRenderer.h */; };
 		4BA1413D1AEFCF2300E7B9BB /* TNetJackRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA141351AEFCF2300E7B9BB /* TNetJackRenderer.cpp */; };
 		4BA1413E1AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BA141361AEFCF2300E7B9BB /* TNetJackRenderer.h */; };
-		4BA1413F1AEFCF2300E7B9BB /* TNetJackRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA141351AEFCF2300E7B9BB /* TNetJackRenderer.cpp */; };
-		4BA141401AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BA141361AEFCF2300E7B9BB /* TNetJackRenderer.h */; };
 		4BA49D2D185F01CE007749FB /* LAS-test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA49D2B185F01CE007749FB /* LAS-test.cpp */; };
 		4BA49DE6185F0D1E007749FB /* LibAudioStreamMC++.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BB9D8B618042D96001B620C /* LibAudioStreamMC++.h */; };
 		4BA49DEA185F0D1E007749FB /* LAS-test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA49D2B185F01CE007749FB /* LAS-test.cpp */; };
@@ -1102,7 +1100,6 @@
 				4BC71DF61931C7760065A7E3 /* TAudioDate.h in Headers */,
 				4BC71DF71931C7760065A7E3 /* TAudioRenderer.h in Headers */,
 				4B5108B819655A330046C73B /* TOfflineRenderer.h in Headers */,
-				4BA141401AEFCF2300E7B9BB /* TNetJackRenderer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1817,7 +1814,6 @@
 				4BC71E1B1931C7760065A7E3 /* TSelectAudioStream.cpp in Sources */,
 				4BC71E1C1931C7760065A7E3 /* TAudioRenderer.cpp in Sources */,
 				4B5108B719655A330046C73B /* TOfflineRenderer.cpp in Sources */,
-				4BA1413F1AEFCF2300E7B9BB /* TNetJackRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
