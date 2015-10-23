@@ -25,6 +25,7 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "UTools.h"
 #include <mach/mach_time.h>
+#include <sys/time.h>
 
 #define WAIT_COUNTER 60
 
@@ -39,6 +40,7 @@ typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 AudioObjectID TCoreAudioRenderer::fPluginID = 0;
 bool TCoreAudioRenderer::fState = false;
+AudioDeviceID TCoreAudioRenderer::fAggregateDeviceID = 0;
 
 static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
 {
@@ -208,9 +210,16 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, int sampl
 			*id = inDefault;
 			return noErr;
 		} else {
-			printf("GetDefaultDevice : input = %ld and output = %ld are not the same\n", inDefault, outDefault);
-            if (CreateAggregateDevice(inDefault, outDefault, samplerate, id) != noErr) {
-                return kAudioHardwareBadDeviceError;
+			printf("GetDefaultDevice : input = %ld and output = %ld are not the same %ld\n", inDefault, outDefault, fAggregateDeviceID);
+            if (fAggregateDeviceID == 0) { // Create aggregate device the first time
+                if (CreateAggregateDevice(inDefault, outDefault, samplerate, id) != noErr) {
+                    return kAudioHardwareBadDeviceError;
+                }
+                fAggregateDeviceID = *id;
+                printf("GetDefaultDevice : new fAgregateDeviceID = %d \n", fAggregateDeviceID);
+            } else {
+                printf("GetDefaultDevice : fAgregateDeviceID already created %d \n", fAggregateDeviceID);
+                *id = fAggregateDeviceID;
             }
 		}
 	} else if (inChan > 0) {
@@ -378,8 +387,20 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
 
     CFMutableDictionaryRef aggDeviceDict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
-    CFStringRef AggregateDeviceNameRef = CFSTR("CoreAudioDuplex");
-    CFStringRef AggregateDeviceUIDRef = CFSTR("com.grame.CoreAudioDuplex");
+    char buffer1[64];
+    char buffer2[64];
+    
+    // generate "random" name
+    struct timeval fTv1;
+    struct timezone tz;
+    gettimeofday(&fTv1, &tz);
+    
+    sprintf(buffer1, "com.grame.%d", fTv1.tv_sec + fTv1.tv_usec);
+    sprintf(buffer2, "%d", fTv1.tv_sec + fTv1.tv_usec);
+    
+    CFStringRef AggregateDeviceNameRef = CFStringCreateWithCString(kCFAllocatorDefault, buffer1, CFStringGetSystemEncoding());
+    CFStringRef AggregateDeviceUIDRef = CFStringCreateWithCString(kCFAllocatorDefault, buffer2, CFStringGetSystemEncoding());
+  
 
     // add the name of the device to the dictionary
     CFDictionaryAddValue(aggDeviceDict, CFSTR(kAudioAggregateDeviceNameKey), AggregateDeviceNameRef);

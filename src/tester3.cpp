@@ -182,6 +182,7 @@ int main(int argc, char* argv[])
     //gAudioPlayer = OpenAudioPlayer(4, 4, SR, BS, 65536*4, SR*60*20, kNetJackRenderer, 1);
     
     gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
+    gAudioPlayer = OpenAudioPlayer(2, 2, SR, BS, 65536*4, SR*60*20, kCoreAudioRenderer, 1);
     assert(gAudioPlayer);
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(gAudioPlayer);
@@ -227,7 +228,7 @@ int main(int argc, char* argv[])
     }
     */
     
-    s1 = MakeLoopSound(MakeFadeSound(MakeBufferSound(buffer, stream_size, 2), SR, SR),10);
+    s1 = MakeLoopSound(MakeFadeSound(MakeBufferSound(buffer, stream_size, 2, false), SR, SR), 10);
     StartSound(gAudioPlayer, s1, GenRealDate(gAudioPlayer, GetCurDate()));
     
     sleep(1);
