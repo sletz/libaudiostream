@@ -28,11 +28,11 @@ research@grame.fr
 #include "UTools.h"
 
 /*!
-\brief A TBufferedAudioStream object will contains the common double-buffering buffer access code.
+\brief A TBufferedAudioStream object contains the common double-buffering buffer access code.
 */
 
 /*
-A TBufferedAudioStream object will contains the common double-buffering buffer access code.
+A TBufferedAudioStream object contains the common double-buffering buffer access code.
  
 The Read method calls the ReadBuffer method when the end of a "big" buffer is reached.
  

@@ -50,7 +50,7 @@ void la_smartable1::Init()
 
 void la_smartable1::Destroy()
 {
-	fDeleteManager->FlushCmds(); // Hum...
+    fDeleteManager->FlushCmds(); // Hum...
     delete fDeleteManager;
-	fDeleteManager = NULL;
+    fDeleteManager = 0;
 }

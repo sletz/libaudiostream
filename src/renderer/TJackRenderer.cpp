@@ -181,7 +181,7 @@ long TJackRenderer::Start()
 
 long TJackRenderer::Cont()
 {
-    const char** ports = NULL;
+    const char** ports = 0;
 
     if (jack_activate(fClient)) {
         printf("Cannot activate client");
@@ -268,7 +268,7 @@ long TJackRenderer::GetDeviceCount()
 
 void TJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
-	const char** ports = NULL;
+    const char** ports = 0;
     jack_client_t* client;
     int i;
 	

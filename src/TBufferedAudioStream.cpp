@@ -28,7 +28,7 @@ research@grame.fr
 
 TBufferedAudioStream::TBufferedAudioStream(): TAudioStream()
 {
-    fMemoryBuffer = NULL;
+    fMemoryBuffer = 0;
     fFramesNum = 0;
     fCurFrame = 0;
     fChannels = 0;
@@ -48,12 +48,12 @@ void TBufferedAudioStream::WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long
     fReady = true;
 }
 
-static bool EndFirst (int curframe, int framesNum, int buffersize)
+static bool EndFirst(int curframe, int framesNum, int buffersize)
 {
     return ((curframe / buffersize) == 0) && (((curframe + framesNum) / buffersize) == 1);
 }
 
-static bool EndSecond (int curframe, int framesNum, int buffersize)
+static bool EndSecond(int curframe, int framesNum, int buffersize)
 {
     return ((curframe / buffersize) == 1) && (((curframe + framesNum) / buffersize) == 2);
 }
@@ -64,9 +64,6 @@ long TBufferedAudioStream::HandleBuffer(FLOAT_BUFFER buffer, long framesNum, lon
     
     float** temp1 = (float**)alloca(fMemoryBuffer->GetChannels()*sizeof(float*));
     float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-  
-    // Check length
-    framesNum = UTools::Min(framesNum, fFramesNum - (fTotalFrames + fCurFrame));
    
     if (EndFirst(fCurFrame, framesNum, fMemoryBuffer->GetSize() / 2)) { // End of first buffer
   

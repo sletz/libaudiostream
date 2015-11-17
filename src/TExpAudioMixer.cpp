@@ -107,7 +107,9 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
     
     // Real-time input
-    TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
+    if (TAudioGlobals::fSharedInput) {
+        TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
+    }
 
     // Prepare buffer for master effect
     if (fMasterEffect) {

@@ -279,7 +279,7 @@ extern "C"
 
 AUDIOAPI long LibVersion()
 {
-	return 201;
+	return 202;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -839,7 +839,7 @@ AUDIOAPI AudioEffectPtr MakeRemoteFaustAudioEffectPtr(const char* code, const ch
 
 #ifdef __APPLE__
 #include<dispatch/dispatch.h>
-static TCodeFaustAudioEffect* gDSP = NULL;
+static TCodeFaustAudioEffect* gDSP = 0;
 
 AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* code, const char* library_path, const char* draw_path)
 {
@@ -853,7 +853,7 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* code, const 
                 gDSP = TLocalCodeFaustAudioEffectFactory::CreateEffect(code, library_path, draw_path);
             } catch (TLASException& e) {
                 TAudioGlobals::AddLibError(e.Message());
-                gDSP = NULL;
+                gDSP = 0;
             } 
         });
         return (gDSP) ? new LA_SMARTP<TAudioEffectInterface>(gDSP) : 0; 
@@ -1267,7 +1267,9 @@ AUDIOAPI long StartAudioPlayer(AudioPlayerPtr ext_player)
     
     if (player && player->fMixer && player->fRenderer) {
         // Reset real-time input
-        TAudioGlobals::fSharedInput->Reset();
+        if (TAudioGlobals::fSharedInput) {
+            TAudioGlobals::fSharedInput->Reset();
+        }
         // Reset effect table
         //TAudioGlobals::fEffectTable.clear();
         // Start player
