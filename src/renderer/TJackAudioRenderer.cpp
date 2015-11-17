@@ -170,7 +170,7 @@ long TJackAudioRenderer::Close()
 
 long TJackAudioRenderer::Start()
 {
-    const char** ports = NULL;
+    const char** ports = 0;
     
     // Init timing here
     fAnchorFrameTime = 0;
@@ -244,7 +244,7 @@ long TJackAudioRenderer::GetDeviceCount()
 
 void TJackAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
-	const char** ports = NULL;
+	const char** ports = 0;
     jack_client_t* client;
     int i;
 	

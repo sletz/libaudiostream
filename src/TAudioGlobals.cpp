@@ -33,15 +33,15 @@ research@grame.fr
 #endif
 
 // Globals
-float* TSharedBuffers::fInBuffer = NULL;
-float* TSharedBuffers::fOutBuffer = NULL;
+float* TSharedBuffers::fInBuffer = 0;
+float* TSharedBuffers::fOutBuffer = 0;
 
 float TPanTable::fPanTable[128];
 float TPanTable::fVolTable[128];
 
-TCmdManagerPtr la_smartable1::fManager = NULL;
-TCmdManagerPtr TCmdManager::fInstance = NULL;
-TAudioGlobalsPtr TAudioGlobals::fInstance = NULL;
+TCmdManagerPtr la_smartable1::fManager = 0;
+TCmdManagerPtr TCmdManager::fInstance = 0;
+TAudioGlobalsPtr TAudioGlobals::fInstance = 0;
 long TAudioGlobals::fClientCount = 0;
 
 long TAudioGlobals::fInput = 0;
@@ -58,8 +58,8 @@ long TAudioGlobals::fFileMax = 0;
 long TAudioGlobals::fInputLatency = -1;
 long TAudioGlobals::fOutputLatency = -1;
 
-TBufferedAudioStream* TAudioGlobals::fSharedInput = NULL;
-char* TAudioGlobals::fLastLibError = NULL;
+TBufferedAudioStream* TAudioGlobals::fSharedInput = 0;
+char* TAudioGlobals::fLastLibError = 0;
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
@@ -120,7 +120,7 @@ void TAudioGlobals::Destroy()
 		TRTRendererAudioStream::Destroy();
 		la_smartable1::Destroy();
 		delete fInstance;
-		fInstance = NULL;
+		fInstance = 0;
 		SetMaximumFiles(fFileMax);
 	}
 }
@@ -137,7 +137,7 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long channels, long samp
     fDiskError = 0;
     
     // Allocate shared real-time input
-    fSharedInput = new TBufferedInputAudioStream(rtstream_duration); 
+    fSharedInput = (rtstream_duration > 0) ? new TBufferedInputAudioStream(rtstream_duration) : 0; 
     fLastLibError = new char[512];
 }
 

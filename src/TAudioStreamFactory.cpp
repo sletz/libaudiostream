@@ -158,8 +158,7 @@ TAudioStreamPtr TAudioStreamFactory::MakeInputSound()
 TAudioStreamPtr TAudioStreamFactory::MakeSharedInputSound()
 {
     TRY_CALL
-    assert(TAudioGlobals::fSharedInput);
-    return new TSharedBufferedAudioStream(0, TAudioGlobals::fSharedInput->GetMemoryBuffer());
+    return (TAudioGlobals::fSharedInput) ? new TSharedBufferedAudioStream(0, TAudioGlobals::fSharedInput->GetMemoryBuffer()) : 0;
     CATCH_EXCEPTION
 }
 

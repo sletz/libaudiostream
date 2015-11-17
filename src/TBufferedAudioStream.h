@@ -27,11 +27,11 @@ research@grame.fr
 #include "TAudioBuffer.h"
 
 /*!
-\brief A TBufferedAudioStream object will contains the common double-buffering buffer access code.
+\brief A TBufferedAudioStream object contains the common double-buffering buffer access code.
 */
 
 /*
-A TBufferedAudioStream object will contains the common double-buffering buffer access code.
+A TBufferedAudioStream object contains the common double-buffering buffer access code.
  
 The Read method calls the ReadBuffer method when the end of a "big" buffer is reached.
  
@@ -139,9 +139,9 @@ class TBufferedAudioStream : public TAudioStream
 
 typedef TBufferedAudioStream * TBufferedAudioStreamPtr;
 
-//-----------------------------------
+//----------------------------------
 // Class TSharedBufferedAudioStream
-//-----------------------------------
+//----------------------------------
 
 class TSharedBufferedAudioStream : public TBufferedAudioStream
 {

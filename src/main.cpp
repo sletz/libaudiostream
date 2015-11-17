@@ -683,7 +683,7 @@ int main(int argc, char* argv[])
     */
     // If failure opens CoreAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kCoreAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, (SAMPLE_RATE * 60 * 10)*0, kCoreAudioRenderer, 1);
     }
     
     if (!player) {

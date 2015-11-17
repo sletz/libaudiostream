@@ -65,7 +65,9 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
     
     // Real-time input
-    TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
+    if (TAudioGlobals::fSharedInput) {
+        TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
+    }
 
     // Mix all SoundChannels
 	list<TAudioChannelPtr>::iterator iter = fSoundChannelSeq.begin();

@@ -47,9 +47,7 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
         TBufferedInputAudioStream(long endFrame): TBufferedAudioStream()
         {
             fFramesNum = endFrame;
-            
-            // Hack : always stereo for now
-            fChannels = 2;
+            fChannels = TAudioGlobals::fInput;
             
             // Dynamic allocation
             fMemoryBuffer = new TLocalAudioBuffer<float>(endFrame, fChannels, true);
@@ -91,11 +89,12 @@ class TBufferedInputAudioStream : public TBufferedAudioStream
             */
                                              
             // Read input and write it to memory
-            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+            UAudioTools::ZeroFloatBlk(fTmpBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fInput);
             UAudioTools::MixFrameToFrameBlk1(fTmpBuffer->GetFrame(framePos),
                                              TSharedBuffers::GetInBuffer(),
                                              framesNum,
                                              channels);
+                                             
             return TBufferedAudioStream::Write(fTmpBuffer, framesNum, framePos, channels); 
         }
 

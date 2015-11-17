@@ -184,7 +184,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
 										? (float(TAudioGlobals::fInputLatency) / 1000.f)
 										:Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency)
                                        : 0;
-	inputParameters.hostApiSpecificStreamInfo = NULL;
+	inputParameters.hostApiSpecificStreamInfo = 0;
 
     outputParameters.device = outputDevice;
     outputParameters.channelCount = outChan;
@@ -194,7 +194,7 @@ long TPortAudioV19Renderer::Open(long inputDevice, long outputDevice, long inCha
 										 ? (float(TAudioGlobals::fOutputLatency) / 1000.f)
 										 :Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency)
                                         : 0;
-    outputParameters.hostApiSpecificStreamInfo = NULL;
+    outputParameters.hostApiSpecificStreamInfo = 0;
 
     PaError err = Pa_OpenStream(&fStream,
 								(inputDevice == paNoDevice) ? 0 : &inputParameters,

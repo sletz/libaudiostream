@@ -51,5 +51,5 @@ void la_smartable1::Destroy()
 {
 	fManager->FlushCmds(); // Hum...
     delete fManager;
-	fManager = NULL;
+	fManager = 0;
 }

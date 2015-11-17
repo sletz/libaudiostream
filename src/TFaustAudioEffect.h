@@ -383,7 +383,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase
             //char error_msg[256] = {0};
             std::string error_msg;
             char error_lib[512] = {0};
-            llvm_dsp_factory* factory = NULL;
+            llvm_dsp_factory* factory = 0;
             char input_name[64];
             
             fCode = code;

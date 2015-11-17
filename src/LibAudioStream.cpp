@@ -249,7 +249,7 @@ AUDIOAPI void ProcessEffect(AudioEffectPtr effect, float** input, float** output
 
 AUDIOAPI long LibVersion()
 {
-	return 1281;
+	return 1282;
 }
 
 AUDIOAPI const char* GetLastLibError()
@@ -685,7 +685,7 @@ AUDIOAPI AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* li
 
 #ifdef __APPLE__
 #include<dispatch/dispatch.h>
-static TCodeFaustAudioEffect* gDSP = NULL;
+static TCodeFaustAudioEffect* gDSP = 0;
 
 AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path)
 {
@@ -699,7 +699,7 @@ AUDIOAPI AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const 
                 gDSP = new TCodeFaustAudioEffect(name, library_path, draw_path); 
             } catch (TLASException& e) {
                 strncpy(TAudioGlobals::fLastLibError, e.Message().c_str(), 512);
-                gDSP = NULL;
+                gDSP = 0;
             } 
         });
         return (gDSP) ? new LA_SMARTP<TAudioEffectInterface>(gDSP) : 0; 
@@ -948,7 +948,9 @@ AUDIOAPI void StartAudioPlayer(AudioPlayerPtr player)
 {
     if (player && player->fMixer && player->fRenderer) {
         // Reset real-time input
-        TAudioGlobals::fSharedInput->Reset();
+        if (TAudioGlobals::fSharedInput) {
+            TAudioGlobals::fSharedInput->Reset();
+        }
         // Start player
         player->fRenderer->Start();
     }
