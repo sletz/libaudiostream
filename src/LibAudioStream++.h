@@ -444,7 +444,7 @@ void SetAudioLatencies(long inputLatency, long outputLatency);
 \param sample_rate The sampling rate.
 \param buffer_size The audio player internal buffer size.
 \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
-\param rtstream_duration The input stream duration in frames.
+\param rtstream_duration The input stream duration in frames. If 0, then no input stream will be allocated. Note that when an input stream is defined, only *one* player can be used.
 \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer or kJackRenderer.
 \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
 \return A pointer to new audio player object.
