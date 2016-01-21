@@ -218,7 +218,7 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, int sampl
                 gAggregateDeviceID = *id;
                 printf("GetDefaultDevice : new fAgregateDeviceID = %d\n", gAggregateDeviceID);
             } else {
-                printf("GetDefaultDevice : fAgregateDeviceID already created\n");
+                printf("GetDefaultDevice : fAgregateDeviceID = %d already created \n", gAggregateDeviceID);
                 *id = gAggregateDeviceID;
             }
 		}
@@ -1247,10 +1247,22 @@ void TCoreAudioRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
     ComponentDescription cd = {kAudioUnitType_Output, kAudioUnitSubType_HALOutput, kAudioUnitManufacturer_Apple, 0, 0};
     Component HALOutput = FindNextComponent(NULL, &cd);
     
-    if (GetDefaultDevice(2, 2, 44100, &fDeviceID) != noErr) {
-		printf("Cannot open default device\n");
-		return;
-	}
+    if (GetDefaultDevice(2, 2, 44100, &fDeviceID) == noErr) {
+         printf("Default stereo device opened...\n");
+    } else {
+        printf("Cannot open default stereo device\n");
+        if (GetDefaultDevice(0, 2, 44100, &fDeviceID) == noErr) {
+            printf("Default output device opened...\n");
+        } else {
+            printf("Cannot open default output device\n"); 
+            if (GetDefaultDevice(2, 0, 44100, &fDeviceID) == noErr) {
+                printf("Default input device opened...\n");
+            } else {
+                printf("Cannot open default input device\n");
+                return;
+            }
+        }
+    }
     
     err = OpenAComponent(HALOutput, &fAUHAL);
     if (err != noErr) {

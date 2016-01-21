@@ -101,13 +101,13 @@ int TPortAudioV19Renderer::GetFirstValidOutputDevice()
     return paNoDevice;
 }
 
-TPortAudioV19Renderer::TPortAudioV19Renderer(): TAudioRenderer()
+TPortAudioV19Renderer::TPortAudioV19Renderer():TAudioRenderer()
 {
 	PaError err;
 	
     if ((err = Pa_Initialize()) != paNoError) {
 		printf("Pa_Initialize error: %s\n", Pa_GetErrorText(err));
-        throw new std::bad_alloc;
+        throw std::bad_alloc();
 	}
     
     fAnchorFrameTime = 0;
