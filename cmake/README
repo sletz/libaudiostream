@@ -1,0 +1,6 @@
+Note : some module files were taken from : 
+- The Supercollider source tree : Jack, Sndfile, Portaudio.
+  https://github.com/supercollider/supercollider/tree/master/cmake_modules
+  
+- The io source tree : Samplerate
+  https://github.com/stevedekorte/io/tree/master/modules
