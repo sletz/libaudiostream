@@ -205,3 +205,21 @@ if(LIBAUDIOSTREAM_SAMPLES)
     set_target_properties(fileplaycpp PROPERTIES CXX_STANDARD 14)
     set_target_properties(record PROPERTIES CXX_STANDARD 14)
 endif()
+
+if(LIBAUDIOSTREAM_TESTS)
+    add_executable(test1 src/tester1.cpp)
+    add_executable(test2 src/tester2.cpp)
+    add_executable(test3 src/tester3.cpp)
+
+    target_link_libraries(test1 PUBLIC libaudiostream)
+    target_link_libraries(test2 PUBLIC libaudiostream)
+    target_link_libraries(test3 PUBLIC libaudiostream)
+
+    target_include_directories(test1 PRIVATE src)
+    target_include_directories(test2 PRIVATE src)
+    target_include_directories(test3 PRIVATE src)
+
+    set_target_properties(test1 PROPERTIES CXX_STANDARD 14)
+    set_target_properties(test2 PROPERTIES CXX_STANDARD 14)
+    set_target_properties(test3 PROPERTIES CXX_STANDARD 14)
+endif()
