@@ -81,7 +81,7 @@ else (PORTAUDIO_LIBRARIES AND PORTAUDIO_INCLUDE_DIRS)
     )
    
     set(PORTAUDIO_VERSION
-      18
+      19
     )
    
     if (PORTAUDIO_INCLUDE_DIRS AND PORTAUDIO_LIBRARIES)
@@ -90,7 +90,7 @@ else (PORTAUDIO_LIBRARIES AND PORTAUDIO_INCLUDE_DIRS)
    
     if (PORTAUDIO_FOUND)
       if (NOT Portaudio_FIND_QUIETLY)
-        message(STATUS "Found Portaudio: ${PORTAUDIO_LIBRARIES}")
+        message(STATUS "Found Portaudio ${PORTAUDIO_VERSION}: ${PORTAUDIO_LIBRARIES}")
       endif (NOT Portaudio_FIND_QUIETLY)
     else (PORTAUDIO_FOUND)
       if (Portaudio_FIND_REQUIRED)

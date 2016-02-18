@@ -300,3 +300,20 @@ long TPortAudioRenderer::GetDefaultOutputDevice()
 	return Pa_GetDefaultOutputDeviceID();
 }
 
+
+long TPortAudioRenderer::Pause()
+{
+    return Stop();
+}
+
+long TPortAudioRenderer::Cont()
+{
+    PaError err = Pa_StartStream(fStream);
+    
+    if (err != paNoError) {
+        printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
+        return OPEN_ERR;
+    } else {
+        return NO_ERR;
+	}
+}
