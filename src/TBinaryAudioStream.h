@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -47,7 +47,7 @@ class TBinaryAudioStream : public TDecoratedAudioStream
         virtual ~TBinaryAudioStream()
         {}
 	
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels) = 0;
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos) = 0;
 
         virtual void Reset()
         {

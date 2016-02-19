@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -37,6 +37,14 @@ research@grame.fr
 #include "lflifo.h"
 #include <vector>
 
+#ifdef _WIN32
+// window 
+#define ALIGN(A) __declspec(align(A))
+#else
+// GCC
+#define ALIGN(A) __attribute__((aligned(A)))
+#endif
+
 //-------------
 // Struct TCmd
 //-------------
@@ -48,6 +56,8 @@ Warning : the fifocell data structure size (see lffifo.h) MUST match the TCmd da
 \brief A command structure
 */
 
+#define MAXCOMMAND 4096
+
 typedef struct TCmd
 {
     TCmd* link;
@@ -57,9 +67,7 @@ typedef struct TCmd
     long arg3;
     long arg4;
     long arg5;
-}TCmd;
-
-#define MAXCOMMAND 256
+} TCmd;
 
 //-------------------------
 // Class TThreadCmdManager
@@ -173,9 +181,9 @@ class TThreadCmdManager : public TCmdManager
 {
 
     private:
-
-	    lifo fFreeCmd;      // Commands free list
-        fifo fRunningCmd;   // Running commands
+    
+        ALIGN(16) lifo fFreeCmd;      // Commands free list
+        ALIGN(16) fifo fRunningCmd ;   // Running commands
         bool fRunning;
 
 	#if defined(__APPLE__) || defined(linux)
@@ -200,6 +208,38 @@ class TThreadCmdManager : public TCmdManager
 };
 
 typedef TThreadCmdManager * TThreadCmdManagerPtr;
+
+class TWaitThreadCmdManager : public TCmdManager
+{
+
+    private:
+    
+        ALIGN(16) lifo fFreeCmd;      // Commands free list
+        ALIGN(16) fifo fRunningCmd;   // Running commands
+        bool fRunning;
+
+	#if defined(__APPLE__) || defined(linux)
+		std::vector<pthread_t> fThreadList; // Execution thread
+		static void* CmdHandler(void* arg);
+	#elif WIN32
+		std::vector<HANDLE> fThreadList; // Execution thread
+		HANDLE fCond;   // Condition variable
+  		static DWORD WINAPI CmdHandler(void* arg);
+	#endif
+       
+    public:
+
+        TWaitThreadCmdManager(long thread);
+        ~TWaitThreadCmdManager();
+
+        void ExecCmdAux(CmdPtr fun, long a1, long a2, long a3, long a4, long a5);
+        void RunAux();
+        void FlushCmds();
+};
+
+typedef TThreadCmdManager * TThreadCmdManagerPtr;
+
+typedef TWaitThreadCmdManager * TWaitThreadCmdManagerPtr;
 
 //Utilisation
 /*

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -51,14 +51,14 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
 
     protected:
 
-        long Write(SHORT_BUFFER buffer, long framesNum, long framePos);
+        long WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
     public:
 
         TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format);
         virtual ~TWriteFileAudioStream();
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
        
@@ -66,14 +66,18 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
         {
             return new TWriteFileAudioStream(fName, fStream->CutBegin(frames), fFormat);
         }
+        
         long Length()
         {
             return fStream->Length();
         }
+        
         TAudioStreamPtr Copy()
         {
             return new TWriteFileAudioStream(fName, fStream->Copy(), fFormat);
         }
+        
+        long SetPos(long frames) { return fStream->SetPos(frames); }
 };
 
 typedef TWriteFileAudioStream * TWriteFileAudioStreamPtr;

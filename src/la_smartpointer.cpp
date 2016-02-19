@@ -1,5 +1,5 @@
 /*
-  Copyright © Grame 2003-2007
+  Copyright (C) Grame 2003-2007
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@
 void la_smartable::removeReference() 
 { 
 	if (--refCount == 0) {
-		delete this; 
+ 		delete this; 
 	}
 }
 
@@ -37,19 +37,20 @@ void la_smartable1::removeReferenceAux(la_smartable1* obj, long u1, long u2, lon
 
 void la_smartable1::removeReference() 
 { 
-	if (--refCount == 0 && fManager) {
-		fManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
+	if (--refCount == 0 && fDeleteManager) {
+  		fDeleteManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
 	}
 }
 
 void la_smartable1::Init()
 {
-    fManager = new TThreadCmdManager(1);
+    //fDeleteManager = new TThreadCmdManager(1);
+    fDeleteManager = new TWaitThreadCmdManager(1); 
 }
 
 void la_smartable1::Destroy()
 {
-	fManager->FlushCmds(); // Hum...
-    delete fManager;
-	fManager = NULL;
+    fDeleteManager->FlushCmds(); // Hum...
+    delete fDeleteManager;
+    fDeleteManager = 0;
 }

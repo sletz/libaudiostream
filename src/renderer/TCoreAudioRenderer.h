@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2006-2007
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -48,14 +48,20 @@ class TCoreAudioRenderer : public TAudioRenderer
 		AudioBufferList* fInputData;
 		AudioDeviceID fDeviceID;
 		AudioUnit fAUHAL;
-        AudioObjectID fPluginID;    // Used for aggregate device
-        bool fState;
+        static AudioObjectID gPluginID;             // Used for aggregate device
+        static AudioDeviceID gAggregateDeviceID;    // Used for aggregate device
+        static bool fState;
+    
         AudioTimeStamp fCallbackTime;
-        
-        static double fTimeRatio;
-		
-		OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
-        int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
+        UInt64 fCallbackHostTime;
+    
+        RendererInfo fInfo;
+    
+        Float64 fAnchorFrameTime;   // Time stamp of the begining of rendering
+        UInt64 fAnchorHostTime;     // Time stamp of the begining of rendering
+   	
+		static OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
+        static int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
         int SetupBufferSize(long buffer_size);
         
         int Render(AudioUnitRenderActionFlags *ioActionFlags,
@@ -83,37 +89,41 @@ class TCoreAudioRenderer : public TAudioRenderer
                                                 AudioDevicePropertyID inPropertyID,
                                                 void* inClientData);
                                        
-        OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
+        static OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
                                             
-        OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
-        OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
-        OSStatus DestroyAggregateDevice();
+        static OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
+        static OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
+        static OSStatus DestroyAggregateDevice(AudioDeviceID id);
         
         static void InitTime();
         static double GetMicroSeconds();
-
+        
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+  
     public:
 
-        TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),fAUHAL(0),fPluginID(0),fState(false)
-        {
-            InitTime();
-        }
+        TCoreAudioRenderer(): TAudioRenderer(),fInputData(0),fDeviceID(0),
+            fAUHAL(0), fCallbackHostTime(0),
+            fAnchorFrameTime(0.),fAnchorHostTime(0)
+        {}
         virtual ~TCoreAudioRenderer()
         {}
 
-        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+        long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
 
         long Start();
         long Stop();
-
+    
+        long Pause();
+        long Cont();
+	
         void GetInfo(RendererInfoPtr info);
 		
-		long GetDeviceCount();
-		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
-		long GetDefaultInputDevice();
-		long GetDefaultOutputDevice();
+		static long GetDeviceCount();
+		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		static long GetDefaultInputDevice();
+		static long GetDefaultOutputDevice();
 };
 
 typedef TCoreAudioRenderer * TCoreAudioRendererPtr;

@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2002-2007
+Copyright (C) Grame 2002-2007
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -49,19 +49,24 @@ class TPortAudioRenderer : public TAudioRenderer
         void DisplayDevices();
         int GetFirstValidInputDevice();
         int GetFirstValidOutputDevice();
+    
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
 
     public:
 
         TPortAudioRenderer();
         virtual ~TPortAudioRenderer();
   
-        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+        long Open(long inChan, long outChan, long bufferSize, long sampleRate);
+		
         long Close();
 
         long Start();
         long Stop();
-
+        
+        long Pause();
+        long Cont();
+        
         void GetInfo(RendererInfoPtr info);
 		
 		long GetDeviceCount();

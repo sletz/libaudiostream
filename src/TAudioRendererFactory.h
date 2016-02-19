@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -26,7 +26,7 @@ research@grame.fr
 #include "AudioExports.h"
 #include "TAudioRenderer.h"
 
-enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer};
+enum {kPortAudioRenderer = 0, kJackRenderer, kCoreAudioRenderer, kOffLineAudioRenderer, kNetJackRenderer};
 
 /*!
 \brief A factory for audio renderers.

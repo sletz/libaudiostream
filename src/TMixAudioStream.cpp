@@ -1,5 +1,5 @@
 /*
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -24,18 +24,20 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include <assert.h>
 
-long TMixAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TMixAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
     if (fStream) { // One of the 2 stream is finished
-        return fStream->Read(buffer, framesNum, framePos, channels);
+        return fStream->Read(buffer, framesNum, framePos);
     } else {
-        long res1 = fStream1->Read(buffer, framesNum, framePos, channels);
+        long res1 = fStream1->Read(buffer, framesNum, framePos);
 
         if (res1 < framesNum) {
             fStream = fStream2; // Stream1 is finished, fStream variable is used as the remaining stream
-            return fStream2->Read(buffer, framesNum, framePos, channels);
+            return fStream2->Read(buffer, framesNum, framePos);
         } else {
-            long res2 = fStream2->Read(buffer, framesNum, framePos, channels);
+            long res2 = fStream2->Read(buffer, framesNum, framePos);
             if (res2 < framesNum) {
                 fStream = fStream1; // Stream2 is finished, fStream variable is used as the remaining stream
             }

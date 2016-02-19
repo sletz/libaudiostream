@@ -7,4 +7,4 @@ The version 1.0.11 is used
 - for PortAudio, see at http://www.portaudio.com/
 The version 18.1 is used
 
-To compile Jack support with the Xcode project, install Jack from  http://www.jackosx.com
+To compile Jack support with the Xcode project, install Jack from http://www.jackosx.com

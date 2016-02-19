@@ -1,6 +1,6 @@
 /*
 
-Copyright © Grame 2002-2007
+Copyright (C) Grame 2002-2007
 
 This library is free software; you can redistribute it and modify it under 
 the terms of the GNU Library General Public License as published by the 
@@ -20,6 +20,7 @@ research@grame.fr
 
 */
 
+#include <cstring>
 #include "TPortAudioRenderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
@@ -128,7 +129,7 @@ TPortAudioRenderer::~TPortAudioRenderer()
 	Pa_Terminate();
 }
 
-long TPortAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate)
+long TPortAudioRenderer::Open(long inChan, long outChan, long bufferSize, long sampleRate)
 {
     PaError err;
     const PaDeviceInfo* pdi;
@@ -175,10 +176,10 @@ long TPortAudioRenderer::OpenDefault(long inChan, long outChan, long bufferSize,
         printf("Output channel number %ld\n", outChan);
     }
 	
-	return Open(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
+	return OpenImp(inDevice, outDevice, inChan, outChan, bufferSize, sampleRate);
 }
 
-long TPortAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
+long TPortAudioRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
     printf("Opening device : inChan: %ld outChan: %ld bufferSize: %ld sampleRate: %ld\n", inChan, outChan, bufferSize, sampleRate);
 
@@ -198,9 +199,10 @@ long TPortAudioRenderer::Open(long inputDevice, long outputDevice, long inChan, 
 								Process,
 								this);
 
-    if (err != paNoError)
+    if (err != paNoError) {
         goto error;
-    return TAudioRenderer::OpenDefault(inChan, outChan, bufferSize, sampleRate);
+    }
+    return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
 
 error:
     printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
@@ -210,9 +212,10 @@ error:
 
 long TPortAudioRenderer::Close()
 {
-    if (fStream) 
+    if (fStream) {
         Pa_CloseStream(fStream);
-     return NO_ERR;
+    }
+    return NO_ERR;
 }
 
 long TPortAudioRenderer::Start()
@@ -246,13 +249,13 @@ void TPortAudioRenderer::GetInfo(RendererInfoPtr info)
     info->fSampleRate = fSampleRate;
     info->fBufferSize = fBufferSize;
     info->fCurFrame = long(Pa_StreamTime(fStream));
-    info->fCurMs = ConvertSample2Ms(info->fCurFrame);
+    info->fCurUsec = ConvertSample2Ms(info->fCurFrame);
 #if defined(WIN32) && defined(IMUTUS)
     info->fOutputLatencyFrame = Pa_GetOutputLatency(fStream);
-    info->fOutputLatencyMs = ConvertSample2Ms(info->fOutputLatencyFrame);
+    info->fOutputLatencyUsec = ConvertSample2Usec(info->fOutputLatencyFrame);
 #else
 	info->fOutputLatencyFrame = 0;
-    info->fOutputLatencyMs = 0;
+    info->fOutputLatencyUsec = 0;
 #endif
 }
 
@@ -297,3 +300,20 @@ long TPortAudioRenderer::GetDefaultOutputDevice()
 	return Pa_GetDefaultOutputDeviceID();
 }
 
+
+long TPortAudioRenderer::Pause()
+{
+    return Stop();
+}
+
+long TPortAudioRenderer::Cont()
+{
+    PaError err = Pa_StartStream(fStream);
+    
+    if (err != paNoError) {
+        printf("Error while opening device : device open error %s\n", Pa_GetErrorText(err));
+        return OPEN_ERR;
+    } else {
+        return NO_ERR;
+	}
+}

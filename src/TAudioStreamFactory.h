@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -55,9 +55,12 @@ typedef TAudioStreamPtr BinayOp(TAudioStreamPtr s1, TAudioStreamPtr s2);
 \brief A factory for streams.
 */
 
+class TBufferedAudioStream;
+
 class AUDIO_EXPORTS TAudioStreamFactory
 {
-
+    private:
+ 
     public:
 
         TAudioStreamFactory()
@@ -65,17 +68,22 @@ class AUDIO_EXPORTS TAudioStreamFactory
         virtual ~TAudioStreamFactory()
         {}
 
-        static TAudioStreamPtr MakeInputSound(void);
-        static TAudioStreamPtr MakeNullSound(long lengthFrame);
+        static TAudioStreamPtr MakeInputSound();
+        static TAudioStreamPtr MakeSharedInputSound();
+        static TAudioStreamPtr MakeNullSound(long length);
+        static TAudioStreamPtr MakeMultiNullSound(long channels, long length);
+        static TAudioStreamPtr MakeConstantSound(long channels, long length, float value);
+        static TAudioStreamPtr MakeBufferSound(float** buffer, long length, long channels, bool erase);
         static TAudioStreamPtr MakeReadSound(string name);
         static TAudioStreamPtr MakeRegionSound(string name, long beginFrame, long endFrame);
-		static TAudioStreamPtr MakeStereoSound(TAudioStreamPtr sound);
         static TAudioStreamPtr MakeLoopSound(TAudioStreamPtr sound, long n);
         static TAudioStreamPtr MakeFadeSound(TAudioStreamPtr sound, long fadeIn, long fadeOut);
         static TAudioStreamPtr MakeCutSound(TAudioStreamPtr s1, long beginFrame, long endFrame);
         static TAudioStreamPtr MakeSeqSound(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade);
         static TAudioStreamPtr MakeMixSound(TAudioStreamPtr s1, TAudioStreamPtr s2);
-        static TAudioStreamPtr MakeTransformSound(TAudioStreamPtr s1, TAudioEffectListPtr effect, long fadeIn, long fadeOut);
+        static TAudioStreamPtr MakeParSound(TAudioStreamPtr s1, TAudioStreamPtr s2);
+        static TAudioStreamPtr MakeSelectSound(TAudioStreamPtr sound, long* selection, long channels); 
+        static TAudioStreamPtr MakeEffectSound(TAudioStreamPtr s1, TAudioEffectInterfacePtr effect, long fadeIn, long fadeOut);
 		static TAudioStreamPtr MakeRubberBandSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech);
     #ifdef SOUND_TOUCH
 		static TAudioStreamPtr MakeSoundTouchSound(TAudioStreamPtr s1, double* pitch_shift, double* time_strech);

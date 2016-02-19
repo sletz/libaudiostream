@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -16,7 +16,7 @@ along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
-grame@rd.grame.fr
+research@grame.fr
 
 */
 
@@ -38,11 +38,12 @@ class TEventHandler
 
     protected:
 
-        long fNum; // event number
+        long fNum;      // event number
+        bool fFired;    // Fired state
 
     public:
 
-        TEventHandler(long num): fNum(num)
+        TEventHandler(long num): fNum(num), fFired(false)
         {}
         virtual ~TEventHandler()
         {}
@@ -59,12 +60,13 @@ typedef TEventHandler * TEventHandlerPtr;
 \brief A TEventSeqAudioStream plays two streams in sequence, and switch to the second stream if an event is received.
 */
 
+/*
 class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 {
-
+    
     public:
 
-        TEventSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2,  long crossFade, long num): TSeqAudioStream(s1, s2, crossFade), TEventHandler(num)
+        TEventSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade, long num): TSeqAudioStream(s1, s2, crossFade), TEventHandler(num)
         {}
         virtual ~TEventSeqAudioStream()
         {}
@@ -76,14 +78,16 @@ class TEventSeqAudioStream : public TSeqAudioStream, public TEventHandler
 
         bool HandleEvent(long num)
         {
-            if ((fNum == num) && (fStream == fStream1)) {
-                fStream = fStream2;
-            }
-            return (fNum == num);
+            fFired = (fNum == num);
+            return fFired;
         }
+        
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        void Reset();
 };
 
 typedef TEventSeqAudioStream * TEventSeqAudioStreamPtr;
+*/
 
 //-------------------------
 // Class TEventHandlerList
@@ -92,7 +96,7 @@ typedef TEventSeqAudioStream * TEventSeqAudioStreamPtr;
 \brief A STL list which contains the TEventHandler nodes of a stream expression.
 */
 
-class TEventHandlerList : public list<TEventHandlerPtr>
+class TEventHandlerList : public std::list<TEventHandlerPtr>
 {
 
     private:
@@ -153,7 +157,7 @@ class TEventAudioStream : public TDecoratedAudioStream, public TEventHandler
         {
             bool res = false;
             // Iterate through list
-            for (list<TEventHandlerPtr>::iterator iter = fHandlerList.begin(); iter != fHandlerList.end(); iter++) {
+            for (std::list<TEventHandlerPtr>::iterator iter = fHandlerList.begin(); iter != fHandlerList.end(); iter++) {
                 TEventHandlerPtr handler = *iter;
                 res |= handler->HandleEvent(num);
             }

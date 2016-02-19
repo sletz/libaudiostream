@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -45,12 +45,13 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
 
         string fName;
         SNDFILE* fFile;
+        float* fFileBuffer;
+     
+        static void ReadBufferAux(TFileAudioStream* obj, FLOAT_BUFFER buffer, long framesNum, long framePos);
+        static void WriteBufferAux(TFileAudioStream* obj, FLOAT_BUFFER buffer, long framesNum, long framePos);
 
-        static void ReadBufferAux(TFileAudioStream* obj, SHORT_BUFFER buffer, long framesNum, long framePos);
-        static void WriteBufferAux(TFileAudioStream* obj, SHORT_BUFFER buffer, long framesNum, long framePos);
-
-        void ReadBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
-        void WriteBuffer(SHORT_BUFFER buffer, long framesNum, long framePos);
+        void ReadBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
+        void WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
     public:
      
@@ -58,15 +59,6 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
         {}
         virtual ~TFileAudioStream()
         {}
-
-        virtual long Write(SHORT_BUFFER buffer, long framesNum, long framePos)
-        {
-            return 0;
-        }
-        virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos)
-        {
-            return 0;
-        }
 
         virtual void Reset() = 0;
 		virtual TAudioStreamPtr CutBegin(long frames) = 0;

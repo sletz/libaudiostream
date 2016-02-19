@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -39,6 +39,8 @@ class TPortAudioV19Renderer : public TAudioRenderer
     private:
 
         PaStream* fStream;
+        
+        PaTime fAnchorFrameTime;
 
         static int Process(const void* inputBuffer,
 							void* outputBuffer,
@@ -50,25 +52,30 @@ class TPortAudioV19Renderer : public TAudioRenderer
         void DisplayDevices();
         int GetFirstValidInputDevice();
         int GetFirstValidOutputDevice();
+        
+        long OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+     
 
     public:
 
         TPortAudioV19Renderer();        
 		virtual ~TPortAudioV19Renderer();
 
-        long OpenDefault(long inChan, long outChan, long bufferSize, long sampleRate);
-		long Open(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);
+        long Open(long inChan, long outChan, long bufferSize, long sampleRate);
         long Close();
 
         long Start();
         long Stop();
+    
+        long Pause();
+        long Cont();
 
         void GetInfo(RendererInfoPtr info);
 		
-		long GetDeviceCount();
-		void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
-		long GetDefaultInputDevice();
-		long GetDefaultOutputDevice();
+		static long GetDeviceCount();
+		static void GetDeviceInfo(long deviceNum, DeviceInfoPtr info);
+		static long GetDefaultInputDevice();
+		static long GetDefaultOutputDevice();
 };
 
 typedef TPortAudioV19Renderer * TPortAudioV19RendererPtr;

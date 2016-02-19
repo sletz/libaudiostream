@@ -65,7 +65,7 @@ class TAudioMixer : public TAudioClient
 
     public:
 
-        TAudioMixer ();
+        TAudioMixer();
         virtual ~TAudioMixer();
 
         long Load(TAudioStreamPtr stream, long channel, float vol, float panLeft, float panRight);

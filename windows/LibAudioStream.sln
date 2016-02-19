@@ -1,61 +1,46 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibAudioStream", "LibAudioStream.vcproj", "{EF45AF65-7762-49BB-B0AA-9900B4C492AF}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibAudioStream", "LibAudioStream.vcxproj", "{EF45AF65-7762-49BB-B0AA-9900B4C492AF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibAudioStreamJack", "LibAudioStreamJack.vcproj", "{1F3AFDAD-A933-44F6-89A9-4D7FDE6CAFE4}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{059D6162-CD51-11D0-AE1F-00A0C90FFFC3}") = "LibAudioStreamJack", "LibAudioStreamJack.dsp", "{5A1B4F64-31F8-4588-B5F2-B3AA1BC43D45}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibAudioStreamV19", "LibAudioStreamV19.vcproj", "{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibAudioStreamV19", "LibAudioStreamV19.vcxproj", "{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fileplay", "fileplay.vcproj", "{CAB4B666-7610-471C-AE6D-4CAA19809C7C}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fileplay", "fileplay.vcxproj", "{CAB4B666-7610-471C-AE6D-4CAA19809C7C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fileplaycpp", "fileplaycpp.vcproj", "{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fileplaycpp", "fileplaycpp.vcxproj", "{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testPlayer", "testPlayer.vcproj", "{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testPlayer", "testPlayer.vcxproj", "{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}"
 EndProject
 Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Release = Release
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Debug.ActiveCfg = Debug|Win32
-		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Debug.Build.0 = Debug|Win32
-		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Release.ActiveCfg = Release|Win32
-		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Release.Build.0 = Release|Win32
-		{1F3AFDAD-A933-44F6-89A9-4D7FDE6CAFE4}.Debug.ActiveCfg = Debug|Win32
-		{1F3AFDAD-A933-44F6-89A9-4D7FDE6CAFE4}.Debug.Build.0 = Debug|Win32
-		{1F3AFDAD-A933-44F6-89A9-4D7FDE6CAFE4}.Release.ActiveCfg = Release|Win32
-		{1F3AFDAD-A933-44F6-89A9-4D7FDE6CAFE4}.Release.Build.0 = Release|Win32
-		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Debug.ActiveCfg = Debug|Win32
-		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Debug.Build.0 = Debug|Win32
-		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Release.ActiveCfg = Release|Win32
-		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Release.Build.0 = Release|Win32
-		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Debug.ActiveCfg = Debug|Win32
-		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Debug.Build.0 = Debug|Win32
-		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Release.ActiveCfg = Release|Win32
-		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Release.Build.0 = Release|Win32
-		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Debug.ActiveCfg = Debug|Win32
-		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Debug.Build.0 = Debug|Win32
-		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Release.ActiveCfg = Release|Win32
-		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Release.Build.0 = Release|Win32
-		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Debug.ActiveCfg = Debug|Win32
-		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Debug.Build.0 = Debug|Win32
-		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Release.ActiveCfg = Release|Win32
-		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Release.Build.0 = Release|Win32
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Debug|Win32.Build.0 = Debug|Win32
+		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Release|Win32.ActiveCfg = Release|Win32
+		{EF45AF65-7762-49BB-B0AA-9900B4C492AF}.Release|Win32.Build.0 = Release|Win32
+		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Debug|Win32.Build.0 = Debug|Win32
+		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Release|Win32.ActiveCfg = Release|Win32
+		{7B96A55F-025A-4FF2-BB86-E4424FA3D08D}.Release|Win32.Build.0 = Release|Win32
+		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Debug|Win32.Build.0 = Debug|Win32
+		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Release|Win32.ActiveCfg = Release|Win32
+		{CAB4B666-7610-471C-AE6D-4CAA19809C7C}.Release|Win32.Build.0 = Release|Win32
+		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Debug|Win32.Build.0 = Debug|Win32
+		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Release|Win32.ActiveCfg = Release|Win32
+		{C39131A2-8BE4-4AD3-A780-F9DFF3D5392B}.Release|Win32.Build.0 = Release|Win32
+		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Debug|Win32.Build.0 = Debug|Win32
+		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Release|Win32.ActiveCfg = Release|Win32
+		{7F0DBEB3-8BDE-4066-80F8-977F65AC5495}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -20,10 +20,14 @@ research@grame.fr
 
 */
 
+#include <cstddef>
+#include <cstring>
 #include "TAudioRendererFactory.h"
+#include "TAudioGlobals.h"
 
 #ifdef __JACK__
-#include "TJackAudioRenderer.h"
+#include "TJackRenderer.h"
+#include "TNetJackRenderer.h"
 #endif
 
 #ifdef __PORTAUDIO__
@@ -38,10 +42,16 @@ research@grame.fr
 #include "TCoreAudioRenderer.h"
 #endif
 
+#include "TOfflineRenderer.h"
+
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
+    TAudioGlobals::ClearLibError();
 	try {
 		switch (renderer) {
+                
+            case kOffLineAudioRenderer:
+                return new TOfflineRenderer();
 
 			case kPortAudioRenderer:
 			#ifdef __PORTAUDIO__
@@ -57,7 +67,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 
 			case kJackRenderer:
 			#ifdef __JACK__
-				return new TJackAudioRenderer();
+				return new TJackRenderer();
 			#else
 			#ifdef WIN32
 				#pragma message ("Jack renderer is not compiled")
@@ -65,6 +75,11 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 				#warning Jack renderer is not compiled
 			#endif
 				return NULL;
+			#endif
+            
+            case kNetJackRenderer:
+            #ifdef __JACK__
+				return new TNetJackRenderer(-1, DEFAULT_MULTICAST_IP, DEFAULT_PORT, DEFAULT_MTU, 5);
 			#endif
 		
 			 case kCoreAudioRenderer:
@@ -83,6 +98,7 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 				return NULL;
 		}
 	} catch (...) {
-		return NULL;
+        TAudioGlobals::AddLibError("Renderer allocation error");
+        return NULL;
 	}
 }

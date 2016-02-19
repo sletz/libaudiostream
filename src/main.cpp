@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -20,7 +20,6 @@ research@grame.fr
 
 */
 
-
 #include "LibAudioStream++.h"
 #include <sndfile.h>
 #include <stdio.h>
@@ -37,7 +36,7 @@ research@grame.fr
     #define FILENAME1 "/Users/letz/Music/Sounds/levot.wav"
 	#define FILENAME2 "/Users/letz/Music/Sounds/tango.wav"
 	#define FILENAME3 "/Users/letz/son1.wav"
-	#define FILENAME4 "/Users/letz/Music/Sounds/levotmono.wav"
+	#define FILENAME4 "/Users/letz/Music/Sounds/levot-mono.aiff"
 	#define EFFECT1 ""
     //#define LLVM_EFFECT1 "process = component(\"effect.lib\").zita_rev1;"
     #define LLVM_EFFECT1 "/Documents/faust-sf/examples/freeverb.dsp"
@@ -50,7 +49,11 @@ research@grame.fr
 #define OUT_CHANNELS 2	// stereo player
 #define CHANNELS 8
 
+#define SAMPLE_RATE 44100
+
 AudioEffect faust_effect = 0;
+
+AudioPlayerPtr player;
 
 static void TestCallback(void* context)
 {
@@ -60,21 +63,32 @@ static void TestCallback(void* context)
 double pitch_shift = 1.0;
 double time_strech = 1.0;
 
+void printControls(AudioEffect faust_effect)
+{
+    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
+    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
+        float min, max, init;
+        char label[32];
+        GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
+        printf("Faust effect: param label = %s min = %f max = %f init = %f value = %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
+    }
+}
+
 AudioStream test0()
 {
     printf("-------------- \n");
     printf("Build a region \n");
     printf("-------------- \n\n");
     AudioStream s1;
-	//s1 = MakeRegionSound(FILENAME1, 200000, 500000);
-	s1 = MakeStereoSound(MakeRegionSound(FILENAME1, 200000, 600000));
+    //s1 = MakeReadSound(FILENAME1);
+    s1 = MakeReadSound(FILENAME4);
     return s1;
 }
 
 AudioStream test1()
 {
     printf("--------------------------- \n");
-    printf("Build a region with a fade \n");
+    printf("Build a region with a fade  \n");
     printf("--------------------------- \n\n");
     AudioStream s1;
     s1 = MakeRegionSound(FILENAME1, 200000, 500000);
@@ -118,17 +132,135 @@ AudioStream test4()
 AudioStream test5()
 {
     printf("------------------------------------\n");
-    printf("Build a input/output through stream \n");
+    printf("Build a input/output thru stream \n");
     printf("------------------------------------\n\n");
     return MakeInputSound();
+}
+
+/*
+AudioStream test5bis()
+{
+    printf("-----------------------------------------------\n");
+    printf("Build a buffered input/output thru stream \n");
+    printf("-----------------------------------------------\n\n");
+    return MakeBufferedInputSound(10 * SAMPLE_RATE);
+}
+
+AudioStream test5ter()
+{
+    printf("----------------------------------------------------------------\n");
+    printf("Build seq of a buffered input/output thru stream and a region\n");
+    printf("----------------------------------------------------------------\n\n");
+    return MakeSeqSound(MakeBufferedInputSound(10 * SAMPLE_RATE), MakeRegionSound(FILENAME1, 200000, 500000), 88200);
+}
+
+
+AudioStream test5ter1()
+{
+    printf("-----------------------------------------------\n");
+    printf("Build a buffered input/output thru stream   \n");
+    printf("-----------------------------------------------\n\n");
+    return MakeMixSound(MakeSeqSound(MakeNullSound(SAMPLE_RATE * 3), MakeSharedBufferedInputSound(SAMPLE_RATE), 10000), MakeBufferedInputSound(20 * SAMPLE_RATE));
+}
+*/
+
+AudioStream test5ter2()
+{
+    AudioEffectList list_effect = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
+	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+   
+    printf("---------------------------------------------------\n");
+    printf("Build delayed + effect version of the input stream \n");
+    printf("---------------------------------------------------\n\n");
+    return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeTransformSound(MakeSharedInputSound(), list_effect, 0, 0), 0);
+    //return MakeSeqSound(MakeNullSound(SAMPLE_RATE * 1), MakeSharedBufferedInputSound(0), 0);
+    //return MakeTransformSound(MakeSharedBufferedInputSound(0), list_effect, 100, 100);
+    //return MakeSharedBufferedInputSound(0);
+}
+
+AudioStream test5ter3()
+{
+    AudioEffectList list_effect1 = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+    list_effect1 = AddAudioEffect(list_effect1, faust_effect);
+ 	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+   
+    printf("-------------------------------------------------\n");
+    printf("Build sequence of parts of the input stream      \n");
+    printf("-------------------------------------------------\n\n");
+    
+    /*
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeTransformSound(MakeSharedInputSound(), list_effect1, 0, 0), SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+    
+    */
+    /*
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), list_effect1, 0, 0), 0);
+                        
+    */
+    /*
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeSharedInputSound(), 2*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+    */
+    
+    return MakeSeqSound(MakeCutSound(MakeSharedInputSound(), 0, 5*SAMPLE_RATE),
+                        MakeCutSound(MakeSharedInputSound(), 0*SAMPLE_RATE, 5*SAMPLE_RATE), 0);
+   
+}
+
+AudioStream test5ter4()
+{
+    
+    AudioEffectList list_effect1 = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+    list_effect1 = AddAudioEffect(list_effect1, faust_effect);
+ 	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+   
+    printf("-----------------------------------------------\n");
+    printf("Takes current portion of the input stream      \n");
+    printf("-----------------------------------------------\n\n");
+    
+    // Remove portion of the input stream from the beginning
+    RendererInfo info;
+    AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
+    GetAudioRendererInfo(renderer, &info);
+    
+    printf("info.fCurFrame %d\n", info.fCurFrame);
+ 
+    return MakeTransformSound(MakeCutSound(MakeSharedInputSound(), 0, info.fCurFrame + 1), list_effect1, 0, 0);
 }
 
 AudioStream test6()
 {
     printf("---------------------------------------------------------\n");
-    printf("Build a input/output through and record the output stream\n");
+    printf("Build a input/output thru and record the output stream\n");
     printf("---------------------------------------------------------\n\n");
-    return MakeWriteSound("input.aif", MakeInputSound(), SF_FORMAT_AIFF | SF_FORMAT_PCM_16);
+    // "Wav" format can be read while being written...
+    return MakeWriteSound("input.wav", MakeInputSound(), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 }
 
 AudioStream test7()
@@ -197,16 +329,10 @@ AudioStream test10()
     AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioStream sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
 	AudioEffectList list_effect = MakeAudioEffectList();
-    faust_effect = MakeFaustAudioEffect(EFFECT1);
+    faust_effect = MakeFaustAudioEffect(EFFECT1, "", "");
     
-	printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
-	}
-	
+    printControls(faust_effect);
+   	
 	list_effect = AddAudioEffect(list_effect, faust_effect);
 	list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.5));
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
@@ -220,33 +346,20 @@ AudioStream test10bis()
     AudioStream sound1 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioStream sound2 = MakeRegionSound(FILENAME1, 400000, 1000000);
     AudioEffectList list_effect = MakeAudioEffectList();
-    faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+    faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
     
-	printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
-    
+    printControls(faust_effect);
+        
     SetControlValueEffect(faust_effect, 0, 1.0);
     SetControlValueEffect(faust_effect, 1, 1.0);
     SetControlValueEffect(faust_effect, 2, 1.0);
     
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-    for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f %f\n", label, min, max, init, GetControlValueEffect(faust_effect, i));
-	}
+    printControls(faust_effect);
 	
-	list_effect = AddAudioEffect(list_effect, faust_effect);
 	//list_effect = AddAudioEffect(list_effect, MakeVolAudioEffect(0.99));
     return MakeSeqSound(sound1, MakeTransformSound(sound2, list_effect, 100, 100), 44100);
 }
-
 
 AudioStream test11()
 {
@@ -254,18 +367,18 @@ AudioStream test11()
     printf("Input stream + Faust freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(EFFECT1);
+	faust_effect = MakeFaustAudioEffect(EFFECT1, "", "");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
 	
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
-	}
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 1.0);
+    SetControlValueEffect(faust_effect, 1, 1.0);
+    SetControlValueEffect(faust_effect, 2, 1.0);
+    
+    printControls(faust_effect);
 	
-	list_effect = AddAudioEffect(list_effect, faust_effect);
-    return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+    return MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
 }
 
 AudioStream test11bis()
@@ -274,36 +387,78 @@ AudioStream test11bis()
     printf("Input stream + Faust LLVM freeverb effect                               \n");
     printf("-------------------------------------------------------------------\n\n");
     AudioEffectList list_effect = MakeAudioEffectList();
-	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1);
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
 	
-    printf("Faust effect: param num %ld\n", GetControlCountEffect(faust_effect));
-	for (int i = 0; i < GetControlCountEffect(faust_effect); i++) {
-		float min, max, init;
-		char label[32];
-		GetControlParamEffect(faust_effect, i, label, &min, &max, &init); 
-		printf("Faust effect: param %s %f %f %f\n", label, min, max, init);
-	}
-    SetControlValueEffect(faust_effect, 9, 1.0);
-    SetControlValueEffect(faust_effect, 10, 20.0);
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
   
-	list_effect = AddAudioEffect(list_effect, faust_effect);
-    return MakeTransformSound(MakeInputSound(), list_effect, 100, 100);
+    return MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16);
+}
+
+AudioStream test11ter()
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("Input stream + Faust LLVM freeverb effect                               \n");
+    printf("-------------------------------------------------------------------\n\n");
+    AudioEffectList list_effect = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(LLVM_EFFECT1, "", "/Users/letz/SVG");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
+	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+  
+    return MakeMixSound(
+        MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16), 
+        MakeSeqSound(MakeNullSound(3 * 44100), MakeReadSound("reverb_input.wav"), 100));
+}
+
+AudioStream test11quad(const char* faust_code)
+{
+    printf("-------------------------------------------------------------------\n");
+    printf("Input stream + Faust LLVM freeverb effect                               \n");
+    printf("-------------------------------------------------------------------\n\n");
+    AudioEffectList list_effect = MakeAudioEffectList();
+	faust_effect = MakeFaustAudioEffect(faust_code, "", "/Users/letz/SVG");
+    list_effect = AddAudioEffect(list_effect, faust_effect);
+	
+    printControls(faust_effect);
+    
+    SetControlValueEffect(faust_effect, 0, 0.9);
+    SetControlValueEffect(faust_effect, 1, 0.9);
+    SetControlValueEffect(faust_effect, 2, 0.9);
+    
+    printControls(faust_effect);
+  
+    return MakeMixSound(
+        MakeWriteSound("reverb_input.wav", MakeTransformSound(MakeInputSound(), list_effect, 100, 100), SF_FORMAT_WAV | SF_FORMAT_PCM_16), 
+        MakeSeqSound(MakeNullSound(3 * 44100), MakeReadSound("reverb_input.wav"), 100));
 }
 
 AudioStream test12()
 {
     printf("-------------------------------------------------------------------\n");
-    printf("RubberBand library												   \n");
+    printf("RubberBand library (1)											   \n");
     printf("-------------------------------------------------------------------\n\n");
     
 	AudioStream s1 = MakeReadSound(FILENAME1);
 	return MakePitchSchiftTimeStretchSound(s1, &pitch_shift, &time_strech);
- }
+}
 
 AudioStream test13()
 {
     printf("-------------------------------------------------------------------\n");
-    printf("RubberBand library (2)												   \n");
+    printf("RubberBand library (2)											   \n");
     printf("-------------------------------------------------------------------\n\n");
 	
 	AudioStream s1 = MakeRegionSound(FILENAME1, 200000, 500000);
@@ -332,7 +487,7 @@ void test21()
     printf("-----------------------------------------------------------\n");
     printf("Non real-time rendering : use the MakeRendererSound wrapper\n");
     printf("-----------------------------------------------------------\n\n");
-    AudioStream sound = MakeRendererSound(MakeWriteSound("output.aif", MakeReadSound(FILENAME3),SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
+    AudioStream sound = MakeRendererSound(MakeWriteSound("output.aif", MakeReadSound(FILENAME3), SF_FORMAT_AIFF | SF_FORMAT_PCM_16));
     float buffer[512 * OUT_CHANNELS];
     long res;
 	do {
@@ -350,21 +505,34 @@ void TestPlay(AudioPlayerPtr player)
     char c;
     
     AudioRendererPtr renderer = GetAudioPlayerRenderer(player);
+    
+    // To reset real-time input
+    //StopAudioPlayer(player);
+    //StartAudioPlayer(player);
 	
     while ((c = getchar()) && (c != 'n')) {
 
         switch (c) {
 
             case 'b':
+                StopAudioPlayer(player);
+                
                 StartChannel(player, 1);
-				break;
+                StartAudioPlayer(player);
+            break;
 
             case 'p':
+                StopAudioPlayer(player);
+               
                 ContChannel(player, 1);
+                StartAudioPlayer(player);
                 break;
 
             case 's':
                 StopChannel(player, 1);
+                
+                StopAudioPlayer(player);
+                StartAudioPlayer(player);
                 break;
 
             case '+':
@@ -399,7 +567,7 @@ void TestPlay(AudioPlayerPtr player)
                 RendererInfo info;
                 GetAudioRendererInfo(renderer, &info);
                 printf("info.fCurFrame %lld\n", info.fCurFrame);
-                printf("info.fCurUsec %lld\n", info.fCurUsec);
+                printf("info.fCurUsec %lld %f\n", info.fCurUsec, float(info.fCurUsec/1000000));
 				break;
 
             /*
@@ -437,40 +605,41 @@ void SaveSound(AudioStream sound, char* name)
 }
 */
 
-void ExecTest(AudioPlayerPtr player, AudioStream sound)
+static void printError(int err)
+{
+    switch (err) {
+        case 0:
+            printf("NO_ERR\n");
+            break;
+        case -1:
+            printf("OPEN_ERR\n");
+            break;
+        case -2:
+            printf("CLOSE_ERR\n");
+            break;
+        case -3:
+            printf("LOAD_ERR\n");
+            break;
+        case -4:
+            printf("FILE_NOT_FOUND_ERR\n");
+            break;
+    
+    }
+}
+
+static void ExecTest(AudioPlayerPtr player, AudioStream sound)
 {
 	printf("ExecTest channels = %ld \n", GetChannelsSound(sound));
-    int res = LoadChannel(player, sound, 1, 1.0f, 1.0f, 0.0f);
+    int err = LoadChannel(player, sound, 1, 1.0f, 1.0f, 0.0f);
 	SetStopCallbackChannel(player, 1, TestCallback, NULL);
-    if (res == NO_ERR) {
+    if (err == NO_ERR) {
         TestPlay(player);
     } else {
-        printf("LoadChannel error %d \n", res);
+        printf("LoadChannel error %d \n", err);
+        printError(err);
     }
     StopChannel(player, 1);
 }
-
-#ifndef WIN32
-
-int SetMaximumFiles(long filecount)
-{
-    struct rlimit lim;
-    lim.rlim_cur = lim.rlim_max = (rlim_t)filecount;
-    return (setrlimit(RLIMIT_NOFILE, &lim) == 0) ? 0 : errno;
-}
-
-int GetMaximumFiles(long *filecount) 
-{
-    struct rlimit lim;
-    if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
-        *filecount = (long)lim.rlim_max;
-        return 0;
-    } else {
-		return errno;
-	}
-}
-
-#endif
 
 int main(int argc, char* argv[])
 {
@@ -480,26 +649,23 @@ int main(int argc, char* argv[])
 
 	int res = LibVersion();
     
-    ///int samplerate = 96000;
-    int samplerate = 44100;
-
-#ifndef WIN32
-	SetMaximumFiles(1024);	
-	printf("sysconf id_max %ld\n", sysconf(_SC_OPEN_MAX));
-#endif
-	
 	// Try to open Jack version
-    AudioPlayerPtr player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 512, 65536 * 8, 131072 * 4, kJackRenderer, 1);
+    player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 512, 65536 * 8, SAMPLE_RATE * 60 * 10, kJackRenderer, 1);
     // If failure opens PortAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kPortAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kPortAudioRenderer, 1);
     }
     // If failure opens CoreAudio version
     if (!player) {
-        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, samplerate, 1024, 65536 * 8, 131072 * 8, kCoreAudioRenderer, 1);
+        player = OpenAudioPlayer(IN_CHANNELS, OUT_CHANNELS, CHANNELS, SAMPLE_RATE, 1024, 65536 * 8, SAMPLE_RATE * 60 * 10, kCoreAudioRenderer, 1);
     }
     
-    StartAudioPlayer(player);
+    if (!player) {
+        printf("Cannot open AudioPlayer...\n");
+        return -1;
+    } 
+    
+    //StartAudioPlayer(player);
 	
     printf("Type 'b' to start playing from the begining\n");
     printf("Type 's' to stop playing\n");
@@ -509,7 +675,8 @@ int main(int argc, char* argv[])
     printf("Type '1' to pan left\n");
     printf("Type '2' to pan right\n");
     printf("Type 'n' to go to next test\n");
-	
+    
+   
 	/*
     ExecTest(player, test0());
 	ExecTest(player, test0());
@@ -519,7 +686,9 @@ int main(int argc, char* argv[])
 	ExecTest(player, test0());
 	ExecTest(player, test0());
     */
+    
 
+    /*
     ExecTest(player, test0());
     ExecTest(player, test1());
 	ExecTest(player, test1());
@@ -528,6 +697,21 @@ int main(int argc, char* argv[])
     ExecTest(player, test4());
     ExecTest(player, test5());
     ExecTest(player, test6());
+    */
+    
+    /*
+    //ExecTest(player, test5bis());
+    //ExecTest(player, test5ter());
+    ExecTest(player, test5ter1());
+    */
+
+    //ExecTest(player, test5ter2());
+    //ExecTest(player, test5ter3());
+    
+    ExecTest(player, test5ter4());
+	
+    
+    /*
 	ExecTest(player, test7());
     ExecTest(player, test8());
     ExecTest(player, test9());
@@ -536,9 +720,18 @@ int main(int argc, char* argv[])
     ExecTest(player, test10bis());
 	//ExecTest(player, test11());
     ExecTest(player, test11bis());
+    */
+    
+    /*
+    ExecTest(player, test10bis());
+    
+    ExecTest(player, test11ter());
+    ExecTest(player, test11quad("process = _,_;"));
+    ExecTest(player, test11quad("process = _,_;"));
     	
 	ExecTest(player, test12());
 	ExecTest(player, test13());
+    */
 
     /*
 	test20();

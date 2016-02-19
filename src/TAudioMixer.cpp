@@ -24,10 +24,13 @@ research@grame.fr
 #pragma warning (disable : 4786)
 #endif
 
+#include "TAudioBuffer.h"
 #include "TAudioMixer.h"
 #include "UAudioTools.h"
 #include "TPanTable.h"
 #include "TSharedBuffers.h"
+#include "TAudioGlobals.h"
+#include "TBufferedInputAudioStream.h"
 
 /*--------------------------------------------------------------------------*/
 // Internal API
@@ -39,7 +42,7 @@ TAudioMixer::TAudioMixer ()
     SetVol(DEFAULT_VOL);
     SetPan(DEFAULT_PAN_LEFT, DEFAULT_PAN_RIGHT);
 
-    fMixBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
+    fMixBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
     fSoundChannelTable = new TAudioChannelPtr[TAudioGlobals::fChannels];
 
     for (int j = 0; j < TAudioGlobals::fChannels; j++) {
@@ -61,7 +64,10 @@ bool TAudioMixer::AudioCallback(float* inputBuffer, float* outputBuffer, long fr
 {
     // Init buffer
     UAudioTools::ZeroFloatBlk(fMixBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
-	
+    
+    // Real-time input
+    TAudioGlobals::fSharedInput->Read(fMixBuffer, frames, 0, TAudioGlobals::fOutput);
+
     // Mix all SoundChannels
 	list<TAudioChannelPtr>::iterator iter = fSoundChannelSeq.begin();
 	while (iter != fSoundChannelSeq.end()) {
@@ -100,7 +106,7 @@ long TAudioMixer::Load(TAudioStreamPtr stream, long chan, float vol, float panLe
         channel->SetPan(panLeft, panRight);
         return NO_ERR;
     } else {
-        printf("Allocate : Channel already inserted  %ld\n", chan);
+        printf("Allocate : Channel already inserted %ld\n", chan);
         return LOAD_ERR;
     }
 }
@@ -113,7 +119,7 @@ void TAudioMixer::Start(long chan)
         channel->Reset();
         channel->SoundOn();
         channel->SetState(true);
-		// This is supposed to be unsafe since fSoundChannelSeq list is also read in AudioCallback thread... but no crash even occured
+		// This is supposed to be unsafe since fSoundChannelSeq list is also read in AudioCallback thread... but no crash ever occured
         fSoundChannelSeq.push_front(channel);
     } else {
         printf("Start : Channel already playing : %ld\n", chan);

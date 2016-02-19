@@ -23,6 +23,7 @@ research@grame.fr
 #ifndef __TAudioEngine__
 #define __TAudioEngine__
 
+#include <stdint.h>
 #include "TAudioRenderer.h"
 #include "TAudioMixer.h"
 
@@ -38,8 +39,8 @@ class TAudioEngine
 
     protected:
 
-        TAudioMixerPtr	fMixer;  		// Writer of Audio output
-        TAudioRendererPtr fRenderer; 	// Renderer
+        TAudioMixerPtr fMixer;          // Writer of Audio output
+        TAudioRendererPtr fRenderer;    // Renderer
 
     public:
 

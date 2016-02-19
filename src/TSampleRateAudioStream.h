@@ -1,5 +1,5 @@
 /*
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -38,6 +38,9 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
     private:
 
         FLOAT_BUFFER fBuffer;
+        float* fTmpBufferIn;
+        float* fTmpBufferOut;
+       
         SRC_STATE* fResampler;
         double fRatio;
    
@@ -49,13 +52,15 @@ class TSampleRateAudioStream : public TDecoratedAudioStream
         TSampleRateAudioStream(TAudioStreamPtr stream, double ratio, unsigned int quality = SRC_LINEAR);
         virtual ~TSampleRateAudioStream();
    
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         TAudioStreamPtr CutBegin(long frames);    // Length in frames
     
         TAudioStreamPtr Copy();

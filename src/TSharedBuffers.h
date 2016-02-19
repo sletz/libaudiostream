@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -23,7 +23,7 @@ research@grame.fr
 #ifndef __TSharedBuffers_
 #define __TSharedBuffers_
 
-// Global Input/output buffers
+// Global input/output buffers
 
 //----------------------
 // Class TSharedBuffers
@@ -34,28 +34,54 @@ research@grame.fr
 
 class TSharedBuffers
 {
-
+  
     public:
 
-        static float* fInBuffer;
-        static float* fOutBuffer;
+        static float** fInBuffer;
+        static float** fOutBuffer;
+        
+        static long fInputOffset;
+        static long fOutputOffset;
 
-        static float* GetInBuffer()
+        static float** GetInBuffer()
         {
             return fInBuffer;
         }
-        static float* GetOutBuffer()
+        
+        static float** GetInBuffer(long framesNum, long channels, float** res)
+        {
+            for (int i = 0; i < channels; i++) {
+                res[i] = &fInBuffer[i][fInputOffset];
+            }
+            //printf("GetInBuffer  fInputOffset %ld\n", fInputOffset);
+            fInputOffset += framesNum;
+            return res;
+        }
+        
+        static float** GetOutBuffer()
         {
             return fOutBuffer;
         }
+        
+        static float** GetOutBuffer(long framesNum, long channels, float** res)
+        {
+            for (int i = 0; i < channels; i++) {
+                res[i] = &fOutBuffer[i][fOutputOffset];
+            }
+            fOutputOffset += framesNum;
+            return res;
+        }
 
-        static void SetInBuffer(float* input)
+        static void SetInBuffer(float** input)
         {
             fInBuffer = input;
+            fInputOffset = 0;
         }
-        static void SetOutBuffer(float* output)
+        
+        static void SetOutBuffer(float** output)
         {
             fOutBuffer = output;
+            fOutputOffset = 0;
         }
 };
 

@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "TAudioStream.h"
 #include "TSharedBuffers.h"
+#include "TAudioGlobals.h"
 
 //-------------------------
 // Class TInputAudioStream
@@ -43,14 +44,21 @@ class TInputAudioStream : public TAudioStream
         virtual ~TInputAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
+            assert_stream(framesNum, framePos);
             assert(TSharedBuffers::GetInBuffer());
-            UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos),
+            
+            //printf("TInputAudioStream::Read framesNum %ld\n", framesNum);
+            
+            float** temp1 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
+            //float** temp2 = (float**)alloca(TAudioGlobals::fInput*sizeof(float*));
+            
+            UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(framePos, temp1),
+                                             //TSharedBuffers::GetInBuffer(framesNum, TAudioGlobals::fInput, temp2),
                                              TSharedBuffers::GetInBuffer(),
-                                             framesNum,
-                                             channels);
-            return framesNum;
+                                             framesNum, TAudioGlobals::fInput);
+			return framesNum;
         }
 
         void Reset()
@@ -59,23 +67,25 @@ class TInputAudioStream : public TAudioStream
         // Cut the beginning of the stream
         virtual TAudioStreamPtr CutBegin(long frames)
         {
-            printf("TInputAudioStream::CutBegin Error\n");
-            return new TInputAudioStream();
+            printf("TInputAudioStream::CutBegin error\n");
+            assert(false);
+            return NULL;
         }
 
         // Length in frames
         virtual long Length()
         {
-            return 0x07FFFFFF;
+            return LONG_MAX;
         } 	
         virtual long Channels()
         {
-            return 2;
+            return TAudioGlobals::fInput;
         } 	
         virtual TAudioStreamPtr Copy()
         {
-            printf("TInputAudioStream::Copy Error\n");
-            return new TInputAudioStream();
+            printf("TInputAudioStream::Copy error\n");
+            assert(false);
+            return NULL;
         }
 };
 

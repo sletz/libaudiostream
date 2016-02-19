@@ -22,6 +22,7 @@ research@grame.fr
 
 #ifndef __LibAudioStream__
 #define __LibAudioStream__
+#include <stdint.h>
 
 /*!
 \addtogroup interface LibAudioStream programming interface
@@ -36,7 +37,7 @@ extern "C"
 
 #define NO_ERR 0
 #define OPEN_ERR -1
-#define CLOSE_ERR -1
+#define CLOSE_ERR -2
 #define LOAD_ERR -3
 #define FILE_NOT_FOUND_ERR -4
 
@@ -103,6 +104,12 @@ extern "C"
     \return the library version number as a 3 digits long value.
     */
 	long LibVersion();
+    
+    /*!
+    \brief Return a string describing the last error.
+    \return the error.
+    */
+	const char* GetLastLibError();
 	
     /**
      * @defgroup SoundFunctions Sound creation and manipulation functions
@@ -199,12 +206,19 @@ extern "C"
     */
     AudioStreamPtr MakeWriteSoundPtr(char* name, AudioStreamPtr sound, long format);
     /*!
-    \brief Create an inputstream.
+    \brief Create an input stream.
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeInputSoundPtr();
+    
     /*!
-    \brief Create an renderer "wrapper" on a stream, to be used for direct access to the stream content.
+    \brief Create a shared stream on the input stream.
+    \return A pointer to new stream object.
+    */
+    AudioStreamPtr MakeSharedInputSoundPtr();
+    
+    /*!
+    \brief Create a renderer "wrapper" on a stream, to be used for direct access to the stream content.
     \return A pointer to new stream object.
     */
     AudioStreamPtr MakeRendererSoundPtr(AudioStreamPtr sound);
@@ -301,9 +315,12 @@ extern "C"
 	/*!
 	\brief Create an effect described in the Faust DSP language.
 	\param name The name of the Faust effect shared library.
+    \param library_path The pathname where to locate additional DSP libraries.
+    \param draw_path The pathname where to save additional resources produced during compilation (like SVG files).
     \return A pointer to new effect object or NULL if the effect cannot be located or created.
 	*/
-	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name);
+	AudioEffectPtr MakeFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
+    AudioEffectPtr MakeDispatchFaustAudioEffectPtr(const char* name, const char* library_path, const char* draw_path);
 	/*!
 	\brief Create an effect by "wrapping" an externally built effect.
 	\param effect The effect to be wrapped.
@@ -372,6 +389,8 @@ extern "C"
 	*/
 	void DeleteEffectPtr(AudioEffectPtr effect);
     
+    const char* GetJsonEffect(AudioEffectPtr effect);
+    
     /*@}*/
     
     /**
@@ -390,13 +409,13 @@ extern "C"
 
     /*!
     \brief Open the audio player.
-    \param inChan The number of input channels. <B>Only stereo players are currently supported </B>
+    \param inChan The number of input channels. 
     \param outChan The number of output channels.
     \param channels The number of stream channels.
     \param sample_rate The sampling rate.
     \param buffer_size The audio player internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
-    \param rtstream_buffer_size The input stream buffer size.
+    \param rtstream_duration The input stream duration in frames.
     \param renderer The audio renderer used to access audio I/O : can be kPortAudioRenderer, kJackRenderer or kCoreAudioRenderer.
     \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
     \return A pointer to new audio player object.
@@ -407,7 +426,7 @@ extern "C"
                                    long sample_rate,
                                    long buffer_size,
                                    long stream_buffer_size,
-                                   long rtstream_buffer_size,
+                                   long rtstream_duration,
                                    long renderer,
                                    long thread_num);
 								   
@@ -481,8 +500,8 @@ extern "C"
     \param chan The audio channel number to be used.
     \param info The channel info structure to be filled.
     */
-    void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
     void GetChannelInfo(AudioPlayerPtr player, long chan, ChannelInfoPtr info);
+    void GetInfoChannel(AudioPlayerPtr player, long chan, ChannelInfoPtr info); // Obsolete version
 	/*!
     \brief Set a callback to be called when the channel stops.
     \param player The audio player.
@@ -605,13 +624,13 @@ extern "C"
     \param renderer The audio renderer used.
     \param inputDevice The audio input device index.
     \param outputDevice The audio output device index.
-	\param inChan The number of input channels. <B>Only stereo players are currently supported </b>. On input, contains the wanted value, on return the really used one.
-	\param outChan The number of output channels.  On input, contains the wanted value, on return the really used one.
-	\param bufferSize The audio player internal buffer size.  On input, contains the wanted value, on return the really used one.
-    \param sampleRate The sampling rate. On input, contains the wanted value, on return the really used one.
+	\param inChan The number of input channels. 
+	\param outChan The number of output channels. 
+	\param bufferSize The audio player internal buffer size. 
+    \param sampleRate The sampling rate. 
  	\return An error code.
 	*/
-	int OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  
+	long OpenAudioRenderer(AudioRendererPtr renderer, long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate);  
 	/*!
     \brief Close an audio renderer.
     \param renderer The audio renderer to be closed.
@@ -657,7 +676,7 @@ extern "C"
     \param sample_rate The sampling rate.
     \param buffer_size The audio player internal buffer size.
     \param stream_buffer_size The file reader/writer buffer size (used for double buffering).
-    \param rtstream_buffer_size The input stream buffer size.
+    \param rtstream_duration The input stream duration in frames.
     \param thread_num The number of additionnal low-priority threads used to precompute data : must be a least one.
     */
 	void AudioGlobalsInit(long inChan, 
@@ -666,7 +685,7 @@ extern "C"
 						long sample_rate,
 						long buffer_size, 
 						long stream_buffer_size, 
-						long rtstream_buffer_size,
+						long rtstream_duration,
 						long thread_num);
 	/*!
     \brief Destroy the global audio context.

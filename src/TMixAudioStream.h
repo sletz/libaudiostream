@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -43,21 +43,32 @@ class TMixAudioStream : public TBinaryAudioStream
         virtual ~TMixAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         TAudioStreamPtr CutBegin(long frames);
+        
         long Length()
         {
             return UTools::Max(fStream1->Length(), fStream2->Length());
         }
+        
         long Channels()
         {
             return UTools::Max(fStream1->Channels(), fStream2->Channels());
         }
+        
         TAudioStreamPtr Copy()
         {
             return new TMixAudioStream(fStream1->Copy(), fStream2->Copy());
+        }
+        
+        long SetPos(long frames)
+        {
+            long res1 = fStream1->SetPos(frames);
+            long res2 = fStream2->SetPos(frames);
+            return (res1 != NO_ERR) ? res1 : res2;
         }
 };
 

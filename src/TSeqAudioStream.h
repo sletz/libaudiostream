@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -36,33 +36,41 @@ research@grame.fr
 class TSeqAudioStream : public TBinaryAudioStream
 {
 
-    protected:
-
-        long fCurFrame;
-        long fFramesNum;
-        long fCrossFade;
-
     public:
 
-        TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2, long crossFade);
+        TSeqAudioStream(TAudioStreamPtr s1, TAudioStreamPtr s2);
         virtual ~TSeqAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         TAudioStreamPtr CutBegin(long frames);
+        
         long Length()
         {
-            return fStream1->Length() + fStream2->Length() - fCrossFade;
+            return fStream1->Length() + fStream2->Length();
         }
+        
         long Channels()
         {
             return UTools::Max(fStream1->Channels(), fStream2->Channels());
         }
+        
         TAudioStreamPtr Copy()
         {
-            return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy(), fCrossFade);
+            return new TSeqAudioStream(fStream1->Copy(), fStream2->Copy());
+        }
+        
+        long SetPos(long frames)
+        {
+            long len1 = fStream1->Length();
+            if (frames < len1) {
+                return fStream1->SetPos(frames);
+            } else {
+                return fStream2->SetPos(frames - len1);
+            }
         }
 };
 

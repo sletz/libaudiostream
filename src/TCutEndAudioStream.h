@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -46,14 +46,17 @@ class TCutEndAudioStream : public TDecoratedAudioStream
         virtual ~TCutEndAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels);
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
+        
         long Length()
         {
             return fFramesNum;
         }
+        
         TAudioStreamPtr CutBegin(long frames);
+        
         TAudioStreamPtr Copy()
         {
             return new TCutEndAudioStream(fStream->Copy(), fFramesNum);

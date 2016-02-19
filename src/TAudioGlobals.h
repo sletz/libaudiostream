@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -25,6 +25,22 @@ research@grame.fr
 
 #include "AudioExports.h"
 #include "TAudioBuffer.h"
+#include "TAudioEffectInterface.h"
+#include <string>
+#include <map>
+#include <list>
+
+#define MAX_OUTPUT_CHAN 64 // Used in TExpAudioMixer
+
+//-------------------
+// Error management
+//-------------------
+
+ typedef struct ErrorInfo {
+        char fStreamError[512];
+        long fDiskError;            // Counter of disk streaming errors
+        long fSchedulingError;      // Counter of too late scheduled stream commmands  
+} ErrorInfo;
 
 //---------------------
 // Class TAudioGlobals
@@ -32,6 +48,11 @@ research@grame.fr
 /*!
 \brief Global state.
 */
+
+class TBufferedAudioStream;
+
+class TLocalCodeFaustAudioEffectFactory;
+class TRemoteCodeFaustAudioEffectFactory;
 
 class AUDIO_EXPORTS TAudioGlobals
 {
@@ -43,30 +64,46 @@ class AUDIO_EXPORTS TAudioGlobals
 
     public:
 
-        static SHORT_BUFFER fInBuffer;          // Shared buffer for Real-Time stream
         static long fInput;                     // Number of input channels
         static long fOutput;                    // Number of output channels
-        static long fChannels;                  // Number of sound channels
-        static long fSampleRate;                // Sampling Rate
-        static long fBufferSize;                // I/O Buffer size
-        static long fStreamBufferSize;          // Stream Buffer size
-        static long fRTStreamBufferSize;        // Real-Time Stream Buffer size
+        static long fSampleRate;                // Sampling rate
+        static long fBufferSize;                // I/O buffer size
+        static long fStreamBufferSize;          // Stream buffer size
         static long fDiskError;                 // Counter of disk streaming errors
+        static long fSchedulingError;           // Counter of too late scheduled stream commmands 
 		static long fFileMax;
 
 		static long fInputLatency;				// Suggested input latency (when used with PortAudio)
 		static long fOutputLatency;				// Suggested output latency (when used with PortAudio)
-
-        TAudioGlobals(long inChan, long outChan, long channels, long sample_rate,
+        
+        static char* fLastLibError;
+    
+        static TBufferedAudioStream* fSharedInput;  // Shared real-time input
+        
+        static std::map<std::string, TLocalCodeFaustAudioEffectFactory*> fLocalFactoryTable;     // Local effect factory 
+        static int fLocalFactoryNumber;
+         
+        static std::map<std::string, TRemoteCodeFaustAudioEffectFactory*> fRemoteFactoryTable;   // Remote effect factory 
+        static int fRemoteFactoryNumber;
+       
+        static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;         // Effect table 
+   
+        TAudioGlobals(long inChan, long outChan, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
         virtual ~TAudioGlobals();
 
-        static void Init(long inChan, long outChan, long channels,
+        static void Init(long inChan, long outChan,
                          long sample_rate, long buffer_size, long stream_buffer_size, 
                          long rtstream_buffer_size, long thread_num);
 
         static void LogError();
         static void Destroy();
+        
+        static void ClearLibError();
+        static void AddLibError(char* error);
+        static void AddLibError(const char* error);
+        static void AddLibError(const std::string& error);
+      
 };
 
 typedef TAudioGlobals * TAudioGlobalsPtr;

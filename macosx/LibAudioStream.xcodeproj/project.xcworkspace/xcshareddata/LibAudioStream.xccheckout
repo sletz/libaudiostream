@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B7C3BDE9-1089-4258-A330-909A1F8CB98C</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LibAudioStream</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>EC203B54-7B38-4CD6-9E24-CC8008B831E1</key>
+		<string>https://github.com/sletz/libaudiostream.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>macosx/LibAudioStream.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>EC203B54-7B38-4CD6-9E24-CC8008B831E1</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/sletz/libaudiostream.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>EC203B54-7B38-4CD6-9E24-CC8008B831E1</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>EC203B54-7B38-4CD6-9E24-CC8008B831E1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>libaudiostream</string>
+		</dict>
+	</array>
+</dict>
+</plist>

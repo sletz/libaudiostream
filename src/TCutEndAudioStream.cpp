@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -31,15 +31,19 @@ TCutEndAudioStream::TCutEndAudioStream(TAudioStreamPtr stream, long end) : TDeco
     fCurFrame = 0;
 }
 
-long TCutEndAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TCutEndAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    int res = fStream->Read(buffer, UTools::Min(framesNum, fFramesNum - fCurFrame), framePos, channels);
+    //printf("TCutEndAudioStream::Read framesNum = %ld fFramesNum = %ld fCurFrame = %ld\n", framesNum, fFramesNum, fCurFrame);
+    assert_stream(framesNum, framePos);
+    
+    int res = fStream->Read(buffer, UTools::Min(framesNum, fFramesNum - fCurFrame), framePos);
     fCurFrame += res;
     return res;
 }
 
 TAudioStreamPtr TCutEndAudioStream::CutBegin(long frames)
 {
+    assert(fFramesNum - frames >= 0);
     return new TCutEndAudioStream(fStream->CutBegin(frames), fFramesNum - frames);
 }
 

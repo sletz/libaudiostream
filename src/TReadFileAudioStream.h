@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -38,11 +38,11 @@ class TReadFileAudioStream : public TFileAudioStream
 
     private:
 
-        SHORT_BUFFER fCopyBuffer;
-        long fBeginFrame;
+        FLOAT_BUFFER fCopyBuffer;
+        long fBeginFrame;  // First frame to be read in the file
         SF_INFO fInfo;
-
-        virtual long Read(SHORT_BUFFER buffer, long framesNum, long framePos);
+     
+        virtual long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos);
         static void ReadEndBufferAux(TReadFileAudioStream* obj, long framesNum, long framePos);
 
     public:
@@ -50,21 +50,25 @@ class TReadFileAudioStream : public TFileAudioStream
         TReadFileAudioStream(string name, long beginFrame);
         virtual ~TReadFileAudioStream();
 
-        // Ajouter constructor avec buffer pour partager le stream
         void ReadEndBuffer(long framesNum, long framePos);
 
         virtual void Reset();
-		virtual TAudioStreamPtr CutBegin(long frames);
+        
+        virtual TAudioStreamPtr CutBegin(long frames);
+        
         virtual long Length()
         {
-   			return fFramesNum - fBeginFrame;
+            return fFramesNum - fBeginFrame;
         }
+        
         virtual TAudioStreamPtr Copy()
         {
             return new TReadFileAudioStream(fName, fBeginFrame);
         }
         
         int SampleRate() { return fInfo.samplerate; }
+        
+        long SetPos(long frames);
 };
 
 typedef TReadFileAudioStream * TReadFileAudioStreamPtr;

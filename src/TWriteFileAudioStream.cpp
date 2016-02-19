@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -21,6 +21,7 @@ research@grame.fr
 */
 
 #include "TWriteFileAudioStream.h"
+#include "TLASException.h"
 #include "TAudioGlobals.h"
 #include "UAudioTools.h"
 #include "UTools.h"
@@ -29,11 +30,16 @@ research@grame.fr
 #include <string.h>
 #include <assert.h>
 
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
+
 TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
     fChannels = stream->Channels();
-    fMemoryBuffer = new TLocalAudioBuffer<short>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
+    fFileBuffer = new float[fChannels * TAudioGlobals::fStreamBufferSize];
     fStream = stream;
     fFormat = format;
     fFramesNum = fStream->Length();
@@ -46,6 +52,7 @@ TWriteFileAudioStream::~TWriteFileAudioStream()
 	Flush();
     Close();	
     delete fMemoryBuffer;  // faux a revoir (si buffer partagŽ)
+    delete [] fFileBuffer;
 }
 
 void TWriteFileAudioStream::Open()
@@ -63,13 +70,9 @@ void TWriteFileAudioStream::Open()
 	
 		// Check file
 		if (!fFile) {
-			throw - 1;
-        }
-
-        // Needed because we later on use sf_writef_short, should be removed is sf_writef_float is used instead.
-        if (info.format & SF_FORMAT_FLOAT) {
-            int arg = SF_TRUE;
-            sf_command(fFile, SFC_SET_SCALE_INT_FLOAT_WRITE, &arg, sizeof(arg));
+            char error[512];
+            snprintf(error, 512, "Cannot open filename \'%s\'\n", utf8name);
+            throw TLASException(error);
         }
 			
 		sf_seek(fFile, 0, SEEK_SET);
@@ -79,39 +82,44 @@ void TWriteFileAudioStream::Open()
 
 void TWriteFileAudioStream::Close()
 {
-	if (fFile) {
+  	if (fFile) {
 		sf_close(fFile);
+        printf("TWriteFileAudioStream::Close OK\n");
         fFile = 0;
     }
 }
 
-long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TWriteFileAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    long res = fStream->Read(buffer, framesNum, framePos, channels);
-    TBufferedAudioStream::Write(buffer, framesNum, framePos, channels); // Write on disk
+    assert_stream(framesNum, framePos);
+    
+    long res = fStream->Read(buffer, framesNum, framePos);
+    TBufferedAudioStream::Write(buffer, framesNum, framePos); // Write on disk
 	if (res < framesNum) {
         if (fManager == 0) {
             printf("Error : stream rendered without command manager\n");
         }
-		assert(fManager);
-		fManager->ExecCmd((CmdPtr)CloseAux, (long)this, 0, 0, 0, 0);
+        assert(fManager);
+        fManager->ExecCmd((CmdPtr)CloseAux, (long)addReference(), 0, 0, 0, 0);
 	}
     return res;
 }
 
 void TWriteFileAudioStream::Reset()
 {
-    // A AMELIORER (rŽutiliser les fichiers disque??)
 	Open();
     fStream->Reset();
     TBufferedAudioStream::Reset();
 }
 
 // Called by TCmdManager
-long TWriteFileAudioStream::Write(SHORT_BUFFER buffer, long framesNum, long framePos)
+long TWriteFileAudioStream::WriteImp(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert(fFile);
-    return long(sf_writef_short(fFile, buffer->GetFrame(framePos), framesNum));  // In frames
+    float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
+    UAudioTools::Interleave(fFileBuffer, buffer->GetFrame(framePos, temp), framesNum, fChannels);
+
+    return long(sf_writef_float(fFile, fFileBuffer, framesNum));  // In frames
 }
 
 void TWriteFileAudioStream::Flush()
@@ -134,5 +142,6 @@ void TWriteFileAudioStream::CloseAux(TWriteFileAudioStreamPtr obj, long u1, long
 {
     obj->Flush();
 	obj->Close();
+    obj->removeReference();
 }
 

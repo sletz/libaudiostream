@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -42,12 +42,12 @@ class TAudioClient
 
 		/*!
 		\brief Audio callback called by the AudioManager.
-		\param inputBuffer The input buffer as a array of interleaved float samples (stereo here).
-		\param outputBuffer The output buffer as a array of interleaved float samples (stereo here).
+		\param inputBuffer The input buffer as an array of non interleaved float samples arrays.
+		\param outputBuffer The output buffer as an array of non interleaved float samples arrays.
 		\param frames The input/output buffer number of frames.
 		\return true if success, false otherwise.
 		*/
-        virtual bool AudioCallback(float* inputBuffer, float* outputBuffer, long frames) = 0;
+        virtual bool AudioCallback(float** inputs, float** outputs, long frames) = 0;
 };
 
 typedef TAudioClient * TAudioClientPtr;

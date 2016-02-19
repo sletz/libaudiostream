@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -31,7 +31,7 @@ research@grame.fr
 // Class TNullAudioStream
 //------------------------
 /*!
-\brief  A TNullAudioStream generates "silence".
+\brief A TNullAudioStream generates "silence".
 */
 
 class TNullAudioStream : public TAudioStream
@@ -41,15 +41,18 @@ class TNullAudioStream : public TAudioStream
 
         long fFramesNum;
         long fCurFrame;
+        long fChannels;
 
     public:
 
-        TNullAudioStream(long lengthFrame): fFramesNum(lengthFrame), fCurFrame(0)
+        TNullAudioStream(long lengthFrame): fFramesNum(lengthFrame), fCurFrame(0), fChannels(1)
+        {}
+        TNullAudioStream(long channels, long lengthFrame): fFramesNum(lengthFrame), fCurFrame(0), fChannels(channels)
         {}
         virtual ~TNullAudioStream()
         {}
 
-        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             framesNum = UTools::Min(framesNum, fFramesNum - fCurFrame);
             fCurFrame += framesNum;
@@ -58,22 +61,102 @@ class TNullAudioStream : public TAudioStream
 
         TAudioStreamPtr CutBegin(long frames)
         {
-            return new TNullAudioStream(UTools::Max(0,fFramesNum - frames));
+            return new TNullAudioStream(fChannels, UTools::Max(0, fFramesNum - frames));
         }
+        
         long Length()
         {
             return fFramesNum;
         }
+        
+        long Channels()
+        {
+            return fChannels;
+        }
+        
         void Reset()
         {
             fCurFrame = 0;
         }
+        
         TAudioStreamPtr Copy()
         {
-            return new TNullAudioStream(fFramesNum);
+            return new TNullAudioStream(fChannels, fFramesNum);
         }
 };
 
 typedef TNullAudioStream * TNullAudioStreamPtr;
+
+//----------------------------
+// Class TConstantAudioStream
+//----------------------------
+/*!
+\brief A TConstantAudioStream generates a constant value.
+*/
+
+class TConstantAudioStream : public TAudioStream
+{
+
+    private:
+
+        long fFramesNum;
+        long fCurFrame;
+        long fChannels;
+        float fValue;
+
+    public:
+
+        TConstantAudioStream(long length, float value): fFramesNum(length), fCurFrame(0), fChannels(1), fValue(value)
+        {}
+        TConstantAudioStream(long channels, long length, float value): fFramesNum(length), fCurFrame(0), fChannels(channels), fValue(value)
+        {}
+        virtual ~TConstantAudioStream()
+        {}
+
+        long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        {
+            framesNum = UTools::Min(framesNum, fFramesNum - fCurFrame);
+            fCurFrame += framesNum;
+            
+            float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
+            for (int i = 0; i < framesNum; i++) {
+                UAudioTools::AddFrame(buffer->GetFrame(i + framePos, temp), fValue, buffer->GetChannels());
+            }
+            return framesNum;
+        }
+
+        TAudioStreamPtr CutBegin(long frames)
+        {
+            return new TConstantAudioStream(fChannels, UTools::Max(0, fFramesNum - frames), fValue);
+        }
+        
+        long Length()
+        {
+            return fFramesNum;
+        }
+        
+        long Channels()
+        {
+            return fChannels;
+        }
+        
+        void Reset()
+        {
+            fCurFrame = 0;
+        }
+        
+        TAudioStreamPtr Copy()
+        {
+            return new TConstantAudioStream(fChannels, fFramesNum, fValue);
+        }
+        
+        long SetPos(long frames)
+        {
+            fCurFrame = UTools::Min(frames, fFramesNum);
+            return NO_ERR;
+        }
+};
+
+typedef TConstantAudioStream * TConstantAudioStreamPtr;
 
 #endif

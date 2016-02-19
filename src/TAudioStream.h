@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -26,6 +26,7 @@ research@grame.fr
 #include "TAudioConstants.h"
 #include "UAudioTools.h"
 #include "TAudioBuffer.h"
+#include "TAudioGlobals.h"
 #include "la_smartpointer.h"
 #include <stdio.h>
 
@@ -35,13 +36,14 @@ research@grame.fr
 
 class TAudioStream;
 
-typedef LA_SMARTP<TAudioStream>  TAudioStreamPtr;
+typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 
 /*!
 \brief The base class for all streams.
 */ 
 
-class TAudioStream : public la_smartable
+//class TAudioStream : public la_smartable
+class TAudioStream : public la_smartable1
 {
 
     public:
@@ -51,11 +53,11 @@ class TAudioStream : public la_smartable
         virtual ~TAudioStream()
         {}
 
-        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;
         }
@@ -81,11 +83,29 @@ class TAudioStream : public la_smartable
         {
             return 0;
         }
+        
+        virtual long SetPos(long frames)
+        {
+            return 0;
+        }
+    
+        virtual long GetPos()
+        {
+            return 0;
+        }
 
         // Copy the structure
         virtual TAudioStreamPtr Copy()
         {
             return 0;
+        }
+        
+        void assert_stream(long framesNum, long framePos)
+        {   
+            if ((framesNum < 0) || (framePos + framesNum > TAudioGlobals::fBufferSize)) {
+                printf("assert_stream framesNum = %ld framePos = %ld\n", framesNum, framePos);
+                assert(false);
+            }
         }
 };
 
@@ -140,16 +160,16 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             fStream = stream;
         }
 
-		virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+		virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(fStream);
-            return fStream->Write(buffer, framesNum, framePos, channels);
+            return fStream->Write(buffer, framesNum, framePos);
         }
 
-        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+        virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(fStream);
-            return fStream->Read(buffer, framesNum, framePos, channels);
+            return fStream->Read(buffer, framesNum, framePos);
         }
 
         virtual void Reset()
@@ -168,6 +188,18 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
         {
             assert(fStream);
             return fStream->Length();
+        }
+    
+        virtual long SetPos(long frames)
+        {
+            assert(fStream);
+            return fStream->SetPos(frames);
+        }
+        
+        virtual long GetPos()
+        {
+            assert(fStream);
+            return fStream->GetPos();
         }
 
         virtual long Channels()

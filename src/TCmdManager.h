@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -65,13 +65,15 @@ class TCmdManager
         {
             ExecCmdAux(fun, a1, a2, a3, a4, a5);
         }
+        
         static void Run()
         {
-            if (fInstance)
+            if (fInstance) {
                 fInstance->RunAux();
+            }
         }
 
-        virtual void ExecCmdAux (CmdPtr fun, long a1, long a2, long a3, long a4, long a5)
+        virtual void ExecCmdAux(CmdPtr fun, long a1, long a2, long a3, long a4, long a5)
 		{}
         virtual void RunAux()
         {}

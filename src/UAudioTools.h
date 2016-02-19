@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under 
 the terms of the GNU Library General Public License as published by the 
@@ -30,6 +30,7 @@ research@grame.fr
 #include <fcntl.h>
 #include <assert.h>
 #include <limits.h>
+#include <vector>
 
 #include "TAudioConstants.h"
 
@@ -37,9 +38,9 @@ research@grame.fr
 #include <Accelerate/Accelerate.h>
 #endif
 
-//--------------------
+//-------------------
 // Class UAudioTools
-//--------------------
+//-------------------
 /*!
 \brief An utility calls for common mixing functions.
 */
@@ -52,8 +53,32 @@ class UAudioTools
         static const float fGain;
 
     public:
+    
+        static inline void SelectChannelsTo(float** dst, float** src, long framesNum, const std::vector<long>& selection)
+        {
+            int chan = 0;
+            for (unsigned int i = 0; i < selection.size(); i++) {
+                memcpy(dst[chan++], src[selection[i]], framesNum * sizeof(float));
+            }
+        }
+    
+        static inline void CopyChannelsTo(float** dst, float** src, long framesNum, long shift_channel, long channels)
+        {
+            for (int i = 0; i < channels; i++) {
+                memcpy(dst[shift_channel + i], src[i], framesNum * sizeof(float));
+            }
+        }
+        
+        static inline void MixChannelsTo(float** dst, float** src, long framesNum, long shift_channel, long channels)
+        {
+            for (int i = 0; i < channels; i++) {
+                for (int j = 0; j < framesNum; j++) {
+                    dst[shift_channel + i][j] += src[i][j];
+                }
+            }
+        }
 
-        static inline void MonoToStereo(short* dst, short* src, long nbsamples)
+        static inline void MonoToStereo(short* dst, short* src, long framesNum)
         {
             do {
                 int x = *src++;
@@ -61,14 +86,14 @@ class UAudioTools
                 dst++;
                 *dst += x;
                 dst++;
-            } while (--nbsamples);
+            } while (--framesNum);
         }
 
-        static inline void MixMonoToStereoBlk(long* dst, short* src, long nbsamples, short leftamp, short rightamp)
+        static inline void MixMonoToStereoBlk(long* dst, short* src, long framesNum, short leftamp, short rightamp)
         {
             long x, y, i, j;
 
-            for ( i = 0, j = 0 ; i < nbsamples; i += 2, j += 4) {
+            for (i = 0, j = 0 ; i < framesNum; i += 2, j += 4) {
                 x = src[i];
                 y = src[i + 1];
                 dst[j] += (x * leftamp);
@@ -78,12 +103,12 @@ class UAudioTools
             }
         }
 
-        static inline void MixMonoToStereoBlk(float* dst, float* src, long nbsamples, float leftamp, float rightamp)
+        static inline void MixMonoToStereoBlk(float* dst, float* src, long framesNum, float leftamp, float rightamp)
         {
             float x, y;
             long i, j;
 
-            for ( i = 0, j = 0 ; i < nbsamples; i += 2, j += 4) {
+            for ( i = 0, j = 0 ; i < framesNum; i += 2, j += 4) {
                 x = src[i];
                 y = src[i + 1];
                 dst[j] += (x * leftamp);
@@ -93,11 +118,11 @@ class UAudioTools
             }
         }
 
-        static inline void MixStereoToStereoBlk(long* dst, short* src, long nbsamples, short leftamp, short rightamp)
+        static inline void MixStereoToStereoBlk(long* dst, short* src, long framesNum, short leftamp, short rightamp)
         {
             long x, y ;
 
-            for (long i = 0 ; i < nbsamples; i += 2) {
+            for (long i = 0 ; i < framesNum; i += 2) {
                 x = src[i];
                 y = src[i + 1];
                 dst [i] += (x * leftamp);
@@ -105,11 +130,11 @@ class UAudioTools
             }
         }
 
-        static inline void MixStereoToStereoBlk(float* dst, float* src, long nbsamples, float leftamp, float rightamp)
+        static inline void MixStereoToStereoBlk(float* dst, float* src, long framesNum, float leftamp, float rightamp)
         {
             float x, y ;
 
-            for (long i = 0 ; i < nbsamples; i += 2) {
+            for (long i = 0 ; i < framesNum; i += 2) {
                 x = src[i];
                 y = src[i + 1];
                 dst [i] += (x * leftamp);
@@ -128,6 +153,15 @@ class UAudioTools
                 }
             }
 		}
+        
+        static inline void MixFrameToFrameBlk(float** dst, float** src, long framesNum, long channels)
+        {
+     		for (int i = 0; i < channels; i++) {
+                for (int j = 0; j < framesNum; j++) { 
+                    dst[i][j] += src[i][j];
+                }
+            }
+    	}
 
         static inline void MixFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {
@@ -162,6 +196,15 @@ class UAudioTools
                 }
             }
         }
+        
+        static inline void MixFrameToFrameBlk1(float** dst, float** src, long framesNum, long channels)
+        {
+            for (int i = 0 ; i < channels; i++) {
+                for (int j = 0 ; j < framesNum; j++) { 
+                    dst[i][j] += src[i][j];
+                }
+            }
+        }
 
         static inline void ReplaceFrameToFrameBlk(float* dst, float* src, long framesNum, long channels, float leftamp, float rightamp)
         {
@@ -186,7 +229,7 @@ class UAudioTools
                 }
             }
         }
-
+   
         static inline void ZeroStereoBlk(long* dst, long nbsamples)
         {
             memset(dst, 0, sizeof(long) * nbsamples);
@@ -205,6 +248,13 @@ class UAudioTools
         static inline void ZeroFloatBlk(float* dst, long framesNum, long channels)
         {
             memset(dst, 0, sizeof(float) * framesNum * channels);
+        }
+        
+        static inline void ZeroFloatBlk(float** dst, long framesNum, long channels)
+        {
+            for (int i = 0; i < channels; i++) {
+                memset(dst[i], 0, sizeof(float) * framesNum);
+            }
         }
 
         static inline void ZeroShortBlk(short* dst, long framesNum, long channels)
@@ -249,24 +299,43 @@ class UAudioTools
             }
         }
 		
-		static inline void Interleave(float* dst, float** src,long nbsamples, long channels)
+		static inline void Interleave(float* dst, float** src, long framesNum, long channels)
         {
-			int i, j;
-			for (i = 0; i < nbsamples; i++) {
+            int i, j;
+			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {
 					dst[i * channels + j] = src[j][i]; 
 				}
 			}
         }
 		
-		static inline void Deinterleave(float** dst, float* src,long nbsamples, long channels)
+		static inline void Deinterleave(float** dst, float* src, long framesNum, long channels)
         {
-			int i, j;
-			for (i = 0; i < nbsamples; i++) {
+         	int i, j;
+			for (i = 0; i < framesNum; i++) {
 				for (j = 0; j < channels; j++) {
 					dst[j][i] = src[i * channels + j];
 				}
 			}
+        }
+        
+        static inline void Adapt(float** dst, float** src, long framesNum, long channelsIn, long channelsOut)
+        {
+			if (channelsIn < channelsOut) {
+                for (int split = 0; split < channelsOut/channelsIn; split++) {
+                    // TODO
+                    memcpy(dst[split], src[split], framesNum * sizeof(float));
+                }
+            } else if (channelsIn == channelsOut) {
+                for (int split = 0; split < channelsOut; split++) {
+                    memcpy(dst[split], src[split], framesNum * sizeof(float));
+                }
+            } else {
+                for (int split = 0; split < channelsIn/channelsOut; split++) {
+                    // TODO
+                    memcpy(dst[split], src[split], framesNum * sizeof(float));
+                }
+            }
         }
 
         static inline float ClipFloat (float sample)
@@ -289,11 +358,16 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] = float(in[i]) * fGain;
                     out[i + 1] = float(in[i + 1]) * fGain;
                     out[i + 2] = float(in[i + 2]) * fGain;
                     out[i + 3] = float(in[i + 3]) * fGain;
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] = float(in[i]) * fGain;
                 }
             }
         }
@@ -329,11 +403,16 @@ class UAudioTools
 				vDSP_vflt16(in, 1, buffer, 1, framesNum * channelsOut);
 				vDSP_vsma(buffer, 1, &fGain, out, 1, out, 1, framesNum * channelsOut);
 			#else
+                /*
 				for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += float(in[i]) * fGain;
                     out[i + 1] += float(in[i + 1]) * fGain;
                     out[i + 2] += float(in[i + 2]) * fGain;
                     out[i + 3] += float(in[i + 3]) * fGain;
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] += float(in[i]) * fGain;
                 }
 			#endif
 			
@@ -370,11 +449,16 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
                     out[i] += (short)(ClipFloat(in[i]) * fGain);
                     out[i + 1] += (short)(ClipFloat(in[i + 1]) * fGain);
                     out[i + 2] += (short)(ClipFloat(in[i + 2]) * fGain);
                     out[i + 3] += (short)(ClipFloat(in[i + 3]) * fGain);
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] += (short)(ClipFloat(in[i]) * fGain);
                 }
             }
         }
@@ -388,26 +472,104 @@ class UAudioTools
                     }
                 }
             } else {
+                /*
                 for (long i = 0; i < framesNum * channelsOut; i += 4) {
-                    out[i] = (short)(ClipFloat(in[i]) * fGain);
-                    out[i + 1] = (short)(ClipFloat(in[i + 1]) * fGain);
-                    out[i + 2] = (short)(ClipFloat(in[i + 2]) * fGain);
-                    out[i + 3] = (short)(ClipFloat(in[i + 3]) * fGain);
+                    out[i] += in[i];
+                    out[i + 1] += in[i + 1];
+                    out[i + 2] += in[i + 2];
+                    out[i + 3] += in[i + 3];
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] += in[i];
                 }
             }
         }
-
-        static inline void MultFrame(float* frame, float val, long channels)
+        
+        static inline void Float2FloatMix(float** in, float** out, long framesNum, long channels)
         {
-            // A optimiser
-            for (int i = 0 ; i < channels; i++) {
+            for (long i = 0; i < channels; i ++) {
+                /*
+                for (long j = 0; j < framesNum; j += 4) {
+                    out[i][j] += in[i][j];
+                    out[i][j + 1] += in[i][j + 1];
+                    out[i][j + 2] += in[i][j + 2];
+                    out[i][j + 3] += in[i][j + 3];
+                }
+                */
+                for (long j = 0; j < framesNum; j++) {
+                    out[i][j] += in[i][j];
+                }
+            }
+        }
+        
+        static inline void Float2Float(float* in, float* out, long framesNum, long channelsIn, long channelsOut)
+        {
+            if (channelsIn < channelsOut) {  // distribute channels
+                for (long i = 0; i < framesNum; i++) {
+                    for (long j = 0; j < channelsOut; j++) {
+                        out [i*channelsOut + j] = in[i * channelsIn + j % channelsIn];
+                    }
+                }
+            } else {
+                /*
+                for (long i = 0; i < framesNum * channelsOut; i += 4) {
+                    out[i] = in[i];
+                    out[i + 1] = in[i + 1];
+                    out[i + 2] = in[i + 2];
+                    out[i + 3] = in[i + 3];
+                }
+                */
+                for (long i = 0; i < framesNum * channelsOut; i++) {
+                    out[i] = in[i];
+                }
+            }
+        }
+        
+        static inline void Float2Float(float** in, float** out, long framesNum, long channels)
+        {
+            for (long i = 0; i < channels; i ++) {
+                /*
+                for (long j = 0; j < framesNum; j += 4) {
+                    out[i][j] += in[i][j];
+                    out[i][j + 1] += in[i][j + 1];
+                    out[i][j + 2] += in[i][j + 2];
+                    out[i][j + 3] += in[i][j + 3];
+                }
+                */
+                for (long j = 0; j < framesNum; j++) {
+                    out[i][j] = in[i][j];
+                }
+            }        
+        }
+
+        static inline void MultFrame(float* frame, float val, long size)
+        {
+            // To optimize
+            for (int i = 0 ; i < size; i++) {
                 frame[i] *= val;
             }
         }
-		
+        
+        static inline void MultFrame(float** frame, float val, long channels)
+        {
+            // To optimize
+            for (int i = 0 ; i < channels; i++) {
+                frame[i][0] *= val;
+            }
+        }
+        
+        static inline void AddFrame(float** frame, float val, long channels)
+        {
+            // To optimize
+            for (int i = 0 ; i < channels; i++) {
+                frame[i][0] += val;
+            }
+        }
+	
         static void cTocCopy(char *dest, const char* src)
         {
-            register short i = 0;
+            short i = 0;
 
             while (src[i] != 0) {
                 dest[i] = src[i];

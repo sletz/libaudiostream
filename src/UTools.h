@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -19,7 +19,6 @@ Grame Research Laboratory, 9, rue du Garet 69001 Lyon - France
 research@grame.fr
 
 */
-
 
 // ===========================================================================
 //	 UTools.h
@@ -49,14 +48,28 @@ class UTools
         {
             return (a < b) ? a : b;
         }
+        inline static float Min(float a, float b)
+        {
+            return (a < b) ? a : b;
+        }
+        inline static double Min(double a, double b)
+        {
+            return (a < b) ? a : b;
+        }
         inline static long Max(long a, long b)
+        {
+            return (a >= b) ? a : b;
+        }
+        inline static float Max(float a, float b)
+        {
+            return (a >= b) ? a : b;
+        }
+        inline static double Max(double a, double b)
         {
             return (a >= b) ? a : b;
         }
 
 };
-
-
 
 #endif
 

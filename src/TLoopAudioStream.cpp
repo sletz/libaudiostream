@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -30,13 +30,15 @@ TLoopAudioStream::TLoopAudioStream(TAudioStreamPtr stream, long loop): TDecorate
     fCurLoop = 0;
 }
 
-long TLoopAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TLoopAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
-    long res = fStream->Read(buffer, framesNum, framePos, channels);
+    assert_stream(framesNum, framePos);
+     
+    long res = fStream->Read(buffer, framesNum, framePos);
 
     if ((res < framesNum) && (++fCurLoop < fLoopNum)) { // Loop
         fStream->Reset();
-        return res + Read(buffer, framesNum - res, framePos + res, channels); // Read the end of the buffer
+        return res + Read(buffer, framesNum - res, framePos + res); // Read the end of the buffer
     } else {
         return res;
     }
@@ -51,7 +53,7 @@ TAudioStreamPtr TLoopAudioStream::CutBegin(long frames)
     long length = fStream->Length();
     long n1 = frames / length + 1;
     long n2 = frames % length;
-    return new TSeqAudioStream(fStream->CutBegin(n2), new TLoopAudioStream(fStream->Copy(), fLoopNum - n1), 0);
+    return new TSeqAudioStream(fStream->CutBegin(n2), new TLoopAudioStream(fStream->Copy(), fLoopNum - n1));
 }
 
 void TLoopAudioStream::Reset()

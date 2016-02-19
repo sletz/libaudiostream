@@ -1,5 +1,5 @@
 /*
- Copyright (C) Grame 2003-2012
+ Copyright (C) Grame 2003-2013
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -59,7 +59,7 @@ class LA_EXPORT la_smartable {
 		//! gives the reference count of the object
 		unsigned refs() const         { return refCount; }
 		//! addReference increments the ref count and checks for refCount overflow
-		void addReference()           { refCount++; assert(refCount != 0); }
+        la_smartable* addReference()           { refCount++; assert(refCount != 0); return this; }
 		//! removeReference delete the object when refCount is zero		
 		virtual void removeReference();
 		
@@ -68,7 +68,11 @@ class LA_EXPORT la_smartable {
 		la_smartable() : refCount(0) {}
 		la_smartable(const la_smartable&): refCount(0) {}
 		//! destructor checks for non-zero refCount
-		virtual ~la_smartable()    { assert (refCount == 0); }
+		virtual ~la_smartable()    
+        { 
+            assert (refCount == 0); 
+            printf("~la_smartable %x\n", this);
+        }
 		la_smartable& operator=(const la_smartable&) { return *this; }
 };
 
@@ -78,8 +82,8 @@ class la_smartable1 : public la_smartable {
 
 	private:
 		
-		static void removeReferenceAux(la_smartable1* obj,long u1, long u2, long u3);
-		static TCmdManager* fManager;
+		static void removeReferenceAux(la_smartable1* obj, long u1, long u2, long u3);
+		static TCmdManager* fDeleteManager;
 
 	public:
 	
@@ -107,7 +111,8 @@ template<class T> class LA_SMARTP {
 		//! an empty constructor - points to null
 		LA_SMARTP()	: fSmartPtr(0) {}
 		//! build a smart pointer from a class pointer
-		LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)              {
+		LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)  {
+            printf("LA_SMARTP %x\n", rawptr);
 			if (fSmartPtr) fSmartPtr->addReference(); 
 		}
 		//! build a smart pointer from an convertible class reference

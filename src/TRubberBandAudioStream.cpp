@@ -1,5 +1,5 @@
 /*
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -22,6 +22,8 @@ research@grame.fr
 #include "TAudioGlobals.h"
 #include "TRubberBandAudioStream.h"
 #include "UTools.h"
+#undef min
+#undef max
 
 using namespace RubberBand;
 
@@ -34,28 +36,16 @@ TRubberBandAudioStream::TRubberBandAudioStream(TAudioStreamPtr stream, double* p
 	fTimeStretchVal = *time_strech;
    
 	fRubberBand = new RubberBandStretcher(TAudioGlobals::fSampleRate, stream->Channels(), RubberBandStretcher::OptionProcessRealTime);
-	fBuffer = new TLocalAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, TAudioGlobals::fOutput);
+	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());
 	
 	fRubberBand->setTimeRatio(1/fTimeStretchVal);
 	fRubberBand->setPitchScale(fPitchShiftVal);
-    
-    int i;
-    for (i = 0; i < 2; i++) {
-        fTemp1[i] = (float*)calloc(TAudioGlobals::fBufferSize, sizeof(float));
-        fTemp2[i] = (float*)calloc(TAudioGlobals::fBufferSize, sizeof(float));
-    }
- }
+}
 
 TRubberBandAudioStream::~TRubberBandAudioStream()
 {
 	delete fRubberBand;
 	delete fBuffer;
-    
-    int i;
-	for (i = 0; i < 2; i++) {
-		free(fTemp1[i]);
-        free(fTemp2[i]);
-	}
 }
 
 TAudioStreamPtr TRubberBandAudioStream::CutBegin(long frames)
@@ -63,8 +53,10 @@ TAudioStreamPtr TRubberBandAudioStream::CutBegin(long frames)
     return new TRubberBandAudioStream(fStream->CutBegin(frames), fPitchShift, fTimeStretch);
 }
 
-long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos, long channels)
+long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
+    assert_stream(framesNum, framePos);
+    
   	if (fTimeStretchVal != *fTimeStretch) {
 		fTimeStretchVal = *fTimeStretch;
 		fRubberBand->setTimeRatio(1/fTimeStretchVal);
@@ -74,20 +66,20 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
 		fRubberBand->setPitchScale(fPitchShiftVal);
 	}
     
+    float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
+    float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
+    
     while (fRubberBand->available() < framesNum) {
         int needFrames = std::min((int)framesNum, (int)fRubberBand->getSamplesRequired());
         if (needFrames > 0) {
-            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0), TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);
-            fStream->Read(fBuffer, needFrames, 0, channels);
-            // Deinterleave...
-            UAudioTools::Deinterleave(fTemp1, fBuffer->GetFrame(0), needFrames, channels);
-            fRubberBand->process(fTemp1, needFrames, false);
+            UAudioTools::ZeroFloatBlk(fBuffer->GetFrame(0, temp1), TAudioGlobals::fBufferSize, fStream->Channels());
+            fStream->Read(fBuffer, needFrames, 0);
+            fRubberBand->process(fBuffer->GetFrame(0, temp1), needFrames, false);
         }
     }
     
-    fRubberBand->retrieve(fTemp2, std::min((int)framesNum, fRubberBand->available()));
-    // Interleave...
-    UAudioTools::Interleave(buffer->GetFrame(0), fTemp2, framesNum, channels);
+    fRubberBand->retrieve(buffer->GetFrame(framePos, temp2), std::min((int)framesNum, fRubberBand->available()));
+
 	return framesNum;
 }
 

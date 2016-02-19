@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) Grame 2002-2013
+Copyright (C) Grame 2002-2014
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -128,7 +128,8 @@ class TRTRendererAudioStream : public TRendererAudioStream
         static void Flush();
 };
 
-typedef TRTRendererAudioStream * TRTRendererAudioStreamPtr;
+//typedef TRTRendererAudioStream * TRTRendererAudioStreamPtr;
+typedef LA_SMARTP<TRTRendererAudioStream>  TRTRendererAudioStreamPtr;
 
 //----------------------
 // Class TGCAudioStream
