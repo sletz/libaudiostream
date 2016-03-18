@@ -22,6 +22,7 @@ research@grame.fr
 
 #ifndef __LibAudioStream__
 #define __LibAudioStream__
+#include <stdint.h>
 
 /*!
 \addtogroup interface LibAudioStream programming interface

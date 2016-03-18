@@ -2,13 +2,13 @@
 
 Copyright (C) Grame 2015
 
-This library is free software; you can redistribute it and modify it under 
-the terms of the GNU Library General Public License as published by the 
+This library is free software; you can redistribute it and modify it under
+the terms of the GNU Library General Public License as published by the
 Free Software Foundation version 2 of the License, or any later version.
 
 This library is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
 for more details.
 
 You should have received a copy of the GNU Library General Public License
@@ -23,6 +23,7 @@ research@grame.fr
 #include "TNetJackRenderer.h"
 #include "TSharedBuffers.h"
 #include "TAudioGlobals.h"
+#include <cstring>
 
 TNetJackRenderer::TNetJackRenderer(int net_format, const std::string& master_ip, int master_port, int mtu, int latency)
     :TAudioRenderer(), fNet(0), fNetFormat(net_format), fMasterIP(master_ip), fMasterPort(master_port), fMTU(mtu), fLatency(latency)
@@ -48,9 +49,9 @@ long TNetJackRenderer::Open(long inChan, long outChan, long bufferSize, long sam
 long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan, long outChan, long bufferSize, long sampleRate)
 {
     jack_slave_t request = {
-                inChan,
-                outChan,
-                0, 
+                int(inChan),
+                int(outChan),
+                0,
                 0,
                 fMTU,
                 -1,
@@ -63,18 +64,18 @@ long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan,
         printf("JACK remote server not running ?\n");
         return OPEN_ERR;
     }
-    
+
     if (sampleRate != fResult.sample_rate) {
-		printf("Warning: requested sample rate = %ld different from driver sample rate = %d \n", sampleRate, fResult.sample_rate);
-	}
-	
-	if (bufferSize != fResult.buffer_size) { 
-		printf("Warning: requested buffer size = %ld different from driver buffer size = %d \n", bufferSize, fResult.buffer_size);
-	}
-    
+        printf("Warning: requested sample rate = %ld different from driver sample rate = %d \n", sampleRate, fResult.sample_rate);
+    }
+
+    if (bufferSize != fResult.buffer_size) {
+        printf("Warning: requested buffer size = %ld different from driver buffer size = %d \n", bufferSize, fResult.buffer_size);
+    }
+
     sampleRate = fResult.sample_rate;
     bufferSize = fResult.buffer_size;
-   
+
     jack_set_net_slave_process_callback(fNet, net_process, this);
 #ifdef RESTART_CB_API
     jack_set_net_slave_restart_callback(fNet, net_restart, this);
@@ -82,9 +83,9 @@ long TNetJackRenderer::OpenImp(long inputDevice, long outputDevice, long inChan,
     jack_set_net_slave_shutdown_callback(fNet, net_shutdown, this);
 #endif
     jack_set_net_slave_sample_rate_callback(fNet, net_sample_rate, this);
-    
+
     jack_set_net_slave_buffer_size_callback(fNet, net_buffer_size, this);
-    
+
     jack_set_net_slave_error_callback(fNet, net_error, this);
 
     return TAudioRenderer::Open(inChan, outChan, bufferSize, sampleRate);
@@ -149,15 +150,15 @@ long TNetJackRenderer::GetDeviceCount()
 void TNetJackRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
     strcpy(info->fName, "NetJack backend");
- 	// TODO
+    // TODO
 }
 
 long TNetJackRenderer::GetDefaultInputDevice()
 {
-	return 0;
+    return 0;
 }
 
 long TNetJackRenderer::GetDefaultOutputDevice()
 {
-	return 0;
+    return 0;
 }
