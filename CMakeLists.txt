@@ -183,7 +183,11 @@ if(${RUBBERBAND_FOUND})
   target_include_directories(libaudiostream PRIVATE ${RUBBERBAND_INCLUDE_DIR})
 endif()
 
+# Faust
 if(${FAUST_FOUND})
+    target_sources(libaudiostream PRIVATE ${FAUST_STREAM})
+    message(${FAUST_LIBRARIES})
+
     target_link_libraries(libaudiostream PUBLIC ${FAUST_LIBRARIES})
     target_include_directories(libaudiostream PRIVATE ${FAUST_INCLUDE_DIR})
 endif()
