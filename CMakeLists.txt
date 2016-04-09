@@ -144,7 +144,7 @@ endif()
 
 # Portaudio
 if(${PORTAUDIO_FOUND})
-    message("${PORTAUDIO_VERSION}")
+  message("${PORTAUDIO_VERSION}")
   if("${PORTAUDIO_VERSION}" EQUAL 18)
     target_sources(libaudiostream PRIVATE ${PA18_RENDERER})
   elseif("${PORTAUDIO_VERSION}" EQUAL 19)
