@@ -40,8 +40,10 @@ src/TRendererAudioStream.cpp
 src/TSelectAudioStream.cpp
 src/TSeqAudioStream.cpp
 src/TThreadCmdManager.cpp
+src/renderer/TOfflineRenderer.cpp
 
 # These files require Faust to build
+src/LibAudioStreamMC++.h
 src/LibAudioStreamMC.cpp
 src/TAudioGlobals.cpp
 src/TAudioRendererFactory.cpp
@@ -83,7 +85,6 @@ src/renderer/TPortAudioV19Renderer.cpp
 set(JACK_RENDERER
 src/renderer/TJackRenderer.cpp
 src/renderer/TAudioRenderer.cpp
-src/renderer/TOfflineRenderer.cpp
 src/renderer/TNetJackRenderer.cpp
 )
 
@@ -112,7 +113,7 @@ find_package(Rubberband REQUIRED)
 find_package(Faust REQUIRED)
 
 add_library(libaudiostream ${CSRC} ${CPPSRC})
-target_include_directories(libaudiostream PRIVATE
+target_include_directories(libaudiostream PUBLIC
   src
   src/atomic
   src/renderer

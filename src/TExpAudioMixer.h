@@ -27,7 +27,6 @@ research@grame.fr
 #include "TRendererAudioStream.h"
 #include "TAudioGlobals.h"
 #include "TAudioDate.h"
-#include "TFaustAudioEffect.h"
 #include "la_smartpointer.h"
 
 #include <list>

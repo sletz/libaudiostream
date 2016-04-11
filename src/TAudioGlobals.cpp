@@ -126,7 +126,7 @@ void TAudioGlobals::Init(long inChan, long outChan, long sample_rate,
 
 void TAudioGlobals::Destroy()
 {
-	if (--fClientCount == 0 && fInstance) {
+    if (--fClientCount == 0 && fInstance) {
 		TDTRendererAudioStream::Destroy();
 		TRTRendererAudioStream::Destroy();
 		la_smartable1::Destroy();
@@ -153,7 +153,9 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long sample_rate,
 TAudioGlobals::~TAudioGlobals()
 {
     delete fSharedInput;
+    fSharedInput = 0;
     delete [] fLastLibError;
+    fLastLibError = 0;
 }
 
 void TAudioGlobals::LogError()

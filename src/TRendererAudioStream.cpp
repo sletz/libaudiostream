@@ -46,6 +46,7 @@ void TDTRendererAudioStream::Init()
 void TDTRendererAudioStream::Destroy()
 {
     delete fManager;
+    fManager = 0;
 }
 void TDTRendererAudioStream::Flush()
 {
@@ -60,6 +61,7 @@ void TRTRendererAudioStream::Init(long thread_num)
 void TRTRendererAudioStream::Destroy()
 {
     delete fManager;
+    fManager = 0;
 }
 void TRTRendererAudioStream::Flush()
 {
