@@ -560,6 +560,13 @@ extern "C"
     void SetAudioLatencies(long inputLatency, long outputLatency);
     
     /*!
+     * \brief CheckRendererAvailability
+     * \param renderer a renderer (kPortAudioRenderer, kJackRenderer, ...)
+     * \return True if the given renderer can be used.
+     */
+    bool CheckRendererAvailability(long renderer);
+
+    /*!
      \brief Open the audio player.
      \param inChan The number of input channels. 
      \param outChan The number of output channels.

@@ -149,6 +149,7 @@ extern "C"
  
     // Open/Close
 	AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency);
+    AUDIOAPI bool CheckRendererAvailability(long renderer);
     AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan, 
                                             long outChan, 
                                             long sample_rate, 
@@ -957,6 +958,31 @@ AUDIOAPI void SetAudioLatencies(long inputLatency, long outputLatency)
 {
 	TAudioGlobals::fInputLatency = inputLatency;
 	TAudioGlobals::fOutputLatency = outputLatency;
+}
+
+AUDIOAPI bool CheckRendererAvailability(long renderer)
+{
+    switch (renderer) {
+#ifdef __PORTAUDIO__
+        case kPortAudioRenderer:
+            return true;
+#endif
+
+#ifdef __JACK__
+        case kJackRenderer:
+        case kNetJackRenderer:
+            return true;
+#endif
+
+#ifdef __COREAUDIO__
+        case kCoreAudioRenderer:
+            return true;
+#endif
+        case kOffLineAudioRenderer:
+            return true;
+        default:
+            return false;
+    }
 }
 
 AUDIOAPI AudioPlayerPtr OpenAudioPlayer(long inChan, 
