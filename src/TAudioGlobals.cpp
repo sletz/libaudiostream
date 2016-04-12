@@ -134,6 +134,8 @@ void TAudioGlobals::Destroy()
 		fInstance = 0;
 		SetMaximumFiles(fFileMax);
 	}
+    if(fClientCount < 0)
+        fClientCount = 0;
 }
 
 TAudioGlobals::TAudioGlobals(long inChan, long outChan, long sample_rate,
