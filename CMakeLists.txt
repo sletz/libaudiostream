@@ -113,7 +113,12 @@ find_package(Rubberband REQUIRED)
 find_package(Faust REQUIRED)
 
 add_library(libaudiostream ${CSRC} ${CPPSRC})
-target_include_directories(libaudiostream PUBLIC
+target_include_directories(libaudiostream PRIVATE
+  src
+  src/atomic
+  src/renderer
+)
+target_include_directories(libaudiostream SYSTEM INTERFACE
   src
   src/atomic
   src/renderer
