@@ -474,8 +474,11 @@ class TLocalCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory
 
         string GetTarget()
         {
-            int tmp;
-            return (sizeof(&tmp) == 8) ? "x86_64-apple-darwin12.2.1" : "i386-apple-darwin10.6.0";
+#if defined(__APPLE__)
+            return (sizeof(int*) == 8) ? "x86_64-apple-darwin12.2.1" : "i386-apple-darwin10.6.0";
+#else
+            return "";
+#endif
         }
 
     public:
