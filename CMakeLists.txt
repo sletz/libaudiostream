@@ -113,6 +113,10 @@ find_package(Rubberband REQUIRED)
 find_package(Faust REQUIRED)
 
 add_library(libaudiostream ${CSRC} ${CPPSRC})
+set_target_properties(
+    libaudiostream
+    PROPERTIES
+        CXX_STANDARD 14)
 target_include_directories(libaudiostream PRIVATE
   src
   src/atomic

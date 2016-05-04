@@ -30,6 +30,7 @@ research@grame.fr
 #include "la_smartpointer.h"
 
 #include <list>
+#include <atomic>
 #include <map>
 
 //----------------
@@ -205,7 +206,7 @@ struct TStreamCommand : public TCommand {
             audio_frame_t start_date = GetDate(date_map, fStartDate);
             audio_frame_t stop_date = GetDate(date_map, fStopDate);
             
-            //printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
+            printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
             
             // Possibly entire buffer to play
             long start_offset;
@@ -284,7 +285,7 @@ class TCommandList : public list<TCommandPtr>
             return first->GetDate() < second->GetDate();
         }
     
-        volatile bool fNeedSort;
+        std::atomic_bool fNeedSort;
     
     public:
     
@@ -379,6 +380,7 @@ class TExpAudioMixer : public TAudioClient
         
         void AddStreamCommand(TCommandPtr command)
         { 
+            std::cerr << "Command added\n";
             fStreamCommands.AddCommand(command);
         }
         void RemoveStreamCommand(TCommandPtr command) 

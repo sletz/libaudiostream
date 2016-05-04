@@ -26,6 +26,7 @@ research@grame.fr
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <iostream>
 
 #ifdef WIN32
 #include <windows.h>

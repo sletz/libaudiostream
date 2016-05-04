@@ -80,7 +80,7 @@ void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buff
     float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     buffer->GetFrame(offset_in_stream, temp);
     TSharedNonInterleavedAudioBuffer<float> buffer_imp(temp, stream_slice, TAudioGlobals::fOutput);
-    
+
     COMMANDS_ITERATOR it = fStreamCommands.begin();
     while (it != fStreamCommands.end()) {
         TCommandPtr command = *it;
