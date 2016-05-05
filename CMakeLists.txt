@@ -7,6 +7,10 @@ set(CMAKE_MODULE_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
 )
 
+if(UNIX AND NOT APPLE)
+    find_package(DL REQUIRED)
+endif()
+
 # Sources
 set(CSRC
 src/atomic/lffifo.c
@@ -129,7 +133,6 @@ target_include_directories(libaudiostream SYSTEM INTERFACE
 )
 
 target_link_libraries(libaudiostream PUBLIC ${Threads_LIBRARIES})
-
 # Dependencies
 # OS X
 if(APPLE)
@@ -139,6 +142,11 @@ if(APPLE)
   target_link_libraries(libaudiostream PUBLIC ${COREAUDIO_LIBRARY})
   target_compile_definitions(libaudiostream PRIVATE
       __COREAUDIO__)
+endif()
+
+# Linux
+if(UNIX AND NOT APPLE)
+    target_link_libraries(libaudiostream PUBLIC ${LIBDL_LIBRARIES})
 endif()
 
 # Jack

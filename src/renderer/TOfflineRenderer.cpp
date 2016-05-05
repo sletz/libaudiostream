@@ -2,13 +2,13 @@
 
 Copyright (C) Grame 2014
 
-This library is free software; you can redistribute it and modify it under 
-the terms of the GNU Library General Public License as published by the 
+This library is free software; you can redistribute it and modify it under
+the terms of the GNU Library General Public License as published by the
 Free Software Foundation version 2 of the License, or any later version.
 
 This library is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License 
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License
 for more details.
 
 You should have received a copy of the GNU Library General Public License
@@ -30,7 +30,7 @@ void* TOfflineRenderer::Process(void* arg)
 {
     TOfflineRenderer* renderer = static_cast<TOfflineRenderer*>(arg);
     renderer->ProcessAux();
-	return NULL;
+    return NULL;
  }
 
 void TOfflineRenderer::ProcessAux()
@@ -44,11 +44,11 @@ TOfflineRenderer::TOfflineRenderer(): TAudioRenderer()
 {
     fInputBuffer = new float*[TAudioGlobals::fInput];
     fOutputBuffer = new float*[TAudioGlobals::fOutput];
-    
+
     for (int i = 0; i < TAudioGlobals::fInput; i++) {
         fInputBuffer[i] = new float[TAudioGlobals::fBufferSize];
     }
-    for (int i = 0; i < TAudioGlobals::fInput; i++) {
+    for (int i = 0; i < TAudioGlobals::fOutput; i++) {
         fOutputBuffer[i] = new float[TAudioGlobals::fBufferSize];
     }
 }
@@ -58,10 +58,10 @@ TOfflineRenderer::~TOfflineRenderer()
     for (int i = 0; i < TAudioGlobals::fInput; i++) {
         delete [] fInputBuffer[i];
     }
-    for (int i = 0; i < TAudioGlobals::fInput; i++) {
+    for (int i = 0; i < TAudioGlobals::fOutput; i++) {
         delete [] fOutputBuffer[i];;
     }
-    
+
     delete [] fInputBuffer;
     delete [] fOutputBuffer;
 }
@@ -86,13 +86,13 @@ long TOfflineRenderer::Close()
 long TOfflineRenderer::Start()
 {
     //return pthread_create(&fThread, NULL, Process, this);
-	return false;
+    return false;
 }
 
 long TOfflineRenderer::Stop()
 {
     //pthread_cancel(fThread);
-    //pthread_join(fThread, NULL); 
+    //pthread_join(fThread, NULL);
     return 0;
 }
 
@@ -113,22 +113,22 @@ void TOfflineRenderer::GetInfo(RendererInfoPtr info)
 
 long TOfflineRenderer::GetDeviceCount()
 {
-	// TODO
+    // TODO
     return 0;
 }
 
 void TOfflineRenderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
-	// TODO
+    // TODO
 }
 
 long TOfflineRenderer::GetDefaultInputDevice()
 {
-	return 1;
+    return 1;
 }
 
 long TOfflineRenderer::GetDefaultOutputDevice()
 {
-	return 1;
+    return 1;
 }
 

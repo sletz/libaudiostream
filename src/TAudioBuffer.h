@@ -74,7 +74,7 @@ class TAudioBuffer
 
         long fFrames;
         long fChannels;
-          
+
     public:
 
         TAudioBuffer():fFrames(0), fChannels(0)
@@ -90,7 +90,7 @@ class TAudioBuffer
         {
             return fChannels;
         }
-        
+
 };
 
 //-------------------------------
@@ -107,7 +107,7 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
     protected:
 
         T* fBuffer;
-        
+
         void TouchAndLock(bool touch)
         {
             if (touch) {
@@ -120,14 +120,17 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
                 }
             }
         }
-      
+
     public:
 
         TInterleavedAudioBuffer():TAudioBuffer<T>(), fBuffer(0)
         {}
         virtual ~TInterleavedAudioBuffer()
         {
-            MUNLOCK(fBuffer, this->fFrames * this->fChannels * sizeof(T));
+            if(fBuffer)
+            {
+                MUNLOCK(fBuffer, this->fFrames * this->fChannels * sizeof(T));
+            }
         }
 
         T* GetFrame(long frame)
@@ -143,7 +146,7 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
             assert(b1->GetChannels() == b2->GetChannels());
             memcpy(b1->GetFrame(f1), b2->GetFrame(f2), frames * sizeof(T) * b1->GetChannels());
         }
-        
+
         T* GetBuffer() { return fBuffer; }
 };
 
@@ -161,7 +164,7 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
     protected:
 
         T** fBuffer;
-        
+
         void TouchAndLock(bool touch)
         {
             if (touch) {
@@ -176,18 +179,21 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
                 }
             }
         }
-      
+
     public:
 
         TNonInterleavedAudioBuffer():TAudioBuffer<T>(), fBuffer(0)
         {}
         virtual ~TNonInterleavedAudioBuffer()
         {
-            for (int i = 0; i < this->fChannels; i++) {
-                MUNLOCK(fBuffer[i], this->fFrames * sizeof(T));
+            if(fBuffer)
+            {
+                for (int i = 0; i < this->fChannels; i++) {
+                    MUNLOCK(fBuffer[i], this->fFrames * sizeof(T));
+                }
             }
         }
-        
+
         T** GetFrame(long frame, T** res)
         {
             if (!(frame <= this->fFrames)) {
@@ -199,24 +205,24 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             }
             return res;
         }
-     
+
         static void Copy(TNonInterleavedAudioBuffer* b1, long f1, TNonInterleavedAudioBuffer* b2, long f2, long frames)
         {
             assert(frames + f1 <= b1->GetSize());
             assert(frames + f2 <= b2->GetSize());
             assert(b1->GetChannels() == b2->GetChannels());
-            
+
             T** tmp1 = (T**)alloca(b1->GetChannels()*sizeof(T*));
             T** tmp2 = (T**)alloca(b2->GetChannels()*sizeof(T*));
 
             T** dst = b1->GetFrame(f1, tmp1);
             T** src = b2->GetFrame(f2, tmp2);
-            
+
             for (int i = 0; i < b1->GetChannels(); i++) {
                 memcpy(dst[i], src[i], frames * sizeof(T));
             }
         }
-        
+
         T** GetBuffer() { return fBuffer; }
 };
 
@@ -241,6 +247,7 @@ class TLocalInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
         virtual ~TLocalInterleavedAudioBuffer()
         {
             delete []this->fBuffer;
+            this->fBuffer = nullptr;
         }
 };
 
@@ -270,6 +277,7 @@ class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
                 delete []this->fBuffer[i];
             }
             delete []this->fBuffer;
+            this->fBuffer = nullptr;
         }
 };
 

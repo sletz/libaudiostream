@@ -40,41 +40,42 @@ research@grame.fr
 struct TCommand : public la_smartable1 {
 
         SymbolicDate fStartDate;
-  
+
         inline audio_frame_t GetDate(map<SymbolicDate, audio_frame_t>& date_map, SymbolicDate date)
         {
             if (date_map.find(date) == date_map.end()) {
+                std::cerr << "Date not found" << date->GetDate() << std::endl;
                 date_map[date] = date->getDate();
             }
             return date_map[date];
         }
-        
+
         inline bool InBuffer(audio_frame_t date, audio_frame_t cur_frame, long frames)
         {
             return (date >= cur_frame && date < cur_frame + frames);
         }
-        
+
         inline audio_frame_t GetDate() { return fStartDate->GetDate(); }
-        
-        TCommand() 
+
+        TCommand()
         {}
         TCommand(SymbolicDate date):fStartDate(date)
         {}
-        virtual ~TCommand() 
+        virtual ~TCommand()
         {}
-         
-        virtual bool Execute(TNonInterleavedAudioBuffer<float>* buffer, 
-                            map<SymbolicDate, audio_frame_t>& date_map, 
-                            audio_frame_t cur_frame, 
+
+        virtual bool Execute(TNonInterleavedAudioBuffer<float>* buffer,
+                            map<SymbolicDate, audio_frame_t>& date_map,
+                            audio_frame_t cur_frame,
                             long frames) = 0;
-                            
+
         bool operator< (const TCommand& command) const
         {
             return fStartDate->getDate() < command.fStartDate->getDate();
         }
-        
+
         virtual long GetOffset(audio_frame_t cur_frame, long frames) { return -1; }
-        
+
 };
 
 typedef LA_SMARTP<TCommand> TCommandPtr;
@@ -85,19 +86,19 @@ typedef LA_SMARTP<TCommand> TCommandPtr;
 //--------------------------------------------
 
 struct TControlCommand : public TCommand {
-   
+
         TControlCommand()
         {}
         TControlCommand(SymbolicDate date):TCommand(date)
         {}
-        virtual ~TControlCommand() 
+        virtual ~TControlCommand()
         {}
-         
-        /* 
+
+        /*
             Returns the offset in buffer, or frames if not in buffer.
         */
-        virtual long GetOffset(audio_frame_t cur_frame, long frames) 
-        { 
+        virtual long GetOffset(audio_frame_t cur_frame, long frames)
+        {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
                 return fStartDate->getDate() - cur_frame;
             } else {
@@ -114,22 +115,22 @@ typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
 //---------------------------------------------------------------------------
 
 struct TEffectControlCommand : public TControlCommand {
-    
+
         TAudioEffectInterfacePtr fEffect;
         string fPath;
         float fValue;
-    
-        TEffectControlCommand() 
+
+        TEffectControlCommand()
         {}
-        TEffectControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date) 
+        TEffectControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date)
             : TControlCommand(date), fEffect(effect), fPath(path), fValue(value)
         {}
-        virtual ~TEffectControlCommand() 
+        virtual ~TEffectControlCommand()
         {}
-         
-        bool Execute(TNonInterleavedAudioBuffer<float>* buffer, 
-                    map<SymbolicDate, audio_frame_t>& date_map, 
-                    audio_frame_t cur_frame, 
+
+        bool Execute(TNonInterleavedAudioBuffer<float>* buffer,
+                    map<SymbolicDate, audio_frame_t>& date_map,
+                    audio_frame_t cur_frame,
                     long frames)
         {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
@@ -140,7 +141,7 @@ struct TEffectControlCommand : public TControlCommand {
                 return true;
             }
         }
-    
+
 };
 
 //-------------------------------------------------------------------------
@@ -154,20 +155,20 @@ struct TExternalControlCommand : public TCommand {
         AudioControlCallback fCallback;
         void* fArg;
         float fValue;
-    
+
         TExternalControlCommand(AudioControlCallback callback, float value, void* arg)
             :fCallback(callback), fArg(arg), fValue(value)
         {}
-        virtual ~TExternalControlCommand() 
+        virtual ~TExternalControlCommand()
         {}
-         
-        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer, 
-                    map<SymbolicDate, audio_frame_t>& date_map, 
-                    audio_frame_t cur_frame, 
+
+        bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer,
+                    map<SymbolicDate, audio_frame_t>& date_map,
+                    audio_frame_t cur_frame,
                     long frames)
         {
             if (InBuffer(fStartDate->getDate(), cur_frame, frames)) {
-                fCallback(fStartDate->getDate(), fValue, fArg); 
+                fCallback(fStartDate->getDate(), fValue, fArg);
                 return false;
             } else {
                 return true;
@@ -179,45 +180,45 @@ struct TExternalControlCommand : public TCommand {
 //---------------------------------------------------------
 // Class TStreamCommand : a command to start/stop streams
 //---------------------------------------------------------
-    
+
 struct TStreamCommand : public TCommand {
-        
+
         TRTRendererAudioStreamPtr fStream; // SmartPtr here...
-        
+
         long fPos;
-            
+
         SymbolicDate fStopDate;
- 
+
         TStreamCommand(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
                 :TCommand(start_date), fStream(stream), fPos(0), fStopDate(stop_date)
         {}
-        virtual ~TStreamCommand() 
+        virtual ~TStreamCommand()
         {}
-        
+
         void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
-          
-        bool Execute(TNonInterleavedAudioBuffer<float>* buffer, 
-                    map<SymbolicDate, audio_frame_t>& date_map, 
-                    audio_frame_t cur_frame, 
+
+        bool Execute(TNonInterleavedAudioBuffer<float>* buffer,
+                    map<SymbolicDate, audio_frame_t>& date_map,
+                    audio_frame_t cur_frame,
                     long frames)
         {
             // Keeps the same value for the entire audio cycle
             audio_frame_t start_date = GetDate(date_map, fStartDate);
             audio_frame_t stop_date = GetDate(date_map, fStopDate);
-            
-            printf("TStreamCommand::Execute start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", start_date, stop_date, cur_frame, frames);
-            
+
+            printf("%p start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", this, start_date, stop_date, cur_frame, frames);
+
             // Possibly entire buffer to play
             long start_offset;
-            long stop_offset;  
-            
+            long stop_offset;
+
             // Init values
             long frame_num;
             bool to_play = false;
             bool to_stop = false;
             long res = 0;
-            
+
             // Possibly move start_offset inside this buffer
             if (InBuffer(start_date, cur_frame, frames)) {
                 // New stream to play...
@@ -235,7 +236,7 @@ struct TStreamCommand : public TCommand {
             } else {
                 start_offset = 0;
             }
-            
+
             // Possibly move stop_offset inside this buffer
             if (InBuffer(stop_date, cur_frame, frames)) {
                 // Stream will be stopped in this buffer...
@@ -249,21 +250,22 @@ struct TStreamCommand : public TCommand {
             } else {
                 stop_offset = frames;
             }
-            
+
             // Then compute effective frame number to play
             frame_num = stop_offset - start_offset;
-            
+
             //printf("TStreamCommand::Execute frame_num = %d start_offset = %d\n", frame_num, start_offset);
-            
+
             // Play it...
             if (to_play) {
                 res = fStream->Read(buffer, frame_num, start_offset);
                 fPos += res;
                 if (to_stop || (res < frame_num)) {
+                    std::cerr << "bad thing happens\n";
                     return false;
-                } 
+                }
             }
-            
+
             return true;
         }
 
@@ -275,51 +277,51 @@ typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 // Class TCommandList
 //--------------------
 
-class TCommandList : public list<TCommandPtr> 
+class TCommandList : public list<TCommandPtr>
 {
 
     private:
-    
+
         static bool compare_command_date (TCommandPtr first, TCommandPtr second)
         {
             return first->GetDate() < second->GetDate();
         }
-    
+
         std::atomic_bool fNeedSort;
-    
+
     public:
-    
+
         TCommandList():fNeedSort(false)
         {}
         virtual ~TCommandList() {}
-    
+
         void AddCommand(TCommandPtr command)
-        { 
+        {
             push_back(command);
             fNeedSort = true;
         }
 
-        void RemoveCommand(TCommandPtr command) 
-        { 
+        void RemoveCommand(TCommandPtr command)
+        {
             remove(command);
             fNeedSort = true;
         }
-        
+
         void PossiblySort()
         {
             if (fNeedSort) {
-                sort(compare_command_date); 
+                sort(compare_command_date);
                 fNeedSort = false;
                 //printf("SORT\n");
             }
         }
-        
+
         void NeedSort()
         {
             fNeedSort = true;
         }
-        
-        void Print() 
+
+        void Print()
         {
             TCommandList::iterator it;
             for (it = begin(); it != end(); it++) {
@@ -341,76 +343,88 @@ class TExpAudioMixer : public TAudioClient
 {
 
     private:
-    
         COMMANDS fStreamCommands;     // List of stream commands
         COMMANDS fControlCommands;    // List of control commands
-        
-        audio_frame_t fCurFrame;
-        
-        TAudioEffectInterfacePtr fMasterEffect;
-        FLOAT_BUFFER fBuffer;
-   
+
+        audio_frame_t fCurFrame = 0;
+
+        TAudioEffectInterfacePtr fMasterEffect = nullptr;
+        FLOAT_BUFFER fBuffer = nullptr;
+
+        long fOutputChannels = 0;
+
         bool AudioCallback(float** inputs, float** outputs, long frames);
-        
-        
-        void ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer, 
-                                map<SymbolicDate, audio_frame_t>& date_map, 
-                                audio_frame_t cur_frame, 
+
+
+        void ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer,
+                                map<SymbolicDate, audio_frame_t>& date_map,
+                                audio_frame_t cur_frame,
                                 long offset,
                                 long slice);
 
-        void ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer, 
-                                map<SymbolicDate, audio_frame_t>& date_map, 
-                                audio_frame_t cur_frame, 
+        void ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer,
+                                map<SymbolicDate, audio_frame_t>& date_map,
+                                audio_frame_t cur_frame,
                                 long offset,
                                 long slice);
 
         long GetNextControlOffset(audio_frame_t cur_frame, long frames);
-      
+
     public:
 
-        TExpAudioMixer():fCurFrame(0),fMasterEffect(NULL) 
+        TExpAudioMixer():
+            TExpAudioMixer{
+                TAudioGlobals::fBufferSize,
+                TAudioGlobals::fOutput}
         {
-            fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, TAudioGlobals::fOutput);  
         }
-        virtual ~TExpAudioMixer() 
+
+        TExpAudioMixer(long buffer_size, long output_channels):
+            fBuffer{new TLocalNonInterleavedAudioBuffer<float>{
+                            buffer_size,
+                            output_channels}},
+            fOutputChannels{output_channels}
+        {
+
+        }
+
+        virtual ~TExpAudioMixer()
         {
             delete fBuffer;
         }
-        
+
         void AddStreamCommand(TCommandPtr command)
-        { 
-            std::cerr << "Command added\n";
+        {
             fStreamCommands.AddCommand(command);
         }
-        void RemoveStreamCommand(TCommandPtr command) 
-        { 
+        void RemoveStreamCommand(TCommandPtr command)
+        {
             fStreamCommands.RemoveCommand(command);
         }
-        
+
         void AddControlCommand(TCommandPtr command)
-        { 
+        {
             fControlCommands.AddCommand(command);
         }
-        void RemoveControlCommand(TCommandPtr command) 
-        { 
+        void RemoveControlCommand(TCommandPtr command)
+        {
             fControlCommands.RemoveCommand(command);
         }
-      
+
         TStreamCommandPtr GetStreamCommand(TAudioStreamPtr stream);
-        
+
         int GetCommandSize() { return fStreamCommands.size(); }
-        
+
         void NeedSort()
         {
             fControlCommands.NeedSort();
             fStreamCommands.NeedSort();
         }
-        
+
         long SetPos(audio_frame_t frames);
-        
+
         void SetEffect(TAudioEffectInterfacePtr effect) { fMasterEffect = effect; }
-    
+
 };
 
 typedef TExpAudioMixer * TExpAudioMixerPtr;
