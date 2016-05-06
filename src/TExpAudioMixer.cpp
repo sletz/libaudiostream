@@ -81,7 +81,6 @@ void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buff
     buffer->GetFrame(offset_in_stream, temp);
     TSharedNonInterleavedAudioBuffer<float> buffer_imp(temp, stream_slice, fOutputChannels);
 
-    std::cerr << (void*) this <<  " => " << fStreamCommands.size() << " streams\n";
     COMMANDS_ITERATOR it = fStreamCommands.begin();
     while (it != fStreamCommands.end()) {
         TCommandPtr command = *it;

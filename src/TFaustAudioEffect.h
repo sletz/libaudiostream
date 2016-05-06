@@ -611,7 +611,6 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
             argv[argc++] = "-l";
             argv[argc++] = "llvm_math.ll";
         #endif
-
             fFactory = createDSPFactoryFromFile(code, argc, argv, GetTarget(), error_msg, 3);
             if (fFactory) {
                 TAudioGlobals::fLocalFactoryTable[code] = this;

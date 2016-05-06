@@ -44,7 +44,6 @@ struct TCommand : public la_smartable1 {
         inline audio_frame_t GetDate(map<SymbolicDate, audio_frame_t>& date_map, SymbolicDate date)
         {
             if (date_map.find(date) == date_map.end()) {
-                std::cerr << "Date not found" << date->GetDate() << std::endl;
                 date_map[date] = date->getDate();
             }
             return date_map[date];
@@ -207,7 +206,7 @@ struct TStreamCommand : public TCommand {
             audio_frame_t start_date = GetDate(date_map, fStartDate);
             audio_frame_t stop_date = GetDate(date_map, fStopDate);
 
-            printf("%p start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", this, start_date, stop_date, cur_frame, frames);
+            //printf("%p start_date = %lld stop_date = %lld cur_frame = %lld frames = %ld\n", this, start_date, stop_date, cur_frame, frames);
 
             // Possibly entire buffer to play
             long start_offset;
@@ -261,7 +260,6 @@ struct TStreamCommand : public TCommand {
                 res = fStream->Read(buffer, frame_num, start_offset);
                 fPos += res;
                 if (to_stop || (res < frame_num)) {
-                    std::cerr << "bad thing happens\n";
                     return false;
                 }
             }
