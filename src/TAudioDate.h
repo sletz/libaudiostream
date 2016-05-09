@@ -41,25 +41,25 @@ typedef int64_t audio_usec_t;
 class TSymbolicDate : public la_smartable1
 {
     private:
-    
+
         std::atomic<audio_frame_t> fRealDate;
-   
-    public : 
+
+    public :
         TSymbolicDate():fRealDate(INT64_MAX)
         {}
         TSymbolicDate(audio_frame_t date):fRealDate(date)
         {}
-        
-        audio_frame_t getDate() { return fRealDate; }
+
+        audio_frame_t getDate() const { return fRealDate; }
         void setDate(audio_frame_t date) { fRealDate = date; }
-        
-        bool operator< (TSymbolicDate& date) 
-        { 
-            return fRealDate < date.fRealDate; 
+
+        bool operator< (TSymbolicDate& date)
+        {
+            return fRealDate < date.fRealDate;
         }
-        
-        audio_frame_t GetDate() { return fRealDate; }
-    
+
+        audio_frame_t GetDate() const { return fRealDate; }
+
 };
 
 typedef LA_SMARTP<TSymbolicDate> TSymbolicDatePtr;
