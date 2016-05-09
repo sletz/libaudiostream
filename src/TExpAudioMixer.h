@@ -391,20 +391,20 @@ class TExpAudioMixer : public TAudioClient
             delete fBuffer;
         }
 
-        void AddStreamCommand(TCommandPtr command)
+        virtual void AddStreamCommand(TCommandPtr command)
         {
             fStreamCommands.AddCommand(command);
         }
-        void RemoveStreamCommand(TCommandPtr command)
+        virtual void RemoveStreamCommand(TCommandPtr command)
         {
             fStreamCommands.RemoveCommand(command);
         }
 
-        void AddControlCommand(TCommandPtr command)
+        virtual void AddControlCommand(TCommandPtr command)
         {
             fControlCommands.AddCommand(command);
         }
-        void RemoveControlCommand(TCommandPtr command)
+        virtual void RemoveControlCommand(TCommandPtr command)
         {
             fControlCommands.RemoveCommand(command);
         }
