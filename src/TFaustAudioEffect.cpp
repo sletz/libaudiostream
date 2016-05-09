@@ -32,10 +32,10 @@ int TRemoteCodeFaustAudioEffect::fEffectIndex = 0;
 
 static bool CheckEnding(const string& name, const string& end)
 {
-    unsigned int match = name.rfind(end);
+    const auto match = name.rfind(end);
     return ((match != string::npos) && (name.size() - end.size() == match));
 }
-   
+
 static string PathToContent(const string& path)
 {
     ifstream file(path.c_str(), std::ifstream::binary);
@@ -43,11 +43,11 @@ static string PathToContent(const string& path)
     file.seekg (0, file.end);
     int size = file.tellg();
     file.seekg (0, file.beg);
-   
+
     // And allocate buffer to that a single line can be read...
     char* buffer = new char[size + 1];
     file.read(buffer, size);
-    
+
     // Terminate the string
     buffer[size] = 0;
     string result = buffer;
@@ -56,8 +56,8 @@ static string PathToContent(const string& path)
     return result;
 }
 
-// Duplicate a Faust effect 'num' times 
-TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterface* effect, int num) 
+// Duplicate a Faust effect 'num' times
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterface* effect, int num)
 {
     TCodeFaustAudioEffect* faust_effect = dynamic_cast<TCodeFaustAudioEffect*>(effect);
     assert(faust_effect);
@@ -67,7 +67,7 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffec
 }
 
 // Split a stream 'num' times to connect to a Faust effect
-TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterface* effect, int num) 
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterface* effect, int num)
 {
     TCodeFaustAudioEffect* faust_effect = dynamic_cast<TCodeFaustAudioEffect*>(effect);
     assert(faust_effect);
@@ -97,7 +97,7 @@ TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const st
     if (TAudioGlobals::fRemoteFactoryTable.find(code) != TAudioGlobals::fRemoteFactoryTable.end()) {
         printf("DSP factory already created...\n");
         factory = TAudioGlobals::fRemoteFactoryTable[code];
-    } else if (CheckEnding(code, ".dsp")) { 
+    } else if (CheckEnding(code, ".dsp")) {
         factory = new TRemoteCodeFaustAudioEffectFactory(PathToContent(code), library_path, draw_path);
     } else {
         factory = new TRemoteCodeFaustAudioEffectFactory(code, library_path, draw_path);
