@@ -33,43 +33,43 @@ research@grame.fr
 
 /*
 A TBufferedAudioStream object contains the common double-buffering buffer access code.
- 
+
 The Read method calls the ReadBuffer method when the end of a "big" buffer is reached.
- 
+
 Subclasses will possibly implements ReadBuffer for their special need. For example a sound file subclass
 will have a ReadBuffer method that calls the real disk read function inside a low-prority thread.
- 
+
     - A TFileAudioStream object is the LibSndFile stream
- 
+
     - A TReadFileAudioStream object is the LibSndFile read stream
- 
+
     - A TWriteFileAudioStream object is the LibSndFile write stream
- 
-  
+
+
                                         //----------------------------//
-                                        //							  //  
-                                        //     TBufferedAudioStream   // 
+                                        //							  //
+                                        //     TBufferedAudioStream   //
                                         //							  //
                                         //----------------------------//
                                                         !
-                                                        !     						
-                                                        !							
-                                        //------------------------------// 		    
-                                        //								//		   
-                                        //      TFileAudioStream      	//		      
-                                        //								//		    
+                                                        !
+                                                        !
+                                        //------------------------------//
+                                        //								//
+                                        //      TFileAudioStream      	//
+                                        //								//
                                         //------------------------------//
                                                         !
                                                         !
-                                                        !     						
-                                ---------------------------------------------                         
+                                                        !
+                                ---------------------------------------------
                                 !                        			        !
-				//------------------------------//	  	    //------------------------------// 					
-				//								//		    //								//
-                //    TReadFileAudioStream      //		    //    TWriteFileAudioStream     //      
+                //------------------------------//	  	    //------------------------------//
+                //								//		    //								//
+                //    TReadFileAudioStream      //		    //    TWriteFileAudioStream     //
                 //			        			//		    //								//
-                //------------------------------//		    //------------------------------//   
- 
+                //------------------------------//		    //------------------------------//
+
 */
 
 //----------------------------
@@ -103,7 +103,7 @@ class TBufferedAudioStream : public TAudioStream
         virtual void WriteBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         long HandleBuffer(FLOAT_BUFFER buffer, long framesNum, long framePos, bool read_or_write);
-  
+
     public:
 
         TBufferedAudioStream();
@@ -114,30 +114,30 @@ class TBufferedAudioStream : public TAudioStream
         virtual long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         virtual void Reset();
-        
+
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             assert(false);
             return 0;
         }
-        
+
         virtual long Length()
         {
             assert(false);
             return 0;
         }
-        
+
         virtual long Channels()
         {
             return fChannels;
         }
-        
+
         virtual TAudioStreamPtr Copy()
         {
             assert(false);
             return 0;
-        } 
-        
+        }
+
         FLOAT_BUFFER GetMemoryBuffer() { return fMemoryBuffer; }
 };
 
@@ -149,13 +149,13 @@ typedef TBufferedAudioStream * TBufferedAudioStreamPtr;
 
 class TSharedBufferedAudioStream : public TBufferedAudioStream
 {
-    
+
     protected:
-    
+
         long fBeginFrame;  // First frame to be read in the shared buffer
 
     public:
-    
+
         TSharedBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer): TBufferedAudioStream()
         {
             // Keep the shared buffer
@@ -163,36 +163,36 @@ class TSharedBufferedAudioStream : public TBufferedAudioStream
 
             fChannels = buffer->GetChannels();
             fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
-            
+
             // Start from fBeginFrame
             fBeginFrame = beginFrame;
             Reset();
-            
+
         }
         virtual ~TSharedBufferedAudioStream()
         {}
-        
+
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             return new TSharedBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
         }
-    
+
         virtual long Length()
         {
             return fFramesNum;
         }
-        
+
         virtual TAudioStreamPtr Copy()
         {
             return new TSharedBufferedAudioStream(fBeginFrame, fMemoryBuffer);
-        } 
-        
+        }
+
         void Reset()
         {
             fCurFrame = fBeginFrame;
             fTotalFrames = 0;
         }
-        
+
         long GetPos()
         {
             return fCurFrame;
@@ -209,42 +209,42 @@ typedef TSharedBufferedAudioStream * TSharedBufferedAudioStreamPtr;
 
 class TMemoryBufferedAudioStream : public TBufferedAudioStream
 {
-    
+
     protected:
-        
+
         long fBeginFrame;       // First frame to be read in the memory buffer
         long fCurWriteFrame;    // Write position inside the buffer
-        
+
         bool fClear;
-        
+
     public:
-        
+
         TMemoryBufferedAudioStream(long beginFrame, FLOAT_BUFFER buffer, bool clear = true):TBufferedAudioStream()
         {
             // Keep the shared buffer
             fMemoryBuffer = buffer;
-            
+
             fChannels = fMemoryBuffer->GetChannels();
             fFramesNum = fMemoryBuffer->GetSize() - fBeginFrame;
-            
+
             // Start from fBeginFrame
             fBeginFrame = beginFrame;
             Reset();
-            
+
             fClear = clear;
         }
-        
+
         virtual ~TMemoryBufferedAudioStream()
         {
             // Will not delete the 'wrapped' buffer
             delete fMemoryBuffer;
         }
-        
+
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             long cur_pos = fCurFrame;
             long res = TBufferedAudioStream::Read(buffer, framesNum, framePos);
-            
+
             // Clear just read buffer
             if (fClear) {
                 float** temp = (float**)alloca(fChannels*sizeof(float*));
@@ -252,43 +252,43 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             }
             return res;
         }
-        
+
         virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(framePos == 0);  // Entire buffer for now...
             framesNum = UTools::Min(framesNum, fMemoryBuffer->GetSize() - fCurWriteFrame);
-            
+
             float** temp1 = (float**)alloca(fMemoryBuffer->GetChannels()*sizeof(float*));
             float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-  
+
             UAudioTools::Float2Float(buffer->GetFrame(framePos, temp2), fMemoryBuffer->GetFrame(fCurWriteFrame, temp1), framesNum, fChannels);
-            
+
             fCurWriteFrame += framesNum;
             return framesNum;
         }
-    
+
         virtual TAudioStreamPtr CutBegin(long frames)
         {
             return new TMemoryBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
         }
-        
+
         virtual long Length()
         {
             return fFramesNum;
         }
-        
+
         virtual TAudioStreamPtr Copy()
         {
             return new TMemoryBufferedAudioStream(fBeginFrame, fMemoryBuffer);
-        } 
-        
+        }
+
         void Reset()
         {
             fCurFrame = fBeginFrame;
             fCurWriteFrame = fBeginFrame;
             fTotalFrames = 0;
         }
-        
+
         virtual long SetPos(long frames)
         {
             assert(frames <= fMemoryBuffer->GetSize());
@@ -296,12 +296,12 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
             Reset();
             return NO_ERR;
         }
-	      
+
         long GetPos()
         {
             return fCurFrame;
         }
-        
+
 };
 
 typedef TMemoryBufferedAudioStream * TMemoryBufferedAudioStreamPtr;

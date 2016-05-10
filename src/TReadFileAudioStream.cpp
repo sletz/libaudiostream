@@ -36,35 +36,35 @@ research@grame.fr
 TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
 {
     memset(&fInfo, 0, sizeof(fInfo));
-	char utf8name[512] = {0};
-	
-	assert(fName.size() < 512);
-	Convert2UTF8(fName.c_str(), utf8name, 512);
-	fFile = sf_open(utf8name, SFM_READ, &fInfo);
-	
+    char utf8name[512] = {0};
+
+    assert(fName.size() < 512);
+    Convert2UTF8(fName.c_str(), utf8name, 512);
+    fFile = sf_open(utf8name, SFM_READ, &fInfo);
+
     // Check file
     if (!fFile) {
         char error[512];
         snprintf(error, 512, "Cannot open filename \'%s\'\n", utf8name);
         throw TLASException(error);
     }
-    
+
     fFramesNum = long(fInfo.frames);
     fChannels = long(fInfo.channels);
-    
+
     if (SetPos(beginFrame) != NO_ERR) {
         throw TLASException("TReadFileAudioStream::SetPos : seek error");
     }
-    
+
     if (fInfo.samplerate != TAudioGlobals::fSampleRate) {
         printf("Warning : file sample rate different from engine sample rate! lib sr = %ld file sr = %d\n", TAudioGlobals::fSampleRate, fInfo.samplerate);
     }
-    
+
     // Dynamic allocation
     fMemoryBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
     fCopyBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fStreamBufferSize, fChannels);
     fFileBuffer = new float[fChannels * TAudioGlobals::fStreamBufferSize];
-  
+
     // Read first buffer directly
     TBufferedAudioStream::ReadBuffer(fMemoryBuffer, TAudioGlobals::fStreamBufferSize, 0);
     TNonInterleavedAudioBuffer<float>::Copy(fCopyBuffer, 0, fMemoryBuffer, 0, TAudioGlobals::fStreamBufferSize);
@@ -75,7 +75,7 @@ TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileA
 long TReadFileAudioStream::SetPos(long frames)
 {
     printf("TReadFileAudioStream::SetPos frames = %d\n", frames);
-     
+
     if (sf_seek(fFile, frames, SEEK_SET) < 0) {
         const char* error = sf_strerror(fFile);
         printf("TReadFileAudioStream::SetPos error = %s\n", error);
@@ -89,7 +89,7 @@ long TReadFileAudioStream::SetPos(long frames)
 
 TReadFileAudioStream::~TReadFileAudioStream()
 {
-	if (fFile) {
+    if (fFile) {
         sf_close(fFile);
         fFile = 0;
     }
@@ -124,7 +124,7 @@ void TReadFileAudioStream::Reset()
 
     // Use only the beginning of the copy buffer, copy the end in the low-priority thread
     int copySize = TAudioGlobals::fBufferSize * 4;
- 
+
     if (copySize < TAudioGlobals::fStreamBufferSize) {
         TNonInterleavedAudioBuffer<float>::Copy(fMemoryBuffer, 0, fCopyBuffer, 0, copySize);
         if (fManager == 0) {
@@ -146,8 +146,8 @@ long TReadFileAudioStream::ReadImp(FLOAT_BUFFER buffer, long framesNum, long fra
     float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     int res = sf_readf_float(fFile, fFileBuffer, framesNum); // In frames
     UAudioTools::Deinterleave(buffer->GetFrame(framePos, temp), fFileBuffer, framesNum, fChannels);
-    
-	return res;
+
+    return res;
 }
 
 

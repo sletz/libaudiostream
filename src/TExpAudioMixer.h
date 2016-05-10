@@ -395,6 +395,11 @@ class TExpAudioMixer : public TAudioClient
         {
             fStreamCommands.AddCommand(command);
         }
+        virtual void StopStreamCommand(TStreamCommandPtr command, SymbolicDate date)
+        {
+            command->SetStopDate(date);
+        }
+
         virtual void RemoveStreamCommand(TCommandPtr command)
         {
             fStreamCommands.RemoveCommand(command);
