@@ -291,11 +291,16 @@ void TPortAudioV19Renderer::GetInfo(RendererInfoPtr info)
 
 long TPortAudioV19Renderer::GetDeviceCount()
 {
-    return Pa_GetDeviceCount();
+    Pa_Initialize();
+    auto n = Pa_GetDeviceCount();
+    Pa_Terminate();
+    return n;
 }
 
 void TPortAudioV19Renderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
 {
+    Pa_Initialize();
+
     const PaDeviceInfo* pdi = Pa_GetDeviceInfo(deviceNum);
     if(!pdi)
         return;
@@ -305,14 +310,22 @@ void TPortAudioV19Renderer::GetDeviceInfo(long deviceNum, DeviceInfoPtr info)
     strcpy(info->fName, pdi->name);
     info->fDefaultBufferSize = 512;
     info->fDefaultSampleRate = pdi->defaultSampleRate; // Init value
+
+    Pa_Terminate();
 }
 
 long TPortAudioV19Renderer::GetDefaultInputDevice()
 {
-    return Pa_GetDefaultInputDevice();
+    Pa_Initialize();
+    auto n = Pa_GetDefaultInputDevice();
+    Pa_Terminate();
+    return n;
 }
 
 long TPortAudioV19Renderer::GetDefaultOutputDevice()
 {
-    return Pa_GetDefaultOutputDevice();
+    Pa_Initialize();
+    auto n = Pa_GetDefaultOutputDevice();
+    Pa_Terminate();
+    return n;
 }
