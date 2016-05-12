@@ -350,6 +350,14 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
             fInit = (init)GetFaustProc(fHandle, "init");
             fCompute = (compute)GetFaustProc(fHandle, "compute");
             fConclude = (conclude)GetFaustProc(fHandle, "conclude");
+
+            if(!fNew || !fDelete || !fGetNumInputs || !fGetNumOutputs || !fBuildUserInterface ||!fInit || !fCompute || !fConclude)
+            {
+                stringstream error;
+                error << "Incorrect Faust module" << name << endl;
+                throw TLASException(error.str());
+            }
+
             fDsp = fNew();
             fInit(fDsp, TAudioGlobals::fSampleRate);
             if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
