@@ -28,8 +28,8 @@ research@grame.fr
 #include "TFaustAudioEffect.h"
 
 #ifndef WIN32
-	#include <sys/errno.h>
-	#include <sys/resource.h>
+    #include <sys/errno.h>
+    #include <sys/resource.h>
 #endif
 
 // Globals
@@ -60,7 +60,7 @@ long TAudioGlobals::fOutputLatency = -1;
 
 TBufferedAudioStream* TAudioGlobals::fSharedInput = 0;
 
-char* TAudioGlobals::fLastLibError = 0;
+char TAudioGlobals::fLastLibError[] = { 0 };
 
 TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
@@ -81,7 +81,7 @@ static int SetMaximumFiles(long filecount)
 {
     return 0;
 }
-static int GetMaximumFiles(long* filecount) 
+static int GetMaximumFiles(long* filecount)
 {
     return 0;
 }
@@ -98,7 +98,7 @@ static bool SetMaximumFiles(long filecount)
     }
 }
 
-static bool GetMaximumFiles(long* filecount) 
+static bool GetMaximumFiles(long* filecount)
 {
     struct rlimit lim;
     if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
@@ -106,34 +106,34 @@ static bool GetMaximumFiles(long* filecount)
         return true;
     } else {
         return false;
-	}
+    }
 }
 #endif
 
 void TAudioGlobals::Init(long inChan, long outChan, long sample_rate,
                          long buffer_size, long stream_buffer_size, long rtstream_buffer_size, long thread_num)
 {
-	if (fClientCount++ == 0 && !fInstance) {
-		fInstance = new TAudioGlobals(inChan, outChan, sample_rate,
-									  buffer_size, stream_buffer_size, rtstream_buffer_size);
-		TDTRendererAudioStream::Init();
-		TRTRendererAudioStream::Init(thread_num);
-		la_smartable1::Init();
-		GetMaximumFiles(&fFileMax);
-		SetMaximumFiles(1024);
-	}
+    if (fClientCount++ == 0 && !fInstance) {
+        fInstance = new TAudioGlobals(inChan, outChan, sample_rate,
+                                      buffer_size, stream_buffer_size, rtstream_buffer_size);
+        TDTRendererAudioStream::Init();
+        TRTRendererAudioStream::Init(thread_num);
+        la_smartable1::Init();
+        GetMaximumFiles(&fFileMax);
+        SetMaximumFiles(1024);
+    }
 }
 
 void TAudioGlobals::Destroy()
 {
     if (--fClientCount == 0 && fInstance) {
-		TDTRendererAudioStream::Destroy();
-		TRTRendererAudioStream::Destroy();
-		la_smartable1::Destroy();
-		delete fInstance;
-		fInstance = 0;
-		SetMaximumFiles(fFileMax);
-	}
+        TDTRendererAudioStream::Destroy();
+        TRTRendererAudioStream::Destroy();
+        la_smartable1::Destroy();
+        delete fInstance;
+        fInstance = 0;
+        SetMaximumFiles(fFileMax);
+    }
     if(fClientCount < 0)
         fClientCount = 0;
 }
@@ -148,16 +148,14 @@ TAudioGlobals::TAudioGlobals(long inChan, long outChan, long sample_rate,
     fSampleRate = sample_rate;
     fDiskError = 0;
     // Allocate shared real-time input
-    fSharedInput = (rtstream_duration > 0) ? new TBufferedInputAudioStream(rtstream_duration) : 0;  
-    fLastLibError = new char[512];
+    fSharedInput = (rtstream_duration > 0) ? new TBufferedInputAudioStream(rtstream_duration) : 0;
+    ClearLibError();
 }
 
 TAudioGlobals::~TAudioGlobals()
 {
     delete fSharedInput;
     fSharedInput = 0;
-    delete [] fLastLibError;
-    fLastLibError = 0;
 }
 
 void TAudioGlobals::LogError()
@@ -168,9 +166,8 @@ void TAudioGlobals::LogError()
 void TAudioGlobals::ClearLibError()
 {
     // First clear error message
-    if (fLastLibError) {
-        strncpy(fLastLibError, "", 512);
-    }
+    using namespace std;
+    fill(begin(fLastLibError), end(fLastLibError), 0);
 }
 
 void TAudioGlobals::AddLibError(char* error)

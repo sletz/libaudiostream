@@ -39,7 +39,7 @@ research@grame.fr
  typedef struct ErrorInfo {
         char fStreamError[512];
         long fDiskError;            // Counter of disk streaming errors
-        long fSchedulingError;      // Counter of too late scheduled stream commmands  
+        long fSchedulingError;      // Counter of too late scheduled stream commmands
 } ErrorInfo;
 
 //---------------------
@@ -60,7 +60,7 @@ class AUDIO_EXPORTS TAudioGlobals
     private:
 
         static TAudioGlobals* fInstance;   	// Unique instance`
-		static long fClientCount;
+        static long fClientCount;
 
     public:
 
@@ -70,40 +70,40 @@ class AUDIO_EXPORTS TAudioGlobals
         static long fBufferSize;                // I/O buffer size
         static long fStreamBufferSize;          // Stream buffer size
         static long fDiskError;                 // Counter of disk streaming errors
-        static long fSchedulingError;           // Counter of too late scheduled stream commmands 
-		static long fFileMax;
+        static long fSchedulingError;           // Counter of too late scheduled stream commmands
+        static long fFileMax;
 
-		static long fInputLatency;				// Suggested input latency (when used with PortAudio)
-		static long fOutputLatency;				// Suggested output latency (when used with PortAudio)
-        
-        static char* fLastLibError;
-    
+        static long fInputLatency;				// Suggested input latency (when used with PortAudio)
+        static long fOutputLatency;				// Suggested output latency (when used with PortAudio)
+
+        static char fLastLibError[512];
+
         static TBufferedAudioStream* fSharedInput;  // Shared real-time input
-        
-        static std::map<std::string, TLocalCodeFaustAudioEffectFactory*> fLocalFactoryTable;     // Local effect factory 
+
+        static std::map<std::string, TLocalCodeFaustAudioEffectFactory*> fLocalFactoryTable;     // Local effect factory
         static int fLocalFactoryNumber;
-         
-        static std::map<std::string, TRemoteCodeFaustAudioEffectFactory*> fRemoteFactoryTable;   // Remote effect factory 
+
+        static std::map<std::string, TRemoteCodeFaustAudioEffectFactory*> fRemoteFactoryTable;   // Remote effect factory
         static int fRemoteFactoryNumber;
-       
-        static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;         // Effect table 
-   
+
+        static std::map<std::string, std::list<TAudioEffectInterfacePtr> > fEffectTable;         // Effect table
+
         TAudioGlobals(long inChan, long outChan, long sample_rate,
                       long buffer_size, long stream_buffer_size, long rtstream_buffer_size);
         virtual ~TAudioGlobals();
 
         static void Init(long inChan, long outChan,
-                         long sample_rate, long buffer_size, long stream_buffer_size, 
+                         long sample_rate, long buffer_size, long stream_buffer_size,
                          long rtstream_buffer_size, long thread_num);
 
         static void LogError();
         static void Destroy();
-        
+
         static void ClearLibError();
         static void AddLibError(char* error);
         static void AddLibError(const char* error);
         static void AddLibError(const std::string& error);
-      
+
 };
 
 typedef TAudioGlobals * TAudioGlobalsPtr;
