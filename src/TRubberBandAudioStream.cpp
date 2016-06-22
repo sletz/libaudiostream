@@ -29,23 +29,28 @@ using namespace RubberBand;
 
 TRubberBandAudioStream::TRubberBandAudioStream(TAudioStreamPtr stream, double* pitch_shift, double* time_strech)
 {
-	fStream = stream;
+    fStream = stream;
     fPitchShift = pitch_shift;
     fTimeStretch = time_strech;
-	fPitchShiftVal = *pitch_shift;
-	fTimeStretchVal = *time_strech;
-   
-	fRubberBand = new RubberBandStretcher(TAudioGlobals::fSampleRate, stream->Channels(), RubberBandStretcher::OptionProcessRealTime);
-	fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());
-	
-	fRubberBand->setTimeRatio(1/fTimeStretchVal);
-	fRubberBand->setPitchScale(fPitchShiftVal);
+    fPitchShiftVal = *pitch_shift;
+    fTimeStretchVal = *time_strech;
+
+    fRubberBand = new RubberBandStretcher(TAudioGlobals::fSampleRate, stream->Channels(),
+                                          RubberBandStretcher::OptionProcessRealTime |
+                                          RubberBandStretcher::OptionStretchElastic |
+                                          RubberBandStretcher::OptionTransientsSmooth |
+                                          RubberBandStretcher::OptionFormantShifted |
+                                          RubberBandStretcher::OptionPitchHighSpeed);
+    fBuffer = new TLocalNonInterleavedAudioBuffer<float>(TAudioGlobals::fBufferSize, stream->Channels());
+
+    fRubberBand->setTimeRatio(1. / fTimeStretchVal);
+    fRubberBand->setPitchScale(fPitchShiftVal);
 }
 
 TRubberBandAudioStream::~TRubberBandAudioStream()
 {
-	delete fRubberBand;
-	delete fBuffer;
+    delete fRubberBand;
+    delete fBuffer;
 }
 
 TAudioStreamPtr TRubberBandAudioStream::CutBegin(long frames)
@@ -56,19 +61,19 @@ TAudioStreamPtr TRubberBandAudioStream::CutBegin(long frames)
 long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePos)
 {
     assert_stream(framesNum, framePos);
-    
-  	if (fTimeStretchVal != *fTimeStretch) {
-		fTimeStretchVal = *fTimeStretch;
-		fRubberBand->setTimeRatio(1/fTimeStretchVal);
-	}
-	if (fPitchShiftVal != *fPitchShift) {
-		fPitchShiftVal = *fPitchShift;
-		fRubberBand->setPitchScale(fPitchShiftVal);
-	}
-    
+
+    if (fTimeStretchVal != *fTimeStretch) {
+        fTimeStretchVal = *fTimeStretch;
+        fRubberBand->setTimeRatio(1./fTimeStretchVal);
+    }
+    if (fPitchShiftVal != *fPitchShift) {
+        fPitchShiftVal = *fPitchShift;
+        fRubberBand->setPitchScale(fPitchShiftVal);
+    }
+
     float** temp1 = (float**)alloca(fBuffer->GetChannels()*sizeof(float*));
     float** temp2 = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-    
+
     while (fRubberBand->available() < framesNum) {
         int needFrames = std::min((int)framesNum, (int)fRubberBand->getSamplesRequired());
         if (needFrames > 0) {
@@ -77,10 +82,14 @@ long TRubberBandAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long fram
             fRubberBand->process(fBuffer->GetFrame(0, temp1), needFrames, false);
         }
     }
-    
-    fRubberBand->retrieve(buffer->GetFrame(framePos, temp2), std::min((int)framesNum, fRubberBand->available()));
 
-	return framesNum;
+    fRubberBand->retrieve(fBuffer->GetFrame(0, temp1), std::min((int)framesNum, fRubberBand->available()));
+
+    UAudioTools::MixFrameToFrameBlk1(buffer->GetFrame(0, temp2),
+                                     fBuffer->GetFrame(0, temp1),
+                                     framesNum,
+                                     Channels());
+    return framesNum;
 }
 
 void TRubberBandAudioStream::Reset()
