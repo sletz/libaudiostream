@@ -50,19 +50,30 @@ class TLoopAudioStream : public TDecoratedAudioStream
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);
 
         void Reset();
-        
+
         TAudioStreamPtr CutBegin(long frames);
-        
+
         long Length()
         {
-            return fLoopNum * fStream->Length();
+            uint64_t num = fLoopNum;
+            uint64_t length = fStream->Length();
+            uint64_t res = num * length;
+            if ((num != 0 && res / num != length) || res >= LONG_MAX)
+            {
+                // Overflow
+                return LONG_MAX;
+            }
+            else
+            {
+                return res;
+            }
         }
-        
+
         TAudioStreamPtr Copy()
         {
             return new TLoopAudioStream(fStream->Copy(), fLoopNum);
         }
-        
+
         long SetPos(long frames)
         {
             long len = fStream->Length();
