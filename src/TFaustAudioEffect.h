@@ -351,8 +351,8 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 
             if(!fNew || !fDelete || !fGetNumInputs || !fGetNumOutputs || !fBuildUserInterface ||!fInit || !fCompute || !fConclude)
             {
-                stringstream error;
-                error << "Incorrect Faust module" << name << endl;
+                std::stringstream error;
+                error << "Incorrect Faust module" << name << std::endl;
                 throw TLASException(error.str());
             }
 

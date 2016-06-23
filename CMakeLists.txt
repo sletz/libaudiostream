@@ -78,7 +78,8 @@ src/TExpAudioMixer.cpp
 
 # Renderers
 set(COREAUDIO_RENDERER
-src/renderer/TCoreAudioRenderer.cpp
+	src/renderer/TAudioRenderer.cpp
+	src/renderer/TCoreAudioRenderer.cpp
 )
 set(PA18_RENDERER
 src/renderer/TPortAudioRenderer.cpp
@@ -138,8 +139,13 @@ target_link_libraries(libaudiostream PUBLIC ${Threads_LIBRARIES})
 if(APPLE)
   target_sources(libaudiostream PRIVATE ${COREAUDIO_RENDERER})
 
+  find_library(COREFOUNDATION_LIBRARY CoreFoundation)
   find_library(COREAUDIO_LIBRARY CoreAudio)
-  target_link_libraries(libaudiostream PUBLIC ${COREAUDIO_LIBRARY})
+  find_library(CORESERVICES_LIBRARY CoreServices)
+  find_library(AUDIOUNIT_LIBRARY AudioUnit)
+  find_library(ACCELERATE_LIBRARY Accelerate)
+  find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
+  target_link_libraries(libaudiostream PUBLIC ${COREFOUNDATION_LIBRARY} ${COREAUDIO_LIBRARY} ${CORESERVICES_LIBRARY} ${AUDIOUNIT_LIBRARY} ${ACCELERATE_LIBRARY} ${AUDIOTOOLBOX_LIBRARY})
   target_compile_definitions(libaudiostream PRIVATE
       __COREAUDIO__)
 endif()
