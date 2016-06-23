@@ -27,8 +27,6 @@ research@grame.fr
 #include "TAudioConstants.h"
 #include <string>
 
-using namespace std;
-
 //-----------------------------
 // Class TWriteFileAudioStream
 //-----------------------------
@@ -55,7 +53,7 @@ class TWriteFileAudioStream : public TFileAudioStream, public TUnaryAudioStream
 
     public:
 
-        TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format);
+		TWriteFileAudioStream(std::string name, TAudioStreamPtr stream, long format);
         virtual ~TWriteFileAudioStream();
 
         long Read(FLOAT_BUFFER buffer, long framesNum, long framePos);

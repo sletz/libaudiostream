@@ -29,8 +29,6 @@ research@grame.fr
 #include <list>
 #include <stdint.h>
 
-using namespace std;
-
 /*!
 \brief To get renderer state.
 */
@@ -98,7 +96,7 @@ class AUDIO_EXPORTS TAudioRenderer
 
     protected:
 
-        list<TRTAudioClient> fClientList;
+		std::list<TRTAudioClient> fClientList;
         long fSampleRate;
         long fInput;
         long fOutput;
@@ -122,7 +120,7 @@ class AUDIO_EXPORTS TAudioRenderer
 
         void RemoveClient(TAudioClientPtr client)
         {
-			for (list<TRTAudioClient>::iterator iter = fClientList.begin(); iter != fClientList.end(); iter++) {
+			for (std::list<TRTAudioClient>::iterator iter = fClientList.begin(); iter != fClientList.end(); iter++) {
 				if ((*iter).fRTClient == client) {
 					(*iter).fRTClient = 0; // Mark client to be removed
                 }

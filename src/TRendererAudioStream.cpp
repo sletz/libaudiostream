@@ -27,7 +27,7 @@ void TRendererAudioStream::SetManager(TAudioStreamPtr stream, TCmdManagerPtr man
 {
     TCmdHandlerList lst(stream);
 
-    for (list<TCmdHandlerPtr>::iterator iter = lst.begin(); iter != lst.end(); iter++) {
+	for (std::list<TCmdHandlerPtr>::iterator iter = lst.begin(); iter != lst.end(); iter++) {
         TCmdHandlerPtr handler = *iter;
         handler->SetManager(manager);
     }

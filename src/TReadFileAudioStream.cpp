@@ -33,7 +33,7 @@ research@grame.fr
 #define snprintf _snprintf
 #endif
 
-TReadFileAudioStream::TReadFileAudioStream(string name, long beginFrame): TFileAudioStream(name)
+TReadFileAudioStream::TReadFileAudioStream(std::string name, long beginFrame): TFileAudioStream(name)
 {
     memset(&fInfo, 0, sizeof(fInfo));
     char utf8name[512] = {0};

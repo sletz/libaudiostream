@@ -41,7 +41,7 @@ struct TCommand : public la_smartable1 {
 
         SymbolicDate fStartDate;
 
-        inline audio_frame_t GetDate(map<SymbolicDate, audio_frame_t>& date_map, SymbolicDate date)
+		inline audio_frame_t GetDate(std::map<SymbolicDate, audio_frame_t>& date_map, SymbolicDate date)
         {
             if (date_map.find(date) == date_map.end()) {
                 date_map[date] = date->getDate();
@@ -64,7 +64,7 @@ struct TCommand : public la_smartable1 {
         {}
 
         virtual bool Execute(TNonInterleavedAudioBuffer<float>* buffer,
-                            map<SymbolicDate, audio_frame_t>& date_map,
+		                    std::map<SymbolicDate, audio_frame_t>& date_map,
                             audio_frame_t cur_frame,
                             long frames) = 0;
 
@@ -116,19 +116,19 @@ typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
 struct TEffectControlCommand : public TControlCommand {
 
         TAudioEffectInterfacePtr fEffect;
-        string fPath;
+		std::string fPath;
         float fValue;
 
         TEffectControlCommand()
         {}
-        TEffectControlCommand(TAudioEffectInterfacePtr effect, const string& path, float value, SymbolicDate date)
+		TEffectControlCommand(TAudioEffectInterfacePtr effect, const std::string& path, float value, SymbolicDate date)
             : TControlCommand(date), fEffect(effect), fPath(path), fValue(value)
         {}
         virtual ~TEffectControlCommand()
         {}
 
         bool Execute(TNonInterleavedAudioBuffer<float>* buffer,
-                    map<SymbolicDate, audio_frame_t>& date_map,
+		            std::map<SymbolicDate, audio_frame_t>& date_map,
                     audio_frame_t cur_frame,
                     long frames)
         {
@@ -162,7 +162,7 @@ struct TExternalControlCommand : public TCommand {
         {}
 
         bool Execute(TSharedNonInterleavedAudioBuffer<float>& shared_buffer,
-                    map<SymbolicDate, audio_frame_t>& date_map,
+		            std::map<SymbolicDate, audio_frame_t>& date_map,
                     audio_frame_t cur_frame,
                     long frames)
         {
@@ -198,7 +198,7 @@ struct TStreamCommand : public TCommand {
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }
 
         bool Execute(TNonInterleavedAudioBuffer<float>* buffer,
-                    map<SymbolicDate, audio_frame_t>& date_map,
+		            std::map<SymbolicDate, audio_frame_t>& date_map,
                     audio_frame_t cur_frame,
                     long frames)
         {
@@ -275,7 +275,7 @@ typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 // Class TCommandList
 //--------------------
 
-class TCommandList : public list<TCommandPtr>
+class TCommandList : public std::list<TCommandPtr>
 {
 
     private:
@@ -341,8 +341,8 @@ class TExpAudioMixer : public TAudioClient
 {
 
     private:
-        COMMANDS fStreamCommands;     // List of stream commands
-        COMMANDS fControlCommands;    // List of control commands
+		COMMANDS fStreamCommands;     // std::list of stream commands
+		COMMANDS fControlCommands;    // std::list of control commands
 
         audio_frame_t fCurFrame = 0;
 
@@ -355,13 +355,13 @@ class TExpAudioMixer : public TAudioClient
 
 
         void ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer,
-                                map<SymbolicDate, audio_frame_t>& date_map,
+		                        std::map<SymbolicDate, audio_frame_t>& date_map,
                                 audio_frame_t cur_frame,
                                 long offset,
                                 long slice);
 
         void ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer,
-                                map<SymbolicDate, audio_frame_t>& date_map,
+		                        std::map<SymbolicDate, audio_frame_t>& date_map,
                                 audio_frame_t cur_frame,
                                 long offset,
                                 long slice);

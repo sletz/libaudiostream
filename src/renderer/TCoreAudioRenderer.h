@@ -92,7 +92,7 @@ class TCoreAudioRenderer : public TAudioRenderer
         static OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name);
                                             
         static OSStatus CreateAggregateDevice(AudioDeviceID captureDeviceID, AudioDeviceID playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
-        static OSStatus CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
+		static OSStatus CreateAggregateDeviceAux(std::vector<AudioDeviceID> captureDeviceID, std::vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice);
         static OSStatus DestroyAggregateDevice(AudioDeviceID id);
         
         static void InitTime();

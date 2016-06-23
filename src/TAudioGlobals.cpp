@@ -66,15 +66,15 @@ TCmdManagerPtr TDTRendererAudioStream::fManager = 0;
 TCmdManagerPtr TRTRendererAudioStream::fManager = 0;
 
 // Local effect factory
-std::map<string, TLocalCodeFaustAudioEffectFactory*> TAudioGlobals::fLocalFactoryTable;
+std::map<std::string, TLocalCodeFaustAudioEffectFactory*> TAudioGlobals::fLocalFactoryTable;
 int TAudioGlobals::fLocalFactoryNumber = 0;
 
 // Remote effect factory
-std::map<string, TRemoteCodeFaustAudioEffectFactory*> TAudioGlobals::fRemoteFactoryTable;
+std::map<std::string, TRemoteCodeFaustAudioEffectFactory*> TAudioGlobals::fRemoteFactoryTable;
 int TAudioGlobals::fRemoteFactoryNumber = 0;
 
 // Effect table
-std::map<std::string, list <TAudioEffectInterfacePtr> > TAudioGlobals::fEffectTable;
+std::map<std::string, std::list <TAudioEffectInterfacePtr> > TAudioGlobals::fEffectTable;
 
 #ifdef WIN32
 static int SetMaximumFiles(long filecount)

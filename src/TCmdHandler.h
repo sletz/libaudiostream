@@ -27,8 +27,6 @@ research@grame.fr
 #include "TBinaryAudioStream.h"
 #include <list>
 
-using namespace std;
-
 //-------------------
 // Class TCmdHandler
 //-------------------
@@ -65,7 +63,7 @@ typedef TCmdHandler * TCmdHandlerPtr;
 \brief A STL list which contains the TCmdHandler nodes of a stream tree.
 */
 
-class TCmdHandlerList : public list<TCmdHandlerPtr>
+class TCmdHandlerList : public std::list<TCmdHandlerPtr>
 {
 
     private:

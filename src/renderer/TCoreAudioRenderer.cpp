@@ -242,7 +242,7 @@ OSStatus TCoreAudioRenderer::CreateAggregateDevice(AudioDeviceID captureDeviceID
     UInt32 outSize = sizeof(sub_device);
 
     err = AudioDeviceGetProperty(captureDeviceID, 0, kAudioDeviceSectionGlobal, kAudioAggregateDevicePropertyActiveSubDeviceList, &outSize, sub_device);
-    vector<AudioDeviceID> captureDeviceIDArray;
+	std::vector<AudioDeviceID> captureDeviceIDArray;
 
     if (err != noErr) {
         //printf("Input device does not have subdevices\n");
@@ -257,7 +257,7 @@ OSStatus TCoreAudioRenderer::CreateAggregateDevice(AudioDeviceID captureDeviceID
 
     outSize = sizeof(sub_device);
     err = AudioDeviceGetProperty(playbackDeviceID, 0, kAudioDeviceSectionGlobal, kAudioAggregateDevicePropertyActiveSubDeviceList, &outSize, sub_device);
-    vector<AudioDeviceID> playbackDeviceIDArray;
+	std::vector<AudioDeviceID> playbackDeviceIDArray;
 
     if (err != noErr) {
         //printf("Output device does not have subdevices\n");
@@ -273,7 +273,7 @@ OSStatus TCoreAudioRenderer::CreateAggregateDevice(AudioDeviceID captureDeviceID
     return CreateAggregateDeviceAux(captureDeviceIDArray, playbackDeviceIDArray, samplerate, outAggregateDevice);
 }
 
-OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> captureDeviceID, vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice)
+OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(std::vector<AudioDeviceID> captureDeviceID, std::vector<AudioDeviceID> playbackDeviceID, int samplerate, AudioDeviceID* outAggregateDevice)
 {
     OSStatus osErr = noErr;
     UInt32 outSize;
@@ -471,7 +471,7 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
     // we need to append the UID for each device to a CFMutableArray, so create one here
     CFMutableArrayRef subDevicesArray = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);
 
-    vector<CFStringRef> captureDeviceUID;
+	std::vector<CFStringRef> captureDeviceUID;
     for (UInt32 i = 0; i < captureDeviceID.size(); i++) {
         CFStringRef ref = GetDeviceName(captureDeviceID[i]);
         if (ref == NULL) {
@@ -482,7 +482,7 @@ OSStatus TCoreAudioRenderer::CreateAggregateDeviceAux(vector<AudioDeviceID> capt
         CFArrayAppendValue(subDevicesArray, ref);
    }
 
-    vector<CFStringRef> playbackDeviceUID;
+	std::vector<CFStringRef> playbackDeviceUID;
     for (UInt32 i = 0; i < playbackDeviceID.size(); i++) {
         CFStringRef ref = GetDeviceName(playbackDeviceID[i]);
         if (ref == NULL) {

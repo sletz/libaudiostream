@@ -32,7 +32,7 @@ research@grame.fr
 /*--------------------------------------------------------------------------*/
 
 void TExpAudioMixer::ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer,
-                                        map<SymbolicDate, audio_frame_t>& date_map,
+                                        std::map<SymbolicDate, audio_frame_t>& date_map,
                                         audio_frame_t cur_frame,
                                         long offset_in_control,
                                         long control_slice)
@@ -72,7 +72,7 @@ long TExpAudioMixer::GetNextControlOffset(audio_frame_t cur_frame, long frames)
 Render all streams inside a "slice" in a buffer.
 */
 void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer,
-                                        map<SymbolicDate, audio_frame_t>& date_map,
+                                        std::map<SymbolicDate, audio_frame_t>& date_map,
                                         audio_frame_t cur_frame,
                                         long offset_in_stream,
                                         long stream_slice)
@@ -127,7 +127,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     long offset_in_control = 0;
     long offset_in_stream = 0;
     long stream_slice = 0;
-    map<SymbolicDate, audio_frame_t> date_map;
+	std::map<SymbolicDate, audio_frame_t> date_map;
 
     // Possibly render slices in presence of control
     while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames) {
