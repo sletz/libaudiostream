@@ -26,7 +26,9 @@ research@grame.fr
 #include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
+#if !defined(_MSC_VER)
 #include <unistd.h>
+#endif
 
 #if defined(__APPLE__) || defined(linux)
 
@@ -40,7 +42,7 @@ void* TThreadCmdManager::CmdHandler(void* arg)
         pthread_cond_wait(&manager->fCond, &manager->fLock);
     }
     pthread_mutex_unlock(&manager->fLock);
-    
+
     pthread_exit(0);
     return 0;
 }
@@ -53,7 +55,7 @@ DWORD WINAPI TThreadCmdManager::CmdHandler(void* arg)
 
     while (manager->fRunning) {
         manager->RunAux();
-		WaitForSingleObject(manager->fCond, INFINITE);
+        WaitForSingleObject(manager->fCond, INFINITE);
     }
 
     return 0;
@@ -72,20 +74,20 @@ void TThreadCmdManager::RunAux()
 }
 
 TThreadCmdManager::TThreadCmdManager(long thread_num)
-{   
+{
     TCmd* cmd;
-	int i;
-    
+    int i;
+
     fRunning = true;
 
     // Init variables
     lfinit(&fFreeCmd);
 
-#if defined(__APPLE__) || defined(linux)   
-	pthread_mutex_init(&fLock, NULL);
+#if defined(__APPLE__) || defined(linux)
+    pthread_mutex_init(&fLock, NULL);
     pthread_cond_init(&fCond, NULL);
 #elif WIN32
-	fCond = CreateEvent(NULL, FALSE, FALSE, NULL);
+    fCond = CreateEvent(NULL, FALSE, FALSE, NULL);
 #endif
 
     // Preallocate commands
@@ -95,10 +97,10 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
             lfpush(&fFreeCmd, (lifocell*)cmd);
         }
     }
-	fifoinit(&fRunningCmd);
+    fifoinit(&fRunningCmd);
 
 #if defined(__APPLE__) || defined(linux)
-	struct sched_param param;
+    struct sched_param param;
     param.sched_priority = 99;
     for (i = 0; i < thread_num; i++) {
         pthread_t thread;
@@ -106,9 +108,9 @@ TThreadCmdManager::TThreadCmdManager(long thread_num)
         fThreadList.push_back(thread);
     }
 #elif WIN32
-	for (i = 0; i < thread_num; i++) {
-		DWORD id;
-		HANDLE thread = CreateThread(NULL, 0, CmdHandler, (void*)this, 0, &id);
+    for (i = 0; i < thread_num; i++) {
+        DWORD id;
+        HANDLE thread = CreateThread(NULL, 0, CmdHandler, (void*)this, 0, &id);
         fThreadList.push_back(thread);
     }
 #endif
@@ -118,11 +120,11 @@ TThreadCmdManager::~TThreadCmdManager()
 {
     TCmd* cmd;
     TCmd* next;
-    
+
     // Stop the threads...
     fRunning = false;
-    
-#if defined(__APPLE__) || defined(linux)      
+
+#if defined(__APPLE__) || defined(linux)
     pthread_mutex_lock(&fLock);
     pthread_cond_broadcast(&fCond);
     pthread_mutex_unlock(&fLock);
@@ -130,30 +132,30 @@ TThreadCmdManager::~TThreadCmdManager()
     fifoput(&fRunningCmd, (fifocell*)cmd);
     SetEvent(fCond);
 #endif
-    
+
     // Wait for thread exit
     for (unsigned int i = 0; i < fThreadList.size(); i++) {
-	#if defined(__APPLE__) || defined(linux)
+    #if defined(__APPLE__) || defined(linux)
         pthread_cancel(fThreadList[i]);
-        pthread_join(fThreadList[i], NULL); 
+        pthread_join(fThreadList[i], NULL);
     #elif WIN32
-		TerminateThread(fThreadList[i],0);
-		//WaitForSingleObject(fThreadList[i], INFINITE);
+        TerminateThread(fThreadList[i],0);
+        //WaitForSingleObject(fThreadList[i], INFINITE);
     #endif
-    }  
+    }
 
-	#if defined(__APPLE__) || defined(linux)
-		pthread_mutex_destroy(&fLock);
-		pthread_cond_destroy(&fCond);
-	#elif WIN32
-		CloseHandle(fCond);
-	#endif
+    #if defined(__APPLE__) || defined(linux)
+        pthread_mutex_destroy(&fLock);
+        pthread_cond_destroy(&fCond);
+    #elif WIN32
+        CloseHandle(fCond);
+    #endif
 
     // Free structures
     while ((cmd = (TCmd*)lfpop(&fFreeCmd))) {
         free(cmd);
-	}
-	cmd = (TCmd*)fifoflush(&fRunningCmd);
+    }
+    cmd = (TCmd*)fifoflush(&fRunningCmd);
     while (cmd) {
         next = cmd->link;
         free(cmd);
@@ -183,16 +185,16 @@ void TThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long arg3, 
         cmd->arg3 = arg3;
         cmd->arg4 = arg4;
         cmd->arg5 = arg5;
-	// Signal the condition to wake the thread
-	#if defined(__APPLE__) || defined(linux)      
+    // Signal the condition to wake the thread
+    #if defined(__APPLE__) || defined(linux)
         pthread_mutex_lock(&fLock);
         fifoput(&fRunningCmd, (fifocell*)cmd);
         pthread_cond_signal(&fCond);
         pthread_mutex_unlock(&fLock);
-	#elif WIN32
-		fifoput(&fRunningCmd, (fifocell*)cmd);
-		SetEvent(fCond);
-	#endif
+    #elif WIN32
+        fifoput(&fRunningCmd, (fifocell*)cmd);
+        SetEvent(fCond);
+    #endif
     } else {
         printf("Error : empty cmd lifo\n");
     }
@@ -210,7 +212,7 @@ void* TWaitThreadCmdManager::CmdHandler(void* arg)
         manager->RunAux();
         usleep(500000);
     }
-    
+
     pthread_exit(0);
     return 0;
 }
@@ -223,7 +225,7 @@ DWORD WINAPI TWaitThreadCmdManager::CmdHandler(void* arg)
 
     while (manager->fRunning) {
         manager->RunAux();
-		WaitForSingleObject(manager->fCond, INFINITE);
+        WaitForSingleObject(manager->fCond, INFINITE);
     }
 
     return 0;
@@ -242,10 +244,10 @@ void TWaitThreadCmdManager::RunAux()
 }
 
 TWaitThreadCmdManager::TWaitThreadCmdManager(long thread_num)
-{   
+{
     TCmd* cmd;
-	int i;
-    
+    int i;
+
     fRunning = true;
 
     // Init variables
@@ -258,10 +260,10 @@ TWaitThreadCmdManager::TWaitThreadCmdManager(long thread_num)
             lfpush(&fFreeCmd, (lifocell*)cmd);
         }
     }
-	fifoinit(&fRunningCmd);
+    fifoinit(&fRunningCmd);
 
 #if defined(__APPLE__) || defined(linux)
-	struct sched_param param;
+    struct sched_param param;
     param.sched_priority = 99;
     for (i = 0; i < thread_num; i++) {
         pthread_t thread;
@@ -269,9 +271,9 @@ TWaitThreadCmdManager::TWaitThreadCmdManager(long thread_num)
         fThreadList.push_back(thread);
     }
 #elif WIN32
-	for (i = 0; i < thread_num; i++) {
-		DWORD id;
-		HANDLE thread = CreateThread(NULL, 0, CmdHandler, (void*)this, 0, &id);
+    for (i = 0; i < thread_num; i++) {
+        DWORD id;
+        HANDLE thread = CreateThread(NULL, 0, CmdHandler, (void*)this, 0, &id);
         fThreadList.push_back(thread);
     }
 #endif
@@ -281,26 +283,26 @@ TWaitThreadCmdManager::~TWaitThreadCmdManager()
 {
     TCmd* cmd;
     TCmd* next;
-    
+
     // Stop the threads...
     fRunning = false;
-    
+
     // Wait for thread exit
     for (unsigned int i = 0; i < fThreadList.size(); i++) {
-	#if defined(__APPLE__) || defined(linux)
+    #if defined(__APPLE__) || defined(linux)
         pthread_cancel(fThreadList[i]);
-        pthread_join(fThreadList[i], NULL); 
+        pthread_join(fThreadList[i], NULL);
     #elif WIN32
-		TerminateThread(fThreadList[i],0);
-		//WaitForSingleObject(fThreadList[i], INFINITE);
+        TerminateThread(fThreadList[i],0);
+        //WaitForSingleObject(fThreadList[i], INFINITE);
     #endif
-    }  
+    }
 
     // Free structures
     while ((cmd = (TCmd*)lfpop(&fFreeCmd))) {
         free(cmd);
-	}
-	cmd = (TCmd*)fifoflush(&fRunningCmd);
+    }
+    cmd = (TCmd*)fifoflush(&fRunningCmd);
     while (cmd) {
         next = cmd->link;
         free(cmd);
@@ -322,7 +324,7 @@ void TWaitThreadCmdManager::ExecCmdAux(CmdPtr fun, long arg1, long arg2, long ar
     // Get a command structure from the free command list
     // fills it and push it on the running list
     TCmd* cmd = (TCmd*)lfpop(&fFreeCmd);
-   
+
     if (cmd) {
         cmd->fun = fun;
         cmd->arg1 = arg1;

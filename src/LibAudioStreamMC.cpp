@@ -73,7 +73,7 @@ research@grame.fr
 
     typedef void (*StopCallback)(void* context);
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !defined(_MSC_VER)
 extern "C"
 {
 #endif
@@ -274,7 +274,7 @@ extern "C"
 
     AUDIOAPI long SetTimedControlValueEffect(AudioPlayerPtr player, const char* effect, const char* path, float value, SymbolicDate date);
 
-#ifdef __cplusplus
+#if defined(__cplusplus) && !defined(_MSC_VER)
 }
 #endif
 
@@ -1433,7 +1433,11 @@ AUDIOAPI long GetDeviceCount(long renderer)
             return TPortAudioV19Renderer::GetDeviceCount();
     #endif
 #else
-    #warning PortAudio renderer is not compiled
+    #ifdef WIN32
+        #pragma message ("warning: PortAudio renderer is not compiled")
+    #else
+        #warning PortAudio renderer is not compiled
+    #endif
             return 0;
 #endif
 #ifdef __JACK__
@@ -1479,7 +1483,11 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
             break;
     #endif
 #else
-    #warning PortAudio renderer is not compiled
+    #ifdef WIN32
+        #pragma message ("PortAudio renderer is not compiled")
+    #else
+        #warning PortAudio renderer is not compiled
+    #endif
 #endif
 #ifdef __JACK__
         case kJackRenderer:
@@ -1525,7 +1533,11 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
             return TPortAudioV19Renderer::GetDefaultInputDevice();
     #endif
 #else
-    #warning PortAudio renderer is not compiled
+    #ifdef WIN32
+        #pragma message ("PortAudio renderer is not compiled")
+    #else
+        #warning PortAudio renderer is not compiled
+    #endif
 #endif
 #ifdef __JACK__
         case kJackRenderer:
@@ -1567,7 +1579,11 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
             return TPortAudioV19Renderer::GetDefaultOutputDevice();
     #endif
 #else
-    #warning PortAudio renderer is not compiled
+    #ifdef WIN32
+        #pragma message ("PortAudio renderer is not compiled")
+    #else
+        #warning PortAudio renderer is not compiled
+    #endif
 #endif
 #ifdef __JACK__
         case kJackRenderer:

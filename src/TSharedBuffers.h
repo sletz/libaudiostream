@@ -22,7 +22,7 @@ research@grame.fr
 
 #ifndef __TSharedBuffers_
 #define __TSharedBuffers_
-
+#include "AudioExports.h"
 // Global input/output buffers
 
 //----------------------
@@ -32,14 +32,14 @@ research@grame.fr
 \brief Shared audio buffers.
 */
 
-class TSharedBuffers
+class AUDIO_EXPORTS TSharedBuffers
 {
-  
+
     public:
 
         static float** fInBuffer;
         static float** fOutBuffer;
-        
+
         static long fInputOffset;
         static long fOutputOffset;
 
@@ -47,7 +47,7 @@ class TSharedBuffers
         {
             return fInBuffer;
         }
-        
+
         static float** GetInBuffer(long framesNum, long channels, float** res)
         {
             for (int i = 0; i < channels; i++) {
@@ -57,12 +57,12 @@ class TSharedBuffers
             fInputOffset += framesNum;
             return res;
         }
-        
+
         static float** GetOutBuffer()
         {
             return fOutBuffer;
         }
-        
+
         static float** GetOutBuffer(long framesNum, long channels, float** res)
         {
             for (int i = 0; i < channels; i++) {
@@ -77,7 +77,7 @@ class TSharedBuffers
             fInBuffer = input;
             fInputOffset = 0;
         }
-        
+
         static void SetOutBuffer(float** output)
         {
             fOutBuffer = output;

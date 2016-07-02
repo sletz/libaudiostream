@@ -47,5 +47,23 @@ research@grame.fr
 #define AUDIO_EXPORTS
 #endif
 
+
+// This was in la_smartpointer.h. Maybe
+// LA_EXPORT and AUDIO_EXPORTS should be merged ?
+#ifdef WIN32
+# ifdef LIBAUDIOSTREAM_EXPORTS
+#  define LA_EXPORT _declspec (dllexport)
+# else
+#  define LA_EXPORT _declspec (dllimport)
+# endif
+#elif __APPLE__
+# ifdef LIBAUDIOSTREAM_EXPORTS
+#  define LA_EXPORT __attribute__ ((visibility("default")))
+# else
+#  define LA_EXPORT
+# endif
+#else
+# define LA_EXPORT
+#endif
 #endif
 

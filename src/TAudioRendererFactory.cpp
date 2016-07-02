@@ -31,11 +31,11 @@ research@grame.fr
 #endif
 
 #ifdef __PORTAUDIO__
-	#ifdef __PORTAUDIOV19__
-		#include "TPortAudioV19Renderer.h"
-	#else
-		#include "TPortAudioRenderer.h"
-	#endif
+    #ifdef __PORTAUDIOV19__
+        #include "TPortAudioV19Renderer.h"
+    #else
+        #include "TPortAudioRenderer.h"
+    #endif
 #endif
 
 #ifdef __COREAUDIO__
@@ -47,58 +47,62 @@ research@grame.fr
 TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
 {
     TAudioGlobals::ClearLibError();
-	try {
-		switch (renderer) {
-                
+    try {
+        switch (renderer) {
+
             case kOffLineAudioRenderer:
                 return new TOfflineRenderer();
 
-			case kPortAudioRenderer:
-			#ifdef __PORTAUDIO__
-				#ifdef __PORTAUDIOV19__
-					return new TPortAudioV19Renderer(); 
-				#else
-					return new TPortAudioRenderer();
-				#endif
-			#else
-			#warning PortAudio renderer is not compiled
-				return NULL;
-			#endif
+            case kPortAudioRenderer:
+            #ifdef __PORTAUDIO__
+                #ifdef __PORTAUDIOV19__
+                    return new TPortAudioV19Renderer();
+                #else
+                    return new TPortAudioRenderer();
+                #endif
+            #else
+                #ifdef WIN32
+                    #pragma message ("PortAudio renderer is not compiled")
+             #else
+                  #warning PortAudio renderer is not compiled
+             #endif
+                return NULL;
+            #endif
 
-			case kJackRenderer:
-			#ifdef __JACK__
-				return new TJackRenderer();
-			#else
-			#ifdef WIN32
-				#pragma message ("Jack renderer is not compiled")
-			#else
-				#warning Jack renderer is not compiled
-			#endif
-				return NULL;
-			#endif
-            
+            case kJackRenderer:
+            #ifdef __JACK__
+                return new TJackRenderer();
+            #else
+            #ifdef WIN32
+                #pragma message ("Jack renderer is not compiled")
+            #else
+                #warning Jack renderer is not compiled
+            #endif
+                return NULL;
+            #endif
+
             case kNetJackRenderer:
             #ifdef __JACK__
-				return new TNetJackRenderer(-1, DEFAULT_MULTICAST_IP, DEFAULT_PORT, DEFAULT_MTU, 5);
-			#endif
-		
-			 case kCoreAudioRenderer:
-			#ifdef __COREAUDIO__
-				return new TCoreAudioRenderer();
-			#else
-			#ifdef WIN32
-				#pragma message ("CoreAudio renderer is not compiled")
-			#else
-				#warning CoreAudio renderer is not compiled
-			#endif
-				return NULL;
-			#endif
-				
-			default:
-				return NULL;
-		}
-	} catch (...) {
+                return new TNetJackRenderer(-1, DEFAULT_MULTICAST_IP, DEFAULT_PORT, DEFAULT_MTU, 5);
+            #endif
+
+             case kCoreAudioRenderer:
+            #ifdef __COREAUDIO__
+                return new TCoreAudioRenderer();
+            #else
+            #ifdef WIN32
+                #pragma message ("CoreAudio renderer is not compiled")
+            #else
+                #warning CoreAudio renderer is not compiled
+            #endif
+                return NULL;
+            #endif
+
+            default:
+                return NULL;
+        }
+    } catch (...) {
         TAudioGlobals::AddLibError("Renderer allocation error");
         return NULL;
-	}
+    }
 }

@@ -77,14 +77,14 @@ class UIObject {
 
     protected:
 
-		std::string fLabel;
+        std::string fLabel;
         FAUSTFLOAT* fZone;
 
         float Range(FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT val) {return (val < min) ? min : (val > max) ? max : val;}
 
     public:
 
-		UIObject(const std::string& label, FAUSTFLOAT* zone):fLabel(label),fZone(zone) {}
+        UIObject(const std::string& label, FAUSTFLOAT* zone):fLabel(label),fZone(zone) {}
         virtual ~UIObject() {}
 
         virtual void SetControlValue(float value) {*fZone = Range(0.0f, 1.0f, value);}
@@ -96,7 +96,7 @@ class UIObject {
             *max = 0;
             *init = 0;
         }
-		std::string GetLabel() { return fLabel; }
+        std::string GetLabel() { return fLabel; }
 
 };
 
@@ -104,7 +104,7 @@ class CheckButton : public UIObject {
 
     public:
 
-		CheckButton(const std::string& label, FAUSTFLOAT* zone):UIObject(label, zone) {}
+        CheckButton(const std::string& label, FAUSTFLOAT* zone):UIObject(label, zone) {}
         virtual ~CheckButton() {}
 };
 
@@ -112,7 +112,7 @@ class Button : public UIObject {
 
     public:
 
-		Button(const std::string& label, FAUSTFLOAT* zone):UIObject(label, zone) {}
+        Button(const std::string& label, FAUSTFLOAT* zone):UIObject(label, zone) {}
         virtual ~Button() {}
 };
 
@@ -127,7 +127,7 @@ class Slider : public UIObject {
 
     public:
 
-		Slider(const std::string& label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
+        Slider(const std::string& label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
             :UIObject(label, zone),fInit(init),fMin(min),fMax(max),fStep(step) {}
         virtual ~Slider() {}
 
@@ -151,7 +151,7 @@ class Bargraph : public UIObject {
 
     public:
 
-		Bargraph(const std::string& label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max)
+        Bargraph(const std::string& label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max)
             :UIObject(label,zone),fMin(min),fMax(max) {}
         virtual ~Bargraph() {}
 
@@ -182,8 +182,8 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 {
     protected:
 
-		std::vector<UIObject*> fUITable;
-		std::vector<std::string> fControlsLevel;
+        std::vector<UIObject*> fUITable;
+        std::vector<std::string> fControlsLevel;
 
         TFaustAudioEffectBase* CopyState(TFaustAudioEffectBase* src)
         {
@@ -194,9 +194,9 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
             return this;
         }
 
-		std::string buildPath(const std::string& label)
+        std::string buildPath(const std::string& label)
         {
-			std::string res = "/";
+            std::string res = "/";
             for (size_t i = 0; i < fControlsLevel.size(); i++) {
                 res += fControlsLevel[i];
                 res += "/";
@@ -211,7 +211,7 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         {}
         virtual ~TFaustAudioEffectBase()
         {
-			for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
+            for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
                 delete *iter;
             }
         }
@@ -279,7 +279,7 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 
         void SetControlValue(const char* label, FAUSTFLOAT value)
         {
-			for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
+            for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
                 if (strcmp((*iter)->GetLabel().c_str(), label) == 0) {
                     (*iter)->SetControlValue(value);
                     return;
@@ -294,8 +294,8 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 
         FAUSTFLOAT GetControlValue(const char* label)
         {
-			for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-				if ((*iter)->GetLabel() == std::string(label)) {
+            for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
+                if ((*iter)->GetLabel() == std::string(label)) {
                     return (*iter)->GetControlValue();
                 }
             }
@@ -317,7 +317,7 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 
     private:
 
-		std::string fName;
+        std::string fName;
         HANDLER fHandle;
         dsp* fDsp;
         newDsp fNew;
@@ -331,13 +331,13 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
 
     public:
 
-		TModuleFaustAudioEffect(const std::string& name): TFaustAudioEffectBase()
+        TModuleFaustAudioEffect(const std::string& name): TFaustAudioEffectBase()
         {
             fName = name;
             fHandle = LoadFaustModule(name.c_str());
             if (!fHandle) {
-				std::stringstream error;
-				error << "Cannot LoadFaustModule " << name << std::endl;
+                std::stringstream error;
+                error << "Cannot LoadFaustModule " << name << std::endl;
                 throw TLASException(error.str());
             }
             fNew = (newDsp)GetFaustProc(fHandle, "newDsp");
@@ -361,8 +361,8 @@ class TModuleFaustAudioEffect : public TFaustAudioEffectBase
             if (fGetNumInputs(fDsp) != 2 || fGetNumOutputs(fDsp) != 2) { // Temporary
                 fDelete(fDsp);
                 UnloadFaustModule(fHandle);
-				std::stringstream error;
-				error << "DSP instance is not stereo and has " << fGetNumInputs(fDsp) << " ins and " << fGetNumOutputs(fDsp) << " outs" << std::endl;
+                std::stringstream error;
+                error << "DSP instance is not stereo and has " << fGetNumInputs(fDsp) << " ins and " << fGetNumOutputs(fDsp) << " outs" << std::endl;
                 throw TLASException(error.str());
             }
             fBuildUserInterface(fDsp, this);
@@ -408,12 +408,12 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase {
 
     protected:
 
-		std::string fName;
-		std::string fJSON;
+        std::string fName;
+        std::string fJSON;
 
         struct Name_Meta : public Meta
         {
-				std::string fName;
+                std::string fName;
 
             Name_Meta():fName("")
             {}
@@ -433,7 +433,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase {
         virtual ~TCodeFaustAudioEffect()
         {}
 
-		virtual TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path) = 0;
+        virtual TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path) = 0;
 
 };
 
@@ -445,18 +445,18 @@ class TCodeFaustAudioEffectFactory
 
     protected:
 
-		std::string fLibraryPath;
-		std::string fDrawPath;
-		std::string fCode;
+        std::string fLibraryPath;
+        std::string fDrawPath;
+        std::string fCode;
 
     public:
 
         TCodeFaustAudioEffectFactory()
         {}
 
-		std::string GetLibraryPath() { return fDrawPath; }
-		std::string GetDrawPath() { return fDrawPath; }
-		virtual std::string GetCode() { return ""; }
+        std::string GetLibraryPath() { return fDrawPath; }
+        std::string GetDrawPath() { return fDrawPath; }
+        virtual std::string GetCode() { return ""; }
 
         // Duplicate a Faust effect 'num' times
         static TCodeFaustAudioEffect* DuplicateEffect(TAudioEffectInterface* effect, int num);
@@ -478,7 +478,7 @@ class TLocalCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory
 
         llvm_dsp_factory* fFactory;
 
-		std::string GetTarget()
+        std::string GetTarget()
         {
 #if defined(__APPLE__)
             return (sizeof(int*) == 8) ? "x86_64-apple-darwin12.2.1" : "i386-apple-darwin10.6.0";
@@ -494,7 +494,7 @@ class TLocalCodeFaustAudioEffectFactory : public TCodeFaustAudioEffectFactory
 
         llvm_dsp_factory* GetFactory() { return fFactory; }
 
-		static TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path);
+        static TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path);
 
 };
 
@@ -511,12 +511,12 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
     protected:
 
         remote_dsp_factory* fFactory;
-		std::string fRemoteIP;
+        std::string fRemoteIP;
         int fRemotePort;
 
     public:
 
-		TRemoteCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
+        TRemoteCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
         {
         #if REMOTE_DSP
             int argc = 0;
@@ -563,8 +563,8 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 TAudioGlobals::fRemoteFactoryTable[code] = this;
                 TAudioGlobals::fRemoteFactoryNumber++;
             }  else {
-				std::stringstream error;
-				error << "createRemoteDSPFactoryFromString error from DSP file " << error_msg << std::endl;
+                std::stringstream error;
+                error << "createRemoteDSPFactoryFromString error from DSP file " << error_msg << std::endl;
                 throw TLASException(error.str());
             }
         #endif
@@ -572,14 +572,14 @@ class TRemoteCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
 
         remote_dsp_factory* GetFactory() { return fFactory; }
 
-		static TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path);
+        static TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path);
 
-		std::string GetCode()
+        std::string GetCode()
         {
             return "environment { " + fCode  + " }.process";
         }
 
-		std::string GetRemoteIP() { return fRemoteIP; }
+        std::string GetRemoteIP() { return fRemoteIP; }
 
 };
 
@@ -592,7 +592,7 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
 
     public:
 
-		TFileCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
+        TFileCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
         {
             int argc = 0;
             const char* argv[16];
@@ -622,13 +622,13 @@ class TFileCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactor
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
             }  else {
-				std::stringstream error;
-				error << "createDSPFactoryFromFile error from DSP file " << error_msg << std::endl;
+                std::stringstream error;
+                error << "createDSPFactoryFromFile error from DSP file " << error_msg << std::endl;
                 throw TLASException(error.str());
             }
         }
 
-		std::string GetCode()
+        std::string GetCode()
         {
             return "component(\"" + fCode  + "\")";
         }
@@ -641,7 +641,7 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
 
     public :
 
-		TStringCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
+        TStringCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
         {
             int argc = 0;
             const char* argv[16];
@@ -672,13 +672,13 @@ class TStringCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFact
                 TAudioGlobals::fLocalFactoryTable[code] = this;
                 TAudioGlobals::fLocalFactoryNumber++;
             } else {
-				std::stringstream error;
-				error << "createDSPFactoryFromString error from DSP code " << error_msg << std::endl;
+                std::stringstream error;
+                error << "createDSPFactoryFromString error from DSP code " << error_msg << std::endl;
                 throw TLASException(error.str());
             }
         }
 
-		std::string GetCode()
+        std::string GetCode()
         {
             return "environment { " + fCode  + " }.process";
         }
@@ -691,13 +691,13 @@ class TIRCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory 
 
     public :
 
-		TIRCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
+        TIRCodeFaustAudioEffectFactory(const std::string& code, const std::string& library_path, const std::string& draw_path)
         {
             fCode = code;
             fLibraryPath = library_path;
             fDrawPath = draw_path;
 
-			// Try bitcode code std::string...
+            // Try bitcode code std::string...
             fFactory = readDSPFactoryFromBitcode(code, GetTarget(), 3);
             if (fFactory) {
                 goto end;
@@ -713,7 +713,7 @@ class TIRCodeFaustAudioEffectFactory : public TLocalCodeFaustAudioEffectFactory 
                 printf("readDSPFactoryFromBitcodeFile error\n");
             }
 
-			// Try IR code std::string...
+            // Try IR code std::string...
             fFactory = readDSPFactoryFromIR(code, GetTarget(), 3);
             if (fFactory) {
                 goto end;
@@ -749,9 +749,9 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
 
         static int fEffectIndex;
 
-		std::string GetLibraryPath() { return fFactory->GetLibraryPath(); }
-		std::string GetDrawPath() { return fFactory->GetDrawPath(); }
-		std::string GetCode() { return fFactory->GetCode(); }
+        std::string GetLibraryPath() { return fFactory->GetLibraryPath(); }
+        std::string GetDrawPath() { return fFactory->GetDrawPath(); }
+        std::string GetCode() { return fFactory->GetCode(); }
 
     public:
 
@@ -769,9 +769,9 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
             fDsp->buildUserInterface(this);
 
             Name_Meta meta;
-            metadataDSPFactory(fFactory->GetFactory(), &meta);
+            fDsp->metadata(&meta);
 
-			std::stringstream name;
+            std::stringstream name;
             if (meta.fName == "") {
                 name << "localEffect";
             } else {
@@ -814,20 +814,20 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
         const char* GetJson()
         {
             JSONUI builder(fDsp->getNumInputs(), fDsp->getNumOutputs());
-            metadataDSPFactory(fFactory->GetFactory(), &builder);
+            fDsp->metadata(&builder);
             fDsp->buildUserInterface(&builder);
             fJSON = builder.JSON();
             return fJSON.c_str();
         }
 
-		std::string GetName()
+        std::string GetName()
         {
             return fName;
         }
 
         TLocalCodeFaustAudioEffectFactory* GetFactory() { return fFactory; }
 
-		TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path)
+        TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path)
         {
             return TLocalCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
         }
@@ -868,9 +868,9 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         remote_dsp* fDsp;
         TRemoteCodeFaustAudioEffectFactory* fFactory;
 
-		std::string GetLibraryPath() { return fFactory->GetLibraryPath(); }
-		std::string GetDrawPath() { return fFactory->GetDrawPath(); }
-		std::string GetCode() { return fFactory->GetCode(); }
+        std::string GetLibraryPath() { return fFactory->GetLibraryPath(); }
+        std::string GetDrawPath() { return fFactory->GetDrawPath(); }
+        std::string GetCode() { return fFactory->GetCode(); }
 
         static int fEffectIndex;
 
@@ -913,7 +913,7 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
             Name_Meta meta;
             metadataRemoteDSPFactory(fFactory->GetFactory(), &meta);
 
-			std::stringstream name;
+            std::stringstream name;
             if (meta.fName == "") {
                 name << "remoteEffect";
             } else {
@@ -969,14 +969,14 @@ class TRemoteCodeFaustAudioEffect : public TCodeFaustAudioEffect
         #endif
         }
 
-		std::string GetName()
+        std::string GetName()
         {
             return fName;
         }
 
         TRemoteCodeFaustAudioEffectFactory* GetFactory() { return fFactory; }
 
-		TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path)
+        TCodeFaustAudioEffect* CreateEffect(const std::string& name, const std::string& library_path, const std::string& draw_path)
         {
             return TRemoteCodeFaustAudioEffectFactory::CreateEffect(name, library_path, draw_path);
         }

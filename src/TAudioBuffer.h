@@ -25,7 +25,6 @@ research@grame.fr
 #include <assert.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/mman.h>
 #include <iostream>
 
 #ifdef WIN32
@@ -55,6 +54,7 @@ research@grame.fr
     }
     #define MUNLOCK(ptr, size) VirtualUnlock((ptr), (size))
 #else
+#include <sys/mman.h>
     #define CHECK_MLOCK(ptr, size) (mlock((ptr), (size)) == 0)
     #define MUNLOCK(ptr, size) munlock((ptr), (size))
 #endif

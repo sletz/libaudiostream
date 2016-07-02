@@ -44,6 +44,7 @@ src/TRendererAudioStream.cpp
 src/TSelectAudioStream.cpp
 src/TSeqAudioStream.cpp
 src/TThreadCmdManager.cpp
+src/renderer/TAudioRenderer.cpp
 src/renderer/TOfflineRenderer.cpp
 
 # These files require Faust to build
@@ -77,16 +78,9 @@ src/TExpAudioMixer.cpp
 # src/tester.cpp
 
 # Renderers
-set(COREAUDIO_RENDERER
-	src/renderer/TAudioRenderer.cpp
-	src/renderer/TCoreAudioRenderer.cpp
-)
-set(PA18_RENDERER
-src/renderer/TPortAudioRenderer.cpp
-)
-set(PA19_RENDERER
-src/renderer/TPortAudioV19Renderer.cpp
-)
+set(COREAUDIO_RENDERER src/renderer/TCoreAudioRenderer.cpp)
+set(PA18_RENDERER src/renderer/TPortAudioRenderer.cpp)
+set(PA19_RENDERER src/renderer/TPortAudioV19Renderer.cpp)
 set(JACK_RENDERER
 src/renderer/TJackRenderer.cpp
 src/renderer/TAudioRenderer.cpp
@@ -118,6 +112,17 @@ find_package(Rubberband REQUIRED)
 find_package(Faust REQUIRED)
 
 add_library(libaudiostream ${CSRC} ${CPPSRC})
+if(WIN32)
+    target_compile_definitions(libaudiostream
+        PUBLIC WIN32
+        PRIVATE NOMINMAX)
+    set_target_properties(libaudiostream
+        PROPERTIES
+          WINDOWS_EXPORT_ALL_SYMBOLS 1)
+endif()
+target_compile_definitions(libaudiostream
+    PRIVATE LIBAUDIOSTREAM_EXPORTS)
+
 set_target_properties(
     libaudiostream
     PROPERTIES

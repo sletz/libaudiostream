@@ -25,26 +25,12 @@
 
 #include <cassert>
 #include <stdio.h>
+#include "AudioExports.h"
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
 
-#ifdef WIN32
-# ifdef LIBAUDIOSTREAM_EXPORTS
-#  define LA_EXPORT _declspec (dllexport)
-# else
-#  define LA_EXPORT _declspec (dllimport)
-# endif
-#elif __APPLE__
-# ifdef LIBAUDIOSTREAM_EXPORTS
-#  define LA_EXPORT __attribute__ ((visibility("default")))
-# else
-#  define LA_EXPORT
-# endif
-#else
-# define LA_EXPORT
-#endif
 
 /*!
 \brief the base class for smart pointers implementation
@@ -78,7 +64,7 @@ class LA_EXPORT la_smartable {
 
 class TCmdManager;
 
-class la_smartable1 : public la_smartable {
+class LA_EXPORT la_smartable1 : public la_smartable {
 
     private:
 

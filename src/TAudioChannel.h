@@ -23,21 +23,24 @@ research@grame.fr
 #ifndef __TAudioChannel__
 #define __TAudioChannel__
 
-#include <unistd.h>
 #include "TFadeAudioStream.h"
 #include "TRendererAudioStream.h"
 #include "TAudioEffect.h"
 #include "TPanTable.h"
 
 #ifdef WIN32
-	#if defined(_AFXDLL) || defined(_WINDLL)	// using mfc
-	#include <afx.h>
-	#else
-	#include <windows.h>// without mfc
-	#endif
-	#define AudioSleep(val) Sleep(val)
+    #if defined(_AFXDLL) || defined(_WINDLL)	// using mfc
+    #include <afx.h>
+    #else
+    #include <windows.h>// without mfc
+    #endif
+    #define AudioSleep(val) Sleep(val)
 #else
  #define AudioSleep(val) usleep(val*1000)
+#endif
+
+#if !defined(_MSC_VER)
+ #include <unistd.h>
 #endif
 
 typedef struct ChannelInfo * ChannelInfoPtr;
@@ -47,7 +50,7 @@ typedef struct ChannelInfo
     long fCurFrame;
     float fVol;
     float fPanLeft;
-	float fPanRight;
+    float fPanRight;
     long fLeftOut;
     long fRightOut;
 }
@@ -80,11 +83,11 @@ class TCallback
 
         void Activate()
         {
-			fStatus = true;
+            fStatus = true;
         }
         void Desactivate()
         {
-			fStatus = false;
+            fStatus = false;
         }
 };
 
@@ -112,11 +115,11 @@ class TStopCallback : public TCallback
 
         void Execute()
         {
-			if (fStatus && fCallback) {
+            if (fStatus && fCallback) {
                 fStatus = false;
                 fCallback(fContext);
-			}
-		}
+            }
+        }
 
         void SetCallback(StopCallback fun, void* context)
         {
@@ -146,16 +149,16 @@ class TAudioChannel
         TRTRendererAudioStream	fRendererStream;	// Renderer stream (set a real-time command manager for file stream)
         TAudioStreamPtr			fStream;			// Audio stream
         FLOAT_BUFFER            fMixBuffer; 		// Used for mixing
-		TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
-		TAudioEffectListManager	fEffectList;
+        TStopCallback			fStopCallback;		// Stop callback called when the stream is finished
+        TAudioEffectListManager	fEffectList;
 
         float fVol;			// Volume
         float fPanLeft;		// Pan for left signal
-		float fPanRight;	// Pan for right signal
-		float fLLVol;		// Volume for left output for left channel
-		float fLRVol;		// Volume for right output for left channel
-		float fRLVol;		// Volume for left output for right channel
-		float fRRVol;		// Volume for right output for right channel
+        float fPanRight;	// Pan for right signal
+        float fLLVol;		// Volume for left output for left channel
+        float fLRVol;		// Volume for right output for left channel
+        float fRLVol;		// Volume for left output for right channel
+        float fRRVol;		// Volume for right output for right channel
         long fLeftOut;		// Audio left out
         long fRightOut;		// Audio right out
         bool fInserted;		// Insertion state
@@ -168,12 +171,12 @@ class TAudioChannel
         // Control
         void SoundOn();
         void SoundOff(bool sync);
-	    void Reset();
+        void Reset();
 
         // Mixing
         bool Mix(FLOAT_BUFFER out, long framesNum, long channels);
-		
-		// To know if the channel is inserted in the active channel list
+
+        // To know if the channel is inserted in the active channel list
         void SetState(bool state)
         {
             fInserted = state;
@@ -182,14 +185,14 @@ class TAudioChannel
         int GetState()
         {
             return fInserted;
-        } 	
-		
+        }
+
         void GetInfo(ChannelInfoPtr info);
 
         void SetStream(TAudioStreamPtr stream);
         TAudioStreamPtr GetStream();
 
-		void SetLeft(long left)
+        void SetLeft(long left)
         {
             fLeftOut = left;
         }
@@ -197,21 +200,21 @@ class TAudioChannel
         {
             return fLeftOut;
         }
-		
+
         void SetRight(long right)
         {
             fRightOut = right;
         }
-		long GetRight()
+        long GetRight()
         {
             return fRightOut;
         }
 
-		void SetVol(float vol)
+        void SetVol(float vol)
         {
             fVol = vol;
-			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
-			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
+            TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
+            TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
         }
         float GetVol()
         {
@@ -221,19 +224,19 @@ class TAudioChannel
         {
             return fPanLeft;
         }
-		float GetPanRight()
+        float GetPanRight()
         {
             return fPanRight;
         }
-		void SetPan(float panLeft, float panRight)
+        void SetPan(float panLeft, float panRight)
         {
-		    fPanLeft = panLeft;
-			fPanRight = panRight;
-			TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
-			TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
-		}
-		
-		void SetStopCallback(StopCallback callback, void* context)
+            fPanLeft = panLeft;
+            fPanRight = panRight;
+            TPanTable::GetLR(fVol, fPanLeft, &fLLVol, &fLRVol);
+            TPanTable::GetLR(fVol, fPanRight, &fRLVol, &fRRVol);
+        }
+
+        void SetStopCallback(StopCallback callback, void* context)
         {
             fStopCallback.SetCallback(callback, context);
         }
@@ -242,10 +245,10 @@ class TAudioChannel
         {
             return fStopCallback.GetCallback();
         }
-		
-		void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
+
+        void SetEffectList(TAudioEffectListPtr effect_list, long fadeIn, long fadeOut)
         {
-			fEffectList.SetEffectList(effect_list, fadeIn, fadeOut);
+            fEffectList.SetEffectList(effect_list, fadeIn, fadeOut);
         }
 
         TAudioEffectListPtr GetEffectList()

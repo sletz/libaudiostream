@@ -15,57 +15,59 @@
 #ifndef __msAtomicWin32__
 #define __msAtomicWin32__
 
-#define inline __inline
+#if !defined(__cplusplus) && (defined(__STDC_VERSION__) && __STDC_VERSION__ < 199901L)
+#define inline __inline__
+#endif
 
 #ifndef __x86_64__
 
 #ifdef __SMP__
 #	define LOCK lock
 #else
-#	define LOCK 
+#	define LOCK
 #endif
 
 //----------------------------------------------------------------
 // CAS functions
 //----------------------------------------------------------------
-inline char CAS (volatile void * addr, volatile void * value, void * newvalue) 
+inline char CAS (volatile void * addr, volatile void * value, void * newvalue)
 {
-	register char c;
-	__asm {
-		push	ebx
-		push	esi
-		mov		esi, addr
-		mov		eax, value
-		mov		ebx, newvalue
-		LOCK cmpxchg dword ptr [esi], ebx
-		sete	c
-		pop		esi
-		pop		ebx
-	}
-	return c;
+    register char c;
+    __asm {
+        push	ebx
+        push	esi
+        mov		esi, addr
+        mov		eax, value
+        mov		ebx, newvalue
+        LOCK cmpxchg dword ptr [esi], ebx
+        sete	c
+        pop		esi
+        pop		ebx
+    }
+    return c;
 }
 
-inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2) 
+inline char CAS2 (volatile void * addr, volatile void * v1, volatile long v2, void * n1, long n2)
 {
-	register char c;
-	__asm {
-		push	ebx
-		push	ecx
-		push	edx
-		push	esi
-		mov		esi, addr
-		mov		eax, v1
-		mov		ebx, n1
-		mov		ecx, n2
-		mov		edx, v2
-		LOCK    cmpxchg8b qword ptr [esi]
-		sete	c
-		pop		esi
-		pop		edx
-		pop		ecx
-		pop		ebx
-	}
-	return c;
+    register char c;
+    __asm {
+        push	ebx
+        push	ecx
+        push	edx
+        push	esi
+        mov		esi, addr
+        mov		eax, v1
+        mov		ebx, n1
+        mov		ecx, n2
+        mov		edx, v2
+        LOCK    cmpxchg8b qword ptr [esi]
+        sete	c
+        pop		esi
+        pop		edx
+        pop		ecx
+        pop		ebx
+    }
+    return c;
 }
 #else
 

@@ -24,6 +24,7 @@ research@grame.fr
 #include "UTools.h"
 #undef min
 #undef max
+#include <algorithm>
 
 using namespace RubberBand;
 
