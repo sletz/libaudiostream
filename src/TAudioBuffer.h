@@ -197,7 +197,7 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
         T** GetFrame(long frame, T** res)
         {
             if (!(frame <= this->fFrames)) {
-                printf("GetFrame frame %ld this->fFrames %ld this->fChannels %ld\n", frame, this->fFrames, this->fChannels, frame);
+                printf("GetFrame frame %ld this->fFrames %ld this->fChannels %ld\n", frame, this->fFrames, this->fChannels);
             }
             assert(frame <= this->fFrames);
             for (int i = 0; i < this->fChannels; i++) {

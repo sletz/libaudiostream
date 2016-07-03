@@ -106,7 +106,7 @@ src/TFaustAudioEffect.cpp
 find_package(Threads REQUIRED)
 find_package(Jack)
 find_package(Portaudio)
-find_package(Sndfile)
+find_package(Sndfile REQUIRED)
 find_package(Samplerate REQUIRED)
 find_package(Rubberband REQUIRED)
 find_package(Faust REQUIRED)
@@ -115,7 +115,7 @@ add_library(libaudiostream ${CSRC} ${CPPSRC})
 if(WIN32)
     target_compile_definitions(libaudiostream
         PUBLIC WIN32
-        PRIVATE NOMINMAX)
+        PRIVATE NOMINMAX _CRT_SECURE_NO_WARNINGS)
     set_target_properties(libaudiostream
         PROPERTIES
           WINDOWS_EXPORT_ALL_SYMBOLS 1)

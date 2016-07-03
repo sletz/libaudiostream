@@ -24,6 +24,7 @@
 #define __la_smartpointer__
 
 #include <cassert>
+#include <cinttypes>
 #include <stdio.h>
 #include "AudioExports.h"
 
@@ -57,7 +58,7 @@ class LA_EXPORT la_smartable {
         virtual ~la_smartable()
         {
             assert (refCount == 0);
-            printf("~la_smartable %x\n", this);
+            printf("~la_smartable %" PRIxPTR "\n", (uintptr_t)this);
         }
         la_smartable& operator=(const la_smartable&) { return *this; }
 };
@@ -98,7 +99,7 @@ template<class T> class LA_SMARTP {
         LA_SMARTP()	: fSmartPtr(nullptr) {}
         //! build a smart pointer from a class pointer
         LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)  {
-            printf("LA_SMARTP %x\n", rawptr);
+            printf("LA_SMARTP %x\n", (intptr_t)rawptr);
             if (fSmartPtr) fSmartPtr->addReference();
         }
         //! build a smart pointer from an convertible class reference
