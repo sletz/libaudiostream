@@ -37,7 +37,7 @@ research@grame.fr
 // Class TCommand
 //----------------
 
-struct LA_EXPORT TCommand : public la_smartable1 {
+struct AUDIO_EXPORTS TCommand : public la_smartable1 {
 
         SymbolicDate fStartDate;
 
@@ -84,7 +84,7 @@ typedef LA_SMARTP<TCommand> TCommandPtr;
 // Class TControlCommand : a control command
 //--------------------------------------------
 
-struct LA_EXPORT TControlCommand : public TCommand {
+struct AUDIO_EXPORTS TControlCommand : public TCommand {
 
         TControlCommand()
         {}
@@ -113,7 +113,7 @@ typedef LA_SMARTP<TControlCommand> TControlCommandPtr;
 // Class TEffectControlCommand : a command to set Faust effect control value
 //---------------------------------------------------------------------------
 
-struct LA_EXPORT TEffectControlCommand : public TControlCommand {
+struct AUDIO_EXPORTS TEffectControlCommand : public TControlCommand {
 
         TAudioEffectInterfacePtr fEffect;
         std::string fPath;
@@ -149,7 +149,7 @@ struct LA_EXPORT TEffectControlCommand : public TControlCommand {
 
 typedef void (*AudioControlCallback) (audio_frame_t date, float value, void *arg);
 
-struct LA_EXPORT TExternalControlCommand : public TCommand {
+struct AUDIO_EXPORTS TExternalControlCommand : public TCommand {
 
         AudioControlCallback fCallback;
         void* fArg;
@@ -180,7 +180,7 @@ struct LA_EXPORT TExternalControlCommand : public TCommand {
 // Class TStreamCommand : a command to start/stop streams
 //---------------------------------------------------------
 
-struct LA_EXPORT TStreamCommand : public TCommand {
+struct AUDIO_EXPORTS TStreamCommand : public TCommand {
 
         TRTRendererAudioStreamPtr fStream; // SmartPtr here...
 
@@ -275,7 +275,7 @@ typedef LA_SMARTP<TStreamCommand> TStreamCommandPtr;
 // Class TCommandList
 //--------------------
 
-class LA_EXPORT TCommandList : public std::list<TCommandPtr>
+class AUDIO_EXPORTS TCommandList : public std::list<TCommandPtr>
 {
 
     private:
@@ -337,7 +337,7 @@ typedef TCommandList::iterator COMMANDS_ITERATOR;
 // Class TExpAudioMixer
 //----------------------
 
-class LA_EXPORT TExpAudioMixer : public TAudioClient
+class AUDIO_EXPORTS TExpAudioMixer : public TAudioClient
 {
 
     private:

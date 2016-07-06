@@ -30,10 +30,10 @@ research@grame.fr
 #pragma warning (disable : 4251)
 #pragma warning (disable : 4786)
 
-#ifdef AUDIOENGINE_EXPORTS
+#if defined(AUDIOENGINE_EXPORTS)
 #define AUDIO_EXPORTS __declspec(dllexport)
 
-#elif LIBAUDIOSTREAM_EXPORTS
+#elif defined(LIBAUDIOSTREAM_EXPORTS)
 #define AUDIO_EXPORTS __declspec(dllexport)
 
 #elif defined(STATIC)
@@ -43,27 +43,14 @@ research@grame.fr
 #define AUDIO_EXPORTS __declspec(dllimport)
 #endif
 
+#elif __APPLE__
+# if defined(LIBAUDIOSTREAM_EXPORTS)
+#   define AUDIO_EXPORTS __attribute__ ((visibility ("default")))
+# else
+#  define AUDIO_EXPORTS
+# endif
 #else
 #define AUDIO_EXPORTS
 #endif
 
-
-// This was in la_smartpointer.h. Maybe
-// LA_EXPORT and AUDIO_EXPORTS should be merged ?
-#ifdef WIN32
-# ifdef LIBAUDIOSTREAM_EXPORTS
-#  define LA_EXPORT _declspec (dllexport)
-# else
-#  define LA_EXPORT _declspec (dllimport)
-# endif
-#elif __APPLE__
-# ifdef LIBAUDIOSTREAM_EXPORTS
-#  define LA_EXPORT __attribute__ ((visibility("default")))
-# else
-#  define LA_EXPORT
-# endif
-#else
-# define LA_EXPORT
 #endif
-#endif
-

@@ -40,7 +40,7 @@
     inherit from the smartable class which provides reference counting
     and automatic delete when the reference count drops to zero.
 */
-class LA_EXPORT la_smartable {
+class AUDIO_EXPORTS la_smartable {
 
     public:
         //! gives the reference count of the object
@@ -65,7 +65,7 @@ class LA_EXPORT la_smartable {
 
 class TCmdManager;
 
-class LA_EXPORT la_smartable1 : public la_smartable {
+class AUDIO_EXPORTS la_smartable1 : public la_smartable {
 
     private:
 
@@ -99,7 +99,7 @@ template<class T> class LA_SMARTP {
         LA_SMARTP()	: fSmartPtr(nullptr) {}
         //! build a smart pointer from a class pointer
         LA_SMARTP(T* rawptr) : fSmartPtr(rawptr)  {
-            printf("LA_SMARTP %x\n", (intptr_t)rawptr);
+            printf("LA_SMARTP %" PRIxPTR "\n", (uintptr_t)rawptr);
             if (fSmartPtr) fSmartPtr->addReference();
         }
         //! build a smart pointer from an convertible class reference

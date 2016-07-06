@@ -34,8 +34,8 @@ research@grame.fr
 \brief The base class for audio effects.
 */
 
-//class LA_EXPORT TAudioEffectInterface : public la_smartable
-class LA_EXPORT TAudioEffectInterface : public la_smartable1
+//class AUDIO_EXPORTS TAudioEffectInterface : public la_smartable
+class AUDIO_EXPORTS TAudioEffectInterface : public la_smartable1
 {
 
     private:

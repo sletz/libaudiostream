@@ -31,7 +31,7 @@ research@grame.fr
 \brief The base class for Audio clients
 */
 
-class LA_EXPORT TAudioClient
+class AUDIO_EXPORTS TAudioClient
 {
 
     public:

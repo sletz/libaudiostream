@@ -43,7 +43,7 @@ typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 */
 
 //class TAudioStream : public la_smartable
-class LA_EXPORT TAudioStream : public la_smartable1
+class AUDIO_EXPORTS TAudioStream : public la_smartable1
 {
 
     public:
@@ -118,7 +118,7 @@ class LA_EXPORT TAudioStream : public la_smartable1
 \brief The base class for all unary streams.
 */
 
-class LA_EXPORT TUnaryAudioStream
+class AUDIO_EXPORTS TUnaryAudioStream
 {
 
     protected:
@@ -146,7 +146,7 @@ typedef TUnaryAudioStream * TUnaryAudioStreamPtr;
 \brief  A TDecoratedAudioStream object decorates the contained stream.
 */
 
-class LA_EXPORT TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
+class AUDIO_EXPORTS TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
 {
 
     public:

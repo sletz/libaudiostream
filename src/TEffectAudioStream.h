@@ -33,7 +33,7 @@ research@grame.fr
 \brief  A TEffectAudioStream object will apply an effect on a stream.
 */
 
-class LA_EXPORT TEffectAudioStream : public TDecoratedAudioStream
+class AUDIO_EXPORTS TEffectAudioStream : public TDecoratedAudioStream
 {
 
     private:
