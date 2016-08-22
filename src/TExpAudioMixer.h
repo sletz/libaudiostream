@@ -190,9 +190,9 @@ struct AUDIO_EXPORTS TStreamCommand : public TCommand {
 
         TStreamCommand(TRTRendererAudioStreamPtr stream, SymbolicDate start_date, SymbolicDate stop_date)
                 :TCommand(start_date), fStream(stream), fPos(0), fStopDate(stop_date)
-        {}
+        { }
         virtual ~TStreamCommand()
-        {}
+        { }
 
         void SetSartDate(SymbolicDate start_date) { fStartDate = start_date; }
         void SetStopDate(SymbolicDate stop_date) { fStopDate = stop_date; }

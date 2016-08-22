@@ -269,7 +269,7 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
 
         virtual TAudioStreamPtr CutBegin(long frames)
         {
-            return new TMemoryBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer);
+            return new TMemoryBufferedAudioStream(fBeginFrame + frames, fMemoryBuffer->clone());
         }
 
         virtual long Length()
@@ -279,7 +279,7 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
 
         virtual TAudioStreamPtr Copy()
         {
-            return new TMemoryBufferedAudioStream(fBeginFrame, fMemoryBuffer);
+            return new TMemoryBufferedAudioStream(fBeginFrame, fMemoryBuffer->clone(), fClear);
         }
 
         void Reset()

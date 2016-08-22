@@ -24,6 +24,7 @@
 #define __la_smartpointer__
 
 #include <cassert>
+#include <atomic>
 #include <cinttypes>
 #include <stdio.h>
 #include "AudioExports.h"
@@ -51,7 +52,7 @@ class AUDIO_EXPORTS la_smartable {
         virtual void removeReference();
 
     protected:
-        unsigned long refCount;
+        std::atomic_ulong refCount;
         la_smartable() : refCount(0) {}
         la_smartable(const la_smartable&): refCount(0) {}
         //! destructor checks for non-zero refCount

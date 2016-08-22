@@ -26,6 +26,7 @@ research@grame.fr
 #include <stdio.h>
 #include <sys/types.h>
 #include <iostream>
+#include <algorithm>
 
 #ifdef WIN32
 #include <windows.h>
@@ -90,6 +91,8 @@ class TAudioBuffer
         {
             return fChannels;
         }
+
+        virtual TAudioBuffer<T>* clone() const = 0;
 
 };
 
@@ -224,6 +227,8 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
         }
 
         T** GetBuffer() { return fBuffer; }
+
+        virtual TNonInterleavedAudioBuffer<T>* clone() const = 0;
 };
 
 
@@ -248,6 +253,14 @@ class TLocalInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
         {
             delete []this->fBuffer;
             this->fBuffer = nullptr;
+        }
+
+
+        TLocalInterleavedAudioBuffer<T>* clone() const
+        {
+            auto ptr = new TLocalInterleavedAudioBuffer<T>{this->fFrames, this->fChannels, false};
+            std::copy_n(this->fBuffer, this->fFrames * this->fChannels, ptr->fBuffer);
+            return ptr;
         }
 };
 
@@ -279,6 +292,16 @@ class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
             delete []this->fBuffer;
             this->fBuffer = nullptr;
         }
+
+        TLocalNonInterleavedAudioBuffer<T>* clone() const
+        {
+            auto ptr = new TLocalNonInterleavedAudioBuffer<T>{this->fFrames, this->fChannels, false};
+
+            for (int i = 0; i < this->fChannels; i++)
+                std::copy_n(this->fBuffer[i], this->fFrames, ptr->fBuffer[i]);
+
+            return ptr;
+        }
 };
 
 /*!
@@ -288,17 +311,21 @@ class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
 template <class T>
 class TSharedInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
 {
-
     public:
-
         TSharedInterleavedAudioBuffer(T* buffer, long frames, long channels)
         {
             this->fBuffer = buffer;
             this->fFrames = frames;
             this->fChannels = channels;
         }
+
         virtual ~TSharedInterleavedAudioBuffer()
         {}
+
+        TSharedInterleavedAudioBuffer<T>* clone() const
+        {
+            return new TSharedInterleavedAudioBuffer<T>{this->fBuffer, this->fFrames, this->fChannels};
+        }
 };
 
 /*!
@@ -319,6 +346,11 @@ class TSharedNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
         }
         virtual ~TSharedNonInterleavedAudioBuffer()
         {}
+
+        TSharedNonInterleavedAudioBuffer<T>* clone() const
+        {
+            return new TSharedNonInterleavedAudioBuffer<T>{this->fBuffer, this->fFrames, this->fChannels};
+        }
 };
 
 typedef TNonInterleavedAudioBuffer<float>* FLOAT_BUFFER;
