@@ -127,8 +127,14 @@ find_package(Rubberband REQUIRED)
 find_package(Faust REQUIRED)
 
 if(APPLE AND LIBAUDIOSTREAM_FRAMEWORK)
-    add_library(LibAudioStream MODULE ${CSRC} ${CPPSRC})
-    set_target_properties(LibAudioStream PROPERTIES BUNDLE TRUE)
+    add_library(LibAudioStream SHARED ${CSRC} ${CPPSRC})
+    set_target_properties(LibAudioStream PROPERTIES 
+        FRAMEWORK TRUE
+        FRAMEWORK_VERSION A
+        MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/macosx/Info-LibAudioStreamPA.plist
+        VERSION ${PROJECT_VERSION}
+        SOVERSION 2.0.0
+        PUBLIC_HEADER src/LibAudioStreamMC++.h)
 else()
     if(LIBAUDIOSTREAM_SHARED)
         add_library(LibAudioStream SHARED ${CSRC} ${CPPSRC})
@@ -293,6 +299,7 @@ install(TARGETS LibAudioStream
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib/static
     RUNTIME DESTINATION bin
+    FRAMEWORK DESTINATION lib
     INCLUDES DESTINATION include)
 
 install(
