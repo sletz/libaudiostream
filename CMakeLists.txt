@@ -139,7 +139,7 @@ else()
     if(LIBAUDIOSTREAM_SHARED)
         add_library(LibAudioStream SHARED ${CSRC} ${CPPSRC})
     else()
-        add_library(LibAudioStream ${CSRC} ${CPPSRC})
+        add_library(LibAudioStream STATIC ${CSRC} ${CPPSRC})
     endif()
 endif()
 
