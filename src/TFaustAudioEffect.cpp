@@ -33,12 +33,12 @@ int TRemoteCodeFaustAudioEffect::fEffectIndex = 0;
 static bool CheckEnding(const std::string& name, const std::string& end)
 {
     const auto match = name.rfind(end);
-	return ((match != std::string::npos) && (name.size() - end.size() == match));
+    return ((match != std::string::npos) && (name.size() - end.size() == match));
 }
 
 static std::string PathToContent(const std::string& path)
 {
-	std::ifstream file(path.c_str(), std::ifstream::binary);
+    std::ifstream file(path.c_str(), std::ifstream::binary);
 
     file.seekg (0, file.end);
     int size = file.tellg();
@@ -48,9 +48,9 @@ static std::string PathToContent(const std::string& path)
     char* buffer = new char[size + 1];
     file.read(buffer, size);
 
-	// Terminate the std::string
+    // Terminate the std::string
     buffer[size] = 0;
-	std::string result = buffer;
+    std::string result = buffer;
     file.close();
     delete [] buffer;
     return result;
@@ -60,8 +60,9 @@ static std::string PathToContent(const std::string& path)
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterface* effect, int num)
 {
     TCodeFaustAudioEffect* faust_effect = dynamic_cast<TCodeFaustAudioEffect*>(effect);
-    assert(faust_effect);
-	std::stringstream faust_code_stream;
+    if(!faust_effect)
+        return nullptr;
+    std::stringstream faust_code_stream;
     faust_code_stream << "declare name \"" << effect->GetName() << "\";" << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "; };";
     return faust_effect->CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
@@ -70,8 +71,9 @@ TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffec
 TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterface* effect, int num)
 {
     TCodeFaustAudioEffect* faust_effect = dynamic_cast<TCodeFaustAudioEffect*>(effect);
-    assert(faust_effect);
-	std::stringstream faust_code_stream;
+    if(!faust_effect)
+        return nullptr;
+    std::stringstream faust_code_stream;
     faust_code_stream << "declare name \"" << effect->GetName() << "\";" << "process = par(i," << num << ",_)<:" << effect->GetCode() << ";";
     return faust_effect->CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
