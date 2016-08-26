@@ -212,10 +212,10 @@ class TMemoryBufferedAudioStream : public TBufferedAudioStream
 
     protected:
 
-        long fBeginFrame;       // First frame to be read in the memory buffer
-        long fCurWriteFrame;    // Write position inside the buffer
+        long fBeginFrame = 0;       // First frame to be read in the memory buffer
+        long fCurWriteFrame = 0;    // Write position inside the buffer
 
-        bool fClear;
+        bool fClear = false;
 
     public:
 
