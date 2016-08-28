@@ -70,7 +70,7 @@ struct AUDIO_EXPORTS TCommand : public la_smartable1 {
 
         bool operator< (const TCommand& command) const
         {
-            return fStartDate->getDate() < command.fStartDate->getDate();
+            return *fStartDate < *command.fStartDate;
         }
 
         virtual long GetOffset(audio_frame_t cur_frame, long frames) { return -1; }
@@ -280,9 +280,9 @@ class AUDIO_EXPORTS TCommandList : public std::list<TCommandPtr>
 
     private:
 
-        static bool compare_command_date (TCommandPtr first, TCommandPtr second)
+        static bool compare_command_date (const TCommandPtr& first, const TCommandPtr& second)
         {
-            return first->GetDate() < second->GetDate();
+            return *first < *second;
         }
 
         std::atomic_bool fNeedSort;
@@ -394,6 +394,7 @@ class AUDIO_EXPORTS TExpAudioMixer : public TAudioClient
         virtual void AddStreamCommand(TCommandPtr command)
         {
             fStreamCommands.AddCommand(command);
+            NeedSort();
         }
         virtual void StopStreamCommand(TStreamCommandPtr command, SymbolicDate date)
         {
