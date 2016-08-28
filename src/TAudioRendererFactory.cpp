@@ -27,6 +27,8 @@ research@grame.fr
 
 #ifdef __JACK__
 #include "TJackRenderer.h"
+#endif
+#ifdef __NETJACK__
 #include "TNetJackRenderer.h"
 #endif
 
@@ -82,8 +84,15 @@ TAudioRendererPtr TAudioRendererFactory::MakeAudioRenderer(int renderer)
             #endif
 
             case kNetJackRenderer:
-            #ifdef __JACK__
+            #ifdef __NETJACK__
                 return new TNetJackRenderer(-1, DEFAULT_MULTICAST_IP, DEFAULT_PORT, DEFAULT_MTU, 5);
+            #else
+            #ifdef WIN32
+                #pragma message ("NetJack renderer is not compiled")
+            #else
+                #warning NetJack renderer is not compiled
+            #endif
+                return NULL;
             #endif
 
              case kCoreAudioRenderer:

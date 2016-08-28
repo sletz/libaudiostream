@@ -30,13 +30,19 @@ research@grame.fr
 
 // Renderers
 #include "TPortAudioV19Renderer.h"
+
 #ifdef __COREAUDIO__
 #include "TCoreAudioRenderer.h"
 #endif
+
 #ifdef __JACK__
 #include "TJackRenderer.h"
+#endif
+
+#ifdef __NETJACK__
 #include "TNetJackRenderer.h"
 #endif
+
 #include "TOfflineRenderer.h"
 
 #ifdef WIN32
@@ -1443,14 +1449,22 @@ AUDIOAPI long GetDeviceCount(long renderer)
 #ifdef __JACK__
         case kJackRenderer:
             return TJackRenderer::GetDeviceCount();
-
-        case kNetJackRenderer:
-            return TNetJackRenderer::GetDeviceCount();
 #else
     #ifdef WIN32
         #pragma message ("JACK renderer is not compiled")
     #else
         #warning Jack renderer is not compiled
+    #endif
+#endif
+
+#ifdef __NETJACK__
+      case kNetJackRenderer:
+          return TNetJackRenderer::GetDeviceCount();
+#else
+    #ifdef WIN32
+        #pragma message ("NETJACK renderer is not compiled")
+    #else
+        #warning NetJack renderer is not compiled
     #endif
 #endif
 
@@ -1489,13 +1503,10 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
         #warning PortAudio renderer is not compiled
     #endif
 #endif
+
 #ifdef __JACK__
         case kJackRenderer:
             TJackRenderer::GetDeviceInfo(deviceNum, info);
-            break;
-
-        case kNetJackRenderer:
-            TNetJackRenderer::GetDeviceInfo(deviceNum, info);
             break;
 #else
     #ifdef WIN32
@@ -1504,6 +1515,19 @@ AUDIOAPI void GetDeviceInfo(long renderer, long deviceNum, DeviceInfo* info)
         #warning Jack renderer is not compiled
     #endif
 #endif
+
+#ifdef __NETJACK__
+      case kNetJackRenderer:
+          TNetJackRenderer::GetDeviceInfo(deviceNum, info);
+          break;
+#else
+    #ifdef WIN32
+        #pragma message ("NETJACK renderer is not compiled")
+    #else
+        #warning NetJack renderer is not compiled
+    #endif
+#endif
+
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             TCoreAudioRenderer::GetDeviceInfo(deviceNum, info);
@@ -1542,9 +1566,6 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
 #ifdef __JACK__
         case kJackRenderer:
             return TJackRenderer::GetDefaultInputDevice();
-
-        case kNetJackRenderer:
-            return TNetJackRenderer::GetDefaultInputDevice();
 #else
     #ifdef WIN32
         #pragma message ("JACK renderer is not compiled")
@@ -1552,6 +1573,18 @@ AUDIOAPI long GetDefaultInputDevice(long renderer)
         #warning Jack renderer is not compiled
     #endif
 #endif
+
+#ifdef __NETJACK__
+      case kNetJackRenderer:
+        return TNetJackRenderer::GetDefaultInputDevice();
+#else
+    #ifdef WIN32
+        #pragma message ("NETJACK renderer is not compiled")
+    #else
+        #warning NetJack renderer is not compiled
+    #endif
+#endif
+
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDefaultInputDevice();
@@ -1588,9 +1621,6 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
 #ifdef __JACK__
         case kJackRenderer:
             return TJackRenderer::GetDefaultOutputDevice();
-
-        case kNetJackRenderer:
-            return TNetJackRenderer::GetDefaultOutputDevice();
 #else
     #ifdef WIN32
         #pragma message ("JACK renderer is not compiled")
@@ -1598,6 +1628,19 @@ AUDIOAPI long GetDefaultOutputDevice(long renderer)
         #warning Jack renderer is not compiled
     #endif
 #endif
+
+
+#ifdef __NETJACK__
+      case kNetJackRenderer:
+        return TNetJackRenderer::GetDefaultOutputDevice();
+#else
+    #ifdef WIN32
+        #pragma message ("NETJACK renderer is not compiled")
+    #else
+        #warning NetJack renderer is not compiled
+    #endif
+#endif
+
 #ifdef __COREAUDIO__
         case kCoreAudioRenderer:
             return TCoreAudioRenderer::GetDefaultOutputDevice();

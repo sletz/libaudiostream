@@ -99,6 +99,8 @@ set(PA19_RENDERER src/renderer/TPortAudioV19Renderer.cpp)
 set(JACK_RENDERER
 src/renderer/TJackRenderer.cpp
 src/renderer/TAudioRenderer.cpp
+)
+set(NETJACK_RENDERER
 src/renderer/TNetJackRenderer.cpp
 )
 
@@ -202,8 +204,15 @@ if(${JACK_FOUND})
   target_compile_definitions(LibAudioStream PRIVATE
       ${JACK_DEFINITIONS}
       __JACK__)
+
   target_link_libraries(LibAudioStream PUBLIC ${JACK_LIBRARIES})
   target_include_directories(LibAudioStream PRIVATE ${JACK_INCLUDE_DIRS})
+
+
+  if(JACK_NETJACK)
+    target_sources(LibAudioStream PRIVATE ${NETJACK_RENDERER})
+    target_compile_definitions(LibAudioStream PRIVATE __NETJACK__)
+  endif()
 endif()
 
 # Portaudio
