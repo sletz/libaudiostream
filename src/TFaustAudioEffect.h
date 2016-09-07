@@ -759,7 +759,7 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
         {
             assert(factory);
             fFactory = factory;
-            fDsp = createDSPInstance(fFactory->GetFactory());
+            fDsp = fFactory->GetFactory()->createDSPInstance();
 
             if (!fDsp) {
                 throw TLASException("DSP instance cannot be created");
@@ -785,7 +785,7 @@ class TLocalCodeFaustAudioEffect : public TCodeFaustAudioEffect
         }
         virtual ~TLocalCodeFaustAudioEffect()
         {
-            deleteDSPInstance(fDsp);
+            delete fDsp;
         }
         void Process(FAUSTFLOAT** input, FAUSTFLOAT** output, long framesNum)
         {
