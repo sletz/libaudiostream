@@ -34,7 +34,7 @@ research@grame.fr
 #define snprintf _snprintf
 #endif
 
-TWriteFileAudioStream::TWriteFileAudioStream(string name, TAudioStreamPtr stream, long format)
+TWriteFileAudioStream::TWriteFileAudioStream(std::string name, TAudioStreamPtr stream, long format)
         : TFileAudioStream(name)
 {
     fChannels = stream->Channels();

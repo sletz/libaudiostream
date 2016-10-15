@@ -29,8 +29,6 @@ research@grame.fr
 #include <sndfile.h>
 #include <string>
 
-using namespace std;
-
 //------------------------
 // Class TFileAudioStream
 //------------------------
@@ -43,7 +41,7 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
 
     protected:
 
-        string fName;
+        std::string fName;
         SNDFILE* fFile;
         float* fFileBuffer;
      
@@ -55,7 +53,7 @@ class TFileAudioStream : public TBufferedAudioStream, public TCmdHandler
 
     public:
      
-        TFileAudioStream(string name): TBufferedAudioStream(), fName(name)
+        TFileAudioStream(std::string name): TBufferedAudioStream(), fName(name)
         {}
         virtual ~TFileAudioStream()
         {}

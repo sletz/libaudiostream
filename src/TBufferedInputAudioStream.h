@@ -27,8 +27,6 @@ research@grame.fr
 #include "TSharedBuffers.h"
 #include "TAudioConstants.h"
 
-using namespace std;
-
 //---------------------------------
 // Class TBufferedInputAudioStream
 //---------------------------------

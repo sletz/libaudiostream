@@ -41,33 +41,33 @@ class TReadFileAudioStream : public TFileAudioStream
         FLOAT_BUFFER fCopyBuffer;
         long fBeginFrame;  // First frame to be read in the file
         SF_INFO fInfo;
-     
+
         virtual long ReadImp(FLOAT_BUFFER buffer, long framesNum, long framePos);
         static void ReadEndBufferAux(TReadFileAudioStream* obj, long framesNum, long framePos);
 
     public:
 
-        TReadFileAudioStream(string name, long beginFrame);
+        TReadFileAudioStream(std::string name, long beginFrame);
         virtual ~TReadFileAudioStream();
 
         void ReadEndBuffer(long framesNum, long framePos);
 
         virtual void Reset();
-        
+
         virtual TAudioStreamPtr CutBegin(long frames);
-        
+
         virtual long Length()
         {
             return fFramesNum - fBeginFrame;
         }
-        
+
         virtual TAudioStreamPtr Copy()
         {
             return new TReadFileAudioStream(fName, fBeginFrame);
         }
-        
+
         int SampleRate() { return fInfo.samplerate; }
-        
+
         long SetPos(long frames);
 };
 

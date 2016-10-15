@@ -56,7 +56,7 @@ class TRendererAudioStream : public TDecoratedAudioStream
         void SetStream(TAudioStreamPtr stream);
         void ClearStream()
         {
-            fStream = 0;
+            fStream = nullptr;
         }
 };
 

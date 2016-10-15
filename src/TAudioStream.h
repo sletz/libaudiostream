@@ -40,10 +40,10 @@ typedef LA_SMARTP<TAudioStream> TAudioStreamPtr;
 
 /*!
 \brief The base class for all streams.
-*/ 
+*/
 
 //class TAudioStream : public la_smartable
-class TAudioStream : public la_smartable1
+class AUDIO_EXPORTS TAudioStream : public la_smartable1
 {
 
     public:
@@ -69,7 +69,7 @@ class TAudioStream : public la_smartable1
         // Cut the beginning of the stream
         virtual TAudioStreamPtr CutBegin(long frames)
         {
-            return 0;
+            return nullptr;
         }
 
         // Length in frames
@@ -83,12 +83,12 @@ class TAudioStream : public la_smartable1
         {
             return 0;
         }
-        
+
         virtual long SetPos(long frames)
         {
             return 0;
         }
-    
+
         virtual long GetPos()
         {
             return 0;
@@ -97,11 +97,11 @@ class TAudioStream : public la_smartable1
         // Copy the structure
         virtual TAudioStreamPtr Copy()
         {
-            return 0;
+            return nullptr;
         }
-        
+
         void assert_stream(long framesNum, long framePos)
-        {   
+        {
             if ((framesNum < 0) || (framePos + framesNum > TAudioGlobals::fBufferSize)) {
                 printf("assert_stream framesNum = %ld framePos = %ld\n", framesNum, framePos);
                 assert(false);
@@ -118,7 +118,7 @@ class TAudioStream : public la_smartable1
 \brief The base class for all unary streams.
 */
 
-class TUnaryAudioStream
+class AUDIO_EXPORTS TUnaryAudioStream
 {
 
     protected:
@@ -126,10 +126,10 @@ class TUnaryAudioStream
         TAudioStreamPtr fStream; // Decorated stream
 
     public:
-	
-		virtual ~TUnaryAudioStream()
+
+        virtual ~TUnaryAudioStream()
         {}
-	
+
         TAudioStreamPtr GetBranch1()
         {
             return fStream;
@@ -146,21 +146,21 @@ typedef TUnaryAudioStream * TUnaryAudioStreamPtr;
 \brief  A TDecoratedAudioStream object decorates the contained stream.
 */
 
-class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
+class AUDIO_EXPORTS TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
 {
 
     public:
 
         TDecoratedAudioStream(): TAudioStream()
         {
-            fStream = 0;
+            fStream = nullptr;
         }
         TDecoratedAudioStream(TAudioStreamPtr stream): TAudioStream()
         {
             fStream = stream;
         }
 
-		virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
+        virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             assert(fStream);
             return fStream->Write(buffer, framesNum, framePos);
@@ -189,13 +189,13 @@ class TDecoratedAudioStream : public TAudioStream, public TUnaryAudioStream
             assert(fStream);
             return fStream->Length();
         }
-    
+
         virtual long SetPos(long frames)
         {
             assert(fStream);
             return fStream->SetPos(frames);
         }
-        
+
         virtual long GetPos()
         {
             assert(fStream);

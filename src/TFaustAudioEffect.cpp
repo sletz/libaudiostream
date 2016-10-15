@@ -30,53 +30,55 @@ int TLocalCodeFaustAudioEffect::fEffectIndex = 0;
 int TRemoteCodeFaustAudioEffect::fEffectIndex = 0;
 #endif
 
-static bool CheckEnding(const string& name, const string& end)
+static bool CheckEnding(const std::string& name, const std::string& end)
 {
-    unsigned int match = name.rfind(end);
-    return ((match != string::npos) && (name.size() - end.size() == match));
+    const auto match = name.rfind(end);
+    return ((match != std::string::npos) && (name.size() - end.size() == match));
 }
-   
-static string PathToContent(const string& path)
+
+static std::string PathToContent(const std::string& path)
 {
-    ifstream file(path.c_str(), std::ifstream::binary);
+    std::ifstream file(path.c_str(), std::ifstream::binary);
 
     file.seekg (0, file.end);
     int size = file.tellg();
     file.seekg (0, file.beg);
-   
+
     // And allocate buffer to that a single line can be read...
     char* buffer = new char[size + 1];
     file.read(buffer, size);
-    
-    // Terminate the string
+
+    // Terminate the std::string
     buffer[size] = 0;
-    string result = buffer;
+    std::string result = buffer;
     file.close();
     delete [] buffer;
     return result;
 }
 
-// Duplicate a Faust effect 'num' times 
-TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterface* effect, int num) 
+// Duplicate a Faust effect 'num' times
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::DuplicateEffect(TAudioEffectInterface* effect, int num)
 {
     TCodeFaustAudioEffect* faust_effect = dynamic_cast<TCodeFaustAudioEffect*>(effect);
-    assert(faust_effect);
-    stringstream faust_code_stream;
+    if(!faust_effect)
+        return nullptr;
+    std::stringstream faust_code_stream;
     faust_code_stream << "declare name \"" << effect->GetName() << "\";" << "process = par(i,n," << effect->GetCode() << ") " << "with { n = " << num << "; };";
     return faust_effect->CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
 // Split a stream 'num' times to connect to a Faust effect
-TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterface* effect, int num) 
+TCodeFaustAudioEffect* TCodeFaustAudioEffectFactory::SplitEffect(TAudioEffectInterface* effect, int num)
 {
     TCodeFaustAudioEffect* faust_effect = dynamic_cast<TCodeFaustAudioEffect*>(effect);
-    assert(faust_effect);
-    stringstream faust_code_stream;
+    if(!faust_effect)
+        return nullptr;
+    std::stringstream faust_code_stream;
     faust_code_stream << "declare name \"" << effect->GetName() << "\";" << "process = par(i," << num << ",_)<:" << effect->GetCode() << ";";
     return faust_effect->CreateEffect(faust_code_stream.str().c_str(), effect->GetLibraryPath(), effect->GetDrawPath());
 }
 
-TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const string& code, const string& library_path, const string& draw_path)
+TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const std::string& code, const std::string& library_path, const std::string& draw_path)
 {
     TLocalCodeFaustAudioEffectFactory* factory = 0;
     if (TAudioGlobals::fLocalFactoryTable.find(code) != TAudioGlobals::fLocalFactoryTable.end()) {
@@ -91,13 +93,13 @@ TCodeFaustAudioEffect* TLocalCodeFaustAudioEffectFactory::CreateEffect(const str
 }
 
 #if REMOTE_DSP
-TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const string& code, const string& library_path, const string& draw_path)
+TCodeFaustAudioEffect* TRemoteCodeFaustAudioEffectFactory::CreateEffect(const std::string& code, const std::string& library_path, const std::string& draw_path)
 {
     TRemoteCodeFaustAudioEffectFactory* factory = 0;
     if (TAudioGlobals::fRemoteFactoryTable.find(code) != TAudioGlobals::fRemoteFactoryTable.end()) {
         printf("DSP factory already created...\n");
         factory = TAudioGlobals::fRemoteFactoryTable[code];
-    } else if (CheckEnding(code, ".dsp")) { 
+    } else if (CheckEnding(code, ".dsp")) {
         factory = new TRemoteCodeFaustAudioEffectFactory(PathToContent(code), library_path, draw_path);
     } else {
         factory = new TRemoteCodeFaustAudioEffectFactory(code, library_path, draw_path);

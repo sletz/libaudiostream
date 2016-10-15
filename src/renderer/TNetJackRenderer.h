@@ -25,6 +25,7 @@ research@grame.fr
 
 #include "TAudioRenderer.h"
 #include <string>
+#include <cstdio>
 #include <jack/net.h>
 
 //-------------------------

@@ -20,7 +20,7 @@ research@grame.fr
 
 */
 
-/*#ifdef WIN32 
+/*#ifdef WIN32
 #pragma warning (disable : 4786)
 #endif*/
 
@@ -31,18 +31,18 @@ research@grame.fr
 // Internal API
 /*--------------------------------------------------------------------------*/
 
-void TExpAudioMixer::ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer, 
-                                        map<SymbolicDate, audio_frame_t>& date_map, 
-                                        audio_frame_t cur_frame, 
+void TExpAudioMixer::ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buffer,
+                                        std::map<SymbolicDate, audio_frame_t>& date_map,
+                                        audio_frame_t cur_frame,
                                         long offset_in_control,
                                         long control_slice)
 {
     COMMANDS_ITERATOR it = fControlCommands.begin();
     while (it != fControlCommands.end()) {
-     
+
         TCommandPtr command = *it;
         long command_offset = command->GetOffset(cur_frame, control_slice);
-        
+
         if (command_offset == offset_in_control) {
             if (command->Execute(buffer, date_map, cur_frame, control_slice)) {
                 it++;
@@ -56,7 +56,7 @@ void TExpAudioMixer::ExecuteControlSlice(TNonInterleavedAudioBuffer<float>* buff
     }
 }
 
-/* 
+/*
     Returns the offset if next control if in buffer, or frames if not in buffer.
 */
 long TExpAudioMixer::GetNextControlOffset(audio_frame_t cur_frame, long frames)
@@ -71,16 +71,16 @@ long TExpAudioMixer::GetNextControlOffset(audio_frame_t cur_frame, long frames)
 /*
 Render all streams inside a "slice" in a buffer.
 */
-void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer, 
-                                        map<SymbolicDate, audio_frame_t>& date_map, 
-                                        audio_frame_t cur_frame, 
+void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buffer,
+                                        std::map<SymbolicDate, audio_frame_t>& date_map,
+                                        audio_frame_t cur_frame,
                                         long offset_in_stream,
                                         long stream_slice)
 {
     float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
     buffer->GetFrame(offset_in_stream, temp);
-    TSharedNonInterleavedAudioBuffer<float> buffer_imp(temp, stream_slice, TAudioGlobals::fOutput);
-    
+    TSharedNonInterleavedAudioBuffer<float> buffer_imp(temp, stream_slice, fOutputChannels);
+
     COMMANDS_ITERATOR it = fStreamCommands.begin();
     while (it != fStreamCommands.end()) {
         TCommandPtr command = *it;
@@ -103,9 +103,9 @@ void TExpAudioMixer::ExecuteStreamsSlice(TNonInterleavedAudioBuffer<float>* buff
 bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 {
     TNonInterleavedAudioBuffer<float>* buffer;
-    
-    TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, TAudioGlobals::fOutput);
-    
+
+    TSharedNonInterleavedAudioBuffer<float> shared_buffer(outputs, frames, fOutputChannels);
+
     // Real-time input
     if (TAudioGlobals::fSharedInput) {
         TAudioGlobals::fSharedInput->Read(&shared_buffer, frames, 0);
@@ -115,19 +115,19 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
     if (fMasterEffect) {
         buffer = fBuffer;
         float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
-        UAudioTools::ZeroFloatBlk(buffer->GetFrame(0, temp), frames, TAudioGlobals::fOutput);
+        UAudioTools::ZeroFloatBlk(buffer->GetFrame(0, temp), frames, fOutputChannels);
     } else {
         buffer = &shared_buffer;
     }
- 
+
     // Possibly sort commands and streams sequences
     fControlCommands.PossiblySort();
     fStreamCommands.PossiblySort();
-     
+
     long offset_in_control = 0;
     long offset_in_stream = 0;
     long stream_slice = 0;
-    map<SymbolicDate, audio_frame_t> date_map;
+    std::map<SymbolicDate, audio_frame_t> date_map;
 
     // Possibly render slices in presence of control
     while ((offset_in_control = GetNextControlOffset(fCurFrame, frames)) < frames) {
@@ -135,24 +135,24 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
         // Render all streams inside this slice
         stream_slice = offset_in_control - offset_in_stream;
         ExecuteStreamsSlice(buffer, date_map, fCurFrame, offset_in_stream, stream_slice);
-        
+
         // Execute all controls at the same date
         ExecuteControlSlice(buffer, date_map, fCurFrame, offset_in_control, frames);
-        
+
         // Move to next slice
         offset_in_stream += stream_slice;
     }
-     
+
     // Render all streams inside last slice, which can be entire buffer if no control in it
     stream_slice = offset_in_control - offset_in_stream;
     ExecuteStreamsSlice(buffer, date_map, fCurFrame, offset_in_stream, stream_slice);
-    
+
     // Apply master effect
     if (fMasterEffect) {
         float** temp = (float**)alloca(buffer->GetChannels()*sizeof(float*));
         fMasterEffect->Process(buffer->GetFrame(0, temp), outputs, frames);
     }
-         
+
     // Update date in frames
     fCurFrame += frames;
     return true;
@@ -161,7 +161,7 @@ bool TExpAudioMixer::AudioCallback(float** inputs, float** outputs, long frames)
 TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 {
     COMMANDS_ITERATOR it;
-    
+
     for (it = fStreamCommands.begin(); it != fStreamCommands.end(); it++) {
         TCommand* command = (*it);
         TStreamCommand* stream_command = dynamic_cast<TStreamCommand*>(command);
@@ -185,4 +185,6 @@ TStreamCommandPtr TExpAudioMixer::GetStreamCommand(TAudioStreamPtr stream)
 long TExpAudioMixer::SetPos(audio_frame_t frames)
 {
     // TODO
+    fCurFrame = frames;
+    return fCurFrame;
 }

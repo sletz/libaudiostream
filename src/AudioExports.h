@@ -30,10 +30,10 @@ research@grame.fr
 #pragma warning (disable : 4251)
 #pragma warning (disable : 4786)
 
-#ifdef AUDIOENGINE_EXPORTS
+#if defined(AUDIOENGINE_EXPORTS)
 #define AUDIO_EXPORTS __declspec(dllexport)
 
-#elif LIBAUDIOSTREAM_EXPORTS
+#elif defined(LIBAUDIOSTREAM_EXPORTS)
 #define AUDIO_EXPORTS __declspec(dllexport)
 
 #elif defined(STATIC)
@@ -43,9 +43,14 @@ research@grame.fr
 #define AUDIO_EXPORTS __declspec(dllimport)
 #endif
 
+#elif __APPLE__
+# if defined(LIBAUDIOSTREAM_EXPORTS)
+#   define AUDIO_EXPORTS __attribute__ ((visibility ("default")))
+# else
+#  define AUDIO_EXPORTS
+# endif
 #else
 #define AUDIO_EXPORTS
 #endif
 
 #endif
-

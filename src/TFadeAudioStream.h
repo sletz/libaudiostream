@@ -108,7 +108,7 @@ class TChannelFadeAudioStream : public TFadeAudioStream
         void SetStream(TAudioStreamPtr stream, long fadein, long fadeout);
         void ClearStream()
         {
-            fStream = 0;
+            fStream = nullptr;
         }
         long GetStatus()
         {

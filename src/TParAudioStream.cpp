@@ -72,6 +72,6 @@ TAudioStreamPtr TParAudioStream::CutBegin(long frames)
 void TParAudioStream::Reset()
 {
     TBinaryAudioStream::Reset();
-    fStream = 0; // The unique stream is reset to NULL
+    fStream = nullptr; // The unique stream is reset to NULL
 }
 

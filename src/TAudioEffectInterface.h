@@ -34,8 +34,8 @@ research@grame.fr
 \brief The base class for audio effects.
 */
 
-//class LA_EXPORT TAudioEffectInterface : public la_smartable
-class LA_EXPORT TAudioEffectInterface : public la_smartable1
+//class AUDIO_EXPORTS TAudioEffectInterface : public la_smartable
+class AUDIO_EXPORTS TAudioEffectInterface : public la_smartable1
 {
 
     private:
@@ -59,17 +59,17 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable1
         {
             return fState;
         }
-        
+
         virtual std::string GetCode()
         {
             return "";
         }
-        
+
         virtual std::string GetLibraryPath()
         {
             return "";
         }
-        
+
         virtual std::string GetDrawPath()
         {
             return "";
@@ -83,20 +83,20 @@ class LA_EXPORT TAudioEffectInterface : public la_smartable1
         }
 
         // Pure virtual : to be implemented by sub-classes
-		
+
         virtual void Process(float** input, float** output, long framesNum) = 0;
         virtual TAudioEffectInterface* Copy() = 0;
         virtual void Reset() = 0;
         virtual long Inputs() = 0;
         virtual long Outputs() = 0;
-		
-		virtual long GetControlCount() = 0;
-		virtual void GetControlParam(long param, char* label, float* min, float* max, float* init) = 0;
-        virtual void SetControlValue(long param, float value) = 0; 
-        virtual void SetControlValue(const char* label, float value) = 0; 
+
+        virtual long GetControlCount() = 0;
+        virtual void GetControlParam(long param, char* label, float* min, float* max, float* init) = 0;
+        virtual void SetControlValue(long param, float value) = 0;
+        virtual void SetControlValue(const char* label, float value) = 0;
         virtual float GetControlValue(long param) = 0;
         virtual float GetControlValue(const char* labe) = 0;
-        
+
         virtual void SetName(const std::string& name) = 0;
         virtual std::string GetName() = 0;
 

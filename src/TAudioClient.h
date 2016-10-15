@@ -22,6 +22,7 @@ research@grame.fr
 
 #ifndef __TAudioClient__
 #define __TAudioClient__
+#include "AudioExports.h"
 
 //--------------------
 // Class TAudioClient
@@ -30,7 +31,7 @@ research@grame.fr
 \brief The base class for Audio clients
 */
 
-class TAudioClient
+class AUDIO_EXPORTS TAudioClient
 {
 
     public:
@@ -40,13 +41,13 @@ class TAudioClient
         virtual ~TAudioClient()
         {}
 
-		/*!
-		\brief Audio callback called by the AudioManager.
-		\param inputBuffer The input buffer as an array of non interleaved float samples arrays.
-		\param outputBuffer The output buffer as an array of non interleaved float samples arrays.
-		\param frames The input/output buffer number of frames.
-		\return true if success, false otherwise.
-		*/
+        /*!
+        \brief Audio callback called by the AudioManager.
+        \param inputBuffer The input buffer as an array of non interleaved float samples arrays.
+        \param outputBuffer The output buffer as an array of non interleaved float samples arrays.
+        \param frames The input/output buffer number of frames.
+        \return true if success, false otherwise.
+        */
         virtual bool AudioCallback(float** inputs, float** outputs, long frames) = 0;
 };
 

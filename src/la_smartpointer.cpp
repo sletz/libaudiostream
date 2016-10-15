@@ -23,29 +23,33 @@
 #include "la_smartpointer.h"
 #include "TThreadCmdManager.h"
 
-void la_smartable::removeReference() 
-{ 
-	if (--refCount == 0) {
- 		delete this; 
-	}
+void la_smartable::removeReference()
+{
+    if (--refCount < 1) {
+        delete this;
+    }
 }
 
 void la_smartable1::removeReferenceAux(la_smartable1* obj, long u1, long u2, long u3)
 {
-	delete obj;
+    delete obj;
 }
 
-void la_smartable1::removeReference() 
-{ 
-	if (--refCount == 0 && fDeleteManager) {
-  		fDeleteManager->ExecCmd((CmdPtr)removeReferenceAux, (long)this, 0, 0, 0, 0);
-	}
+void la_smartable1::removeReference()
+{
+    --refCount;
+    if (refCount < 1 && fDeleteManager)
+    {
+        fDeleteManager->ExecCmd([] (long ptr, long, long, long, long) {
+            la_smartable1::removeReferenceAux(reinterpret_cast<la_smartable1*>(ptr), 0, 0, 0);
+        } , (long)this, 0, 0, 0, 0);
+    }
 }
 
 void la_smartable1::Init()
 {
     //fDeleteManager = new TThreadCmdManager(1);
-    fDeleteManager = new TWaitThreadCmdManager(1); 
+    fDeleteManager = new TWaitThreadCmdManager(1);
 }
 
 void la_smartable1::Destroy()

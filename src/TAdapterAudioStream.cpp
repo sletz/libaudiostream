@@ -29,8 +29,8 @@ long TAdapterAudioStream::Read(FLOAT_BUFFER buffer, long framesNum, long framePo
         return fStream->Read(buffer, framesNum, framePos);
     } else {
         int res = fStream->Read(fAdaptBuffer, framesNum, framePos);
-        float* temp1[buffer->GetChannels()];
-        float* temp2[fAdaptBuffer->GetChannels()];
+        float** temp1 = (float**) alloca(sizeof(float*) * buffer->GetChannels());
+        float** temp2 = (float**) alloca(sizeof(float*) * fAdaptBuffer->GetChannels());
         UAudioTools::Adapt(buffer->GetFrame(framePos, temp1), fAdaptBuffer->GetFrame(framePos, temp2), framesNum, fStream->Channels(), fChannels);
         return res;
     }

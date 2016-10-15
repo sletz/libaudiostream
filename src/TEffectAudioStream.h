@@ -33,15 +33,15 @@ research@grame.fr
 \brief  A TEffectAudioStream object will apply an effect on a stream.
 */
 
-class TEffectAudioStream : public TDecoratedAudioStream
+class AUDIO_EXPORTS TEffectAudioStream : public TDecoratedAudioStream
 {
 
     private:
-        
+
         typedef class LA_SMARTP<TAudioEffectInterface> SAudioEffect;
 
         SAudioEffect fEffect;   // Effect
-		FLOAT_BUFFER fBufferIn;
+        FLOAT_BUFFER fBufferIn;
         FLOAT_BUFFER fBufferOut;
 
     public:
@@ -49,7 +49,7 @@ class TEffectAudioStream : public TDecoratedAudioStream
         TEffectAudioStream(TAudioStreamPtr stream, TAudioEffectInterfacePtr effect);
         virtual ~TEffectAudioStream()
         {
-    		delete fBufferIn;
+            delete fBufferIn;
             delete fBufferOut;
         }
 

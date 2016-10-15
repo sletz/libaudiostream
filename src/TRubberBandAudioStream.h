@@ -37,18 +37,18 @@ class TRubberBandAudioStream : public TDecoratedAudioStream
 
     private:
 
-		double* fPitchShift;
-		double* fTimeStretch;
-		double fPitchShiftVal;
-		double fTimeStretchVal;
-		RubberBand::RubberBandStretcher* fRubberBand;
-		FLOAT_BUFFER fBuffer;
- 	
+        double* fPitchShift;
+        double* fTimeStretch;
+        double fPitchShiftVal;
+        double fTimeStretchVal;
+        RubberBand::RubberBandStretcher fRubberBand;
+        TLocalNonInterleavedAudioBuffer<float> fBuffer;
+
     public:
 
         TRubberBandAudioStream(TAudioStreamPtr stream, double* pitch_shift, double* time_strech);
         virtual ~TRubberBandAudioStream();
-   
+
         virtual long Write(FLOAT_BUFFER buffer, long framesNum, long framePos)
         {
             return 0;

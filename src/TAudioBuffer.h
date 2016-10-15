@@ -25,7 +25,8 @@ research@grame.fr
 #include <assert.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/mman.h>
+#include <iostream>
+#include <algorithm>
 
 #ifdef WIN32
 #include <windows.h>
@@ -54,6 +55,7 @@ research@grame.fr
     }
     #define MUNLOCK(ptr, size) VirtualUnlock((ptr), (size))
 #else
+#include <sys/mman.h>
     #define CHECK_MLOCK(ptr, size) (mlock((ptr), (size)) == 0)
     #define MUNLOCK(ptr, size) munlock((ptr), (size))
 #endif
@@ -73,7 +75,7 @@ class TAudioBuffer
 
         long fFrames;
         long fChannels;
-          
+
     public:
 
         TAudioBuffer():fFrames(0), fChannels(0)
@@ -89,7 +91,9 @@ class TAudioBuffer
         {
             return fChannels;
         }
-        
+
+        virtual TAudioBuffer<T>* clone() const = 0;
+
 };
 
 //-------------------------------
@@ -106,7 +110,7 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
     protected:
 
         T* fBuffer;
-        
+
         void TouchAndLock(bool touch)
         {
             if (touch) {
@@ -119,14 +123,17 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
                 }
             }
         }
-      
+
     public:
 
         TInterleavedAudioBuffer():TAudioBuffer<T>(), fBuffer(0)
         {}
         virtual ~TInterleavedAudioBuffer()
         {
-            MUNLOCK(fBuffer, this->fFrames * this->fChannels * sizeof(T));
+            if(fBuffer)
+            {
+                MUNLOCK(fBuffer, this->fFrames * this->fChannels * sizeof(T));
+            }
         }
 
         T* GetFrame(long frame)
@@ -142,7 +149,7 @@ class TInterleavedAudioBuffer : public TAudioBuffer<T>
             assert(b1->GetChannels() == b2->GetChannels());
             memcpy(b1->GetFrame(f1), b2->GetFrame(f2), frames * sizeof(T) * b1->GetChannels());
         }
-        
+
         T* GetBuffer() { return fBuffer; }
 };
 
@@ -160,7 +167,7 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
     protected:
 
         T** fBuffer;
-        
+
         void TouchAndLock(bool touch)
         {
             if (touch) {
@@ -175,22 +182,25 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
                 }
             }
         }
-      
+
     public:
 
         TNonInterleavedAudioBuffer():TAudioBuffer<T>(), fBuffer(0)
         {}
         virtual ~TNonInterleavedAudioBuffer()
         {
-            for (int i = 0; i < this->fChannels; i++) {
-                MUNLOCK(fBuffer[i], this->fFrames * sizeof(T));
+            if(fBuffer)
+            {
+                for (int i = 0; i < this->fChannels; i++) {
+                    MUNLOCK(fBuffer[i], this->fFrames * sizeof(T));
+                }
             }
         }
-        
+
         T** GetFrame(long frame, T** res)
         {
             if (!(frame <= this->fFrames)) {
-                printf("GetFrame frame %ld this->fFrames %ld this->fChannels %ld\n", frame, this->fFrames, this->fChannels, frame);
+                printf("GetFrame frame %ld this->fFrames %ld this->fChannels %ld\n", frame, this->fFrames, this->fChannels);
             }
             assert(frame <= this->fFrames);
             for (int i = 0; i < this->fChannels; i++) {
@@ -198,25 +208,27 @@ class TNonInterleavedAudioBuffer : public TAudioBuffer<T>
             }
             return res;
         }
-     
+
         static void Copy(TNonInterleavedAudioBuffer* b1, long f1, TNonInterleavedAudioBuffer* b2, long f2, long frames)
         {
             assert(frames + f1 <= b1->GetSize());
             assert(frames + f2 <= b2->GetSize());
             assert(b1->GetChannels() == b2->GetChannels());
-            
+
             T** tmp1 = (T**)alloca(b1->GetChannels()*sizeof(T*));
             T** tmp2 = (T**)alloca(b2->GetChannels()*sizeof(T*));
 
             T** dst = b1->GetFrame(f1, tmp1);
             T** src = b2->GetFrame(f2, tmp2);
-            
+
             for (int i = 0; i < b1->GetChannels(); i++) {
                 memcpy(dst[i], src[i], frames * sizeof(T));
             }
         }
-        
+
         T** GetBuffer() { return fBuffer; }
+
+        virtual TNonInterleavedAudioBuffer<T>* clone() const = 0;
 };
 
 
@@ -240,6 +252,15 @@ class TLocalInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
         virtual ~TLocalInterleavedAudioBuffer()
         {
             delete []this->fBuffer;
+            this->fBuffer = nullptr;
+        }
+
+
+        TLocalInterleavedAudioBuffer<T>* clone() const
+        {
+            auto ptr = new TLocalInterleavedAudioBuffer<T>{this->fFrames, this->fChannels, false};
+            std::copy_n(this->fBuffer, this->fFrames * this->fChannels, ptr->fBuffer);
+            return ptr;
         }
 };
 
@@ -269,6 +290,17 @@ class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
                 delete []this->fBuffer[i];
             }
             delete []this->fBuffer;
+            this->fBuffer = nullptr;
+        }
+
+        TLocalNonInterleavedAudioBuffer<T>* clone() const
+        {
+            auto ptr = new TLocalNonInterleavedAudioBuffer<T>{this->fFrames, this->fChannels, false};
+
+            for (int i = 0; i < this->fChannels; i++)
+                std::copy_n(this->fBuffer[i], this->fFrames, ptr->fBuffer[i]);
+
+            return ptr;
         }
 };
 
@@ -279,17 +311,21 @@ class TLocalNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
 template <class T>
 class TSharedInterleavedAudioBuffer : public TInterleavedAudioBuffer<T>
 {
-
     public:
-
         TSharedInterleavedAudioBuffer(T* buffer, long frames, long channels)
         {
             this->fBuffer = buffer;
             this->fFrames = frames;
             this->fChannels = channels;
         }
+
         virtual ~TSharedInterleavedAudioBuffer()
         {}
+
+        TSharedInterleavedAudioBuffer<T>* clone() const
+        {
+            return new TSharedInterleavedAudioBuffer<T>{this->fBuffer, this->fFrames, this->fChannels};
+        }
 };
 
 /*!
@@ -310,6 +346,11 @@ class TSharedNonInterleavedAudioBuffer : public TNonInterleavedAudioBuffer<T>
         }
         virtual ~TSharedNonInterleavedAudioBuffer()
         {}
+
+        TSharedNonInterleavedAudioBuffer<T>* clone() const
+        {
+            return new TSharedNonInterleavedAudioBuffer<T>{this->fBuffer, this->fFrames, this->fChannels};
+        }
 };
 
 typedef TNonInterleavedAudioBuffer<float>* FLOAT_BUFFER;

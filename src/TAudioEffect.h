@@ -30,8 +30,6 @@ research@grame.fr
 #include "TMutex.h"
 #include <list>
 
-using namespace std;
-
 //--------------------
 // Class TAudioEffect
 //--------------------
@@ -47,7 +45,7 @@ typedef LA_SMARTP<TAudioEffectList> TAudioEffectListPtr;
 \brief  Effect list management for subclasses of TAudioEffectInterface.
 */
 
-class TAudioEffectList : public list<TAudioEffectInterfacePtr>, public la_smartable
+class TAudioEffectList : public std::list<TAudioEffectInterfacePtr>, public la_smartable
 {
 
 	private:
