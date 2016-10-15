@@ -96,7 +96,7 @@ class AUDIO_EXPORTS TAudioRenderer
 
     protected:
 
-		std::list<TRTAudioClient> fClientList;
+        std::list<TRTAudioClient> fClientList;
         long fSampleRate;
         long fInput;
         long fOutput;

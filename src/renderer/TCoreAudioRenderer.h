@@ -60,7 +60,7 @@ class TCoreAudioRenderer : public TAudioRenderer
         Float64 fAnchorFrameTime;   // Time stamp of the begining of rendering
         UInt64 fAnchorHostTime;     // Time stamp of the begining of rendering
    	
-		static OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
+        static OSStatus GetDefaultDevice(int inChan, int outChan, int samplerate, AudioDeviceID* id);
         static int SetupSampleRateAux(AudioDeviceID inDevice, long samplerate);
         int SetupBufferSize(long buffer_size);
         

@@ -211,8 +211,8 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
         {}
         virtual ~TFaustAudioEffectBase()
         {
-            for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-                delete *iter;
+            for (UIObject* ui_elt : fUITable) {
+                delete ui_elt;
             }
         }
 
@@ -279,9 +279,9 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 
         void SetControlValue(const char* label, FAUSTFLOAT value)
         {
-            for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-                if (strcmp((*iter)->GetLabel().c_str(), label) == 0) {
-                    (*iter)->SetControlValue(value);
+            for (UIObject* ui_elt : fUITable) {
+                if (ui_elt->GetLabel() == label) {
+                    ui_elt->SetControlValue(value);
                     return;
                 }
             }
@@ -294,9 +294,9 @@ class TFaustAudioEffectBase : public TAudioEffectInterface, public UI
 
         FAUSTFLOAT GetControlValue(const char* label)
         {
-            for (std::vector<UIObject*>::iterator iter = fUITable.begin(); iter != fUITable.end(); iter++) {
-                if ((*iter)->GetLabel() == std::string(label)) {
-                    return (*iter)->GetControlValue();
+            for (UIObject* ui_elt : fUITable) {
+                if (ui_elt->GetLabel() == label) {
+                    return ui_elt->GetControlValue();
                 }
             }
             return 0.0f;
@@ -413,10 +413,7 @@ class TCodeFaustAudioEffect : public TFaustAudioEffectBase {
 
         struct Name_Meta : public Meta
         {
-                std::string fName;
-
-            Name_Meta():fName("")
-            {}
+            std::string fName;
 
             void declare(const char* key, const char* value)
             {

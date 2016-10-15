@@ -43,7 +43,7 @@ void TAudioRenderer::Run(float** inputs, float** outputs, long frames)
     TSharedBuffers::SetOutBuffer(outputs);
 
 	// Client callback are supposed to *mix* their result in outputs 
-    std::list<TRTAudioClient>::iterator iter = fClientList.begin();
+  std::list<TRTAudioClient>::iterator iter = fClientList.begin();
 	while (iter != fClientList.end()) {
 		TAudioClientPtr client = (*iter).fRTClient;
 		if (client) {

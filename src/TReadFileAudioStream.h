@@ -47,7 +47,7 @@ class TReadFileAudioStream : public TFileAudioStream
 
     public:
 
-		TReadFileAudioStream(std::string name, long beginFrame);
+        TReadFileAudioStream(std::string name, long beginFrame);
         virtual ~TReadFileAudioStream();
 
         void ReadEndBuffer(long framesNum, long framePos);

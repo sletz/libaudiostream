@@ -27,8 +27,8 @@ void TRendererAudioStream::SetManager(TAudioStreamPtr stream, TCmdManagerPtr man
 {
     TCmdHandlerList lst(stream);
 
-	for (std::list<TCmdHandlerPtr>::iterator iter = lst.begin(); iter != lst.end(); iter++) {
-        TCmdHandlerPtr handler = *iter;
+    for (auto handler : lst) 
+    {
         handler->SetManager(manager);
     }
 }
@@ -46,7 +46,7 @@ void TDTRendererAudioStream::Init()
 void TDTRendererAudioStream::Destroy()
 {
     delete fManager;
-    fManager = 0;
+    fManager = nullptr;
 }
 void TDTRendererAudioStream::Flush()
 {
@@ -61,7 +61,7 @@ void TRTRendererAudioStream::Init(long thread_num)
 void TRTRendererAudioStream::Destroy()
 {
     delete fManager;
-    fManager = 0;
+    fManager = nullptr;
 }
 void TRTRendererAudioStream::Flush()
 {
