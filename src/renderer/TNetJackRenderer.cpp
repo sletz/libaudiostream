@@ -98,6 +98,7 @@ long TNetJackRenderer::Close()
         jack_net_slave_close(fNet);
         fNet = 0;
     }
+    return NO_ERR;
 }
 
 long TNetJackRenderer::Start()

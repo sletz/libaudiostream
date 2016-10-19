@@ -47,12 +47,12 @@ static void PrintStreamDesc(AudioStreamBasicDescription *inDesc)
     printf("- - - - - - - - - - - - - - - - - - - -\n");
     printf("  Sample Rate:%f\n", inDesc->mSampleRate);
     printf("  Format ID:%.*s\n", (int) sizeof(inDesc->mFormatID), (char*)&inDesc->mFormatID);
-    printf("  Format Flags:%lX\n", inDesc->mFormatFlags);
-    printf("  Bytes per Packet:%ld\n", inDesc->mBytesPerPacket);
-    printf("  Frames per Packet:%ld\n", inDesc->mFramesPerPacket);
-    printf("  Bytes per Frame:%ld\n", inDesc->mBytesPerFrame);
-    printf("  Channels per Frame:%ld\n", inDesc->mChannelsPerFrame);
-    printf("  Bits per Channel:%ld\n", inDesc->mBitsPerChannel);
+    printf("  Format Flags:%lX\n", (unsigned long)inDesc->mFormatFlags);
+    printf("  Bytes per Packet:%ld\n", (unsigned long)inDesc->mBytesPerPacket);
+    printf("  Frames per Packet:%ld\n", (unsigned long)inDesc->mFramesPerPacket);
+    printf("  Bytes per Frame:%ld\n", (unsigned long)inDesc->mBytesPerFrame);
+    printf("  Channels per Frame:%ld\n", (unsigned long)inDesc->mChannelsPerFrame);
+    printf("  Bits per Channel:%ld\n", (unsigned long)inDesc->mBitsPerChannel);
     printf("- - - - - - - - - - - - - - - - - - - -\n");
 }
 
@@ -210,7 +210,7 @@ OSStatus TCoreAudioRenderer::GetDefaultDevice(int inChan, int outChan, int sampl
 			*id = inDefault;
 			return noErr;
 		} else {
-			printf("GetDefaultDevice : input = %ld and output = %ld are not the same \n", inDefault, outDefault);
+			printf("GetDefaultDevice : input = %ld and output = %ld are not the same \n", (unsigned long)inDefault, (unsigned long)outDefault);
             if (gAggregateDeviceID == 0) { // Create aggregate device the first time
                 if (CreateAggregateDevice(inDefault, outDefault, samplerate, id) != noErr) {
                     return kAudioHardwareBadDeviceError;

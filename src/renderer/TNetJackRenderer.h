@@ -72,13 +72,15 @@ class TNetJackRenderer : public TAudioRenderer
         static int net_sample_rate(jack_nframes_t nframes, void* arg) 
         {
             //return static_cast<TNetJackRenderer*>(arg)->set_sample_rate(nframes);
+            return -1;
         }
         
         static int net_buffer_size(jack_nframes_t nframes, void* arg) 
         {
             //return static_cast<TNetJackRenderer*>(arg)->set_buffer_size(nframes);
+            return -1;
         }
-        
+    
         static void net_error(int error_code, void* arg)
         {
             return static_cast<TNetJackRenderer*>(arg)->error_cb(error_code);
